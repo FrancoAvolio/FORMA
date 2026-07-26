@@ -1,0 +1,72 @@
+{
+  "version": 1,
+  "algorithm": "sha256",
+  "policy": "Files under docs/design-reference are immutable archival Stitch references. Derived implementation assets and visual snapshots must be stored elsewhere.",
+  "files": [
+    {
+      "path": "docs/design-reference/configuraci_n_y_chat_forma/code.html",
+      "bytes": 16138,
+      "sha256": "2475edb9408a3e8f79834c816e41c5296cd87c45efd31dedddca43497e3e610b"
+    },
+    {
+      "path": "docs/design-reference/configuraci_n_y_chat_forma/screen.png",
+      "bytes": 186381,
+      "width": 706,
+      "height": 1600,
+      "sha256": "55c1c7ff89d1a496026b15e2a47c4ffb00bdd3e537c2847fd98cdc86fb7b6cbe"
+    },
+    {
+      "path": "docs/design-reference/explorar_ejercicios_forma/code.html",
+      "bytes": 16454,
+      "sha256": "269e060e1aefcb570afd135aa41c3ba19b7a5cce0d8bcdb4f7225d9266d1cc21"
+    },
+    {
+      "path": "docs/design-reference/explorar_ejercicios_forma/screen.png",
+      "bytes": 157138,
+      "width": 357,
+      "height": 1600,
+      "sha256": "6fab4badcb059438626a9e8756843d2e5adb83799eaebde0566dd3400a889c0d"
+    },
+    {
+      "path": "docs/design-reference/forma_editorial_system/DESIGN.md",
+      "bytes": 7406,
+      "sha256": "e06556d45638918d0c0085bda5c541bb5497eaec5ee6d1ce521ecc1d1d9b84c5"
+    },
+    {
+      "path": "docs/design-reference/landing_page_forma/code.html",
+      "bytes": 13514,
+      "sha256": "b717349571083922f73900fb367272013a48531546e58b33cbbfae773e9777dc"
+    },
+    {
+      "path": "docs/design-reference/landing_page_forma/screen.png",
+      "bytes": 180168,
+      "width": 395,
+      "height": 1600,
+      "sha256": "125eaa711c1d7f1bff083b10df38a893d1ebe4900e9fecee532038e7ade56ddf"
+    },
+    {
+      "path": "docs/design-reference/reemplazar_ejercicio_forma/code.html",
+      "bytes": 16924,
+      "sha256": "1a8985cc3f9289c45f9da7286122f009faa2d9cb2ec8f72fc9c157eb5ff116be"
+    },
+    {
+      "path": "docs/design-reference/reemplazar_ejercicio_forma/screen.png",
+      "bytes": 104608,
+      "width": 390,
+      "height": 944,
+      "sha256": "2522c48ee6f1acd906f65db3b850f622494f639f3141712f8ff27bc15eb9f706"
+    },
+    {
+      "path": "docs/design-reference/rutina_semanal_forma/code.html",
+      "bytes": 20815,
+      "sha256": "dfa88670f39ece59811b53a9743282ac87647410044b4f7fb6db3b2da05dedd4"
+    },
+    {
+      "path": "docs/design-reference/rutina_semanal_forma/screen.png",
+      "bytes": 190529,
+      "width": 435,
+      "height": 1600,
+      "sha256": "43e357980ae59949191229c0d32a5017ef260476e3c7aa9dd41e17838a25b408"
+    }
+  ]
+}

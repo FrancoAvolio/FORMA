@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+
+<html lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Forma - Ejercicios</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline-variant": "#c4c6cf",
+                        "surface-tint": "#455f88",
+                        "primary-fixed-dim": "#adc7f7",
+                        "primary": "#002045",
+                        "primary-fixed": "#d6e3ff",
+                        "on-error-container": "#93000a",
+                        "surface-bright": "#fcf9f8",
+                        "on-surface-variant": "#43474e",
+                        "on-primary-container": "#86a0cd",
+                        "surface-container-low": "#f6f3f2",
+                        "on-primary-fixed-variant": "#2d476f",
+                        "secondary": "#ab3500",
+                        "inverse-primary": "#adc7f7",
+                        "background": "#fcf9f8",
+                        "surface-variant": "#e4e2e1",
+                        "error": "#ba1a1a",
+                        "on-background": "#1b1c1c",
+                        "on-secondary-container": "#5d1900",
+                        "on-tertiary-fixed": "#00210a",
+                        "primary-container": "#1a365d",
+                        "on-secondary-fixed": "#390c00",
+                        "surface-container-lowest": "#ffffff",
+                        "outline": "#74777f",
+                        "on-secondary": "#ffffff",
+                        "inverse-surface": "#303030",
+                        "error-container": "#ffdad6",
+                        "on-error": "#ffffff",
+                        "surface-container": "#f0eded",
+                        "secondary-container": "#fe6a34",
+                        "on-primary": "#ffffff",
+                        "surface-container-highest": "#e4e2e1",
+                        "tertiary-fixed-dim": "#aad0ac",
+                        "secondary-fixed": "#ffdbd0",
+                        "secondary-fixed-dim": "#ffb59d",
+                        "surface-container-high": "#eae7e7",
+                        "on-tertiary-fixed-variant": "#2c4e32",
+                        "on-secondary-fixed-variant": "#832600",
+                        "tertiary-container": "#1c3d23",
+                        "on-surface": "#1b1c1c",
+                        "on-primary-fixed": "#001b3c",
+                        "inverse-on-surface": "#f3f0f0",
+                        "surface-dim": "#dcd9d9",
+                        "on-tertiary-container": "#83a886",
+                        "surface": "#fcf9f8",
+                        "tertiary-fixed": "#c5edc7",
+                        "tertiary": "#04270f",
+                        "on-tertiary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "stack-sm": "8px",
+                        "gutter": "16px",
+                        "unit": "4px",
+                        "container-margin": "20px",
+                        "stack-lg": "32px",
+                        "stack-md": "16px"
+                    },
+                    "fontFamily": {
+                        "data-mono": ["Geist"],
+                        "headline-sm": ["Geist"],
+                        "body-md": ["Geist"],
+                        "label-caps": ["Geist"],
+                        "display-lg-mobile": ["Geist"],
+                        "display-lg": ["Geist"],
+                        "headline-md": ["Geist"],
+                        "body-lg": ["Geist"]
+                    },
+                    "fontSize": {
+                        "data-mono": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "display-lg-mobile": ["32px", { "lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "display-lg": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Geist', sans-serif; }
+        .grid-bg {
+            background-image: linear-gradient(to right, #E2E8F0 1px, transparent 1px),
+                              linear-gradient(to bottom, #E2E8F0 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col relative grid-bg">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center px-container-margin py-stack-sm w-full z-50 bg-background border-b border-outline-variant docked full-width top-0">
+<div class="flex items-center gap-4">
+<button aria-label="Menu" class="hover:bg-surface-container-low transition-colors rounded p-1">
+<span class="material-symbols-outlined text-primary" data-icon="menu">menu</span>
+</button>
+</div>
+<h1 class="font-headline-md text-headline-md font-bold tracking-tight text-primary">FORMA</h1>
+<div class="flex items-center gap-4">
+<button aria-label="Profile" class="hover:bg-surface-container-low transition-colors rounded p-1 overflow-hidden h-8 w-8 rounded-full border border-outline-variant">
+<img alt="Foto de perfil de usuario" class="object-cover w-full h-full" data-alt="A small, stylized avatar portrait of an athlete in a minimalist, light mode setting, featuring cool, crisp studio lighting and a highly technical, editorial sports aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWjCAg154X2dq7avHOqtgElF_40NTsfT9TDNBaJeB4RETPK8ibt8M_g7Oc_RrYqEr_FxJT2YUq4d2pXJqJxheCCmGgYI-hN4MiHNeL95lUEl82f83pj9mOMS0X0j7BQbCAAeWxNgw7af8dYAwFEF4Eh-Ag1F5_pBOGxhTo5rVzC1OT9-7o_tUoJjX4omzM0wFKYSwnDj-_nrNy7dug8FSUJ4DGCaRcN6PTP9o7jwInjS3N7esjaMcrPZFO1TS_-iFuLyRGPaeT1WO-"/>
+</button>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-1 w-full max-w-[1200px] mx-auto pb-[100px] md:pb-stack-lg px-container-margin pt-stack-lg flex flex-col gap-stack-lg">
+<!-- Search & Filter Header -->
+<section class="flex flex-col gap-stack-md">
+<div class="relative w-full border-b border-outline-variant">
+<span class="material-symbols-outlined absolute left-0 top-1/2 -translate-y-1/2 text-outline" data-icon="search">search</span>
+<input class="w-full bg-transparent border-none py-3 pl-10 pr-4 text-body-md font-body-md placeholder:text-outline focus:ring-0 focus:outline-none focus:border-primary-container transition-colors" placeholder="Buscar ejercicio, músculo o equipamiento" type="text"/>
+</div>
+<!-- Filter Chips -->
+<div class="flex flex-wrap gap-2">
+<button class="bg-primary-container text-on-primary rounded px-3 py-1 font-label-caps text-label-caps uppercase">Todos</button>
+<button class="bg-surface-variant text-on-surface-variant rounded px-3 py-1 font-label-caps text-label-caps uppercase hover:bg-outline-variant transition-colors">Parte del cuerpo</button>
+<button class="bg-surface-variant text-on-surface-variant rounded px-3 py-1 font-label-caps text-label-caps uppercase hover:bg-outline-variant transition-colors">Músculo objetivo</button>
+<button class="bg-surface-variant text-on-surface-variant rounded px-3 py-1 font-label-caps text-label-caps uppercase hover:bg-outline-variant transition-colors">Equipamiento</button>
+<button class="bg-surface-variant text-on-surface-variant rounded px-3 py-1 font-label-caps text-label-caps uppercase hover:bg-outline-variant transition-colors">Patrón</button>
+<button class="bg-surface-variant text-on-surface-variant rounded px-3 py-1 font-label-caps text-label-caps uppercase hover:bg-outline-variant transition-colors">Dificultad</button>
+</div>
+</section>
+<!-- Results Grid -->
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+<!-- Card 1 -->
+<article class="bg-surface-container-lowest border border-outline-variant rounded-lg overflow-hidden flex flex-col hover:bg-surface-container-low transition-colors cursor-pointer group">
+<div class="h-48 w-full border-b border-outline-variant relative overflow-hidden bg-surface-container-low flex items-center justify-center">
+<img class="object-contain h-full p-4 mix-blend-multiply opacity-80 group-hover:opacity-100 transition-opacity" data-alt="A minimalist, high-contrast black and white technical illustration of a person performing a barbell back squat, isolated on a stark white background. The drawing style is precise, architectural, and reminiscent of vintage sports science manuals." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCKUgBkaV8l1L6TZJSKIcvx7MQzGJZrbK_MOwt3m3b2C51_jzROK33kPmBjkbR36O9B7JCK0JWlKA9MhtWhVtMYQwhyhvIp56dyGMYPNNpDrjuYWICngokjdz0m_QsVRvkaiPNpmmvp3yPgjo1yTtybCb7YUHImokmKfqNLC_pVmdvJZkY9SzfLiw_mCia8-iv4CnrljRhZIn0Hdo7Wp9fWzH3LmmQXgTGoURYFJWmKDGgicxyC-S3AiHUgajpG44btrx-5rxnJ0V7k"/>
+</div>
+<div class="p-4 flex flex-col flex-1">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-sm text-headline-sm text-primary">Sentadilla Trasera</h3>
+<span class="bg-surface-variant text-on-surface-variant rounded px-2 py-0.5 font-data-mono text-data-mono text-[10px]">Avanzado</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4 text-sm">Cuádriceps, Glúteos • Barra</p>
+<div class="mt-auto pt-4 border-t border-outline-variant flex justify-between items-center">
+<span class="font-label-caps text-label-caps text-primary uppercase">Ver técnica</span>
+<span class="material-symbols-outlined text-primary text-sm" data-icon="arrow_forward">arrow_forward</span>
+</div>
+</div>
+</article>
+<!-- Card 2 -->
+<article class="bg-surface-container-lowest border border-outline-variant rounded-lg overflow-hidden flex flex-col hover:bg-surface-container-low transition-colors cursor-pointer group">
+<div class="h-48 w-full border-b border-outline-variant relative overflow-hidden bg-surface-container-low flex items-center justify-center">
+<img class="object-contain h-full p-4 mix-blend-multiply opacity-80 group-hover:opacity-100 transition-opacity" data-alt="A minimalist, high-contrast black and white technical illustration of a person performing a deadlift, isolated on a stark white background. The drawing style is precise, architectural, and reminiscent of vintage sports science manuals." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAvB4YD3QCPWh-w8CvovMXjy7Y6l6SZ7zIhvb2zLchTR4lICDupT_H49iapEFPoaj9lTndIA4609X39i6rXSqXBpaY3eSze240iPbjWmNfSDK080YrizIK36A_i5cnWIYyOrGdosf0oOGKXm8BT_VcROGt8elHh8PwMGZb2C51utGOPww5ew9rVwXIX9sci4G9bgmCxYV9GhLuroV-7IypMvVZRcI-DNp3GxObD8G0outk2OJulJXFexuKWlPO5gASWNE1MZNjEDiJl"/>
+</div>
+<div class="p-4 flex flex-col flex-1">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-sm text-headline-sm text-primary">Peso Muerto</h3>
+<span class="bg-surface-variant text-on-surface-variant rounded px-2 py-0.5 font-data-mono text-data-mono text-[10px]">Avanzado</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4 text-sm">Isquiotibiales, Espalda baja • Barra</p>
+<div class="mt-auto pt-4 border-t border-outline-variant flex justify-between items-center">
+<span class="font-label-caps text-label-caps text-primary uppercase">Ver técnica</span>
+<span class="material-symbols-outlined text-primary text-sm" data-icon="arrow_forward">arrow_forward</span>
+</div>
+</div>
+</article>
+<!-- Card 3 -->
+<article class="bg-surface-container-lowest border border-outline-variant rounded-lg overflow-hidden flex flex-col hover:bg-surface-container-low transition-colors cursor-pointer group">
+<div class="h-48 w-full border-b border-outline-variant relative overflow-hidden bg-surface-container-low flex items-center justify-center">
+<img class="object-contain h-full p-4 mix-blend-multiply opacity-80 group-hover:opacity-100 transition-opacity" data-alt="A minimalist, high-contrast black and white technical illustration of a person performing a bench press, isolated on a stark white background. The drawing style is precise, architectural, and reminiscent of vintage sports science manuals." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBcRievQf8AzsoLwIIV7zs97LywUDQ9mBB2LU1l9KG0MJOFaHbQPOdey-mtP8-9t-8AdeqtQN9EirHjVbffz1BLLl-vSCUiib4AXbosy3pF7OJUPulPHeOWJqxGLoqRrCtI_FzjijYbqgmIQB5gWrO2y-ibp1xRoPdSPUdLjPW5108M6epP3qor9dGvFHd_EQZQH_ZsiP4BG6d2OYauocKtzqlWss0zM75TxJzBXKIfEcX9MVqGs_-wnLItbTA2yjalXFhRVPTi9Esf"/>
+</div>
+<div class="p-4 flex flex-col flex-1">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-sm text-headline-sm text-primary">Press de Banca</h3>
+<span class="bg-surface-variant text-on-surface-variant rounded px-2 py-0.5 font-data-mono text-data-mono text-[10px]">Intermedio</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4 text-sm">Pecho, Tríceps • Barra</p>
+<div class="mt-auto pt-4 border-t border-outline-variant flex justify-between items-center">
+<span class="font-label-caps text-label-caps text-primary uppercase">Ver técnica</span>
+<span class="material-symbols-outlined text-primary text-sm" data-icon="arrow_forward">arrow_forward</span>
+</div>
+</div>
+</article>
+<!-- Skeleton Card -->
+<article class="bg-surface-container-lowest border border-outline-variant rounded-lg overflow-hidden flex flex-col opacity-50">
+<div class="h-48 w-full border-b border-outline-variant bg-surface-variant animate-pulse"></div>
+<div class="p-4 flex flex-col flex-1">
+<div class="flex justify-between items-start mb-2">
+<div class="h-6 bg-surface-variant rounded w-3/4 animate-pulse"></div>
+<div class="h-4 bg-surface-variant rounded w-1/4 animate-pulse"></div>
+</div>
+<div class="h-4 bg-surface-variant rounded w-1/2 mb-4 animate-pulse"></div>
+<div class="mt-auto pt-4 border-t border-outline-variant flex justify-between items-center">
+<div class="h-4 bg-surface-variant rounded w-1/3 animate-pulse"></div>
+<div class="h-4 w-4 bg-surface-variant rounded animate-pulse"></div>
+</div>
+</div>
+</article>
+</section>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center bg-surface-container-lowest border-t border-outline-variant pb-safe pt-stack-sm md:hidden shadow-sm">
+<a class="flex flex-col items-center justify-center text-on-surface-variant font-label-caps text-label-caps hover:text-primary transition-colors p-2" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="chat_bubble">chat_bubble</span>
+<span>Crear</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary font-bold font-label-caps text-label-caps scale-95 transition-transform duration-150 p-2" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="fitness_center" data-weight="fill" style="font-variation-settings: 'FILL' 1;">fitness_center</span>
+<span>Ejercicios</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant font-label-caps text-label-caps hover:text-primary transition-colors p-2" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="bookmark">bookmark</span>
+<span>Guardadas</span>
+</a>
+</nav>
+</body></html>

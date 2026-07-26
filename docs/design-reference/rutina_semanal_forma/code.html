@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+
+<html lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FORMA - Mi Plan de Hipertrofia</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/geist@1.0.0/dist/fonts/geist-sans/style.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline-variant": "#c4c6cf",
+                        "surface-tint": "#455f88",
+                        "primary-fixed-dim": "#adc7f7",
+                        "primary": "#002045",
+                        "primary-fixed": "#d6e3ff",
+                        "on-error-container": "#93000a",
+                        "surface-bright": "#fcf9f8",
+                        "on-surface-variant": "#43474e",
+                        "on-primary-container": "#86a0cd",
+                        "surface-container-low": "#f6f3f2",
+                        "on-primary-fixed-variant": "#2d476f",
+                        "secondary": "#ab3500",
+                        "inverse-primary": "#adc7f7",
+                        "background": "#fcf9f8",
+                        "surface-variant": "#e4e2e1",
+                        "error": "#ba1a1a",
+                        "on-background": "#1b1c1c",
+                        "on-secondary-container": "#5d1900",
+                        "on-tertiary-fixed": "#00210a",
+                        "primary-container": "#1a365d",
+                        "on-secondary-fixed": "#390c00",
+                        "surface-container-lowest": "#ffffff",
+                        "outline": "#74777f",
+                        "on-secondary": "#ffffff",
+                        "inverse-surface": "#303030",
+                        "error-container": "#ffdad6",
+                        "on-error": "#ffffff",
+                        "surface-container": "#f0eded",
+                        "secondary-container": "#fe6a34",
+                        "on-primary": "#ffffff",
+                        "surface-container-highest": "#e4e2e1",
+                        "tertiary-fixed-dim": "#aad0ac",
+                        "secondary-fixed": "#ffdbd0",
+                        "secondary-fixed-dim": "#ffb59d",
+                        "surface-container-high": "#eae7e7",
+                        "on-tertiary-fixed-variant": "#2c4e32",
+                        "on-secondary-fixed-variant": "#832600",
+                        "tertiary-container": "#1c3d23",
+                        "on-surface": "#1b1c1c",
+                        "on-primary-fixed": "#001b3c",
+                        "inverse-on-surface": "#f3f0f0",
+                        "surface-dim": "#dcd9d9",
+                        "on-tertiary-container": "#83a886",
+                        "surface": "#fcf9f8",
+                        "tertiary-fixed": "#c5edc7",
+                        "tertiary": "#04270f",
+                        "on-tertiary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "stack-sm": "8px",
+                        "gutter": "16px",
+                        "unit": "4px",
+                        "container-margin": "20px",
+                        "stack-lg": "32px",
+                        "stack-md": "16px"
+                    },
+                    "fontFamily": {
+                        "data-mono": ["Geist Mono", "monospace"],
+                        "headline-sm": ["Geist", "sans-serif"],
+                        "body-md": ["Geist", "sans-serif"],
+                        "label-caps": ["Geist", "sans-serif"],
+                        "display-lg-mobile": ["Geist", "sans-serif"],
+                        "display-lg": ["Geist", "sans-serif"],
+                        "headline-md": ["Geist", "sans-serif"],
+                        "body-lg": ["Geist", "sans-serif"]
+                    },
+                    "fontSize": {
+                        "data-mono": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "display-lg-mobile": ["32px", { "lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "display-lg": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+          font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.filled {
+          font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen pb-24 md:pb-0">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center px-container-margin py-stack-sm w-full z-50 bg-background border-b border-outline-variant sticky top-0">
+<div class="flex items-center gap-stack-sm">
+<button class="text-on-surface-variant hover:bg-surface-container-low p-2 rounded-full transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<span class="font-headline-md text-headline-md font-bold tracking-tight text-primary">FORMA</span>
+</div>
+<div>
+<img class="w-8 h-8 rounded-full object-cover border border-outline-variant" data-alt="A small, circular profile picture of an athlete in a white training shirt, minimalist studio lighting, high contrast, stark white background, conveying professionalism and focus, in line with the sports-science editorial aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC8tvjWaXPkFCHLnLTkecL7VcPsbdnglKIKggWALmOxR-H4RcZ0k3Svi7d_6XosNGL_P4szPQjSOqeGZcjWnaK8WSY296t4cnA6CWWjk7dTTcxWlhKvVdJSwsaO6BysdxARplbHhY0y7IH54jm29sMxkgJ-NKqsRw1SNkFf2C_Wenfq-O5wGI9Z3HZ0B3DjiVLCvQnBsMrQ59MN0k3AOTckVUBfdTPepMnpt-SPzGXCJqWkMRFXq6FfCsUSckU8DiF3pe6-ek1dG4ec"/>
+</div>
+</header>
+<main class="max-w-[1200px] mx-auto px-container-margin py-stack-lg flex flex-col gap-stack-lg">
+<!-- Header Section -->
+<section class="border-b border-outline-variant pb-stack-md flex flex-col md:flex-row justify-between items-start md:items-end gap-stack-md">
+<div>
+<h1 class="font-display-lg-mobile text-display-lg-mobile md:font-display-lg md:text-display-lg text-primary mb-stack-sm">Mi Plan de Hipertrofia</h1>
+<div class="flex flex-wrap items-center gap-gutter">
+<div class="flex items-center gap-unit text-on-surface-variant">
+<span class="material-symbols-outlined text-sm">target</span>
+<span class="font-body-md text-body-md">Hipertrofia</span>
+</div>
+<div class="flex items-center gap-unit text-on-surface-variant">
+<span class="material-symbols-outlined text-sm">calendar_today</span>
+<span class="font-data-mono text-data-mono">4 DÍAS / SEMANA</span>
+</div>
+<div class="flex items-center gap-unit text-on-surface-variant">
+<span class="material-symbols-outlined text-sm">schedule</span>
+<span class="font-data-mono text-data-mono">6H TOTALES</span>
+</div>
+</div>
+</div>
+<div class="flex gap-stack-sm w-full md:w-auto">
+<button class="flex-1 md:flex-none border border-outline-variant px-4 py-2 rounded text-on-surface hover:bg-surface-container-low transition-colors font-label-caps text-label-caps flex items-center justify-center gap-2 uppercase">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+                    Editar
+                </button>
+<button class="flex-1 md:flex-none bg-primary-container text-on-primary px-4 py-2 rounded hover:opacity-90 transition-opacity font-label-caps text-label-caps flex items-center justify-center gap-2 uppercase">
+<span class="material-symbols-outlined text-[18px]">bookmark</span>
+                    Guardar
+                </button>
+</div>
+</section>
+<!-- Main Content Area (Layout) -->
+<div class="flex flex-col lg:flex-row gap-stack-lg">
+<!-- Left Column: Routine Details -->
+<div class="flex-1 flex flex-col gap-stack-md">
+<!-- Day Navigation (Segmented Control Style) -->
+<nav class="bg-surface-container-highest p-1 rounded-lg flex overflow-x-auto border border-outline-variant">
+<button class="flex-1 min-w-[80px] bg-surface-container-lowest text-primary py-2 px-4 rounded shadow-sm font-label-caps text-label-caps uppercase text-center border border-outline-variant">Día 1</button>
+<button class="flex-1 min-w-[80px] text-on-surface-variant py-2 px-4 rounded hover:bg-surface-variant transition-colors font-label-caps text-label-caps uppercase text-center">Día 2</button>
+<button class="flex-1 min-w-[80px] text-on-surface-variant py-2 px-4 rounded hover:bg-surface-variant transition-colors font-label-caps text-label-caps uppercase text-center">Día 3</button>
+<button class="flex-1 min-w-[80px] text-on-surface-variant py-2 px-4 rounded hover:bg-surface-variant transition-colors font-label-caps text-label-caps uppercase text-center">Día 4</button>
+</nav>
+<!-- Selected Day Context -->
+<div class="flex justify-between items-baseline mb-stack-sm">
+<h2 class="font-headline-sm text-headline-sm text-primary">Lunes <span class="text-on-surface-variant font-normal">— Tracción</span></h2>
+<span class="font-data-mono text-data-mono text-on-surface-variant">6 EJERCICIOS • 55 MIN</span>
+</div>
+<!-- Exercise List -->
+<div class="flex flex-col border border-outline-variant bg-surface-container-lowest rounded-lg overflow-hidden">
+<!-- Exercise Row 1 (Highlight Example) -->
+<div class="flex items-center p-gutter border-b border-outline-variant bg-surface-container-low hover:bg-surface-variant cursor-pointer group transition-colors">
+<span class="material-symbols-outlined text-outline cursor-grab mr-stack-sm">drag_indicator</span>
+<div class="w-12 h-12 bg-surface-variant rounded border border-outline-variant mr-gutter flex-shrink-0 flex items-center justify-center">
+<img class="w-10 h-10 object-contain opacity-70" data-alt="Abstract line-art illustration of a back muscle group, minimalist technical drawing style, dark blue ink on a stark white background, clinical and scientific aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCknDf6iKkarPvydygO7uKPgX3EUmT74xCIih3jCb0bWhV2cL0SEbUuOGXpkFoBB9O1J_ahwmGFjnIghWyttpcBcEBDqzBn3ip5aeXLnkLvkOadBCt9udzwsMCS8g8RXwxH9FDnTHrBlFO328FVMLj2dbjlxWfvNZeJKYKwAnJhIQzh4D8oufsdh0kVQjubVNpm1CQTUaZKnac5z9aZXHKVmZ_6UT2K1xUhfHWgeMFhYazn86r67vfWpc3FBM7Q8zT18qCd0aXFyGvm"/>
+</div>
+<div class="flex-1 min-w-0">
+<h3 class="font-body-md text-body-md font-semibold text-primary truncate">Dominadas asistidas</h3>
+<div class="flex flex-wrap gap-x-3 gap-y-1 mt-1 text-on-surface-variant font-label-caps text-label-caps uppercase">
+<span>Dorsales</span>
+<span>•</span>
+<span>Máquina</span>
+</div>
+</div>
+<div class="hidden sm:flex flex-col items-end mx-gutter min-w-[100px]">
+<span class="font-data-mono text-data-mono text-primary">3 x 10-12</span>
+<span class="font-label-caps text-label-caps text-outline uppercase mt-1">90S DESCANSO</span>
+</div>
+<div class="bg-surface-tint text-on-primary px-2 py-1 rounded font-data-mono text-[12px] whitespace-nowrap ml-auto">
+                            RPE 8
+                        </div>
+</div>
+<!-- Contextual Panel for Highlighted Exercise (Bento style insert) -->
+<div class="bg-surface-bright border-b border-outline-variant p-gutter flex flex-col gap-stack-sm shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)]">
+<div class="flex items-start gap-gutter">
+<div class="w-24 h-24 bg-surface-variant rounded border border-outline-variant flex-shrink-0 relative overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="High quality biomechanical diagram showing the latissimus dorsi muscle highlighted in red during a pull-up motion, scientific textbook style, stark white background, precision linework." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAjqSDMW851YGBfO9nyOEKhuq3_1bqgTZA9IjbkdRIx7BBo6WW7i57UvWoPxDd1VtIMTu_7itQjyy0t5hGETv3iTM6Xv9sB-xEJl2gZ3910gC3f7k1hHl31BEXXG5VO3Lsk8JdqHuBkNjIOidqs-gYPqhAjC7CV_nbo1VEmcW_6wFdyAVg6zoef-tQ6rvTqxL3c7Q4AHBMyf546IjnHl7M2G7dUTq3oOq0u-11IdqjK6YwwbvEIAn-RV1ooE5lBsXsG2yV4jDirGKd2"/>
+</div>
+<div>
+<h4 class="font-headline-sm text-headline-sm text-primary mb-1">Notas de Ejecución</h4>
+<p class="font-body-md text-body-md text-on-surface-variant text-sm">Mantén el pecho alto y deprime las escápulas antes de iniciar el tirón. Controla la fase excéntrica (bajada) durante al menos 2 segundos para maximizar el tiempo bajo tensión.</p>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-unit pt-stack-sm border-t border-outline-variant border-dashed">
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps text-outline uppercase">Progresión</span>
+<span class="font-data-mono text-data-mono text-primary">Semana 1: -15kg</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps text-outline uppercase">Tempo</span>
+<span class="font-data-mono text-data-mono text-primary">2-0-1-0</span>
+</div>
+<div class="flex justify-end items-center">
+<button class="text-surface-tint hover:bg-primary-fixed-dim/20 p-2 rounded-full transition-colors">
+<span class="material-symbols-outlined">swap_horiz</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Exercise Row 2 -->
+<div class="flex items-center p-gutter border-b border-outline-variant hover:bg-surface-container-low cursor-pointer group transition-colors bg-surface-container-lowest">
+<span class="material-symbols-outlined text-outline-variant cursor-grab mr-stack-sm group-hover:text-outline">drag_indicator</span>
+<div class="w-12 h-12 bg-surface-variant rounded border border-outline-variant mr-gutter flex-shrink-0 flex items-center justify-center">
+<img class="w-10 h-10 object-contain opacity-70" data-alt="Abstract line-art illustration of a mid-back muscle group, minimalist technical drawing style, dark blue ink on a stark white background, clinical and scientific aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAkN6Vt2Ja3yDsQgYGwhTcG7K35zpSaUzRlQeCa0Vn4v2FiV0pfn8SL4lUNZhmB8277paY3ZUOSOKvgogmtyOJvFVXXOqL3qIIvMrj2K0A8R_9zh6u01rBxWRdc_WB5re0lAYAZk576e4Y6m1XNRd2TxUJxMhbD2tUumL6aDG2zjb3ZEL0HM1ZL0xXNUjdQw3eCJucDeb1XrXwRFPPTdo67W3VIHx66jb9XthxNXfOGaFJ9DWswhcuabqEEcELLxkOAzIcqgqFp1oMA"/>
+</div>
+<div class="flex-1 min-w-0">
+<h3 class="font-body-md text-body-md font-semibold text-primary truncate">Remo con barra</h3>
+<div class="flex flex-wrap gap-x-3 gap-y-1 mt-1 text-on-surface-variant font-label-caps text-label-caps uppercase">
+<span>Espalda media</span>
+<span>•</span>
+<span>Barra libre</span>
+</div>
+</div>
+<div class="hidden sm:flex flex-col items-end mx-gutter min-w-[100px]">
+<span class="font-data-mono text-data-mono text-primary">4 x 8-10</span>
+<span class="font-label-caps text-label-caps text-outline uppercase mt-1">120S DESCANSO</span>
+</div>
+<div class="bg-surface-tint text-on-primary px-2 py-1 rounded font-data-mono text-[12px] whitespace-nowrap ml-auto opacity-70">
+                            RPE 8
+                        </div>
+</div>
+<!-- Exercise Row 3 -->
+<div class="flex items-center p-gutter hover:bg-surface-container-low cursor-pointer group transition-colors bg-surface-container-lowest">
+<span class="material-symbols-outlined text-outline-variant cursor-grab mr-stack-sm group-hover:text-outline">drag_indicator</span>
+<div class="w-12 h-12 bg-surface-variant rounded border border-outline-variant mr-gutter flex-shrink-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-outline">fitness_center</span>
+</div>
+<div class="flex-1 min-w-0">
+<h3 class="font-body-md text-body-md font-semibold text-primary truncate">Jalón al pecho</h3>
+<div class="flex flex-wrap gap-x-3 gap-y-1 mt-1 text-on-surface-variant font-label-caps text-label-caps uppercase">
+<span>Dorsales</span>
+<span>•</span>
+<span>Polea</span>
+</div>
+</div>
+<div class="hidden sm:flex flex-col items-end mx-gutter min-w-[100px]">
+<span class="font-data-mono text-data-mono text-primary">3 x 12-15</span>
+<span class="font-label-caps text-label-caps text-outline uppercase mt-1">90S DESCANSO</span>
+</div>
+<div class="bg-surface-tint text-on-primary px-2 py-1 rounded font-data-mono text-[12px] whitespace-nowrap ml-auto opacity-70">
+                            RPE 9
+                        </div>
+</div>
+</div>
+</div>
+<!-- Right Column: Meta Information & Validation -->
+<div class="w-full lg:w-80 flex flex-col gap-stack-md">
+<!-- Validated Badge -->
+<div class="bg-surface-container-lowest border border-tertiary-fixed-dim rounded-lg p-gutter shadow-[0px_4px_20px_rgba(45,45,45,0.02)]">
+<div class="flex items-center gap-2 mb-stack-sm">
+<span class="material-symbols-outlined filled text-tertiary-container">verified</span>
+<h3 class="font-headline-sm text-headline-sm text-tertiary-container">Rutina Validada</h3>
+</div>
+<ul class="flex flex-col gap-2 font-body-md text-body-md text-on-surface text-sm">
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-tertiary-fixed-dim text-sm mt-0.5">check</span>
+<span>Volumen óptimo (12-16 series/músculo)</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-tertiary-fixed-dim text-sm mt-0.5">check</span>
+<span>Frecuencia 2x comprobada</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-tertiary-fixed-dim text-sm mt-0.5">check</span>
+<span>Gestión de fatiga (RPE ondulante)</span>
+</li>
+</ul>
+</div>
+<!-- Assumptions Panel -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-gutter shadow-[0px_4px_20px_rgba(45,45,45,0.02)]">
+<h3 class="font-headline-sm text-headline-sm text-primary mb-stack-sm border-b border-outline-variant pb-2">Suposiciones del Plan</h3>
+<div class="flex flex-col gap-stack-sm">
+<div class="flex flex-col gap-1">
+<span class="font-label-caps text-label-caps text-outline uppercase">Nivel</span>
+<span class="font-data-mono text-data-mono bg-surface-container-low px-2 py-1 rounded w-fit">Intermedio</span>
+</div>
+<div class="flex flex-col gap-1">
+<span class="font-label-caps text-label-caps text-outline uppercase">Equipamiento Asumido</span>
+<div class="flex flex-wrap gap-1">
+<span class="font-data-mono text-data-mono bg-surface-container-low px-2 py-1 rounded text-xs border border-outline-variant">Barras y Discos</span>
+<span class="font-data-mono text-data-mono bg-surface-container-low px-2 py-1 rounded text-xs border border-outline-variant">Poleas</span>
+<span class="font-data-mono text-data-mono bg-surface-container-low px-2 py-1 rounded text-xs border border-outline-variant">Mancuernas</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 flex justify-around items-center bg-surface-container-lowest border-t border-outline-variant shadow-sm pb-safe pt-stack-sm h-16">
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">chat_bubble</span>
+<span class="font-label-caps text-[10px] mt-1">Crear</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary font-bold opacity-80 transition-opacity" href="#">
+<span class="material-symbols-outlined filled">fitness_center</span>
+<span class="font-label-caps text-[10px] mt-1">Ejercicios</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">bookmark</span>
+<span class="font-label-caps text-[10px] mt-1">Guardadas</span>
+</a>
+</nav>
+</body></html>

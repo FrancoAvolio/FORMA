@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FORMA - Routine Setup</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "outline-variant": "#c4c6cf",
+                    "surface-tint": "#455f88",
+                    "primary-fixed-dim": "#adc7f7",
+                    "primary": "#002045",
+                    "primary-fixed": "#d6e3ff",
+                    "on-error-container": "#93000a",
+                    "surface-bright": "#fcf9f8",
+                    "on-surface-variant": "#43474e",
+                    "on-primary-container": "#86a0cd",
+                    "surface-container-low": "#f6f3f2",
+                    "on-primary-fixed-variant": "#2d476f",
+                    "secondary": "#ab3500",
+                    "inverse-primary": "#adc7f7",
+                    "background": "#fcf9f8",
+                    "surface-variant": "#e4e2e1",
+                    "error": "#ba1a1a",
+                    "on-background": "#1b1c1c",
+                    "on-secondary-container": "#5d1900",
+                    "on-tertiary-fixed": "#00210a",
+                    "primary-container": "#1a365d",
+                    "on-secondary-fixed": "#390c00",
+                    "surface-container-lowest": "#ffffff",
+                    "outline": "#74777f",
+                    "on-secondary": "#ffffff",
+                    "inverse-surface": "#303030",
+                    "error-container": "#ffdad6",
+                    "on-error": "#ffffff",
+                    "surface-container": "#f0eded",
+                    "secondary-container": "#fe6a34",
+                    "on-primary": "#ffffff",
+                    "surface-container-highest": "#e4e2e1",
+                    "tertiary-fixed-dim": "#aad0ac",
+                    "secondary-fixed": "#ffdbd0",
+                    "secondary-fixed-dim": "#ffb59d",
+                    "surface-container-high": "#eae7e7",
+                    "on-tertiary-fixed-variant": "#2c4e32",
+                    "on-secondary-fixed-variant": "#832600",
+                    "tertiary-container": "#1c3d23",
+                    "on-surface": "#1b1c1c",
+                    "on-primary-fixed": "#001b3c",
+                    "inverse-on-surface": "#f3f0f0",
+                    "surface-dim": "#dcd9d9",
+                    "on-tertiary-container": "#83a886",
+                    "surface": "#fcf9f8",
+                    "tertiary-fixed": "#c5edc7",
+                    "tertiary": "#04270f",
+                    "on-tertiary": "#ffffff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "stack-sm": "8px",
+                    "gutter": "16px",
+                    "unit": "4px",
+                    "container-margin": "20px",
+                    "stack-lg": "32px",
+                    "stack-md": "16px"
+            },
+            "fontFamily": {
+                    "data-mono": ["Geist"],
+                    "headline-sm": ["Geist"],
+                    "body-md": ["Geist"],
+                    "label-caps": ["Geist"],
+                    "display-lg-mobile": ["Geist"],
+                    "display-lg": ["Geist"],
+                    "headline-md": ["Geist"],
+                    "body-lg": ["Geist"]
+            },
+            "fontSize": {
+                    "data-mono": ["14px", {"lineHeight": "20px", "fontWeight": "500"}],
+                    "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "display-lg-mobile": ["32px", {"lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "display-lg": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        @import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap');
+        body { font-family: 'Geist', sans-serif; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* Ambient shadow for technical floaters */
+        .shadow-ambient {
+            box-shadow: 0px 4px 20px rgba(45, 45, 45, 0.05);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col md:items-center">
+<!-- Mobile-first wrapper, constrained on desktop -->
+<div class="w-full max-w-[1200px] bg-background min-h-screen flex flex-col relative overflow-hidden">
+<!-- TopAppBar (From JSON Source of Truth) -->
+<header class="flex justify-between items-center px-container-margin py-stack-sm w-full z-50 bg-background border-b border-outline-variant sticky top-0">
+<!-- Leading Icon -->
+<button class="text-primary hover:bg-surface-container-low transition-colors rounded p-unit">
+<span class="material-symbols-outlined font-headline-md text-headline-md">menu</span>
+</button>
+<!-- Headline / Brand -->
+<h1 class="font-headline-md text-headline-md font-bold tracking-tight text-primary">FORMA</h1>
+<!-- Trailing Avatar -->
+<div class="w-8 h-8 rounded-full border border-outline-variant overflow-hidden bg-surface-container-high hover:opacity-80 transition-opacity cursor-pointer">
+<img alt="Foto de perfil de usuario" class="w-full h-full object-cover" data-alt="A minimalist, high-contrast, black and white portrait of an athletic user, stylized with subtle film grain, serving as a profile picture in a sleek editorial sports app interface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC58IC2tP29i2yrDBoRROckWHhL2v-Xb-E0q6eNOqliMeZWDND_0X-WzNpI-N6GAuYgqvuIify8Ldmow1yjyyPfd0fVQPep7g6YuronhgBXuwD-2lOkPYMRmmpMCHbur4hPKBxzWX0dGNpRobHk36XRPPoR5-IYyYVb62sWXNNXvD-ATXRilSvFOL1hZvBK8Fc1JR5TW3RN2F_fbWAurC5WiHS4_-MAs_3A01PFbUFPwme3HND8wA-E5umwVt2OkaDrDSDIU_Zig46X"/>
+</div>
+</header>
+<!-- Main Workspace Canvas -->
+<main class="flex-1 flex flex-col relative">
+<!-- Context Header: Progress & Preview Toggle -->
+<div class="px-container-margin py-stack-sm border-b border-outline-variant flex justify-between items-center bg-surface sticky top-[60px] z-40 backdrop-blur-sm bg-opacity-90">
+<button class="flex items-center gap-unit text-on-surface-variant hover:text-primary transition-colors group">
+<span class="font-label-caps text-label-caps">VISTA PREVIA</span>
+<span class="material-symbols-outlined text-[16px] group-hover:translate-y-[2px] transition-transform">expand_more</span>
+</button>
+<!-- Technical Badge (Progress) -->
+<div class="bg-surface-variant text-on-surface px-stack-sm py-[2px] rounded font-data-mono text-data-mono flex items-center gap-unit border border-outline-variant">
+<span class="w-1.5 h-1.5 rounded-full bg-surface-tint"></span>
+                    Perfil de rutina · 6 de 8 datos
+                </div>
+</div>
+<!-- Collapsible Routine Preview (Expanded State) -->
+<section class="px-container-margin py-stack-md border-b border-outline-variant bg-surface-container-lowest">
+<div class="grid grid-cols-2 md:grid-cols-4 gap-[1px] bg-outline-variant border border-outline-variant rounded-sm overflow-hidden">
+<div class="bg-surface-container-lowest p-stack-sm flex flex-col justify-between hover:bg-surface transition-colors">
+<span class="font-label-caps text-label-caps text-outline">OBJETIVO PRINCIPAL</span>
+<span class="font-data-mono text-data-mono text-primary mt-unit">HIPERTROFIA</span>
+</div>
+<div class="bg-surface-container-lowest p-stack-sm flex flex-col justify-between hover:bg-surface transition-colors">
+<span class="font-label-caps text-label-caps text-outline">NIVEL ACTUAL</span>
+<span class="font-data-mono text-data-mono text-primary mt-unit">INTERMEDIO</span>
+</div>
+<div class="bg-surface-container-lowest p-stack-sm flex flex-col justify-between hover:bg-surface transition-colors">
+<span class="font-label-caps text-label-caps text-outline">DÍAS DISPONIBLES</span>
+<span class="font-data-mono text-data-mono text-primary mt-unit">4 DÍAS / SEMANA</span>
+</div>
+<div class="bg-surface-container-lowest p-stack-sm flex flex-col justify-between hover:bg-surface transition-colors">
+<span class="font-label-caps text-label-caps text-outline">DURACIÓN MAX.</span>
+<span class="font-data-mono text-data-mono text-outline mt-unit animate-pulse">ESPERANDO...</span>
+</div>
+</div>
+</section>
+<!-- Conversational Canvas -->
+<div class="flex-1 overflow-y-auto px-container-margin py-stack-lg flex flex-col gap-stack-lg pb-32">
+<!-- System Message -->
+<div class="flex gap-stack-md border-b border-outline-variant pb-stack-lg">
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center shrink-0 border border-primary-container">
+<span class="material-symbols-outlined text-on-primary text-[16px]" style="font-variation-settings: 'FILL' 1;">science</span>
+</div>
+<div class="flex-1 pt-1">
+<p class="font-body-md text-body-md text-on-surface leading-relaxed max-w-[600px]">
+                            Perfecto. Para cerrar la rutina necesito saber cuánto tiempo tenés por sesión.
+                        </p>
+<!-- Contextual Technical Info -->
+<div class="mt-stack-sm flex items-center gap-unit text-outline font-data-mono text-data-mono">
+<span class="material-symbols-outlined text-[14px]">info</span>
+<span>La hipertrofia óptima requiere min. 45 min.</span>
+</div>
+</div>
+</div>
+<!-- User Space (Waiting for input) -->
+<div class="flex gap-stack-md justify-end opacity-50">
+<div class="flex-1 pt-1 text-right">
+<p class="font-body-md text-body-md text-outline">Escribiendo...</p>
+</div>
+<div class="w-8 h-8 rounded-full border border-outline border-dashed flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-outline text-[16px]">person</span>
+</div>
+</div>
+</div>
+<!-- Input & Actions Area -->
+<div class="absolute bottom-0 w-full bg-surface-bright border-t border-outline-variant pt-stack-sm pb-[calc(20px+48px)] z-40">
+<!-- Suggested Prompt Chips -->
+<div class="px-container-margin flex gap-stack-sm overflow-x-auto pb-stack-sm no-scrollbar">
+<button class="whitespace-nowrap px-stack-sm py-[6px] border border-outline-variant rounded bg-surface-container-low font-label-caps text-label-caps text-on-surface-variant hover:bg-primary-container hover:text-on-primary hover:border-primary-container transition-all shadow-sm">
+                        45 MINUTOS EXACTOS
+                    </button>
+<button class="whitespace-nowrap px-stack-sm py-[6px] border border-outline-variant rounded bg-surface-container-low font-label-caps text-label-caps text-on-surface-variant hover:bg-primary-container hover:text-on-primary hover:border-primary-container transition-all shadow-sm">
+                        1 HORA APROX.
+                    </button>
+<button class="whitespace-nowrap px-stack-sm py-[6px] border border-outline-variant rounded bg-surface-container-low font-label-caps text-label-caps text-on-surface-variant hover:bg-primary-container hover:text-on-primary hover:border-primary-container transition-all shadow-sm">
+                        MÁS DE 90 MIN.
+                    </button>
+</div>
+<!-- Input Field Container -->
+<div class="px-container-margin mt-unit">
+<div class="relative w-full border-b border-outline-variant focus-within:border-primary-container transition-colors group">
+<input class="w-full bg-transparent py-stack-sm pr-12 font-body-md text-body-md text-on-surface focus:outline-none placeholder:text-outline placeholder:font-body-md" placeholder="Ejemplo: quiero entrenar cuatro días para ganar músculo..." type="text"/>
+<button class="absolute right-0 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center text-outline hover:text-primary transition-colors bg-surface-container-highest rounded-full">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">arrow_upward</span>
+</button>
+</div>
+</div>
+<!-- Fallback Link -->
+<div class="px-container-margin mt-stack-md flex justify-center">
+<a class="font-label-caps text-label-caps text-outline hover:text-primary border-b border-transparent hover:border-primary transition-all flex items-center gap-unit" href="#">
+<span>Completar con formulario</span>
+<span class="material-symbols-outlined text-[14px]">assignment</span>
+</a>
+</div>
+</div>
+<!-- Bottom Sheet (Training Profile Summary - Peeking) -->
+<div class="fixed bottom-0 left-0 md:left-auto md:w-full md:max-w-[1200px] w-full bg-surface-container-lowest border-t border-outline-variant shadow-ambient transform translate-y-[calc(100%-48px)] hover:translate-y-0 transition-transform duration-300 ease-out z-50 rounded-t-xl group cursor-pointer">
+<!-- Handle & Label -->
+<div class="h-12 flex items-center justify-center border-b border-outline-variant relative">
+<div class="w-10 h-1 rounded-full bg-outline-variant group-hover:bg-primary transition-colors"></div>
+<div class="absolute left-container-margin flex items-center gap-unit text-on-surface-variant group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[16px]">summarize</span>
+<span class="font-label-caps text-label-caps">RESUMEN DEL PERFIL</span>
+</div>
+</div>
+<!-- Hidden Content (Revealed on hover/drag up) -->
+<div class="p-container-margin pb-stack-lg bg-surface grid grid-cols-1 md:grid-cols-2 gap-stack-md">
+<!-- Complex Bento Item -->
+<div class="border border-outline-variant p-stack-md bg-surface-container-lowest">
+<div class="flex justify-between items-center mb-stack-sm border-b border-outline-variant pb-unit">
+<h3 class="font-label-caps text-label-caps text-on-surface-variant">BIOMETRÍA</h3>
+<span class="material-symbols-outlined text-[16px] text-outline">monitor_weight</span>
+</div>
+<div class="grid grid-cols-2 gap-y-stack-sm font-data-mono text-data-mono">
+<span class="text-outline">PESO</span>
+<span class="text-primary text-right">82.5 KG</span>
+<span class="text-outline">ALTURA</span>
+<span class="text-primary text-right">180 CM</span>
+<span class="text-outline">EDAD</span>
+<span class="text-primary text-right">28 AÑOS</span>
+</div>
+</div>
+<!-- Complex Bento Item -->
+<div class="border border-outline-variant p-stack-md bg-surface-container-lowest">
+<div class="flex justify-between items-center mb-stack-sm border-b border-outline-variant pb-unit">
+<h3 class="font-label-caps text-label-caps text-on-surface-variant">HISTORIAL DE LESIONES</h3>
+<span class="material-symbols-outlined text-[16px] text-outline">medical_services</span>
+</div>
+<ul class="font-body-md text-body-md text-on-surface space-y-unit mt-stack-sm">
+<li class="flex items-start gap-unit">
+<span class="material-symbols-outlined text-[16px] text-secondary mt-1">warning</span>
+<span>Tendinitis rotuliana leve (Rodilla derecha). Evitar impacto alto.</span>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- Note: BottomNavBar is intentionally suppressed as this is a linear/transactional setup flow, 
+         following the "Automatic Suppression" rule in the Source of Truth Hierarchy. -->
+</body></html>

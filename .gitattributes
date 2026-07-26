@@ -1,0 +1,3 @@
+docs/design-reference/** -text
+*.png binary
+*.ico binary
