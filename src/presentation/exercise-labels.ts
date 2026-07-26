@@ -1,0 +1,78 @@
+const LABELS: Readonly<Record<string, string>> = {
+  abs: "Abdominales",
+  adductors: "Aductores",
+  back: "Espalda",
+  biceps: "Bíceps",
+  calves: "Pantorrillas",
+  cardio: "Cardio",
+  chest: "Pecho",
+  forearms: "Antebrazos",
+  glutes: "Glúteos",
+  hamstrings: "Isquiotibiales",
+  hip_flexors: "Flexores de cadera",
+  lats: "Dorsales",
+  lower_arms: "Antebrazos",
+  lower_back: "Espalda baja",
+  lower_legs: "Piernas",
+  middle_back: "Espalda media",
+  neck: "Cuello",
+  quads: "Cuádriceps",
+  shoulders: "Hombros",
+  traps: "Trapecios",
+  triceps: "Tríceps",
+  upper_arms: "Brazos",
+  upper_back: "Espalda alta",
+  upper_legs: "Muslos",
+  waist: "Zona media",
+  barbell: "Barra",
+  barbell_rack: "Soporte para barra",
+  band_anchor: "Anclaje para banda",
+  bench: "Banco",
+  body_weight: "Peso corporal",
+  cable: "Polea",
+  dumbbell: "Mancuernas",
+  dip_bars: "Paralelas",
+  glute_ham_developer: "Banco glute-ham",
+  hyperextension_bench: "Banco de hiperextensiones",
+  kettlebell: "Pesa rusa",
+  machine: "Máquina",
+  medicine_ball: "Balón medicinal",
+  preacher_bench: "Banco Scott",
+  pull_up_bar: "Barra de dominadas",
+  resistance_band: "Banda elástica",
+  roller: "Rodillo",
+  smith_machine: "Máquina Smith",
+  stability_ball: "Pelota de estabilidad",
+  step_platform: "Plataforma escalón",
+  weighted: "Carga adicional",
+  horizontal_push: "Empuje horizontal",
+  vertical_push: "Empuje vertical",
+  horizontal_pull: "Tracción horizontal",
+  vertical_pull: "Tracción vertical",
+  squat: "Sentadilla",
+  hinge: "Bisagra de cadera",
+  lunge: "Zancada",
+  carry: "Carga y traslado",
+  core: "Zona media",
+  isolation: "Aislado",
+  beginner: "Principiante",
+  intermediate: "Intermedio",
+  advanced: "Avanzado",
+  compound: "Compuesto",
+  bilateral: "Bilateral",
+  unilateral: "Unilateral",
+};
+
+export function exerciseLabel(value: string | null | undefined): string {
+  if (!value) return "Sin clasificar";
+  return (
+    LABELS[value] ??
+    value
+      .replaceAll("_", " ")
+      .replace(/\b\p{L}/gu, (character) => character.toLocaleUpperCase("es"))
+  );
+}
+
+export function exerciseListLabel(values: readonly string[]): string {
+  return values.map(exerciseLabel).join(", ");
+}

@@ -1,0 +1,5416 @@
+{
+  "schemaVersion": 1,
+  "datasetCommit": "7455efae41b330c265e7cd4b78dfa848e7ce5ebd",
+  "curationReviewSha256": "9f1d32edb076e1a56fe68e14e2ab256e2e41bb7d8ca97f586f3b78ec1a3a0c7c",
+  "approvedCount": 156,
+  "records": [
+    {
+      "exerciseId": "0001",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "core",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        20
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "core:flexion",
+      "additionalEquipment": [],
+      "tags": [
+        "abs",
+        "bilateral",
+        "body_weight",
+        "core",
+        "hip_flexors",
+        "isolation",
+        "lower_back",
+        "waist"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0017",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "vertical_pull",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "fatigueCost": "medium",
+      "skillRequirement": "low",
+      "substitutionGroup": "vertical_pull:lats",
+      "additionalEquipment": [],
+      "tags": [
+        "back",
+        "biceps",
+        "bilateral",
+        "compound",
+        "forearms",
+        "lats",
+        "leverage_machine",
+        "machine",
+        "vertical_pull"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0019",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "horizontal_push",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "fatigueCost": "medium",
+      "skillRequirement": "low",
+      "substitutionGroup": "horizontal_push:upper_arms",
+      "additionalEquipment": [],
+      "tags": [
+        "bilateral",
+        "chest",
+        "compound",
+        "horizontal_push",
+        "leverage_machine",
+        "machine",
+        "shoulders",
+        "triceps",
+        "upper_arms"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0025",
+      "approvedForGeneration": true,
+      "difficulty": "intermediate",
+      "movementPattern": "horizontal_push",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "substitutionGroup": "horizontal_push:chest",
+      "additionalEquipment": [
+        "barbell_rack",
+        "bench"
+      ],
+      "tags": [
+        "barbell",
+        "barbell_rack",
+        "bench",
+        "bilateral",
+        "chest",
+        "compound",
+        "horizontal_push",
+        "pectorals",
+        "shoulders",
+        "triceps"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0027",
+      "approvedForGeneration": true,
+      "difficulty": "intermediate",
+      "movementPattern": "horizontal_pull",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "substitutionGroup": "row:upper_back",
+      "additionalEquipment": [],
+      "tags": [
+        "back",
+        "barbell",
+        "biceps",
+        "bilateral",
+        "compound",
+        "forearms",
+        "horizontal_pull",
+        "upper_back"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0030",
+      "approvedForGeneration": true,
+      "difficulty": "intermediate",
+      "movementPattern": "horizontal_push",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "substitutionGroup": "horizontal_push:upper_arms",
+      "additionalEquipment": [
+        "barbell_rack",
+        "bench"
+      ],
+      "tags": [
+        "barbell",
+        "barbell_rack",
+        "bench",
+        "bilateral",
+        "chest",
+        "compound",
+        "horizontal_push",
+        "shoulders",
+        "triceps",
+        "upper_arms"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0031",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "isolation:biceps",
+      "additionalEquipment": [],
+      "tags": [
+        "barbell",
+        "biceps",
+        "bilateral",
+        "forearms",
+        "isolation",
+        "upper_arms"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0032",
+      "approvedForGeneration": true,
+      "difficulty": "intermediate",
+      "movementPattern": "hinge",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        3,
+        8
+      ],
+      "defaultRestSeconds": [
+        120,
+        180
+      ],
+      "fatigueCost": "high",
+      "skillRequirement": "medium",
+      "substitutionGroup": "hinge:upper_legs",
+      "additionalEquipment": [],
+      "tags": [
+        "barbell",
+        "bilateral",
+        "compound",
+        "glutes",
+        "hamstrings",
+        "hinge",
+        "lower_back",
+        "upper_legs"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0033",
+      "approvedForGeneration": true,
+      "difficulty": "intermediate",
+      "movementPattern": "horizontal_push",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "substitutionGroup": "horizontal_push:chest",
+      "additionalEquipment": [
+        "barbell_rack",
+        "bench"
+      ],
+      "tags": [
+        "barbell",
+        "barbell_rack",
+        "bench",
+        "bilateral",
+        "chest",
+        "compound",
+        "horizontal_push",
+        "pectorals",
+        "shoulders",
+        "triceps"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0041",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "isolation:delts_front",
+      "additionalEquipment": [],
+      "tags": [
+        "barbell",
+        "biceps",
+        "bilateral",
+        "delts",
+        "isolation",
+        "shoulders",
+        "triceps"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0042",
+      "approvedForGeneration": true,
+      "difficulty": "intermediate",
+      "movementPattern": "squat",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        120,
+        180
+      ],
+      "fatigueCost": "high",
+      "skillRequirement": "medium",
+      "substitutionGroup": "squat:upper_legs",
+      "additionalEquipment": [
+        "barbell_rack"
+      ],
+      "tags": [
+        "barbell",
+        "barbell_rack",
+        "bilateral",
+        "calves",
+        "compound",
+        "core",
+        "glutes",
+        "hamstrings",
+        "quadriceps",
+        "squat",
+        "upper_legs"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0047",
+      "approvedForGeneration": true,
+      "difficulty": "intermediate",
+      "movementPattern": "horizontal_push",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "substitutionGroup": "horizontal_push:chest",
+      "additionalEquipment": [
+        "barbell_rack",
+        "bench"
+      ],
+      "tags": [
+        "barbell",
+        "barbell_rack",
+        "bench",
+        "bilateral",
+        "chest",
+        "compound",
+        "horizontal_push",
+        "pectorals",
+        "shoulders",
+        "triceps"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0049",
+      "approvedForGeneration": true,
+      "difficulty": "intermediate",
+      "movementPattern": "horizontal_pull",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "substitutionGroup": "row:upper_back",
+      "additionalEquipment": [
+        "bench"
+      ],
+      "tags": [
+        "back",
+        "barbell",
+        "bench",
+        "biceps",
+        "bilateral",
+        "compound",
+        "forearms",
+        "horizontal_pull",
+        "upper_back"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0054",
+      "approvedForGeneration": true,
+      "difficulty": "intermediate",
+      "movementPattern": "lunge",
+      "modality": "compound",
+      "laterality": "unilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "substitutionGroup": "lunge:upper_legs",
+      "additionalEquipment": [
+        "barbell_rack"
+      ],
+      "tags": [
+        "barbell",
+        "barbell_rack",
+        "calves",
+        "compound",
+        "glutes",
+        "hamstrings",
+        "lunge",
+        "quadriceps",
+        "unilateral",
+        "upper_legs"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0061",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "isolation:triceps",
+      "additionalEquipment": [
+        "bench"
+      ],
+      "tags": [
+        "barbell",
+        "bench",
+        "bilateral",
+        "isolation",
+        "shoulders",
+        "triceps",
+        "upper_arms"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0070",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "isolation:biceps",
+      "additionalEquipment": [
+        "preacher_bench"
+      ],
+      "tags": [
+        "barbell",
+        "biceps",
+        "bilateral",
+        "forearms",
+        "isolation",
+        "preacher_bench",
+        "upper_arms"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0080",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "isolation:biceps",
+      "additionalEquipment": [],
+      "tags": [
+        "barbell",
+        "biceps",
+        "bilateral",
+        "forearms",
+        "isolation",
+        "upper_arms"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0085",
+      "approvedForGeneration": true,
+      "difficulty": "intermediate",
+      "movementPattern": "hinge",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        120,
+        180
+      ],
+      "fatigueCost": "high",
+      "skillRequirement": "medium",
+      "substitutionGroup": "hinge:upper_legs",
+      "additionalEquipment": [],
+      "tags": [
+        "barbell",
+        "bilateral",
+        "compound",
+        "glutes",
+        "hamstrings",
+        "hinge",
+        "lower_back",
+        "upper_legs"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0088",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "isolation:calves",
+      "additionalEquipment": [
+        "bench",
+        "step_platform"
+      ],
+      "tags": [
+        "barbell",
+        "bench",
+        "bilateral",
+        "calves",
+        "hamstrings",
+        "isolation",
+        "lower_legs",
+        "quadriceps",
+        "step_platform"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0092",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "isolation:triceps",
+      "additionalEquipment": [
+        "bench"
+      ],
+      "tags": [
+        "barbell",
+        "bench",
+        "bilateral",
+        "isolation",
+        "shoulders",
+        "triceps",
+        "upper_arms"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0095",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "isolation:traps",
+      "additionalEquipment": [],
+      "tags": [
+        "back",
+        "barbell",
+        "bilateral",
+        "isolation",
+        "shoulders",
+        "traps"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0108",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "isolation:calves",
+      "additionalEquipment": [
+        "barbell_rack"
+      ],
+      "tags": [
+        "barbell",
+        "barbell_rack",
+        "bilateral",
+        "calves",
+        "glutes",
+        "hamstrings",
+        "isolation",
+        "lower_legs"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0109",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "isolation:triceps",
+      "additionalEquipment": [],
+      "tags": [
+        "barbell",
+        "bilateral",
+        "isolation",
+        "shoulders",
+        "triceps",
+        "upper_arms"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0116",
+      "approvedForGeneration": true,
+      "difficulty": "intermediate",
+      "movementPattern": "hinge",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        120,
+        180
+      ],
+      "fatigueCost": "high",
+      "skillRequirement": "medium",
+      "substitutionGroup": "hinge:upper_legs",
+      "additionalEquipment": [],
+      "tags": [
+        "barbell",
+        "bilateral",
+        "compound",
+        "glutes",
+        "hamstrings",
+        "hinge",
+        "lower_back",
+        "upper_legs"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0117",
+      "approvedForGeneration": true,
+      "difficulty": "intermediate",
+      "movementPattern": "hinge",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        3,
+        8
+      ],
+      "defaultRestSeconds": [
+        120,
+        180
+      ],
+      "fatigueCost": "high",
+      "skillRequirement": "medium",
+      "substitutionGroup": "hinge:upper_legs",
+      "additionalEquipment": [],
+      "tags": [
+        "barbell",
+        "bilateral",
+        "compound",
+        "glutes",
+        "hamstrings",
+        "hinge",
+        "lower_back",
+        "quadriceps",
+        "upper_legs"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0124",
+      "approvedForGeneration": true,
+      "difficulty": "intermediate",
+      "movementPattern": "squat",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        120,
+        180
+      ],
+      "fatigueCost": "high",
+      "skillRequirement": "medium",
+      "substitutionGroup": "squat:upper_legs",
+      "additionalEquipment": [
+        "barbell_rack"
+      ],
+      "tags": [
+        "barbell",
+        "barbell_rack",
+        "bilateral",
+        "calves",
+        "compound",
+        "glutes",
+        "hamstrings",
+        "quads",
+        "squat",
+        "upper_legs"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0151",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "horizontal_push",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "fatigueCost": "medium",
+      "skillRequirement": "low",
+      "substitutionGroup": "horizontal_push:chest",
+      "additionalEquipment": [],
+      "tags": [
+        "bilateral",
+        "cable",
+        "chest",
+        "compound",
+        "horizontal_push",
+        "pectorals",
+        "shoulders",
+        "triceps"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0158",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "horizontal_push",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "chest_fly:pectorals",
+      "additionalEquipment": [],
+      "tags": [
+        "bilateral",
+        "cable",
+        "chest",
+        "horizontal_push",
+        "isolation",
+        "pectorals",
+        "shoulders",
+        "triceps"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0162",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "isolation:delts_front",
+      "additionalEquipment": [],
+      "tags": [
+        "bilateral",
+        "cable",
+        "delts",
+        "forearms",
+        "isolation",
+        "shoulders",
+        "triceps"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0165",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "isolation:biceps",
+      "additionalEquipment": [],
+      "tags": [
+        "biceps",
+        "bilateral",
+        "cable",
+        "forearms",
+        "isolation",
+        "upper_arms"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0168",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "unilateral",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "isolation:adductors",
+      "additionalEquipment": [],
+      "tags": [
+        "adductors",
+        "cable",
+        "glutes",
+        "isolation",
+        "quadriceps",
+        "unilateral",
+        "upper_legs"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0169",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "horizontal_push",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "fatigueCost": "medium",
+      "skillRequirement": "low",
+      "substitutionGroup": "horizontal_push:chest",
+      "additionalEquipment": [
+        "bench"
+      ],
+      "tags": [
+        "bench",
+        "bilateral",
+        "cable",
+        "chest",
+        "compound",
+        "deltoids",
+        "horizontal_push",
+        "pectorals",
+        "triceps"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0171",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "horizontal_push",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "chest_fly:pectorals",
+      "additionalEquipment": [
+        "bench"
+      ],
+      "tags": [
+        "bench",
+        "bilateral",
+        "cable",
+        "chest",
+        "deltoids",
+        "horizontal_push",
+        "isolation",
+        "pectorals",
+        "triceps"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0175",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "core",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        20
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "core:flexion",
+      "additionalEquipment": [],
+      "tags": [
+        "abs",
+        "bilateral",
+        "cable",
+        "core",
+        "isolation",
+        "obliques",
+        "waist"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0178",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "isolation:delts_lateral",
+      "additionalEquipment": [],
+      "tags": [
+        "bilateral",
+        "cable",
+        "delts",
+        "isolation",
+        "shoulders",
+        "traps",
+        "triceps"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0180",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "horizontal_pull",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "fatigueCost": "medium",
+      "skillRequirement": "low",
+      "substitutionGroup": "row:upper_back",
+      "additionalEquipment": [],
+      "tags": [
+        "back",
+        "biceps",
+        "bilateral",
+        "cable",
+        "compound",
+        "forearms",
+        "horizontal_pull",
+        "upper_back"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0192",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "unilateral",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "isolation:delts_lateral",
+      "additionalEquipment": [],
+      "tags": [
+        "cable",
+        "delts",
+        "isolation",
+        "shoulders",
+        "traps",
+        "triceps",
+        "unilateral"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0195",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "isolation:biceps",
+      "additionalEquipment": [
+        "preacher_bench"
+      ],
+      "tags": [
+        "biceps",
+        "bilateral",
+        "cable",
+        "forearms",
+        "isolation",
+        "preacher_bench",
+        "upper_arms"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0198",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "vertical_pull",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "fatigueCost": "medium",
+      "skillRequirement": "low",
+      "substitutionGroup": "vertical_pull:lats",
+      "additionalEquipment": [],
+      "tags": [
+        "back",
+        "biceps",
+        "bilateral",
+        "cable",
+        "compound",
+        "forearms",
+        "lats",
+        "vertical_pull"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0200",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "isolation:triceps",
+      "additionalEquipment": [],
+      "tags": [
+        "bilateral",
+        "cable",
+        "forearms",
+        "isolation",
+        "triceps",
+        "upper_arms"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0201",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "isolation:triceps",
+      "additionalEquipment": [],
+      "tags": [
+        "bilateral",
+        "cable",
+        "forearms",
+        "isolation",
+        "triceps",
+        "upper_arms"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0207",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "isolation:triceps",
+      "additionalEquipment": [],
+      "tags": [
+        "bilateral",
+        "cable",
+        "forearms",
+        "isolation",
+        "triceps",
+        "upper_arms"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0212",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "core",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        20
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "core:flexion",
+      "additionalEquipment": [],
+      "tags": [
+        "abs",
+        "bilateral",
+        "cable",
+        "core",
+        "isolation",
+        "obliques",
+        "waist"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0219",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "vertical_push",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "fatigueCost": "medium",
+      "skillRequirement": "low",
+      "substitutionGroup": "vertical_push:shoulders",
+      "additionalEquipment": [],
+      "tags": [
+        "bilateral",
+        "cable",
+        "compound",
+        "delts",
+        "shoulders",
+        "triceps",
+        "upper_back",
+        "vertical_push"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0220",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "isolation:traps",
+      "additionalEquipment": [],
+      "tags": [
+        "back",
+        "bilateral",
+        "cable",
+        "isolation",
+        "shoulders",
+        "traps"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0223",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "core",
+      "modality": "isolation",
+      "laterality": "unilateral",
+      "defaultRepRange": [
+        10,
+        20
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "core:rotation_lateral",
+      "additionalEquipment": [],
+      "tags": [
+        "abs",
+        "cable",
+        "core",
+        "isolation",
+        "obliques",
+        "unilateral",
+        "waist"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0226",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "core",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        20
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "core:flexion",
+      "additionalEquipment": [],
+      "tags": [
+        "abs",
+        "bilateral",
+        "cable",
+        "core",
+        "isolation",
+        "obliques",
+        "waist"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0227",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "horizontal_push",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "chest_fly:pectorals",
+      "additionalEquipment": [],
+      "tags": [
+        "bilateral",
+        "cable",
+        "chest",
+        "deltoids",
+        "horizontal_push",
+        "isolation",
+        "pectorals",
+        "triceps"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0238",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "isolation:lats",
+      "additionalEquipment": [],
+      "tags": [
+        "back",
+        "biceps",
+        "bilateral",
+        "cable",
+        "isolation",
+        "lats",
+        "shoulders"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0241",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "isolation:triceps",
+      "additionalEquipment": [],
+      "tags": [
+        "bilateral",
+        "cable",
+        "forearms",
+        "isolation",
+        "triceps",
+        "upper_arms"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0242",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "core",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        20
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "core:hip_flexion",
+      "additionalEquipment": [],
+      "tags": [
+        "abs",
+        "bilateral",
+        "cable",
+        "core",
+        "hip_flexors",
+        "isolation",
+        "waist"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0262",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "core",
+      "modality": "isolation",
+      "laterality": "unilateral",
+      "defaultRepRange": [
+        10,
+        20
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "core:rotation_lateral",
+      "additionalEquipment": [],
+      "tags": [
+        "abs",
+        "body_weight",
+        "core",
+        "isolation",
+        "obliques",
+        "unilateral",
+        "waist"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0277",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "core",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        20
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "core:flexion",
+      "additionalEquipment": [
+        "bench"
+      ],
+      "tags": [
+        "abs",
+        "bench",
+        "bilateral",
+        "body_weight",
+        "core",
+        "hip_flexors",
+        "isolation",
+        "waist"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0279",
+      "approvedForGeneration": true,
+      "difficulty": "intermediate",
+      "movementPattern": "horizontal_push",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "substitutionGroup": "horizontal_push:chest",
+      "additionalEquipment": [
+        "bench"
+      ],
+      "tags": [
+        "bench",
+        "bilateral",
+        "body_weight",
+        "chest",
+        "compound",
+        "horizontal_push",
+        "pectorals",
+        "shoulders",
+        "triceps"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0282",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "core",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        20
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "core:flexion",
+      "additionalEquipment": [
+        "bench"
+      ],
+      "tags": [
+        "abs",
+        "bench",
+        "bilateral",
+        "body_weight",
+        "core",
+        "hip_flexors",
+        "isolation",
+        "lower_back",
+        "waist"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0289",
+      "approvedForGeneration": true,
+      "difficulty": "intermediate",
+      "movementPattern": "horizontal_push",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "substitutionGroup": "horizontal_push:chest",
+      "additionalEquipment": [
+        "bench"
+      ],
+      "tags": [
+        "bench",
+        "bilateral",
+        "chest",
+        "compound",
+        "dumbbell",
+        "horizontal_push",
+        "pectorals",
+        "shoulders",
+        "triceps"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0293",
+      "approvedForGeneration": true,
+      "difficulty": "intermediate",
+      "movementPattern": "horizontal_pull",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "substitutionGroup": "row:upper_back",
+      "additionalEquipment": [],
+      "tags": [
+        "back",
+        "biceps",
+        "bilateral",
+        "compound",
+        "dumbbell",
+        "forearms",
+        "horizontal_pull",
+        "upper_back"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0294",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "isolation:biceps",
+      "additionalEquipment": [],
+      "tags": [
+        "biceps",
+        "bilateral",
+        "dumbbell",
+        "forearms",
+        "isolation",
+        "upper_arms"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0297",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "unilateral",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "isolation:biceps",
+      "additionalEquipment": [
+        "bench"
+      ],
+      "tags": [
+        "bench",
+        "biceps",
+        "dumbbell",
+        "forearms",
+        "isolation",
+        "unilateral",
+        "upper_arms"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0300",
+      "approvedForGeneration": true,
+      "difficulty": "intermediate",
+      "movementPattern": "hinge",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        120,
+        180
+      ],
+      "fatigueCost": "high",
+      "skillRequirement": "medium",
+      "substitutionGroup": "hinge:upper_legs",
+      "additionalEquipment": [],
+      "tags": [
+        "bilateral",
+        "compound",
+        "dumbbell",
+        "glutes",
+        "hamstrings",
+        "hinge",
+        "lower_back",
+        "upper_legs"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0301",
+      "approvedForGeneration": true,
+      "difficulty": "intermediate",
+      "movementPattern": "horizontal_push",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "substitutionGroup": "horizontal_push:chest",
+      "additionalEquipment": [
+        "bench"
+      ],
+      "tags": [
+        "bench",
+        "bilateral",
+        "chest",
+        "compound",
+        "dumbbell",
+        "horizontal_push",
+        "pectorals",
+        "shoulders",
+        "triceps"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0302",
+      "approvedForGeneration": true,
+      "difficulty": "intermediate",
+      "movementPattern": "horizontal_push",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "medium",
+      "substitutionGroup": "chest_fly:pectorals",
+      "additionalEquipment": [
+        "bench"
+      ],
+      "tags": [
+        "bench",
+        "bilateral",
+        "chest",
+        "dumbbell",
+        "horizontal_push",
+        "isolation",
+        "pectorals",
+        "shoulders"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0308",
+      "approvedForGeneration": true,
+      "difficulty": "intermediate",
+      "movementPattern": "horizontal_push",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "medium",
+      "substitutionGroup": "chest_fly:pectorals",
+      "additionalEquipment": [
+        "bench"
+      ],
+      "tags": [
+        "bench",
+        "bilateral",
+        "chest",
+        "dumbbell",
+        "horizontal_push",
+        "isolation",
+        "pectorals",
+        "shoulders"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0310",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "isolation:delts_front",
+      "additionalEquipment": [],
+      "tags": [
+        "biceps",
+        "bilateral",
+        "delts",
+        "dumbbell",
+        "isolation",
+        "shoulders",
+        "trapezius"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0313",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "isolation:biceps",
+      "additionalEquipment": [],
+      "tags": [
+        "biceps",
+        "bilateral",
+        "dumbbell",
+        "forearms",
+        "isolation",
+        "upper_arms"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0314",
+      "approvedForGeneration": true,
+      "difficulty": "intermediate",
+      "movementPattern": "horizontal_push",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "substitutionGroup": "horizontal_push:chest",
+      "additionalEquipment": [
+        "bench"
+      ],
+      "tags": [
+        "bench",
+        "bilateral",
+        "chest",
+        "compound",
+        "dumbbell",
+        "horizontal_push",
+        "pectorals",
+        "shoulders",
+        "triceps"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0315",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "isolation:biceps",
+      "additionalEquipment": [
+        "bench"
+      ],
+      "tags": [
+        "bench",
+        "biceps",
+        "bilateral",
+        "dumbbell",
+        "forearms",
+        "isolation",
+        "upper_arms"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0319",
+      "approvedForGeneration": true,
+      "difficulty": "intermediate",
+      "movementPattern": "horizontal_push",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "medium",
+      "substitutionGroup": "chest_fly:pectorals",
+      "additionalEquipment": [
+        "bench"
+      ],
+      "tags": [
+        "bench",
+        "bilateral",
+        "chest",
+        "dumbbell",
+        "horizontal_push",
+        "isolation",
+        "pectorals",
+        "shoulders"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0327",
+      "approvedForGeneration": true,
+      "difficulty": "intermediate",
+      "movementPattern": "horizontal_pull",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "substitutionGroup": "row:upper_back",
+      "additionalEquipment": [
+        "bench"
+      ],
+      "tags": [
+        "back",
+        "bench",
+        "biceps",
+        "bilateral",
+        "compound",
+        "dumbbell",
+        "horizontal_pull",
+        "shoulders",
+        "upper_back"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0334",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "isolation:delts_lateral",
+      "additionalEquipment": [],
+      "tags": [
+        "bilateral",
+        "delts",
+        "dumbbell",
+        "isolation",
+        "shoulders",
+        "traps"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0336",
+      "approvedForGeneration": true,
+      "difficulty": "intermediate",
+      "movementPattern": "lunge",
+      "modality": "compound",
+      "laterality": "unilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "substitutionGroup": "lunge:upper_legs",
+      "additionalEquipment": [],
+      "tags": [
+        "calves",
+        "compound",
+        "dumbbell",
+        "glutes",
+        "hamstrings",
+        "lunge",
+        "quadriceps",
+        "unilateral",
+        "upper_legs"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0351",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "isolation:triceps",
+      "additionalEquipment": [
+        "bench"
+      ],
+      "tags": [
+        "bench",
+        "bilateral",
+        "dumbbell",
+        "isolation",
+        "shoulders",
+        "triceps",
+        "upper_arms"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0361",
+      "approvedForGeneration": true,
+      "difficulty": "intermediate",
+      "movementPattern": "vertical_push",
+      "modality": "compound",
+      "laterality": "unilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "substitutionGroup": "vertical_push:shoulders",
+      "additionalEquipment": [],
+      "tags": [
+        "compound",
+        "delts",
+        "dumbbell",
+        "shoulders",
+        "triceps",
+        "unilateral",
+        "upper_back",
+        "vertical_push"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0372",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "isolation:biceps",
+      "additionalEquipment": [
+        "preacher_bench"
+      ],
+      "tags": [
+        "biceps",
+        "bilateral",
+        "dumbbell",
+        "forearms",
+        "isolation",
+        "preacher_bench",
+        "upper_arms"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0383",
+      "approvedForGeneration": true,
+      "difficulty": "intermediate",
+      "movementPattern": "horizontal_pull",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "medium",
+      "substitutionGroup": "rear_delt_pull:delts",
+      "additionalEquipment": [],
+      "tags": [
+        "bilateral",
+        "delts",
+        "dumbbell",
+        "horizontal_pull",
+        "isolation",
+        "rhomboids",
+        "shoulders",
+        "trapezius"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0396",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "isolation:delts_lateral",
+      "additionalEquipment": [
+        "bench"
+      ],
+      "tags": [
+        "bench",
+        "bilateral",
+        "delts",
+        "dumbbell",
+        "isolation",
+        "shoulders",
+        "traps",
+        "upper_back"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0405",
+      "approvedForGeneration": true,
+      "difficulty": "intermediate",
+      "movementPattern": "vertical_push",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "substitutionGroup": "vertical_push:shoulders",
+      "additionalEquipment": [
+        "bench"
+      ],
+      "tags": [
+        "bench",
+        "bilateral",
+        "compound",
+        "delts",
+        "dumbbell",
+        "shoulders",
+        "triceps",
+        "upper_back",
+        "vertical_push"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0406",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "isolation:traps",
+      "additionalEquipment": [],
+      "tags": [
+        "back",
+        "bilateral",
+        "dumbbell",
+        "isolation",
+        "shoulders",
+        "traps"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0413",
+      "approvedForGeneration": true,
+      "difficulty": "intermediate",
+      "movementPattern": "squat",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "substitutionGroup": "squat:upper_legs",
+      "additionalEquipment": [],
+      "tags": [
+        "bilateral",
+        "calves",
+        "compound",
+        "dumbbell",
+        "glutes",
+        "hamstrings",
+        "quadriceps",
+        "squat",
+        "upper_legs"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0416",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "isolation:biceps",
+      "additionalEquipment": [],
+      "tags": [
+        "biceps",
+        "bilateral",
+        "dumbbell",
+        "forearms",
+        "isolation",
+        "upper_arms"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0417",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "isolation:calves",
+      "additionalEquipment": [],
+      "tags": [
+        "ankles",
+        "bilateral",
+        "calves",
+        "dumbbell",
+        "isolation",
+        "lower_legs"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0430",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "isolation:triceps",
+      "additionalEquipment": [],
+      "tags": [
+        "bilateral",
+        "dumbbell",
+        "isolation",
+        "shoulders",
+        "triceps",
+        "upper_arms"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0464",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "core",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        20
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "core:rotation_lateral",
+      "additionalEquipment": [],
+      "tags": [
+        "abs",
+        "bilateral",
+        "body_weight",
+        "core",
+        "isolation",
+        "obliques",
+        "shoulders",
+        "waist"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0472",
+      "approvedForGeneration": true,
+      "difficulty": "intermediate",
+      "movementPattern": "core",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        20
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "medium",
+      "substitutionGroup": "core:hip_flexion",
+      "additionalEquipment": [
+        "pull_up_bar"
+      ],
+      "tags": [
+        "abs",
+        "bilateral",
+        "body_weight",
+        "core",
+        "hip_flexors",
+        "isolation",
+        "pull_up_bar",
+        "waist"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0488",
+      "approvedForGeneration": true,
+      "difficulty": "intermediate",
+      "movementPattern": "hinge",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "substitutionGroup": "hinge:back",
+      "additionalEquipment": [
+        "hyperextension_bench"
+      ],
+      "tags": [
+        "back",
+        "bilateral",
+        "body_weight",
+        "compound",
+        "glutes",
+        "hamstrings",
+        "hinge",
+        "hyperextension_bench",
+        "spine"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0493",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "horizontal_push",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "fatigueCost": "medium",
+      "skillRequirement": "low",
+      "substitutionGroup": "horizontal_push:chest",
+      "additionalEquipment": [
+        "bench"
+      ],
+      "tags": [
+        "bench",
+        "bilateral",
+        "body_weight",
+        "chest",
+        "compound",
+        "horizontal_push",
+        "pectorals",
+        "shoulders",
+        "triceps"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0534",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "squat",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "substitutionGroup": "squat:upper_legs",
+      "additionalEquipment": [],
+      "tags": [
+        "bilateral",
+        "calves",
+        "compound",
+        "glutes",
+        "hamstrings",
+        "kettlebell",
+        "quadriceps",
+        "squat",
+        "upper_legs"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0541",
+      "approvedForGeneration": true,
+      "difficulty": "intermediate",
+      "movementPattern": "horizontal_pull",
+      "modality": "compound",
+      "laterality": "unilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "substitutionGroup": "row:upper_back",
+      "additionalEquipment": [],
+      "tags": [
+        "back",
+        "biceps",
+        "compound",
+        "forearms",
+        "horizontal_pull",
+        "kettlebell",
+        "unilateral",
+        "upper_back"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0546",
+      "approvedForGeneration": true,
+      "difficulty": "intermediate",
+      "movementPattern": "vertical_push",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "substitutionGroup": "vertical_push:shoulders",
+      "additionalEquipment": [
+        "bench"
+      ],
+      "tags": [
+        "bench",
+        "bilateral",
+        "compound",
+        "core",
+        "delts",
+        "kettlebell",
+        "shoulders",
+        "triceps",
+        "vertical_push"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0549",
+      "approvedForGeneration": true,
+      "difficulty": "intermediate",
+      "movementPattern": "hinge",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        20
+      ],
+      "defaultRestSeconds": [
+        60,
+        120
+      ],
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "substitutionGroup": "hinge:upper_legs",
+      "additionalEquipment": [],
+      "tags": [
+        "bilateral",
+        "compound",
+        "core",
+        "glutes",
+        "hamstrings",
+        "hinge",
+        "kettlebell",
+        "upper_legs"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0573",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "hinge",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "fatigueCost": "medium",
+      "skillRequirement": "low",
+      "substitutionGroup": "hinge:back",
+      "additionalEquipment": [],
+      "tags": [
+        "back",
+        "bilateral",
+        "compound",
+        "glutes",
+        "hamstrings",
+        "hinge",
+        "leverage_machine",
+        "machine",
+        "spine"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0576",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "horizontal_push",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "fatigueCost": "medium",
+      "skillRequirement": "low",
+      "substitutionGroup": "horizontal_push:chest",
+      "additionalEquipment": [],
+      "tags": [
+        "bilateral",
+        "chest",
+        "compound",
+        "horizontal_push",
+        "leverage_machine",
+        "machine",
+        "pectorals",
+        "shoulders",
+        "triceps"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0579",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "vertical_pull",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "fatigueCost": "medium",
+      "skillRequirement": "low",
+      "substitutionGroup": "vertical_pull:lats",
+      "additionalEquipment": [],
+      "tags": [
+        "back",
+        "biceps",
+        "bilateral",
+        "compound",
+        "lats",
+        "leverage_machine",
+        "machine",
+        "rear_deltoids",
+        "rhomboids",
+        "vertical_pull"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0582",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "isolation:hamstrings",
+      "additionalEquipment": [],
+      "tags": [
+        "bilateral",
+        "glutes",
+        "hamstrings",
+        "isolation",
+        "leverage_machine",
+        "machine",
+        "upper_legs"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0584",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "isolation:delts_lateral",
+      "additionalEquipment": [],
+      "tags": [
+        "bilateral",
+        "delts",
+        "isolation",
+        "leverage_machine",
+        "machine",
+        "shoulders",
+        "traps",
+        "upper_back"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0585",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "isolation:quads",
+      "additionalEquipment": [],
+      "tags": [
+        "bilateral",
+        "hamstrings",
+        "isolation",
+        "leverage_machine",
+        "machine",
+        "quads",
+        "upper_legs"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0586",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "isolation:hamstrings",
+      "additionalEquipment": [],
+      "tags": [
+        "bilateral",
+        "calves",
+        "hamstrings",
+        "isolation",
+        "leverage_machine",
+        "machine",
+        "upper_legs"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0587",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "vertical_push",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "fatigueCost": "medium",
+      "skillRequirement": "low",
+      "substitutionGroup": "vertical_push:shoulders",
+      "additionalEquipment": [],
+      "tags": [
+        "bilateral",
+        "compound",
+        "delts",
+        "leverage_machine",
+        "machine",
+        "shoulders",
+        "triceps",
+        "upper_chest",
+        "vertical_push"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0592",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "isolation:biceps",
+      "additionalEquipment": [],
+      "tags": [
+        "biceps",
+        "bilateral",
+        "forearms",
+        "isolation",
+        "leverage_machine",
+        "machine",
+        "upper_arms"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0594",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "isolation:calves",
+      "additionalEquipment": [],
+      "tags": [
+        "ankle_stabilizers",
+        "bilateral",
+        "calves",
+        "isolation",
+        "leverage_machine",
+        "lower_legs",
+        "machine",
+        "soleus"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0595",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "core",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        20
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "core:flexion",
+      "additionalEquipment": [],
+      "tags": [
+        "abs",
+        "bilateral",
+        "core",
+        "isolation",
+        "leverage_machine",
+        "machine",
+        "obliques",
+        "waist"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0596",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "horizontal_push",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "chest_fly:pectorals",
+      "additionalEquipment": [],
+      "tags": [
+        "bilateral",
+        "chest",
+        "deltoids",
+        "horizontal_push",
+        "isolation",
+        "leverage_machine",
+        "machine",
+        "pectorals",
+        "trapezius"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0598",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "isolation:adductors",
+      "additionalEquipment": [],
+      "tags": [
+        "adductors",
+        "bilateral",
+        "glutes",
+        "hamstrings",
+        "isolation",
+        "leverage_machine",
+        "machine",
+        "upper_legs"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0599",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "isolation:hamstrings",
+      "additionalEquipment": [],
+      "tags": [
+        "bilateral",
+        "calves",
+        "hamstrings",
+        "isolation",
+        "leverage_machine",
+        "machine",
+        "upper_legs"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0600",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "core",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        20
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "core:hip_flexion",
+      "additionalEquipment": [],
+      "tags": [
+        "abs",
+        "bilateral",
+        "core",
+        "hip_flexors",
+        "isolation",
+        "leverage_machine",
+        "machine",
+        "waist"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0602",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "horizontal_pull",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "rear_delt_pull:delts",
+      "additionalEquipment": [],
+      "tags": [
+        "bilateral",
+        "delts",
+        "horizontal_pull",
+        "isolation",
+        "leverage_machine",
+        "machine",
+        "rhomboids",
+        "shoulders",
+        "trapezius"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0603",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "vertical_push",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "fatigueCost": "medium",
+      "skillRequirement": "low",
+      "substitutionGroup": "vertical_push:shoulders",
+      "additionalEquipment": [],
+      "tags": [
+        "bilateral",
+        "chest",
+        "compound",
+        "delts",
+        "leverage_machine",
+        "machine",
+        "shoulders",
+        "triceps",
+        "vertical_push"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0604",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "isolation:traps",
+      "additionalEquipment": [],
+      "tags": [
+        "back",
+        "bilateral",
+        "isolation",
+        "leverage_machine",
+        "machine",
+        "shoulders",
+        "traps"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0605",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "isolation:calves",
+      "additionalEquipment": [],
+      "tags": [
+        "ankle_stabilizers",
+        "bilateral",
+        "calves",
+        "isolation",
+        "leverage_machine",
+        "lower_legs",
+        "machine",
+        "soleus"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0606",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "horizontal_pull",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "fatigueCost": "medium",
+      "skillRequirement": "low",
+      "substitutionGroup": "row:upper_back",
+      "additionalEquipment": [],
+      "tags": [
+        "back",
+        "biceps",
+        "bilateral",
+        "compound",
+        "forearms",
+        "horizontal_pull",
+        "leverage_machine",
+        "machine",
+        "upper_back"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0607",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "isolation:triceps",
+      "additionalEquipment": [],
+      "tags": [
+        "bilateral",
+        "isolation",
+        "leverage_machine",
+        "machine",
+        "shoulders",
+        "triceps",
+        "upper_arms"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0620",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "core",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        20
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "core:hip_flexion",
+      "additionalEquipment": [
+        "bench"
+      ],
+      "tags": [
+        "abs",
+        "bench",
+        "bilateral",
+        "body_weight",
+        "core",
+        "hip_flexors",
+        "isolation",
+        "waist"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0652",
+      "approvedForGeneration": true,
+      "difficulty": "intermediate",
+      "movementPattern": "vertical_pull",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "substitutionGroup": "vertical_pull:lats",
+      "additionalEquipment": [
+        "pull_up_bar"
+      ],
+      "tags": [
+        "back",
+        "biceps",
+        "bilateral",
+        "body_weight",
+        "compound",
+        "forearms",
+        "lats",
+        "pull_up_bar",
+        "vertical_pull"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0659",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "horizontal_push",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "fatigueCost": "medium",
+      "skillRequirement": "low",
+      "substitutionGroup": "horizontal_push:chest",
+      "additionalEquipment": [],
+      "tags": [
+        "bilateral",
+        "body_weight",
+        "chest",
+        "compound",
+        "deltoids",
+        "horizontal_push",
+        "pectorals",
+        "triceps"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0662",
+      "approvedForGeneration": true,
+      "difficulty": "intermediate",
+      "movementPattern": "horizontal_push",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "substitutionGroup": "horizontal_push:chest",
+      "additionalEquipment": [],
+      "tags": [
+        "bilateral",
+        "body_weight",
+        "chest",
+        "compound",
+        "core",
+        "deltoids",
+        "horizontal_push",
+        "pectorals",
+        "triceps"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0673",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "vertical_pull",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "fatigueCost": "medium",
+      "skillRequirement": "low",
+      "substitutionGroup": "vertical_pull:lats",
+      "additionalEquipment": [],
+      "tags": [
+        "back",
+        "biceps",
+        "bilateral",
+        "compound",
+        "forearms",
+        "lats",
+        "leverage_machine",
+        "machine",
+        "vertical_pull"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0687",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "core",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        20
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "core:rotation_lateral",
+      "additionalEquipment": [],
+      "tags": [
+        "abs",
+        "bilateral",
+        "body_weight",
+        "core",
+        "isolation",
+        "obliques",
+        "waist"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0689",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "core",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        20
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "core:hip_flexion",
+      "additionalEquipment": [
+        "bench"
+      ],
+      "tags": [
+        "abs",
+        "bench",
+        "bilateral",
+        "body_weight",
+        "core",
+        "hip_flexors",
+        "isolation",
+        "waist"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0766",
+      "approvedForGeneration": true,
+      "difficulty": "intermediate",
+      "movementPattern": "vertical_push",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "substitutionGroup": "vertical_push:shoulders",
+      "additionalEquipment": [
+        "bench",
+        "smith_machine"
+      ],
+      "tags": [
+        "bench",
+        "bilateral",
+        "compound",
+        "delts",
+        "shoulders",
+        "smith_machine",
+        "triceps",
+        "upper_back",
+        "vertical_push"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0814",
+      "approvedForGeneration": true,
+      "difficulty": "intermediate",
+      "movementPattern": "horizontal_push",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "substitutionGroup": "horizontal_push:upper_arms",
+      "additionalEquipment": [
+        "bench"
+      ],
+      "tags": [
+        "bench",
+        "bilateral",
+        "body_weight",
+        "chest",
+        "compound",
+        "horizontal_push",
+        "shoulders",
+        "triceps",
+        "upper_arms"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0832",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "core",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        20
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "core:flexion",
+      "additionalEquipment": [],
+      "tags": [
+        "abs",
+        "bilateral",
+        "core",
+        "isolation",
+        "obliques",
+        "waist",
+        "weighted"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0841",
+      "approvedForGeneration": true,
+      "difficulty": "advanced",
+      "movementPattern": "vertical_pull",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        3,
+        8
+      ],
+      "defaultRestSeconds": [
+        120,
+        180
+      ],
+      "fatigueCost": "high",
+      "skillRequirement": "high",
+      "substitutionGroup": "vertical_pull:lats",
+      "additionalEquipment": [
+        "pull_up_bar"
+      ],
+      "tags": [
+        "back",
+        "biceps",
+        "bilateral",
+        "compound",
+        "forearms",
+        "lats",
+        "pull_up_bar",
+        "vertical_pull",
+        "weighted"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0846",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "core",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        20
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "core:rotation_lateral",
+      "additionalEquipment": [],
+      "tags": [
+        "abs",
+        "bilateral",
+        "core",
+        "isolation",
+        "lower_back",
+        "obliques",
+        "waist",
+        "weighted"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0868",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "isolation:biceps",
+      "additionalEquipment": [],
+      "tags": [
+        "biceps",
+        "bilateral",
+        "cable",
+        "forearms",
+        "isolation",
+        "upper_arms"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0872",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "core",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        20
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "core:hip_flexion",
+      "additionalEquipment": [],
+      "tags": [
+        "abs",
+        "bilateral",
+        "body_weight",
+        "core",
+        "hip_flexors",
+        "isolation",
+        "waist"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0873",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "core",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        20
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "core:hip_flexion",
+      "additionalEquipment": [],
+      "tags": [
+        "abs",
+        "bilateral",
+        "cable",
+        "core",
+        "hip_flexors",
+        "isolation",
+        "waist"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0970",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "vertical_pull",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "substitutionGroup": "vertical_pull:lats",
+      "additionalEquipment": [
+        "pull_up_bar"
+      ],
+      "tags": [
+        "back",
+        "band",
+        "biceps",
+        "bilateral",
+        "compound",
+        "forearms",
+        "lats",
+        "pull_up_bar",
+        "resistance_band",
+        "vertical_pull"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0978",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "isolation:delts_front",
+      "additionalEquipment": [],
+      "tags": [
+        "band",
+        "bilateral",
+        "delts",
+        "isolation",
+        "resistance_band",
+        "shoulders",
+        "triceps",
+        "upper_back"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "0993",
+      "approvedForGeneration": true,
+      "difficulty": "intermediate",
+      "movementPattern": "horizontal_pull",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "medium",
+      "substitutionGroup": "rear_delt_pull:delts",
+      "additionalEquipment": [
+        "band_anchor"
+      ],
+      "tags": [
+        "band",
+        "band_anchor",
+        "bilateral",
+        "delts",
+        "horizontal_pull",
+        "isolation",
+        "resistance_band",
+        "shoulders",
+        "trapezius",
+        "upper_back"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "1004",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "squat",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "fatigueCost": "medium",
+      "skillRequirement": "low",
+      "substitutionGroup": "squat:upper_legs",
+      "additionalEquipment": [],
+      "tags": [
+        "band",
+        "bilateral",
+        "calves",
+        "compound",
+        "glutes",
+        "hamstrings",
+        "quadriceps",
+        "resistance_band",
+        "squat",
+        "upper_legs"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "1298",
+      "approvedForGeneration": true,
+      "difficulty": "intermediate",
+      "movementPattern": "horizontal_push",
+      "modality": "compound",
+      "laterality": "unilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "substitutionGroup": "horizontal_push:chest",
+      "additionalEquipment": [],
+      "tags": [
+        "chest",
+        "compound",
+        "horizontal_push",
+        "kettlebell",
+        "pectorals",
+        "shoulders",
+        "triceps",
+        "unilateral"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "1299",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "horizontal_push",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "fatigueCost": "medium",
+      "skillRequirement": "low",
+      "substitutionGroup": "horizontal_push:chest",
+      "additionalEquipment": [],
+      "tags": [
+        "bilateral",
+        "chest",
+        "compound",
+        "horizontal_push",
+        "leverage_machine",
+        "machine",
+        "pectorals",
+        "shoulders",
+        "triceps"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "1300",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "horizontal_push",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "fatigueCost": "medium",
+      "skillRequirement": "low",
+      "substitutionGroup": "horizontal_push:chest",
+      "additionalEquipment": [],
+      "tags": [
+        "bilateral",
+        "chest",
+        "compound",
+        "horizontal_push",
+        "leverage_machine",
+        "machine",
+        "pectorals",
+        "shoulders",
+        "triceps"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "1314",
+      "approvedForGeneration": true,
+      "difficulty": "intermediate",
+      "movementPattern": "hinge",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "substitutionGroup": "hinge:back",
+      "additionalEquipment": [],
+      "tags": [
+        "back",
+        "bilateral",
+        "compound",
+        "glutes",
+        "hamstrings",
+        "hinge",
+        "spine",
+        "stability_ball"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "1326",
+      "approvedForGeneration": true,
+      "difficulty": "intermediate",
+      "movementPattern": "vertical_pull",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "substitutionGroup": "vertical_pull:lats",
+      "additionalEquipment": [
+        "pull_up_bar"
+      ],
+      "tags": [
+        "back",
+        "biceps",
+        "bilateral",
+        "body_weight",
+        "compound",
+        "forearms",
+        "lats",
+        "pull_up_bar",
+        "vertical_pull"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "1350",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "horizontal_pull",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "fatigueCost": "medium",
+      "skillRequirement": "low",
+      "substitutionGroup": "row:upper_back",
+      "additionalEquipment": [],
+      "tags": [
+        "back",
+        "biceps",
+        "bilateral",
+        "compound",
+        "forearms",
+        "horizontal_pull",
+        "leverage_machine",
+        "machine",
+        "upper_back"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "1373",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "isolation:calves",
+      "additionalEquipment": [],
+      "tags": [
+        "ankles",
+        "bilateral",
+        "body_weight",
+        "calves",
+        "feet",
+        "isolation",
+        "lower_legs"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "1375",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "isolation:calves",
+      "additionalEquipment": [],
+      "tags": [
+        "bilateral",
+        "cable",
+        "calves",
+        "glutes",
+        "hamstrings",
+        "isolation",
+        "lower_legs"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "1379",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "isolation:calves",
+      "additionalEquipment": [
+        "bench",
+        "step_platform"
+      ],
+      "tags": [
+        "bench",
+        "bilateral",
+        "calves",
+        "dumbbell",
+        "hamstrings",
+        "isolation",
+        "lower_legs",
+        "step_platform"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "1409",
+      "approvedForGeneration": true,
+      "difficulty": "intermediate",
+      "movementPattern": "hinge",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "substitutionGroup": "hinge:upper_legs",
+      "additionalEquipment": [],
+      "tags": [
+        "barbell",
+        "bilateral",
+        "compound",
+        "glutes",
+        "hamstrings",
+        "hinge",
+        "lower_back",
+        "upper_legs"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "1429",
+      "approvedForGeneration": true,
+      "difficulty": "intermediate",
+      "movementPattern": "vertical_pull",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "substitutionGroup": "vertical_pull:lats",
+      "additionalEquipment": [
+        "pull_up_bar"
+      ],
+      "tags": [
+        "back",
+        "biceps",
+        "bilateral",
+        "body_weight",
+        "compound",
+        "forearms",
+        "lats",
+        "pull_up_bar",
+        "vertical_pull"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "1430",
+      "approvedForGeneration": true,
+      "difficulty": "intermediate",
+      "movementPattern": "horizontal_push",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "substitutionGroup": "horizontal_push:chest",
+      "additionalEquipment": [
+        "dip_bars"
+      ],
+      "tags": [
+        "bilateral",
+        "body_weight",
+        "chest",
+        "compound",
+        "dip_bars",
+        "horizontal_push",
+        "pectorals",
+        "shoulders",
+        "triceps"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "1457",
+      "approvedForGeneration": true,
+      "difficulty": "intermediate",
+      "movementPattern": "vertical_push",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "substitutionGroup": "vertical_push:shoulders",
+      "additionalEquipment": [],
+      "tags": [
+        "barbell",
+        "bilateral",
+        "compound",
+        "delts",
+        "shoulders",
+        "triceps",
+        "upper_back",
+        "vertical_push"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "1459",
+      "approvedForGeneration": true,
+      "difficulty": "intermediate",
+      "movementPattern": "hinge",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        120,
+        180
+      ],
+      "fatigueCost": "high",
+      "skillRequirement": "medium",
+      "substitutionGroup": "hinge:upper_legs",
+      "additionalEquipment": [],
+      "tags": [
+        "bilateral",
+        "compound",
+        "dumbbell",
+        "glutes",
+        "hamstrings",
+        "hinge",
+        "lower_back",
+        "upper_legs"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "1460",
+      "approvedForGeneration": true,
+      "difficulty": "intermediate",
+      "movementPattern": "lunge",
+      "modality": "compound",
+      "laterality": "unilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "substitutionGroup": "lunge:upper_legs",
+      "additionalEquipment": [],
+      "tags": [
+        "body_weight",
+        "calves",
+        "compound",
+        "glutes",
+        "hamstrings",
+        "lunge",
+        "quadriceps",
+        "unilateral",
+        "upper_legs"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "1641",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "isolation:biceps",
+      "additionalEquipment": [],
+      "tags": [
+        "biceps",
+        "bilateral",
+        "cable",
+        "forearms",
+        "isolation",
+        "upper_arms"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "1760",
+      "approvedForGeneration": true,
+      "difficulty": "intermediate",
+      "movementPattern": "squat",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "substitutionGroup": "squat:upper_legs",
+      "additionalEquipment": [],
+      "tags": [
+        "bilateral",
+        "calves",
+        "compound",
+        "dumbbell",
+        "glutes",
+        "hamstrings",
+        "quads",
+        "squat",
+        "upper_legs"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "2188",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "isolation:triceps",
+      "additionalEquipment": [
+        "bench"
+      ],
+      "tags": [
+        "bench",
+        "bilateral",
+        "dumbbell",
+        "isolation",
+        "shoulders",
+        "triceps",
+        "upper_arms"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "2285",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "isolation:lats",
+      "additionalEquipment": [],
+      "tags": [
+        "back",
+        "bilateral",
+        "isolation",
+        "lats",
+        "leverage_machine",
+        "machine",
+        "shoulders",
+        "triceps"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "2287",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "squat",
+      "modality": "compound",
+      "laterality": "unilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        120,
+        180
+      ],
+      "fatigueCost": "high",
+      "skillRequirement": "low",
+      "substitutionGroup": "squat:upper_legs",
+      "additionalEquipment": [],
+      "tags": [
+        "compound",
+        "glutes",
+        "hamstrings",
+        "leverage_machine",
+        "machine",
+        "quads",
+        "squat",
+        "unilateral",
+        "upper_legs"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "2368",
+      "approvedForGeneration": true,
+      "difficulty": "intermediate",
+      "movementPattern": "lunge",
+      "modality": "compound",
+      "laterality": "unilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "substitutionGroup": "lunge:upper_legs",
+      "additionalEquipment": [],
+      "tags": [
+        "body_weight",
+        "calves",
+        "compound",
+        "glutes",
+        "hamstrings",
+        "lunge",
+        "quads",
+        "unilateral",
+        "upper_legs"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "2611",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "squat",
+      "modality": "compound",
+      "laterality": "unilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        120,
+        180
+      ],
+      "fatigueCost": "high",
+      "skillRequirement": "low",
+      "substitutionGroup": "squat:upper_legs",
+      "additionalEquipment": [],
+      "tags": [
+        "calves",
+        "compound",
+        "glutes",
+        "hamstrings",
+        "leverage_machine",
+        "machine",
+        "quadriceps",
+        "squat",
+        "unilateral",
+        "upper_legs"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "3007",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "unilateral",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "substitutionGroup": "isolation:quads",
+      "additionalEquipment": [
+        "band_anchor"
+      ],
+      "tags": [
+        "band_anchor",
+        "hamstrings",
+        "isolation",
+        "quads",
+        "resistance_band",
+        "unilateral",
+        "upper_legs"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "3013",
+      "approvedForGeneration": true,
+      "difficulty": "beginner",
+      "movementPattern": "hinge",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "fatigueCost": "medium",
+      "skillRequirement": "low",
+      "substitutionGroup": "hinge:upper_legs",
+      "additionalEquipment": [],
+      "tags": [
+        "bilateral",
+        "body_weight",
+        "compound",
+        "core",
+        "glutes",
+        "hamstrings",
+        "hinge",
+        "upper_legs"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "3017",
+      "approvedForGeneration": true,
+      "difficulty": "intermediate",
+      "movementPattern": "horizontal_pull",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "substitutionGroup": "row:upper_back",
+      "additionalEquipment": [],
+      "tags": [
+        "back",
+        "barbell",
+        "biceps",
+        "bilateral",
+        "compound",
+        "forearms",
+        "horizontal_pull",
+        "upper_back"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    },
+    {
+      "exerciseId": "3193",
+      "approvedForGeneration": true,
+      "difficulty": "advanced",
+      "movementPattern": "hinge",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "fatigueCost": "medium",
+      "skillRequirement": "high",
+      "substitutionGroup": "hinge:upper_legs",
+      "additionalEquipment": [
+        "glute_ham_developer"
+      ],
+      "tags": [
+        "bilateral",
+        "body_weight",
+        "compound",
+        "glute_ham_developer",
+        "glutes",
+        "hamstrings",
+        "hinge",
+        "lower_back",
+        "upper_legs"
+      ],
+      "curation": {
+        "method": "deterministic_rules_v1_with_selection_review",
+        "programmingAssumptionsRequireDomainReview": true
+      }
+    }
+  ]
+}

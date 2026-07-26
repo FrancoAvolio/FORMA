@@ -1,0 +1,1090 @@
+{
+  "schemaVersion": 1,
+  "datasetCommit": "7455efae41b330c265e7cd4b78dfa848e7ce5ebd",
+  "queryAliases": {
+    "pecho": [
+      "chest",
+      "pectorals",
+      "pectoral"
+    ],
+    "espalda": [
+      "back",
+      "lats",
+      "upper back",
+      "latissimus dorsi"
+    ],
+    "hombro": [
+      "shoulders",
+      "delts",
+      "deltoids"
+    ],
+    "hombros": [
+      "shoulders",
+      "delts",
+      "deltoids"
+    ],
+    "bíceps": [
+      "biceps",
+      "biceps curl"
+    ],
+    "biceps": [
+      "biceps",
+      "biceps curl"
+    ],
+    "tríceps": [
+      "triceps",
+      "triceps extension"
+    ],
+    "triceps": [
+      "triceps",
+      "triceps extension"
+    ],
+    "piernas": [
+      "upper legs",
+      "lower legs",
+      "quads",
+      "hamstrings",
+      "glutes",
+      "calves"
+    ],
+    "cuádriceps": [
+      "quads",
+      "quadriceps"
+    ],
+    "cuadriceps": [
+      "quads",
+      "quadriceps"
+    ],
+    "isquiotibiales": [
+      "hamstrings"
+    ],
+    "glúteos": [
+      "glutes"
+    ],
+    "gluteos": [
+      "glutes"
+    ],
+    "gemelos": [
+      "calves"
+    ],
+    "pantorrillas": [
+      "calves"
+    ],
+    "abdomen": [
+      "abs",
+      "waist",
+      "core"
+    ],
+    "abdominales": [
+      "abs",
+      "waist",
+      "core"
+    ],
+    "mancuernas": [
+      "dumbbell"
+    ],
+    "mancuerna": [
+      "dumbbell"
+    ],
+    "barra": [
+      "barbell",
+      "ez barbell",
+      "olympic barbell"
+    ],
+    "banco": [
+      "bench"
+    ],
+    "banco_predicador": [
+      "preacher_bench"
+    ],
+    "banco_hiperextension": [
+      "hyperextension_bench"
+    ],
+    "barra_dominadas": [
+      "pull_up_bar",
+      "pull-up bar"
+    ],
+    "rack_barra": [
+      "barbell_rack"
+    ],
+    "anclaje_banda": [
+      "band_anchor"
+    ],
+    "maquina_glute_ham": [
+      "glute_ham_developer"
+    ],
+    "plataforma": [
+      "step_platform"
+    ],
+    "paralelas": [
+      "dip_bars",
+      "dip bars"
+    ],
+    "polea": [
+      "cable"
+    ],
+    "máquina": [
+      "machine",
+      "leverage machine",
+      "smith machine",
+      "assisted"
+    ],
+    "maquina": [
+      "machine",
+      "leverage machine",
+      "smith machine",
+      "assisted"
+    ],
+    "banda": [
+      "resistance_band",
+      "band",
+      "resistance band"
+    ],
+    "corporal": [
+      "body_weight",
+      "body weight"
+    ],
+    "peso_corporal": [
+      "body_weight",
+      "body weight"
+    ]
+  },
+  "exerciseAliases": {
+    "1004": [
+      "band squat",
+      "glutes",
+      "quadriceps",
+      "sentadilla con banda"
+    ],
+    "1298": [
+      "kettlebell one arm floor press",
+      "pectorals",
+      "press de suelo a un brazo con kettlebell",
+      "triceps"
+    ],
+    "1299": [
+      "lever incline chest press",
+      "pectorals",
+      "press de pecho inclinado en máquina",
+      "shoulders"
+    ],
+    "1300": [
+      "lever decline chest press",
+      "pectorals",
+      "press de pecho declinado en máquina",
+      "triceps"
+    ],
+    "1314": [
+      "back extension on exercise ball",
+      "extensión lumbar con pelota de estabilidad",
+      "glutes",
+      "spine"
+    ],
+    "1326": [
+      "biceps",
+      "chin-up",
+      "dominada supina",
+      "lats"
+    ],
+    "1350": [
+      "biceps",
+      "lever seated row",
+      "remo sentado en máquina",
+      "upper back"
+    ],
+    "1373": [
+      "ankles",
+      "bodyweight standing calf raise",
+      "calves",
+      "elevación de talones de pie con peso corporal"
+    ],
+    "1375": [
+      "cable standing calf raise",
+      "calves",
+      "elevación de talones de pie en polea",
+      "hamstrings"
+    ],
+    "1379": [
+      "calves",
+      "dumbbell seated calf raise",
+      "elevación de talones sentado con mancuerna",
+      "hamstrings"
+    ],
+    "1409": [
+      "barbell glute bridge",
+      "glutes",
+      "hamstrings",
+      "puente de glúteos con barra"
+    ],
+    "1429": [
+      "biceps",
+      "dominada con agarre amplio",
+      "lats",
+      "wide grip pull-up"
+    ],
+    "1430": [
+      "chest dip (on dip-pull-up cage)",
+      "fondo de pecho en paralelas",
+      "pectorals",
+      "triceps"
+    ],
+    "1457": [
+      "barbell standing wide military press",
+      "delts",
+      "press militar de pie con barra y agarre amplio",
+      "triceps"
+    ],
+    "1459": [
+      "dumbbell romanian deadlift",
+      "glutes",
+      "hamstrings",
+      "peso muerto rumano con mancuernas"
+    ],
+    "1460": [
+      "glutes",
+      "quadriceps",
+      "walking lunge",
+      "zancada caminando"
+    ],
+    "1641": [
+      "biceps",
+      "cable seated curl",
+      "curl sentado en polea",
+      "forearms"
+    ],
+    "1760": [
+      "dumbbell goblet squat",
+      "glutes",
+      "quads",
+      "sentadilla goblet con mancuernas"
+    ],
+    "2188": [
+      "dumbbell seated triceps extension",
+      "extensión de tríceps sentado con mancuerna",
+      "shoulders",
+      "triceps"
+    ],
+    "2285": [
+      "lats",
+      "lever pullover",
+      "pullover en máquina",
+      "triceps"
+    ],
+    "2287": [
+      "hamstrings",
+      "lever alternate leg press",
+      "prensa alternada de piernas en máquina",
+      "quads"
+    ],
+    "2368": [
+      "glutes",
+      "quads",
+      "sentadilla dividida",
+      "split squats"
+    ],
+    "2611": [
+      "glutes",
+      "lever horizontal one leg press",
+      "prensa horizontal a una pierna en máquina",
+      "quadriceps"
+    ],
+    "3007": [
+      "extensión de piernas con banda de resistencia",
+      "hamstrings",
+      "quads",
+      "resistance band leg extension"
+    ],
+    "3013": [
+      "glutes",
+      "hamstrings",
+      "low glute bridge on floor",
+      "puente de glúteos en el suelo"
+    ],
+    "3017": [
+      "barbell pendlay row",
+      "biceps",
+      "remo pendlay con barra",
+      "upper back"
+    ],
+    "3193": [
+      "elevación de glúteos e isquiotibiales",
+      "glute-ham raise",
+      "glutes",
+      "hamstrings"
+    ],
+    "0001": [
+      "3/4 sit-up",
+      "abdominal de tres cuartos",
+      "abs",
+      "hip flexors"
+    ],
+    "0017": [
+      "assisted pull-up",
+      "biceps",
+      "dominada asistida",
+      "lats"
+    ],
+    "0019": [
+      "assisted triceps dip (kneeling)",
+      "chest",
+      "fondo de tríceps asistido de rodillas",
+      "triceps"
+    ],
+    "0025": [
+      "barbell bench press",
+      "pectorals",
+      "press de banca con barra",
+      "triceps"
+    ],
+    "0027": [
+      "barbell bent over row",
+      "biceps",
+      "remo inclinado con barra",
+      "upper back"
+    ],
+    "0030": [
+      "barbell close-grip bench press",
+      "chest",
+      "press de banca con agarre cerrado con barra",
+      "triceps"
+    ],
+    "0031": [
+      "barbell curl",
+      "biceps",
+      "curl con barra",
+      "forearms"
+    ],
+    "0032": [
+      "barbell deadlift",
+      "glutes",
+      "hamstrings",
+      "peso muerto con barra"
+    ],
+    "0033": [
+      "barbell decline bench press",
+      "pectorals",
+      "press de banca declinado con barra",
+      "triceps"
+    ],
+    "0041": [
+      "barbell front raise",
+      "biceps",
+      "delts",
+      "elevación frontal con barra"
+    ],
+    "0042": [
+      "barbell front squat",
+      "glutes",
+      "quadriceps",
+      "sentadilla frontal con barra"
+    ],
+    "0047": [
+      "barbell incline bench press",
+      "pectorals",
+      "press de banca inclinado con barra",
+      "shoulders"
+    ],
+    "0049": [
+      "barbell incline row",
+      "biceps",
+      "remo con barra apoyado en banco inclinado",
+      "upper back"
+    ],
+    "0054": [
+      "barbell lunge",
+      "glutes",
+      "quadriceps",
+      "zancada con barra"
+    ],
+    "0061": [
+      "barbell lying triceps extension",
+      "extensión de tríceps acostado con barra",
+      "shoulders",
+      "triceps"
+    ],
+    "0070": [
+      "barbell preacher curl",
+      "biceps",
+      "curl predicador con barra",
+      "forearms"
+    ],
+    "0080": [
+      "barbell reverse curl",
+      "biceps",
+      "curl inverso con barra",
+      "forearms"
+    ],
+    "0085": [
+      "barbell romanian deadlift",
+      "glutes",
+      "hamstrings",
+      "peso muerto rumano con barra"
+    ],
+    "0088": [
+      "barbell seated calf raise",
+      "calves",
+      "elevación de talones sentado con barra",
+      "hamstrings"
+    ],
+    "0092": [
+      "barbell seated overhead triceps extension",
+      "extensión de tríceps sobre la cabeza sentado con barra",
+      "shoulders",
+      "triceps"
+    ],
+    "0095": [
+      "barbell shrug",
+      "encogimiento de hombros con barra",
+      "shoulders",
+      "traps"
+    ],
+    "0108": [
+      "barbell standing leg calf raise",
+      "calves",
+      "elevación de talones de pie con barra",
+      "hamstrings"
+    ],
+    "0109": [
+      "barbell standing overhead triceps extension",
+      "extensión de tríceps sobre la cabeza de pie con barra",
+      "shoulders",
+      "triceps"
+    ],
+    "0116": [
+      "barbell straight leg deadlift",
+      "glutes",
+      "hamstrings",
+      "peso muerto con piernas rígidas con barra"
+    ],
+    "0117": [
+      "barbell sumo deadlift",
+      "glutes",
+      "hamstrings",
+      "peso muerto sumo con barra"
+    ],
+    "0124": [
+      "barbell wide squat",
+      "glutes",
+      "quads",
+      "sentadilla con postura amplia con barra"
+    ],
+    "0151": [
+      "cable bench press",
+      "pectorals",
+      "press de pecho de pie en polea",
+      "triceps"
+    ],
+    "0158": [
+      "apertura declinada en polea",
+      "cable decline fly",
+      "pectorals",
+      "shoulders"
+    ],
+    "0162": [
+      "cable front raise",
+      "delts",
+      "elevación frontal en polea",
+      "triceps"
+    ],
+    "0165": [
+      "biceps",
+      "cable hammer curl (with rope)",
+      "curl martillo con cuerda en polea",
+      "forearms"
+    ],
+    "0168": [
+      "adductors",
+      "aducción de cadera en polea",
+      "cable hip adduction",
+      "glutes"
+    ],
+    "0169": [
+      "cable incline bench press",
+      "deltoids",
+      "pectorals",
+      "press de banca inclinado en polea"
+    ],
+    "0171": [
+      "apertura inclinada en polea",
+      "cable incline fly",
+      "deltoids",
+      "pectorals"
+    ],
+    "0175": [
+      "abs",
+      "cable kneeling crunch",
+      "encogimiento abdominal de rodillas en polea",
+      "obliques"
+    ],
+    "0178": [
+      "cable lateral raise",
+      "delts",
+      "elevación lateral en polea",
+      "traps"
+    ],
+    "0180": [
+      "biceps",
+      "cable low seated row",
+      "remo sentado bajo en polea",
+      "upper back"
+    ],
+    "0192": [
+      "cable one arm lateral raise",
+      "delts",
+      "elevación lateral a un brazo en polea",
+      "traps"
+    ],
+    "0195": [
+      "biceps",
+      "cable preacher curl",
+      "curl predicador en polea",
+      "forearms"
+    ],
+    "0198": [
+      "biceps",
+      "cable pulldown",
+      "jalón en polea",
+      "lats"
+    ],
+    "0200": [
+      "cable pushdown (with rope attachment)",
+      "extensión de tríceps hacia abajo con accesorio de cuerda en polea",
+      "forearms",
+      "triceps"
+    ],
+    "0201": [
+      "cable pushdown",
+      "extensión de tríceps hacia abajo en polea",
+      "forearms",
+      "triceps"
+    ],
+    "0207": [
+      "cable reverse-grip pushdown",
+      "extensión de tríceps en polea con agarre inverso",
+      "forearms",
+      "triceps"
+    ],
+    "0212": [
+      "abs",
+      "cable seated crunch",
+      "encogimiento abdominal sentado en polea",
+      "obliques"
+    ],
+    "0219": [
+      "cable shoulder press",
+      "delts",
+      "press de hombros en polea",
+      "triceps"
+    ],
+    "0220": [
+      "cable shrug",
+      "encogimiento de hombros en polea",
+      "shoulders",
+      "traps"
+    ],
+    "0223": [
+      "abs",
+      "cable side crunch",
+      "encogimiento abdominal lateral en polea",
+      "obliques"
+    ],
+    "0226": [
+      "abs",
+      "cable standing crunch",
+      "encogimiento abdominal de pie en polea",
+      "obliques"
+    ],
+    "0227": [
+      "apertura de pie en polea",
+      "cable standing fly",
+      "deltoids",
+      "pectorals"
+    ],
+    "0238": [
+      "cable straight arm pulldown",
+      "jalón con brazos rectos en polea",
+      "lats",
+      "shoulders"
+    ],
+    "0241": [
+      "cable triceps pushdown (v-bar)",
+      "extensión de tríceps en polea con barra v",
+      "forearms",
+      "triceps"
+    ],
+    "0242": [
+      "abs",
+      "cable tuck reverse crunch",
+      "encogimiento inverso en polea con rodillas flexionadas",
+      "hip flexors"
+    ],
+    "0262": [
+      "abs",
+      "cross body crunch",
+      "encogimiento abdominal cruzado",
+      "obliques"
+    ],
+    "0277": [
+      "abs",
+      "decline crunch",
+      "encogimiento abdominal en banco declinado",
+      "hip flexors"
+    ],
+    "0279": [
+      "decline push-up",
+      "flexión con pies elevados",
+      "pectorals",
+      "triceps"
+    ],
+    "0282": [
+      "abdominal en banco declinado",
+      "abs",
+      "decline sit-up",
+      "hip flexors"
+    ],
+    "0289": [
+      "dumbbell bench press",
+      "pectorals",
+      "press de banca con mancuernas",
+      "triceps"
+    ],
+    "0293": [
+      "biceps",
+      "dumbbell bent over row",
+      "remo inclinado con mancuernas",
+      "upper back"
+    ],
+    "0294": [
+      "biceps",
+      "curl de bíceps con mancuernas",
+      "dumbbell biceps curl",
+      "forearms"
+    ],
+    "0297": [
+      "biceps",
+      "curl concentrado con mancuernas",
+      "dumbbell concentration curl",
+      "forearms"
+    ],
+    "0300": [
+      "dumbbell deadlift",
+      "glutes",
+      "hamstrings",
+      "peso muerto con mancuernas"
+    ],
+    "0301": [
+      "dumbbell decline bench press",
+      "pectorals",
+      "press de banca declinado con mancuernas",
+      "triceps"
+    ],
+    "0302": [
+      "apertura declinada con mancuernas",
+      "dumbbell decline fly",
+      "pectorals",
+      "shoulders"
+    ],
+    "0308": [
+      "apertura con mancuernas",
+      "dumbbell fly",
+      "pectorals",
+      "shoulders"
+    ],
+    "0310": [
+      "biceps",
+      "delts",
+      "dumbbell front raise",
+      "elevación frontal con mancuernas"
+    ],
+    "0313": [
+      "biceps",
+      "curl martillo con mancuernas",
+      "dumbbell hammer curl",
+      "forearms"
+    ],
+    "0314": [
+      "dumbbell incline bench press",
+      "pectorals",
+      "press de banca inclinado con mancuernas",
+      "shoulders"
+    ],
+    "0315": [
+      "biceps",
+      "curl de bíceps inclinado con mancuernas",
+      "dumbbell incline biceps curl",
+      "forearms"
+    ],
+    "0319": [
+      "apertura inclinada con mancuernas",
+      "dumbbell incline fly",
+      "pectorals",
+      "shoulders"
+    ],
+    "0327": [
+      "biceps",
+      "dumbbell incline row",
+      "remo con mancuernas apoyado en banco inclinado",
+      "upper back"
+    ],
+    "0334": [
+      "delts",
+      "dumbbell lateral raise",
+      "elevación lateral con mancuernas",
+      "traps"
+    ],
+    "0336": [
+      "dumbbell lunge",
+      "glutes",
+      "quadriceps",
+      "zancada con mancuernas"
+    ],
+    "0351": [
+      "dumbbell lying triceps extension",
+      "extensión de tríceps acostado con mancuernas",
+      "shoulders",
+      "triceps"
+    ],
+    "0361": [
+      "delts",
+      "dumbbell one arm shoulder press",
+      "press de hombros a un brazo con mancuernas",
+      "triceps"
+    ],
+    "0372": [
+      "biceps",
+      "curl predicador con mancuernas",
+      "dumbbell preacher curl",
+      "forearms"
+    ],
+    "0383": [
+      "delts",
+      "dumbbell reverse fly",
+      "trapezius",
+      "vuelo posterior con mancuernas"
+    ],
+    "0396": [
+      "delts",
+      "dumbbell seated lateral raise",
+      "elevación lateral sentado con mancuernas",
+      "traps"
+    ],
+    "0405": [
+      "delts",
+      "dumbbell seated shoulder press",
+      "press de hombros sentado con mancuernas",
+      "triceps"
+    ],
+    "0406": [
+      "dumbbell shrug",
+      "encogimiento de hombros con mancuernas",
+      "shoulders",
+      "traps"
+    ],
+    "0413": [
+      "dumbbell squat",
+      "glutes",
+      "quadriceps",
+      "sentadilla con mancuernas"
+    ],
+    "0416": [
+      "biceps",
+      "curl de bíceps de pie con mancuernas",
+      "dumbbell standing biceps curl",
+      "forearms"
+    ],
+    "0417": [
+      "ankles",
+      "calves",
+      "dumbbell standing calf raise",
+      "elevación de talones de pie con mancuernas"
+    ],
+    "0430": [
+      "dumbbell standing triceps extension",
+      "extensión de tríceps de pie con mancuernas",
+      "shoulders",
+      "triceps"
+    ],
+    "0464": [
+      "abs",
+      "front plank with twist",
+      "obliques",
+      "plancha frontal con giro"
+    ],
+    "0472": [
+      "abs",
+      "elevación de piernas colgado",
+      "hanging leg raise",
+      "hip flexors"
+    ],
+    "0488": [
+      "glutes",
+      "hiperextensión en banco",
+      "hyperextension (on bench)",
+      "spine"
+    ],
+    "0493": [
+      "flexión de brazos inclinada",
+      "incline push-up",
+      "pectorals",
+      "triceps"
+    ],
+    "0534": [
+      "glutes",
+      "kettlebell goblet squat",
+      "quadriceps",
+      "sentadilla goblet con kettlebell"
+    ],
+    "0541": [
+      "biceps",
+      "kettlebell one arm row",
+      "remo a un brazo con kettlebell",
+      "upper back"
+    ],
+    "0546": [
+      "delts",
+      "kettlebell seated press",
+      "press sentado con kettlebell",
+      "triceps"
+    ],
+    "0549": [
+      "balanceo con kettlebell",
+      "glutes",
+      "hamstrings",
+      "kettlebell swing"
+    ],
+    "0573": [
+      "extensión lumbar en máquina",
+      "glutes",
+      "lever back extension",
+      "spine"
+    ],
+    "0576": [
+      "lever chest press",
+      "pectorals",
+      "press de pecho en máquina",
+      "triceps"
+    ],
+    "0579": [
+      "biceps",
+      "jalón frontal en máquina",
+      "lats",
+      "lever front pulldown"
+    ],
+    "0582": [
+      "curl femoral de rodillas en máquina",
+      "glutes",
+      "hamstrings",
+      "lever kneeling leg curl"
+    ],
+    "0584": [
+      "delts",
+      "elevación lateral en máquina",
+      "lever lateral raise",
+      "traps"
+    ],
+    "0585": [
+      "extensión de piernas en máquina",
+      "hamstrings",
+      "lever leg extension",
+      "quads"
+    ],
+    "0586": [
+      "calves",
+      "curl femoral acostado en máquina",
+      "hamstrings",
+      "lever lying leg curl"
+    ],
+    "0587": [
+      "delts",
+      "lever military press",
+      "press militar en máquina",
+      "triceps"
+    ],
+    "0592": [
+      "biceps",
+      "curl predicador en máquina",
+      "forearms",
+      "lever preacher curl"
+    ],
+    "0594": [
+      "calves",
+      "elevación de talones sentado en máquina",
+      "lever seated calf raise",
+      "soleus"
+    ],
+    "0595": [
+      "abs",
+      "encogimiento abdominal sentado en máquina con apoyo pectoral",
+      "lever seated crunch (chest pad)",
+      "obliques"
+    ],
+    "0596": [
+      "apertura de pecho sentada en máquina",
+      "deltoids",
+      "lever seated fly",
+      "pectorals"
+    ],
+    "0598": [
+      "adductors",
+      "aducción de cadera sentada en máquina",
+      "hamstrings",
+      "lever seated hip adduction"
+    ],
+    "0599": [
+      "calves",
+      "curl femoral sentado en máquina",
+      "hamstrings",
+      "lever seated leg curl"
+    ],
+    "0600": [
+      "abs",
+      "encogimiento abdominal con elevación de piernas en máquina",
+      "hip flexors",
+      "lever seated leg raise crunch"
+    ],
+    "0602": [
+      "delts",
+      "lever seated reverse fly",
+      "trapezius",
+      "vuelo posterior sentado en máquina"
+    ],
+    "0603": [
+      "delts",
+      "lever shoulder press",
+      "press de hombros en máquina",
+      "triceps"
+    ],
+    "0604": [
+      "encogimiento de hombros en máquina",
+      "lever shrug",
+      "shoulders",
+      "traps"
+    ],
+    "0605": [
+      "calves",
+      "elevación de talones de pie en máquina",
+      "lever standing calf raise",
+      "soleus"
+    ],
+    "0606": [
+      "biceps",
+      "lever t bar row",
+      "remo en barra t en máquina",
+      "upper back"
+    ],
+    "0607": [
+      "extensión de tríceps en máquina",
+      "lever triceps extension",
+      "shoulders",
+      "triceps"
+    ],
+    "0620": [
+      "abs",
+      "elevación de piernas acostado en banco plano",
+      "hip flexors",
+      "lying leg raise flat bench"
+    ],
+    "0652": [
+      "biceps",
+      "dominada",
+      "lats",
+      "pull-up"
+    ],
+    "0659": [
+      "flexión de brazos contra la pared",
+      "pectorals",
+      "push-up (wall)",
+      "triceps"
+    ],
+    "0662": [
+      "flexión de brazos",
+      "pectorals",
+      "push-up",
+      "triceps"
+    ],
+    "0673": [
+      "biceps",
+      "jalón dorsal en máquina con agarre supino",
+      "lats",
+      "reverse grip machine lat pulldown"
+    ],
+    "0687": [
+      "abs",
+      "giro ruso",
+      "obliques",
+      "russian twist"
+    ],
+    "0689": [
+      "abs",
+      "elevación de piernas sentado",
+      "hip flexors",
+      "seated leg raise"
+    ],
+    "0766": [
+      "delts",
+      "press de hombros en smith",
+      "smith shoulder press",
+      "triceps"
+    ],
+    "0814": [
+      "chest",
+      "fondo de tríceps en banco",
+      "triceps",
+      "triceps dip"
+    ],
+    "0832": [
+      "abs",
+      "encogimiento abdominal lastrado",
+      "obliques",
+      "weighted crunch"
+    ],
+    "0841": [
+      "biceps",
+      "dominada lastrada",
+      "lats",
+      "weighted pull-up"
+    ],
+    "0846": [
+      "abs",
+      "giro ruso lastrado",
+      "obliques",
+      "weighted russian twist"
+    ],
+    "0868": [
+      "biceps",
+      "cable curl",
+      "curl en polea",
+      "forearms"
+    ],
+    "0872": [
+      "abs",
+      "encogimiento abdominal inverso",
+      "hip flexors",
+      "reverse crunch"
+    ],
+    "0873": [
+      "abs",
+      "cable reverse crunch",
+      "encogimiento abdominal inverso en polea",
+      "hip flexors"
+    ],
+    "0970": [
+      "band assisted pull-up",
+      "biceps",
+      "dominada asistida con banda",
+      "lats"
+    ],
+    "0978": [
+      "band front raise",
+      "delts",
+      "elevación frontal con banda",
+      "triceps"
+    ],
+    "0993": [
+      "band reverse fly",
+      "delts",
+      "upper back",
+      "vuelo posterior con banda"
+    ]
+  }
+}

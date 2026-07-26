@@ -1,0 +1,7817 @@
+{
+  "schemaVersion": 1,
+  "datasetCommit": "7455efae41b330c265e7cd4b78dfa848e7ce5ebd",
+  "exercises": [
+    {
+      "id": "0001",
+      "name": "Abdominal de tres cuartos",
+      "sourceName": "3/4 sit-up",
+      "aliases": [
+        "3/4 sit-up",
+        "abdominal de tres cuartos",
+        "abs",
+        "hip flexors"
+      ],
+      "equipment": [
+        "body_weight"
+      ],
+      "rawEquipment": "body weight",
+      "bodyPart": "waist",
+      "primaryMuscles": [
+        "abs"
+      ],
+      "secondaryMuscles": [
+        "hip_flexors",
+        "lower_back"
+      ],
+      "movementPattern": "core",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        20
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "core:flexion",
+      "tags": [
+        "abs",
+        "bilateral",
+        "body_weight",
+        "core",
+        "hip_flexors",
+        "isolation",
+        "lower_back",
+        "waist"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0001"
+    },
+    {
+      "id": "0017",
+      "name": "Dominada asistida",
+      "sourceName": "assisted pull-up",
+      "aliases": [
+        "assisted pull-up",
+        "biceps",
+        "dominada asistida",
+        "lats"
+      ],
+      "equipment": [
+        "machine"
+      ],
+      "rawEquipment": "leverage machine",
+      "bodyPart": "back",
+      "primaryMuscles": [
+        "lats"
+      ],
+      "secondaryMuscles": [
+        "biceps",
+        "forearms"
+      ],
+      "movementPattern": "vertical_pull",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "medium",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "substitutionGroup": "vertical_pull:lats",
+      "tags": [
+        "back",
+        "biceps",
+        "bilateral",
+        "compound",
+        "forearms",
+        "lats",
+        "leverage_machine",
+        "machine",
+        "vertical_pull"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0017"
+    },
+    {
+      "id": "0019",
+      "name": "Fondo de tríceps asistido de rodillas",
+      "sourceName": "assisted triceps dip (kneeling)",
+      "aliases": [
+        "assisted triceps dip (kneeling)",
+        "chest",
+        "fondo de tríceps asistido de rodillas",
+        "triceps"
+      ],
+      "equipment": [
+        "machine"
+      ],
+      "rawEquipment": "leverage machine",
+      "bodyPart": "upper_arms",
+      "primaryMuscles": [
+        "triceps"
+      ],
+      "secondaryMuscles": [
+        "chest",
+        "shoulders"
+      ],
+      "movementPattern": "horizontal_push",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "medium",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "substitutionGroup": "horizontal_push:upper_arms",
+      "tags": [
+        "bilateral",
+        "chest",
+        "compound",
+        "horizontal_push",
+        "leverage_machine",
+        "machine",
+        "shoulders",
+        "triceps",
+        "upper_arms"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0019"
+    },
+    {
+      "id": "0025",
+      "name": "Press de banca con barra",
+      "sourceName": "barbell bench press",
+      "aliases": [
+        "barbell bench press",
+        "pectorals",
+        "press de banca con barra",
+        "triceps"
+      ],
+      "equipment": [
+        "barbell",
+        "barbell_rack",
+        "bench"
+      ],
+      "rawEquipment": "barbell",
+      "bodyPart": "chest",
+      "primaryMuscles": [
+        "pectorals"
+      ],
+      "secondaryMuscles": [
+        "triceps",
+        "shoulders"
+      ],
+      "movementPattern": "horizontal_push",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "difficulty": "intermediate",
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "substitutionGroup": "horizontal_push:chest",
+      "tags": [
+        "barbell",
+        "barbell_rack",
+        "bench",
+        "bilateral",
+        "chest",
+        "compound",
+        "horizontal_push",
+        "pectorals",
+        "shoulders",
+        "triceps"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0025"
+    },
+    {
+      "id": "0027",
+      "name": "Remo inclinado con barra",
+      "sourceName": "barbell bent over row",
+      "aliases": [
+        "barbell bent over row",
+        "biceps",
+        "remo inclinado con barra",
+        "upper back"
+      ],
+      "equipment": [
+        "barbell"
+      ],
+      "rawEquipment": "barbell",
+      "bodyPart": "back",
+      "primaryMuscles": [
+        "upper_back"
+      ],
+      "secondaryMuscles": [
+        "biceps",
+        "forearms"
+      ],
+      "movementPattern": "horizontal_pull",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "difficulty": "intermediate",
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "substitutionGroup": "row:upper_back",
+      "tags": [
+        "back",
+        "barbell",
+        "biceps",
+        "bilateral",
+        "compound",
+        "forearms",
+        "horizontal_pull",
+        "upper_back"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0027"
+    },
+    {
+      "id": "0030",
+      "name": "Press de banca con agarre cerrado con barra",
+      "sourceName": "barbell close-grip bench press",
+      "aliases": [
+        "barbell close-grip bench press",
+        "chest",
+        "press de banca con agarre cerrado con barra",
+        "triceps"
+      ],
+      "equipment": [
+        "barbell",
+        "barbell_rack",
+        "bench"
+      ],
+      "rawEquipment": "barbell",
+      "bodyPart": "upper_arms",
+      "primaryMuscles": [
+        "triceps"
+      ],
+      "secondaryMuscles": [
+        "chest",
+        "shoulders"
+      ],
+      "movementPattern": "horizontal_push",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "difficulty": "intermediate",
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "substitutionGroup": "horizontal_push:upper_arms",
+      "tags": [
+        "barbell",
+        "barbell_rack",
+        "bench",
+        "bilateral",
+        "chest",
+        "compound",
+        "horizontal_push",
+        "shoulders",
+        "triceps",
+        "upper_arms"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0030"
+    },
+    {
+      "id": "0031",
+      "name": "Curl con barra",
+      "sourceName": "barbell curl",
+      "aliases": [
+        "barbell curl",
+        "biceps",
+        "curl con barra",
+        "forearms"
+      ],
+      "equipment": [
+        "barbell"
+      ],
+      "rawEquipment": "barbell",
+      "bodyPart": "upper_arms",
+      "primaryMuscles": [
+        "biceps"
+      ],
+      "secondaryMuscles": [
+        "forearms"
+      ],
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "isolation:biceps",
+      "tags": [
+        "barbell",
+        "biceps",
+        "bilateral",
+        "forearms",
+        "isolation",
+        "upper_arms"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0031"
+    },
+    {
+      "id": "0032",
+      "name": "Peso muerto con barra",
+      "sourceName": "barbell deadlift",
+      "aliases": [
+        "barbell deadlift",
+        "glutes",
+        "hamstrings",
+        "peso muerto con barra"
+      ],
+      "equipment": [
+        "barbell"
+      ],
+      "rawEquipment": "barbell",
+      "bodyPart": "upper_legs",
+      "primaryMuscles": [
+        "glutes"
+      ],
+      "secondaryMuscles": [
+        "hamstrings",
+        "lower_back"
+      ],
+      "movementPattern": "hinge",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "difficulty": "intermediate",
+      "fatigueCost": "high",
+      "skillRequirement": "medium",
+      "defaultRepRange": [
+        3,
+        8
+      ],
+      "defaultRestSeconds": [
+        120,
+        180
+      ],
+      "substitutionGroup": "hinge:upper_legs",
+      "tags": [
+        "barbell",
+        "bilateral",
+        "compound",
+        "glutes",
+        "hamstrings",
+        "hinge",
+        "lower_back",
+        "upper_legs"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0032"
+    },
+    {
+      "id": "0033",
+      "name": "Press de banca declinado con barra",
+      "sourceName": "barbell decline bench press",
+      "aliases": [
+        "barbell decline bench press",
+        "pectorals",
+        "press de banca declinado con barra",
+        "triceps"
+      ],
+      "equipment": [
+        "barbell",
+        "barbell_rack",
+        "bench"
+      ],
+      "rawEquipment": "barbell",
+      "bodyPart": "chest",
+      "primaryMuscles": [
+        "pectorals"
+      ],
+      "secondaryMuscles": [
+        "triceps",
+        "shoulders"
+      ],
+      "movementPattern": "horizontal_push",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "difficulty": "intermediate",
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "substitutionGroup": "horizontal_push:chest",
+      "tags": [
+        "barbell",
+        "barbell_rack",
+        "bench",
+        "bilateral",
+        "chest",
+        "compound",
+        "horizontal_push",
+        "pectorals",
+        "shoulders",
+        "triceps"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0033"
+    },
+    {
+      "id": "0041",
+      "name": "Elevación frontal con barra",
+      "sourceName": "barbell front raise",
+      "aliases": [
+        "barbell front raise",
+        "biceps",
+        "delts",
+        "elevación frontal con barra"
+      ],
+      "equipment": [
+        "barbell"
+      ],
+      "rawEquipment": "barbell",
+      "bodyPart": "shoulders",
+      "primaryMuscles": [
+        "delts"
+      ],
+      "secondaryMuscles": [
+        "biceps",
+        "triceps"
+      ],
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "isolation:delts_front",
+      "tags": [
+        "barbell",
+        "biceps",
+        "bilateral",
+        "delts",
+        "isolation",
+        "shoulders",
+        "triceps"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0041"
+    },
+    {
+      "id": "0042",
+      "name": "Sentadilla frontal con barra",
+      "sourceName": "barbell front squat",
+      "aliases": [
+        "barbell front squat",
+        "glutes",
+        "quadriceps",
+        "sentadilla frontal con barra"
+      ],
+      "equipment": [
+        "barbell",
+        "barbell_rack"
+      ],
+      "rawEquipment": "barbell",
+      "bodyPart": "upper_legs",
+      "primaryMuscles": [
+        "glutes"
+      ],
+      "secondaryMuscles": [
+        "quadriceps",
+        "hamstrings",
+        "calves",
+        "core"
+      ],
+      "movementPattern": "squat",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "difficulty": "intermediate",
+      "fatigueCost": "high",
+      "skillRequirement": "medium",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        120,
+        180
+      ],
+      "substitutionGroup": "squat:upper_legs",
+      "tags": [
+        "barbell",
+        "barbell_rack",
+        "bilateral",
+        "calves",
+        "compound",
+        "core",
+        "glutes",
+        "hamstrings",
+        "quadriceps",
+        "squat",
+        "upper_legs"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0042"
+    },
+    {
+      "id": "0047",
+      "name": "Press de banca inclinado con barra",
+      "sourceName": "barbell incline bench press",
+      "aliases": [
+        "barbell incline bench press",
+        "pectorals",
+        "press de banca inclinado con barra",
+        "shoulders"
+      ],
+      "equipment": [
+        "barbell",
+        "barbell_rack",
+        "bench"
+      ],
+      "rawEquipment": "barbell",
+      "bodyPart": "chest",
+      "primaryMuscles": [
+        "pectorals"
+      ],
+      "secondaryMuscles": [
+        "shoulders",
+        "triceps"
+      ],
+      "movementPattern": "horizontal_push",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "difficulty": "intermediate",
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "substitutionGroup": "horizontal_push:chest",
+      "tags": [
+        "barbell",
+        "barbell_rack",
+        "bench",
+        "bilateral",
+        "chest",
+        "compound",
+        "horizontal_push",
+        "pectorals",
+        "shoulders",
+        "triceps"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0047"
+    },
+    {
+      "id": "0049",
+      "name": "Remo con barra apoyado en banco inclinado",
+      "sourceName": "barbell incline row",
+      "aliases": [
+        "barbell incline row",
+        "biceps",
+        "remo con barra apoyado en banco inclinado",
+        "upper back"
+      ],
+      "equipment": [
+        "barbell",
+        "bench"
+      ],
+      "rawEquipment": "barbell",
+      "bodyPart": "back",
+      "primaryMuscles": [
+        "upper_back"
+      ],
+      "secondaryMuscles": [
+        "biceps",
+        "forearms"
+      ],
+      "movementPattern": "horizontal_pull",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "difficulty": "intermediate",
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "substitutionGroup": "row:upper_back",
+      "tags": [
+        "back",
+        "barbell",
+        "bench",
+        "biceps",
+        "bilateral",
+        "compound",
+        "forearms",
+        "horizontal_pull",
+        "upper_back"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0049"
+    },
+    {
+      "id": "0054",
+      "name": "Zancada con barra",
+      "sourceName": "barbell lunge",
+      "aliases": [
+        "barbell lunge",
+        "glutes",
+        "quadriceps",
+        "zancada con barra"
+      ],
+      "equipment": [
+        "barbell",
+        "barbell_rack"
+      ],
+      "rawEquipment": "barbell",
+      "bodyPart": "upper_legs",
+      "primaryMuscles": [
+        "glutes"
+      ],
+      "secondaryMuscles": [
+        "quadriceps",
+        "hamstrings",
+        "calves"
+      ],
+      "movementPattern": "lunge",
+      "modality": "compound",
+      "laterality": "unilateral",
+      "difficulty": "intermediate",
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "substitutionGroup": "lunge:upper_legs",
+      "tags": [
+        "barbell",
+        "barbell_rack",
+        "calves",
+        "compound",
+        "glutes",
+        "hamstrings",
+        "lunge",
+        "quadriceps",
+        "unilateral",
+        "upper_legs"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0054"
+    },
+    {
+      "id": "0061",
+      "name": "Extensión de tríceps acostado con barra",
+      "sourceName": "barbell lying triceps extension",
+      "aliases": [
+        "barbell lying triceps extension",
+        "extensión de tríceps acostado con barra",
+        "shoulders",
+        "triceps"
+      ],
+      "equipment": [
+        "barbell",
+        "bench"
+      ],
+      "rawEquipment": "barbell",
+      "bodyPart": "upper_arms",
+      "primaryMuscles": [
+        "triceps"
+      ],
+      "secondaryMuscles": [
+        "shoulders"
+      ],
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "isolation:triceps",
+      "tags": [
+        "barbell",
+        "bench",
+        "bilateral",
+        "isolation",
+        "shoulders",
+        "triceps",
+        "upper_arms"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0061"
+    },
+    {
+      "id": "0070",
+      "name": "Curl predicador con barra",
+      "sourceName": "barbell preacher curl",
+      "aliases": [
+        "barbell preacher curl",
+        "biceps",
+        "curl predicador con barra",
+        "forearms"
+      ],
+      "equipment": [
+        "barbell",
+        "preacher_bench"
+      ],
+      "rawEquipment": "barbell",
+      "bodyPart": "upper_arms",
+      "primaryMuscles": [
+        "biceps"
+      ],
+      "secondaryMuscles": [
+        "forearms"
+      ],
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "isolation:biceps",
+      "tags": [
+        "barbell",
+        "biceps",
+        "bilateral",
+        "forearms",
+        "isolation",
+        "preacher_bench",
+        "upper_arms"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0070"
+    },
+    {
+      "id": "0080",
+      "name": "Curl inverso con barra",
+      "sourceName": "barbell reverse curl",
+      "aliases": [
+        "barbell reverse curl",
+        "biceps",
+        "curl inverso con barra",
+        "forearms"
+      ],
+      "equipment": [
+        "barbell"
+      ],
+      "rawEquipment": "barbell",
+      "bodyPart": "upper_arms",
+      "primaryMuscles": [
+        "biceps"
+      ],
+      "secondaryMuscles": [
+        "forearms"
+      ],
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "isolation:biceps",
+      "tags": [
+        "barbell",
+        "biceps",
+        "bilateral",
+        "forearms",
+        "isolation",
+        "upper_arms"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0080"
+    },
+    {
+      "id": "0085",
+      "name": "Peso muerto rumano con barra",
+      "sourceName": "barbell romanian deadlift",
+      "aliases": [
+        "barbell romanian deadlift",
+        "glutes",
+        "hamstrings",
+        "peso muerto rumano con barra"
+      ],
+      "equipment": [
+        "barbell"
+      ],
+      "rawEquipment": "barbell",
+      "bodyPart": "upper_legs",
+      "primaryMuscles": [
+        "glutes"
+      ],
+      "secondaryMuscles": [
+        "hamstrings",
+        "lower_back"
+      ],
+      "movementPattern": "hinge",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "difficulty": "intermediate",
+      "fatigueCost": "high",
+      "skillRequirement": "medium",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        120,
+        180
+      ],
+      "substitutionGroup": "hinge:upper_legs",
+      "tags": [
+        "barbell",
+        "bilateral",
+        "compound",
+        "glutes",
+        "hamstrings",
+        "hinge",
+        "lower_back",
+        "upper_legs"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0085"
+    },
+    {
+      "id": "0088",
+      "name": "Elevación de talones sentado con barra",
+      "sourceName": "barbell seated calf raise",
+      "aliases": [
+        "barbell seated calf raise",
+        "calves",
+        "elevación de talones sentado con barra",
+        "hamstrings"
+      ],
+      "equipment": [
+        "barbell",
+        "bench",
+        "step_platform"
+      ],
+      "rawEquipment": "barbell",
+      "bodyPart": "lower_legs",
+      "primaryMuscles": [
+        "calves"
+      ],
+      "secondaryMuscles": [
+        "hamstrings",
+        "quadriceps"
+      ],
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "isolation:calves",
+      "tags": [
+        "barbell",
+        "bench",
+        "bilateral",
+        "calves",
+        "hamstrings",
+        "isolation",
+        "lower_legs",
+        "quadriceps",
+        "step_platform"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0088"
+    },
+    {
+      "id": "0092",
+      "name": "Extensión de tríceps sobre la cabeza sentado con barra",
+      "sourceName": "barbell seated overhead triceps extension",
+      "aliases": [
+        "barbell seated overhead triceps extension",
+        "extensión de tríceps sobre la cabeza sentado con barra",
+        "shoulders",
+        "triceps"
+      ],
+      "equipment": [
+        "barbell",
+        "bench"
+      ],
+      "rawEquipment": "barbell",
+      "bodyPart": "upper_arms",
+      "primaryMuscles": [
+        "triceps"
+      ],
+      "secondaryMuscles": [
+        "shoulders"
+      ],
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "isolation:triceps",
+      "tags": [
+        "barbell",
+        "bench",
+        "bilateral",
+        "isolation",
+        "shoulders",
+        "triceps",
+        "upper_arms"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0092"
+    },
+    {
+      "id": "0095",
+      "name": "Encogimiento de hombros con barra",
+      "sourceName": "barbell shrug",
+      "aliases": [
+        "barbell shrug",
+        "encogimiento de hombros con barra",
+        "shoulders",
+        "traps"
+      ],
+      "equipment": [
+        "barbell"
+      ],
+      "rawEquipment": "barbell",
+      "bodyPart": "back",
+      "primaryMuscles": [
+        "traps"
+      ],
+      "secondaryMuscles": [
+        "shoulders"
+      ],
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "isolation:traps",
+      "tags": [
+        "back",
+        "barbell",
+        "bilateral",
+        "isolation",
+        "shoulders",
+        "traps"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0095"
+    },
+    {
+      "id": "0108",
+      "name": "Elevación de talones de pie con barra",
+      "sourceName": "barbell standing leg calf raise",
+      "aliases": [
+        "barbell standing leg calf raise",
+        "calves",
+        "elevación de talones de pie con barra",
+        "hamstrings"
+      ],
+      "equipment": [
+        "barbell",
+        "barbell_rack"
+      ],
+      "rawEquipment": "barbell",
+      "bodyPart": "lower_legs",
+      "primaryMuscles": [
+        "calves"
+      ],
+      "secondaryMuscles": [
+        "hamstrings",
+        "glutes"
+      ],
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "isolation:calves",
+      "tags": [
+        "barbell",
+        "barbell_rack",
+        "bilateral",
+        "calves",
+        "glutes",
+        "hamstrings",
+        "isolation",
+        "lower_legs"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0108"
+    },
+    {
+      "id": "0109",
+      "name": "Extensión de tríceps sobre la cabeza de pie con barra",
+      "sourceName": "barbell standing overhead triceps extension",
+      "aliases": [
+        "barbell standing overhead triceps extension",
+        "extensión de tríceps sobre la cabeza de pie con barra",
+        "shoulders",
+        "triceps"
+      ],
+      "equipment": [
+        "barbell"
+      ],
+      "rawEquipment": "barbell",
+      "bodyPart": "upper_arms",
+      "primaryMuscles": [
+        "triceps"
+      ],
+      "secondaryMuscles": [
+        "shoulders"
+      ],
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "isolation:triceps",
+      "tags": [
+        "barbell",
+        "bilateral",
+        "isolation",
+        "shoulders",
+        "triceps",
+        "upper_arms"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0109"
+    },
+    {
+      "id": "0116",
+      "name": "Peso muerto con piernas rígidas con barra",
+      "sourceName": "barbell straight leg deadlift",
+      "aliases": [
+        "barbell straight leg deadlift",
+        "glutes",
+        "hamstrings",
+        "peso muerto con piernas rígidas con barra"
+      ],
+      "equipment": [
+        "barbell"
+      ],
+      "rawEquipment": "barbell",
+      "bodyPart": "upper_legs",
+      "primaryMuscles": [
+        "hamstrings"
+      ],
+      "secondaryMuscles": [
+        "glutes",
+        "lower_back"
+      ],
+      "movementPattern": "hinge",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "difficulty": "intermediate",
+      "fatigueCost": "high",
+      "skillRequirement": "medium",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        120,
+        180
+      ],
+      "substitutionGroup": "hinge:upper_legs",
+      "tags": [
+        "barbell",
+        "bilateral",
+        "compound",
+        "glutes",
+        "hamstrings",
+        "hinge",
+        "lower_back",
+        "upper_legs"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0116"
+    },
+    {
+      "id": "0117",
+      "name": "Peso muerto sumo con barra",
+      "sourceName": "barbell sumo deadlift",
+      "aliases": [
+        "barbell sumo deadlift",
+        "glutes",
+        "hamstrings",
+        "peso muerto sumo con barra"
+      ],
+      "equipment": [
+        "barbell"
+      ],
+      "rawEquipment": "barbell",
+      "bodyPart": "upper_legs",
+      "primaryMuscles": [
+        "glutes"
+      ],
+      "secondaryMuscles": [
+        "hamstrings",
+        "quadriceps",
+        "lower_back"
+      ],
+      "movementPattern": "hinge",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "difficulty": "intermediate",
+      "fatigueCost": "high",
+      "skillRequirement": "medium",
+      "defaultRepRange": [
+        3,
+        8
+      ],
+      "defaultRestSeconds": [
+        120,
+        180
+      ],
+      "substitutionGroup": "hinge:upper_legs",
+      "tags": [
+        "barbell",
+        "bilateral",
+        "compound",
+        "glutes",
+        "hamstrings",
+        "hinge",
+        "lower_back",
+        "quadriceps",
+        "upper_legs"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0117"
+    },
+    {
+      "id": "0124",
+      "name": "Sentadilla con postura amplia con barra",
+      "sourceName": "barbell wide squat",
+      "aliases": [
+        "barbell wide squat",
+        "glutes",
+        "quads",
+        "sentadilla con postura amplia con barra"
+      ],
+      "equipment": [
+        "barbell",
+        "barbell_rack"
+      ],
+      "rawEquipment": "barbell",
+      "bodyPart": "upper_legs",
+      "primaryMuscles": [
+        "quads"
+      ],
+      "secondaryMuscles": [
+        "glutes",
+        "hamstrings",
+        "calves"
+      ],
+      "movementPattern": "squat",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "difficulty": "intermediate",
+      "fatigueCost": "high",
+      "skillRequirement": "medium",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        120,
+        180
+      ],
+      "substitutionGroup": "squat:upper_legs",
+      "tags": [
+        "barbell",
+        "barbell_rack",
+        "bilateral",
+        "calves",
+        "compound",
+        "glutes",
+        "hamstrings",
+        "quads",
+        "squat",
+        "upper_legs"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0124"
+    },
+    {
+      "id": "0151",
+      "name": "Press de pecho de pie en polea",
+      "sourceName": "cable bench press",
+      "aliases": [
+        "cable bench press",
+        "pectorals",
+        "press de pecho de pie en polea",
+        "triceps"
+      ],
+      "equipment": [
+        "cable"
+      ],
+      "rawEquipment": "cable",
+      "bodyPart": "chest",
+      "primaryMuscles": [
+        "pectorals"
+      ],
+      "secondaryMuscles": [
+        "triceps",
+        "shoulders"
+      ],
+      "movementPattern": "horizontal_push",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "medium",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "substitutionGroup": "horizontal_push:chest",
+      "tags": [
+        "bilateral",
+        "cable",
+        "chest",
+        "compound",
+        "horizontal_push",
+        "pectorals",
+        "shoulders",
+        "triceps"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0151"
+    },
+    {
+      "id": "0158",
+      "name": "Apertura declinada en polea",
+      "sourceName": "cable decline fly",
+      "aliases": [
+        "apertura declinada en polea",
+        "cable decline fly",
+        "pectorals",
+        "shoulders"
+      ],
+      "equipment": [
+        "cable"
+      ],
+      "rawEquipment": "cable",
+      "bodyPart": "chest",
+      "primaryMuscles": [
+        "pectorals"
+      ],
+      "secondaryMuscles": [
+        "shoulders",
+        "triceps"
+      ],
+      "movementPattern": "horizontal_push",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "chest_fly:pectorals",
+      "tags": [
+        "bilateral",
+        "cable",
+        "chest",
+        "horizontal_push",
+        "isolation",
+        "pectorals",
+        "shoulders",
+        "triceps"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0158"
+    },
+    {
+      "id": "0162",
+      "name": "Elevación frontal en polea",
+      "sourceName": "cable front raise",
+      "aliases": [
+        "cable front raise",
+        "delts",
+        "elevación frontal en polea",
+        "triceps"
+      ],
+      "equipment": [
+        "cable"
+      ],
+      "rawEquipment": "cable",
+      "bodyPart": "shoulders",
+      "primaryMuscles": [
+        "delts"
+      ],
+      "secondaryMuscles": [
+        "triceps",
+        "forearms"
+      ],
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "isolation:delts_front",
+      "tags": [
+        "bilateral",
+        "cable",
+        "delts",
+        "forearms",
+        "isolation",
+        "shoulders",
+        "triceps"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0162"
+    },
+    {
+      "id": "0165",
+      "name": "Curl martillo con cuerda en polea",
+      "sourceName": "cable hammer curl (with rope)",
+      "aliases": [
+        "biceps",
+        "cable hammer curl (with rope)",
+        "curl martillo con cuerda en polea",
+        "forearms"
+      ],
+      "equipment": [
+        "cable"
+      ],
+      "rawEquipment": "cable",
+      "bodyPart": "upper_arms",
+      "primaryMuscles": [
+        "biceps"
+      ],
+      "secondaryMuscles": [
+        "forearms"
+      ],
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "isolation:biceps",
+      "tags": [
+        "biceps",
+        "bilateral",
+        "cable",
+        "forearms",
+        "isolation",
+        "upper_arms"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0165"
+    },
+    {
+      "id": "0168",
+      "name": "Aducción de cadera en polea",
+      "sourceName": "cable hip adduction",
+      "aliases": [
+        "adductors",
+        "aducción de cadera en polea",
+        "cable hip adduction",
+        "glutes"
+      ],
+      "equipment": [
+        "cable"
+      ],
+      "rawEquipment": "cable",
+      "bodyPart": "upper_legs",
+      "primaryMuscles": [
+        "adductors"
+      ],
+      "secondaryMuscles": [
+        "glutes",
+        "quadriceps"
+      ],
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "unilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "isolation:adductors",
+      "tags": [
+        "adductors",
+        "cable",
+        "glutes",
+        "isolation",
+        "quadriceps",
+        "unilateral",
+        "upper_legs"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0168"
+    },
+    {
+      "id": "0169",
+      "name": "Press de banca inclinado en polea",
+      "sourceName": "cable incline bench press",
+      "aliases": [
+        "cable incline bench press",
+        "deltoids",
+        "pectorals",
+        "press de banca inclinado en polea"
+      ],
+      "equipment": [
+        "cable",
+        "bench"
+      ],
+      "rawEquipment": "cable",
+      "bodyPart": "chest",
+      "primaryMuscles": [
+        "pectorals"
+      ],
+      "secondaryMuscles": [
+        "deltoids",
+        "triceps"
+      ],
+      "movementPattern": "horizontal_push",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "medium",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "substitutionGroup": "horizontal_push:chest",
+      "tags": [
+        "bench",
+        "bilateral",
+        "cable",
+        "chest",
+        "compound",
+        "deltoids",
+        "horizontal_push",
+        "pectorals",
+        "triceps"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0169"
+    },
+    {
+      "id": "0171",
+      "name": "Apertura inclinada en polea",
+      "sourceName": "cable incline fly",
+      "aliases": [
+        "apertura inclinada en polea",
+        "cable incline fly",
+        "deltoids",
+        "pectorals"
+      ],
+      "equipment": [
+        "cable",
+        "bench"
+      ],
+      "rawEquipment": "cable",
+      "bodyPart": "chest",
+      "primaryMuscles": [
+        "pectorals"
+      ],
+      "secondaryMuscles": [
+        "deltoids",
+        "triceps"
+      ],
+      "movementPattern": "horizontal_push",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "chest_fly:pectorals",
+      "tags": [
+        "bench",
+        "bilateral",
+        "cable",
+        "chest",
+        "deltoids",
+        "horizontal_push",
+        "isolation",
+        "pectorals",
+        "triceps"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0171"
+    },
+    {
+      "id": "0175",
+      "name": "Encogimiento abdominal de rodillas en polea",
+      "sourceName": "cable kneeling crunch",
+      "aliases": [
+        "abs",
+        "cable kneeling crunch",
+        "encogimiento abdominal de rodillas en polea",
+        "obliques"
+      ],
+      "equipment": [
+        "cable"
+      ],
+      "rawEquipment": "cable",
+      "bodyPart": "waist",
+      "primaryMuscles": [
+        "abs"
+      ],
+      "secondaryMuscles": [
+        "obliques"
+      ],
+      "movementPattern": "core",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        20
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "core:flexion",
+      "tags": [
+        "abs",
+        "bilateral",
+        "cable",
+        "core",
+        "isolation",
+        "obliques",
+        "waist"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0175"
+    },
+    {
+      "id": "0178",
+      "name": "Elevación lateral en polea",
+      "sourceName": "cable lateral raise",
+      "aliases": [
+        "cable lateral raise",
+        "delts",
+        "elevación lateral en polea",
+        "traps"
+      ],
+      "equipment": [
+        "cable"
+      ],
+      "rawEquipment": "cable",
+      "bodyPart": "shoulders",
+      "primaryMuscles": [
+        "delts"
+      ],
+      "secondaryMuscles": [
+        "traps",
+        "triceps"
+      ],
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "isolation:delts_lateral",
+      "tags": [
+        "bilateral",
+        "cable",
+        "delts",
+        "isolation",
+        "shoulders",
+        "traps",
+        "triceps"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0178"
+    },
+    {
+      "id": "0180",
+      "name": "Remo sentado bajo en polea",
+      "sourceName": "cable low seated row",
+      "aliases": [
+        "biceps",
+        "cable low seated row",
+        "remo sentado bajo en polea",
+        "upper back"
+      ],
+      "equipment": [
+        "cable"
+      ],
+      "rawEquipment": "cable",
+      "bodyPart": "back",
+      "primaryMuscles": [
+        "upper_back"
+      ],
+      "secondaryMuscles": [
+        "biceps",
+        "forearms"
+      ],
+      "movementPattern": "horizontal_pull",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "medium",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "substitutionGroup": "row:upper_back",
+      "tags": [
+        "back",
+        "biceps",
+        "bilateral",
+        "cable",
+        "compound",
+        "forearms",
+        "horizontal_pull",
+        "upper_back"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0180"
+    },
+    {
+      "id": "0192",
+      "name": "Elevación lateral a un brazo en polea",
+      "sourceName": "cable one arm lateral raise",
+      "aliases": [
+        "cable one arm lateral raise",
+        "delts",
+        "elevación lateral a un brazo en polea",
+        "traps"
+      ],
+      "equipment": [
+        "cable"
+      ],
+      "rawEquipment": "cable",
+      "bodyPart": "shoulders",
+      "primaryMuscles": [
+        "delts"
+      ],
+      "secondaryMuscles": [
+        "traps",
+        "triceps"
+      ],
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "unilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "isolation:delts_lateral",
+      "tags": [
+        "cable",
+        "delts",
+        "isolation",
+        "shoulders",
+        "traps",
+        "triceps",
+        "unilateral"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0192"
+    },
+    {
+      "id": "0195",
+      "name": "Curl predicador en polea",
+      "sourceName": "cable preacher curl",
+      "aliases": [
+        "biceps",
+        "cable preacher curl",
+        "curl predicador en polea",
+        "forearms"
+      ],
+      "equipment": [
+        "cable",
+        "preacher_bench"
+      ],
+      "rawEquipment": "cable",
+      "bodyPart": "upper_arms",
+      "primaryMuscles": [
+        "biceps"
+      ],
+      "secondaryMuscles": [
+        "forearms"
+      ],
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "isolation:biceps",
+      "tags": [
+        "biceps",
+        "bilateral",
+        "cable",
+        "forearms",
+        "isolation",
+        "preacher_bench",
+        "upper_arms"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0195"
+    },
+    {
+      "id": "0198",
+      "name": "Jalón en polea",
+      "sourceName": "cable pulldown",
+      "aliases": [
+        "biceps",
+        "cable pulldown",
+        "jalón en polea",
+        "lats"
+      ],
+      "equipment": [
+        "cable"
+      ],
+      "rawEquipment": "cable",
+      "bodyPart": "back",
+      "primaryMuscles": [
+        "lats"
+      ],
+      "secondaryMuscles": [
+        "biceps",
+        "forearms"
+      ],
+      "movementPattern": "vertical_pull",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "medium",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "substitutionGroup": "vertical_pull:lats",
+      "tags": [
+        "back",
+        "biceps",
+        "bilateral",
+        "cable",
+        "compound",
+        "forearms",
+        "lats",
+        "vertical_pull"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0198"
+    },
+    {
+      "id": "0200",
+      "name": "Extensión de tríceps hacia abajo con accesorio de cuerda en polea",
+      "sourceName": "cable pushdown (with rope attachment)",
+      "aliases": [
+        "cable pushdown (with rope attachment)",
+        "extensión de tríceps hacia abajo con accesorio de cuerda en polea",
+        "forearms",
+        "triceps"
+      ],
+      "equipment": [
+        "cable"
+      ],
+      "rawEquipment": "cable",
+      "bodyPart": "upper_arms",
+      "primaryMuscles": [
+        "triceps"
+      ],
+      "secondaryMuscles": [
+        "forearms"
+      ],
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "isolation:triceps",
+      "tags": [
+        "bilateral",
+        "cable",
+        "forearms",
+        "isolation",
+        "triceps",
+        "upper_arms"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0200"
+    },
+    {
+      "id": "0201",
+      "name": "Extensión de tríceps hacia abajo en polea",
+      "sourceName": "cable pushdown",
+      "aliases": [
+        "cable pushdown",
+        "extensión de tríceps hacia abajo en polea",
+        "forearms",
+        "triceps"
+      ],
+      "equipment": [
+        "cable"
+      ],
+      "rawEquipment": "cable",
+      "bodyPart": "upper_arms",
+      "primaryMuscles": [
+        "triceps"
+      ],
+      "secondaryMuscles": [
+        "forearms"
+      ],
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "isolation:triceps",
+      "tags": [
+        "bilateral",
+        "cable",
+        "forearms",
+        "isolation",
+        "triceps",
+        "upper_arms"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0201"
+    },
+    {
+      "id": "0207",
+      "name": "Extensión de tríceps en polea con agarre inverso",
+      "sourceName": "cable reverse-grip pushdown",
+      "aliases": [
+        "cable reverse-grip pushdown",
+        "extensión de tríceps en polea con agarre inverso",
+        "forearms",
+        "triceps"
+      ],
+      "equipment": [
+        "cable"
+      ],
+      "rawEquipment": "cable",
+      "bodyPart": "upper_arms",
+      "primaryMuscles": [
+        "triceps"
+      ],
+      "secondaryMuscles": [
+        "forearms"
+      ],
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "isolation:triceps",
+      "tags": [
+        "bilateral",
+        "cable",
+        "forearms",
+        "isolation",
+        "triceps",
+        "upper_arms"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0207"
+    },
+    {
+      "id": "0212",
+      "name": "Encogimiento abdominal sentado en polea",
+      "sourceName": "cable seated crunch",
+      "aliases": [
+        "abs",
+        "cable seated crunch",
+        "encogimiento abdominal sentado en polea",
+        "obliques"
+      ],
+      "equipment": [
+        "cable"
+      ],
+      "rawEquipment": "cable",
+      "bodyPart": "waist",
+      "primaryMuscles": [
+        "abs"
+      ],
+      "secondaryMuscles": [
+        "obliques"
+      ],
+      "movementPattern": "core",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        20
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "core:flexion",
+      "tags": [
+        "abs",
+        "bilateral",
+        "cable",
+        "core",
+        "isolation",
+        "obliques",
+        "waist"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0212"
+    },
+    {
+      "id": "0219",
+      "name": "Press de hombros en polea",
+      "sourceName": "cable shoulder press",
+      "aliases": [
+        "cable shoulder press",
+        "delts",
+        "press de hombros en polea",
+        "triceps"
+      ],
+      "equipment": [
+        "cable"
+      ],
+      "rawEquipment": "cable",
+      "bodyPart": "shoulders",
+      "primaryMuscles": [
+        "delts"
+      ],
+      "secondaryMuscles": [
+        "triceps",
+        "upper_back"
+      ],
+      "movementPattern": "vertical_push",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "medium",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "substitutionGroup": "vertical_push:shoulders",
+      "tags": [
+        "bilateral",
+        "cable",
+        "compound",
+        "delts",
+        "shoulders",
+        "triceps",
+        "upper_back",
+        "vertical_push"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0219"
+    },
+    {
+      "id": "0220",
+      "name": "Encogimiento de hombros en polea",
+      "sourceName": "cable shrug",
+      "aliases": [
+        "cable shrug",
+        "encogimiento de hombros en polea",
+        "shoulders",
+        "traps"
+      ],
+      "equipment": [
+        "cable"
+      ],
+      "rawEquipment": "cable",
+      "bodyPart": "back",
+      "primaryMuscles": [
+        "traps"
+      ],
+      "secondaryMuscles": [
+        "shoulders"
+      ],
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "isolation:traps",
+      "tags": [
+        "back",
+        "bilateral",
+        "cable",
+        "isolation",
+        "shoulders",
+        "traps"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0220"
+    },
+    {
+      "id": "0223",
+      "name": "Encogimiento abdominal lateral en polea",
+      "sourceName": "cable side crunch",
+      "aliases": [
+        "abs",
+        "cable side crunch",
+        "encogimiento abdominal lateral en polea",
+        "obliques"
+      ],
+      "equipment": [
+        "cable"
+      ],
+      "rawEquipment": "cable",
+      "bodyPart": "waist",
+      "primaryMuscles": [
+        "abs"
+      ],
+      "secondaryMuscles": [
+        "obliques"
+      ],
+      "movementPattern": "core",
+      "modality": "isolation",
+      "laterality": "unilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        20
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "core:rotation_lateral",
+      "tags": [
+        "abs",
+        "cable",
+        "core",
+        "isolation",
+        "obliques",
+        "unilateral",
+        "waist"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0223"
+    },
+    {
+      "id": "0226",
+      "name": "Encogimiento abdominal de pie en polea",
+      "sourceName": "cable standing crunch",
+      "aliases": [
+        "abs",
+        "cable standing crunch",
+        "encogimiento abdominal de pie en polea",
+        "obliques"
+      ],
+      "equipment": [
+        "cable"
+      ],
+      "rawEquipment": "cable",
+      "bodyPart": "waist",
+      "primaryMuscles": [
+        "abs"
+      ],
+      "secondaryMuscles": [
+        "obliques"
+      ],
+      "movementPattern": "core",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        20
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "core:flexion",
+      "tags": [
+        "abs",
+        "bilateral",
+        "cable",
+        "core",
+        "isolation",
+        "obliques",
+        "waist"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0226"
+    },
+    {
+      "id": "0227",
+      "name": "Apertura de pie en polea",
+      "sourceName": "cable standing fly",
+      "aliases": [
+        "apertura de pie en polea",
+        "cable standing fly",
+        "deltoids",
+        "pectorals"
+      ],
+      "equipment": [
+        "cable"
+      ],
+      "rawEquipment": "cable",
+      "bodyPart": "chest",
+      "primaryMuscles": [
+        "pectorals"
+      ],
+      "secondaryMuscles": [
+        "deltoids",
+        "triceps"
+      ],
+      "movementPattern": "horizontal_push",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "chest_fly:pectorals",
+      "tags": [
+        "bilateral",
+        "cable",
+        "chest",
+        "deltoids",
+        "horizontal_push",
+        "isolation",
+        "pectorals",
+        "triceps"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0227"
+    },
+    {
+      "id": "0238",
+      "name": "Jalón con brazos rectos en polea",
+      "sourceName": "cable straight arm pulldown",
+      "aliases": [
+        "cable straight arm pulldown",
+        "jalón con brazos rectos en polea",
+        "lats",
+        "shoulders"
+      ],
+      "equipment": [
+        "cable"
+      ],
+      "rawEquipment": "cable",
+      "bodyPart": "back",
+      "primaryMuscles": [
+        "lats"
+      ],
+      "secondaryMuscles": [
+        "shoulders",
+        "biceps"
+      ],
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "isolation:lats",
+      "tags": [
+        "back",
+        "biceps",
+        "bilateral",
+        "cable",
+        "isolation",
+        "lats",
+        "shoulders"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0238"
+    },
+    {
+      "id": "0241",
+      "name": "Extensión de tríceps en polea con barra V",
+      "sourceName": "cable triceps pushdown (v-bar)",
+      "aliases": [
+        "cable triceps pushdown (v-bar)",
+        "extensión de tríceps en polea con barra v",
+        "forearms",
+        "triceps"
+      ],
+      "equipment": [
+        "cable"
+      ],
+      "rawEquipment": "cable",
+      "bodyPart": "upper_arms",
+      "primaryMuscles": [
+        "triceps"
+      ],
+      "secondaryMuscles": [
+        "forearms"
+      ],
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "isolation:triceps",
+      "tags": [
+        "bilateral",
+        "cable",
+        "forearms",
+        "isolation",
+        "triceps",
+        "upper_arms"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0241"
+    },
+    {
+      "id": "0242",
+      "name": "Encogimiento inverso en polea con rodillas flexionadas",
+      "sourceName": "cable tuck reverse crunch",
+      "aliases": [
+        "abs",
+        "cable tuck reverse crunch",
+        "encogimiento inverso en polea con rodillas flexionadas",
+        "hip flexors"
+      ],
+      "equipment": [
+        "cable"
+      ],
+      "rawEquipment": "cable",
+      "bodyPart": "waist",
+      "primaryMuscles": [
+        "abs"
+      ],
+      "secondaryMuscles": [
+        "hip_flexors"
+      ],
+      "movementPattern": "core",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        20
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "core:hip_flexion",
+      "tags": [
+        "abs",
+        "bilateral",
+        "cable",
+        "core",
+        "hip_flexors",
+        "isolation",
+        "waist"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0242"
+    },
+    {
+      "id": "0262",
+      "name": "Encogimiento abdominal cruzado",
+      "sourceName": "cross body crunch",
+      "aliases": [
+        "abs",
+        "cross body crunch",
+        "encogimiento abdominal cruzado",
+        "obliques"
+      ],
+      "equipment": [
+        "body_weight"
+      ],
+      "rawEquipment": "body weight",
+      "bodyPart": "waist",
+      "primaryMuscles": [
+        "abs"
+      ],
+      "secondaryMuscles": [
+        "obliques"
+      ],
+      "movementPattern": "core",
+      "modality": "isolation",
+      "laterality": "unilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        20
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "core:rotation_lateral",
+      "tags": [
+        "abs",
+        "body_weight",
+        "core",
+        "isolation",
+        "obliques",
+        "unilateral",
+        "waist"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0262"
+    },
+    {
+      "id": "0277",
+      "name": "Encogimiento abdominal en banco declinado",
+      "sourceName": "decline crunch",
+      "aliases": [
+        "abs",
+        "decline crunch",
+        "encogimiento abdominal en banco declinado",
+        "hip flexors"
+      ],
+      "equipment": [
+        "body_weight",
+        "bench"
+      ],
+      "rawEquipment": "body weight",
+      "bodyPart": "waist",
+      "primaryMuscles": [
+        "abs"
+      ],
+      "secondaryMuscles": [
+        "hip_flexors"
+      ],
+      "movementPattern": "core",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        20
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "core:flexion",
+      "tags": [
+        "abs",
+        "bench",
+        "bilateral",
+        "body_weight",
+        "core",
+        "hip_flexors",
+        "isolation",
+        "waist"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0277"
+    },
+    {
+      "id": "0279",
+      "name": "Flexión con pies elevados",
+      "sourceName": "decline push-up",
+      "aliases": [
+        "decline push-up",
+        "flexión con pies elevados",
+        "pectorals",
+        "triceps"
+      ],
+      "equipment": [
+        "body_weight",
+        "bench"
+      ],
+      "rawEquipment": "body weight",
+      "bodyPart": "chest",
+      "primaryMuscles": [
+        "pectorals"
+      ],
+      "secondaryMuscles": [
+        "triceps",
+        "shoulders"
+      ],
+      "movementPattern": "horizontal_push",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "difficulty": "intermediate",
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "substitutionGroup": "horizontal_push:chest",
+      "tags": [
+        "bench",
+        "bilateral",
+        "body_weight",
+        "chest",
+        "compound",
+        "horizontal_push",
+        "pectorals",
+        "shoulders",
+        "triceps"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0279"
+    },
+    {
+      "id": "0282",
+      "name": "Abdominal en banco declinado",
+      "sourceName": "decline sit-up",
+      "aliases": [
+        "abdominal en banco declinado",
+        "abs",
+        "decline sit-up",
+        "hip flexors"
+      ],
+      "equipment": [
+        "body_weight",
+        "bench"
+      ],
+      "rawEquipment": "body weight",
+      "bodyPart": "waist",
+      "primaryMuscles": [
+        "abs"
+      ],
+      "secondaryMuscles": [
+        "hip_flexors",
+        "lower_back"
+      ],
+      "movementPattern": "core",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        20
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "core:flexion",
+      "tags": [
+        "abs",
+        "bench",
+        "bilateral",
+        "body_weight",
+        "core",
+        "hip_flexors",
+        "isolation",
+        "lower_back",
+        "waist"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0282"
+    },
+    {
+      "id": "0289",
+      "name": "Press de banca con mancuernas",
+      "sourceName": "dumbbell bench press",
+      "aliases": [
+        "dumbbell bench press",
+        "pectorals",
+        "press de banca con mancuernas",
+        "triceps"
+      ],
+      "equipment": [
+        "dumbbell",
+        "bench"
+      ],
+      "rawEquipment": "dumbbell",
+      "bodyPart": "chest",
+      "primaryMuscles": [
+        "pectorals"
+      ],
+      "secondaryMuscles": [
+        "triceps",
+        "shoulders"
+      ],
+      "movementPattern": "horizontal_push",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "difficulty": "intermediate",
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "substitutionGroup": "horizontal_push:chest",
+      "tags": [
+        "bench",
+        "bilateral",
+        "chest",
+        "compound",
+        "dumbbell",
+        "horizontal_push",
+        "pectorals",
+        "shoulders",
+        "triceps"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0289"
+    },
+    {
+      "id": "0293",
+      "name": "Remo inclinado con mancuernas",
+      "sourceName": "dumbbell bent over row",
+      "aliases": [
+        "biceps",
+        "dumbbell bent over row",
+        "remo inclinado con mancuernas",
+        "upper back"
+      ],
+      "equipment": [
+        "dumbbell"
+      ],
+      "rawEquipment": "dumbbell",
+      "bodyPart": "back",
+      "primaryMuscles": [
+        "upper_back"
+      ],
+      "secondaryMuscles": [
+        "biceps",
+        "forearms"
+      ],
+      "movementPattern": "horizontal_pull",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "difficulty": "intermediate",
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "substitutionGroup": "row:upper_back",
+      "tags": [
+        "back",
+        "biceps",
+        "bilateral",
+        "compound",
+        "dumbbell",
+        "forearms",
+        "horizontal_pull",
+        "upper_back"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0293"
+    },
+    {
+      "id": "0294",
+      "name": "Curl de bíceps con mancuernas",
+      "sourceName": "dumbbell biceps curl",
+      "aliases": [
+        "biceps",
+        "curl de bíceps con mancuernas",
+        "dumbbell biceps curl",
+        "forearms"
+      ],
+      "equipment": [
+        "dumbbell"
+      ],
+      "rawEquipment": "dumbbell",
+      "bodyPart": "upper_arms",
+      "primaryMuscles": [
+        "biceps"
+      ],
+      "secondaryMuscles": [
+        "forearms"
+      ],
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "isolation:biceps",
+      "tags": [
+        "biceps",
+        "bilateral",
+        "dumbbell",
+        "forearms",
+        "isolation",
+        "upper_arms"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0294"
+    },
+    {
+      "id": "0297",
+      "name": "Curl concentrado con mancuernas",
+      "sourceName": "dumbbell concentration curl",
+      "aliases": [
+        "biceps",
+        "curl concentrado con mancuernas",
+        "dumbbell concentration curl",
+        "forearms"
+      ],
+      "equipment": [
+        "dumbbell",
+        "bench"
+      ],
+      "rawEquipment": "dumbbell",
+      "bodyPart": "upper_arms",
+      "primaryMuscles": [
+        "biceps"
+      ],
+      "secondaryMuscles": [
+        "forearms"
+      ],
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "unilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "isolation:biceps",
+      "tags": [
+        "bench",
+        "biceps",
+        "dumbbell",
+        "forearms",
+        "isolation",
+        "unilateral",
+        "upper_arms"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0297"
+    },
+    {
+      "id": "0300",
+      "name": "Peso muerto con mancuernas",
+      "sourceName": "dumbbell deadlift",
+      "aliases": [
+        "dumbbell deadlift",
+        "glutes",
+        "hamstrings",
+        "peso muerto con mancuernas"
+      ],
+      "equipment": [
+        "dumbbell"
+      ],
+      "rawEquipment": "dumbbell",
+      "bodyPart": "upper_legs",
+      "primaryMuscles": [
+        "glutes"
+      ],
+      "secondaryMuscles": [
+        "hamstrings",
+        "lower_back"
+      ],
+      "movementPattern": "hinge",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "difficulty": "intermediate",
+      "fatigueCost": "high",
+      "skillRequirement": "medium",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        120,
+        180
+      ],
+      "substitutionGroup": "hinge:upper_legs",
+      "tags": [
+        "bilateral",
+        "compound",
+        "dumbbell",
+        "glutes",
+        "hamstrings",
+        "hinge",
+        "lower_back",
+        "upper_legs"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0300"
+    },
+    {
+      "id": "0301",
+      "name": "Press de banca declinado con mancuernas",
+      "sourceName": "dumbbell decline bench press",
+      "aliases": [
+        "dumbbell decline bench press",
+        "pectorals",
+        "press de banca declinado con mancuernas",
+        "triceps"
+      ],
+      "equipment": [
+        "dumbbell",
+        "bench"
+      ],
+      "rawEquipment": "dumbbell",
+      "bodyPart": "chest",
+      "primaryMuscles": [
+        "pectorals"
+      ],
+      "secondaryMuscles": [
+        "triceps",
+        "shoulders"
+      ],
+      "movementPattern": "horizontal_push",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "difficulty": "intermediate",
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "substitutionGroup": "horizontal_push:chest",
+      "tags": [
+        "bench",
+        "bilateral",
+        "chest",
+        "compound",
+        "dumbbell",
+        "horizontal_push",
+        "pectorals",
+        "shoulders",
+        "triceps"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0301"
+    },
+    {
+      "id": "0302",
+      "name": "Apertura declinada con mancuernas",
+      "sourceName": "dumbbell decline fly",
+      "aliases": [
+        "apertura declinada con mancuernas",
+        "dumbbell decline fly",
+        "pectorals",
+        "shoulders"
+      ],
+      "equipment": [
+        "dumbbell",
+        "bench"
+      ],
+      "rawEquipment": "dumbbell",
+      "bodyPart": "chest",
+      "primaryMuscles": [
+        "pectorals"
+      ],
+      "secondaryMuscles": [
+        "shoulders"
+      ],
+      "movementPattern": "horizontal_push",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "intermediate",
+      "fatigueCost": "low",
+      "skillRequirement": "medium",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "chest_fly:pectorals",
+      "tags": [
+        "bench",
+        "bilateral",
+        "chest",
+        "dumbbell",
+        "horizontal_push",
+        "isolation",
+        "pectorals",
+        "shoulders"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0302"
+    },
+    {
+      "id": "0308",
+      "name": "Apertura con mancuernas",
+      "sourceName": "dumbbell fly",
+      "aliases": [
+        "apertura con mancuernas",
+        "dumbbell fly",
+        "pectorals",
+        "shoulders"
+      ],
+      "equipment": [
+        "dumbbell",
+        "bench"
+      ],
+      "rawEquipment": "dumbbell",
+      "bodyPart": "chest",
+      "primaryMuscles": [
+        "pectorals"
+      ],
+      "secondaryMuscles": [
+        "shoulders"
+      ],
+      "movementPattern": "horizontal_push",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "intermediate",
+      "fatigueCost": "low",
+      "skillRequirement": "medium",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "chest_fly:pectorals",
+      "tags": [
+        "bench",
+        "bilateral",
+        "chest",
+        "dumbbell",
+        "horizontal_push",
+        "isolation",
+        "pectorals",
+        "shoulders"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0308"
+    },
+    {
+      "id": "0310",
+      "name": "Elevación frontal con mancuernas",
+      "sourceName": "dumbbell front raise",
+      "aliases": [
+        "biceps",
+        "delts",
+        "dumbbell front raise",
+        "elevación frontal con mancuernas"
+      ],
+      "equipment": [
+        "dumbbell"
+      ],
+      "rawEquipment": "dumbbell",
+      "bodyPart": "shoulders",
+      "primaryMuscles": [
+        "delts"
+      ],
+      "secondaryMuscles": [
+        "biceps",
+        "trapezius"
+      ],
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "isolation:delts_front",
+      "tags": [
+        "biceps",
+        "bilateral",
+        "delts",
+        "dumbbell",
+        "isolation",
+        "shoulders",
+        "trapezius"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0310"
+    },
+    {
+      "id": "0313",
+      "name": "Curl martillo con mancuernas",
+      "sourceName": "dumbbell hammer curl",
+      "aliases": [
+        "biceps",
+        "curl martillo con mancuernas",
+        "dumbbell hammer curl",
+        "forearms"
+      ],
+      "equipment": [
+        "dumbbell"
+      ],
+      "rawEquipment": "dumbbell",
+      "bodyPart": "upper_arms",
+      "primaryMuscles": [
+        "biceps"
+      ],
+      "secondaryMuscles": [
+        "forearms"
+      ],
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "isolation:biceps",
+      "tags": [
+        "biceps",
+        "bilateral",
+        "dumbbell",
+        "forearms",
+        "isolation",
+        "upper_arms"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0313"
+    },
+    {
+      "id": "0314",
+      "name": "Press de banca inclinado con mancuernas",
+      "sourceName": "dumbbell incline bench press",
+      "aliases": [
+        "dumbbell incline bench press",
+        "pectorals",
+        "press de banca inclinado con mancuernas",
+        "shoulders"
+      ],
+      "equipment": [
+        "dumbbell",
+        "bench"
+      ],
+      "rawEquipment": "dumbbell",
+      "bodyPart": "chest",
+      "primaryMuscles": [
+        "pectorals"
+      ],
+      "secondaryMuscles": [
+        "shoulders",
+        "triceps"
+      ],
+      "movementPattern": "horizontal_push",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "difficulty": "intermediate",
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "substitutionGroup": "horizontal_push:chest",
+      "tags": [
+        "bench",
+        "bilateral",
+        "chest",
+        "compound",
+        "dumbbell",
+        "horizontal_push",
+        "pectorals",
+        "shoulders",
+        "triceps"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0314"
+    },
+    {
+      "id": "0315",
+      "name": "Curl de bíceps inclinado con mancuernas",
+      "sourceName": "dumbbell incline biceps curl",
+      "aliases": [
+        "biceps",
+        "curl de bíceps inclinado con mancuernas",
+        "dumbbell incline biceps curl",
+        "forearms"
+      ],
+      "equipment": [
+        "dumbbell",
+        "bench"
+      ],
+      "rawEquipment": "dumbbell",
+      "bodyPart": "upper_arms",
+      "primaryMuscles": [
+        "biceps"
+      ],
+      "secondaryMuscles": [
+        "forearms"
+      ],
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "isolation:biceps",
+      "tags": [
+        "bench",
+        "biceps",
+        "bilateral",
+        "dumbbell",
+        "forearms",
+        "isolation",
+        "upper_arms"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0315"
+    },
+    {
+      "id": "0319",
+      "name": "Apertura inclinada con mancuernas",
+      "sourceName": "dumbbell incline fly",
+      "aliases": [
+        "apertura inclinada con mancuernas",
+        "dumbbell incline fly",
+        "pectorals",
+        "shoulders"
+      ],
+      "equipment": [
+        "dumbbell",
+        "bench"
+      ],
+      "rawEquipment": "dumbbell",
+      "bodyPart": "chest",
+      "primaryMuscles": [
+        "pectorals"
+      ],
+      "secondaryMuscles": [
+        "shoulders"
+      ],
+      "movementPattern": "horizontal_push",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "intermediate",
+      "fatigueCost": "low",
+      "skillRequirement": "medium",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "chest_fly:pectorals",
+      "tags": [
+        "bench",
+        "bilateral",
+        "chest",
+        "dumbbell",
+        "horizontal_push",
+        "isolation",
+        "pectorals",
+        "shoulders"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0319"
+    },
+    {
+      "id": "0327",
+      "name": "Remo con mancuernas apoyado en banco inclinado",
+      "sourceName": "dumbbell incline row",
+      "aliases": [
+        "biceps",
+        "dumbbell incline row",
+        "remo con mancuernas apoyado en banco inclinado",
+        "upper back"
+      ],
+      "equipment": [
+        "dumbbell",
+        "bench"
+      ],
+      "rawEquipment": "dumbbell",
+      "bodyPart": "back",
+      "primaryMuscles": [
+        "upper_back"
+      ],
+      "secondaryMuscles": [
+        "biceps",
+        "shoulders"
+      ],
+      "movementPattern": "horizontal_pull",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "difficulty": "intermediate",
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "substitutionGroup": "row:upper_back",
+      "tags": [
+        "back",
+        "bench",
+        "biceps",
+        "bilateral",
+        "compound",
+        "dumbbell",
+        "horizontal_pull",
+        "shoulders",
+        "upper_back"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0327"
+    },
+    {
+      "id": "0334",
+      "name": "Elevación lateral con mancuernas",
+      "sourceName": "dumbbell lateral raise",
+      "aliases": [
+        "delts",
+        "dumbbell lateral raise",
+        "elevación lateral con mancuernas",
+        "traps"
+      ],
+      "equipment": [
+        "dumbbell"
+      ],
+      "rawEquipment": "dumbbell",
+      "bodyPart": "shoulders",
+      "primaryMuscles": [
+        "delts"
+      ],
+      "secondaryMuscles": [
+        "traps"
+      ],
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "isolation:delts_lateral",
+      "tags": [
+        "bilateral",
+        "delts",
+        "dumbbell",
+        "isolation",
+        "shoulders",
+        "traps"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0334"
+    },
+    {
+      "id": "0336",
+      "name": "Zancada con mancuernas",
+      "sourceName": "dumbbell lunge",
+      "aliases": [
+        "dumbbell lunge",
+        "glutes",
+        "quadriceps",
+        "zancada con mancuernas"
+      ],
+      "equipment": [
+        "dumbbell"
+      ],
+      "rawEquipment": "dumbbell",
+      "bodyPart": "upper_legs",
+      "primaryMuscles": [
+        "glutes"
+      ],
+      "secondaryMuscles": [
+        "quadriceps",
+        "hamstrings",
+        "calves"
+      ],
+      "movementPattern": "lunge",
+      "modality": "compound",
+      "laterality": "unilateral",
+      "difficulty": "intermediate",
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "substitutionGroup": "lunge:upper_legs",
+      "tags": [
+        "calves",
+        "compound",
+        "dumbbell",
+        "glutes",
+        "hamstrings",
+        "lunge",
+        "quadriceps",
+        "unilateral",
+        "upper_legs"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0336"
+    },
+    {
+      "id": "0351",
+      "name": "Extensión de tríceps acostado con mancuernas",
+      "sourceName": "dumbbell lying triceps extension",
+      "aliases": [
+        "dumbbell lying triceps extension",
+        "extensión de tríceps acostado con mancuernas",
+        "shoulders",
+        "triceps"
+      ],
+      "equipment": [
+        "dumbbell",
+        "bench"
+      ],
+      "rawEquipment": "dumbbell",
+      "bodyPart": "upper_arms",
+      "primaryMuscles": [
+        "triceps"
+      ],
+      "secondaryMuscles": [
+        "shoulders"
+      ],
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "isolation:triceps",
+      "tags": [
+        "bench",
+        "bilateral",
+        "dumbbell",
+        "isolation",
+        "shoulders",
+        "triceps",
+        "upper_arms"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0351"
+    },
+    {
+      "id": "0361",
+      "name": "Press de hombros a un brazo con mancuernas",
+      "sourceName": "dumbbell one arm shoulder press",
+      "aliases": [
+        "delts",
+        "dumbbell one arm shoulder press",
+        "press de hombros a un brazo con mancuernas",
+        "triceps"
+      ],
+      "equipment": [
+        "dumbbell"
+      ],
+      "rawEquipment": "dumbbell",
+      "bodyPart": "shoulders",
+      "primaryMuscles": [
+        "delts"
+      ],
+      "secondaryMuscles": [
+        "triceps",
+        "upper_back"
+      ],
+      "movementPattern": "vertical_push",
+      "modality": "compound",
+      "laterality": "unilateral",
+      "difficulty": "intermediate",
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "substitutionGroup": "vertical_push:shoulders",
+      "tags": [
+        "compound",
+        "delts",
+        "dumbbell",
+        "shoulders",
+        "triceps",
+        "unilateral",
+        "upper_back",
+        "vertical_push"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0361"
+    },
+    {
+      "id": "0372",
+      "name": "Curl predicador con mancuernas",
+      "sourceName": "dumbbell preacher curl",
+      "aliases": [
+        "biceps",
+        "curl predicador con mancuernas",
+        "dumbbell preacher curl",
+        "forearms"
+      ],
+      "equipment": [
+        "dumbbell",
+        "preacher_bench"
+      ],
+      "rawEquipment": "dumbbell",
+      "bodyPart": "upper_arms",
+      "primaryMuscles": [
+        "biceps"
+      ],
+      "secondaryMuscles": [
+        "forearms"
+      ],
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "isolation:biceps",
+      "tags": [
+        "biceps",
+        "bilateral",
+        "dumbbell",
+        "forearms",
+        "isolation",
+        "preacher_bench",
+        "upper_arms"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0372"
+    },
+    {
+      "id": "0383",
+      "name": "Vuelo posterior con mancuernas",
+      "sourceName": "dumbbell reverse fly",
+      "aliases": [
+        "delts",
+        "dumbbell reverse fly",
+        "trapezius",
+        "vuelo posterior con mancuernas"
+      ],
+      "equipment": [
+        "dumbbell"
+      ],
+      "rawEquipment": "dumbbell",
+      "bodyPart": "shoulders",
+      "primaryMuscles": [
+        "delts"
+      ],
+      "secondaryMuscles": [
+        "trapezius",
+        "rhomboids"
+      ],
+      "movementPattern": "horizontal_pull",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "intermediate",
+      "fatigueCost": "low",
+      "skillRequirement": "medium",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "rear_delt_pull:delts",
+      "tags": [
+        "bilateral",
+        "delts",
+        "dumbbell",
+        "horizontal_pull",
+        "isolation",
+        "rhomboids",
+        "shoulders",
+        "trapezius"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0383"
+    },
+    {
+      "id": "0396",
+      "name": "Elevación lateral sentado con mancuernas",
+      "sourceName": "dumbbell seated lateral raise",
+      "aliases": [
+        "delts",
+        "dumbbell seated lateral raise",
+        "elevación lateral sentado con mancuernas",
+        "traps"
+      ],
+      "equipment": [
+        "dumbbell",
+        "bench"
+      ],
+      "rawEquipment": "dumbbell",
+      "bodyPart": "shoulders",
+      "primaryMuscles": [
+        "delts"
+      ],
+      "secondaryMuscles": [
+        "traps",
+        "upper_back"
+      ],
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "isolation:delts_lateral",
+      "tags": [
+        "bench",
+        "bilateral",
+        "delts",
+        "dumbbell",
+        "isolation",
+        "shoulders",
+        "traps",
+        "upper_back"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0396"
+    },
+    {
+      "id": "0405",
+      "name": "Press de hombros sentado con mancuernas",
+      "sourceName": "dumbbell seated shoulder press",
+      "aliases": [
+        "delts",
+        "dumbbell seated shoulder press",
+        "press de hombros sentado con mancuernas",
+        "triceps"
+      ],
+      "equipment": [
+        "dumbbell",
+        "bench"
+      ],
+      "rawEquipment": "dumbbell",
+      "bodyPart": "shoulders",
+      "primaryMuscles": [
+        "delts"
+      ],
+      "secondaryMuscles": [
+        "triceps",
+        "upper_back"
+      ],
+      "movementPattern": "vertical_push",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "difficulty": "intermediate",
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "substitutionGroup": "vertical_push:shoulders",
+      "tags": [
+        "bench",
+        "bilateral",
+        "compound",
+        "delts",
+        "dumbbell",
+        "shoulders",
+        "triceps",
+        "upper_back",
+        "vertical_push"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0405"
+    },
+    {
+      "id": "0406",
+      "name": "Encogimiento de hombros con mancuernas",
+      "sourceName": "dumbbell shrug",
+      "aliases": [
+        "dumbbell shrug",
+        "encogimiento de hombros con mancuernas",
+        "shoulders",
+        "traps"
+      ],
+      "equipment": [
+        "dumbbell"
+      ],
+      "rawEquipment": "dumbbell",
+      "bodyPart": "back",
+      "primaryMuscles": [
+        "traps"
+      ],
+      "secondaryMuscles": [
+        "shoulders"
+      ],
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "isolation:traps",
+      "tags": [
+        "back",
+        "bilateral",
+        "dumbbell",
+        "isolation",
+        "shoulders",
+        "traps"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0406"
+    },
+    {
+      "id": "0413",
+      "name": "Sentadilla con mancuernas",
+      "sourceName": "dumbbell squat",
+      "aliases": [
+        "dumbbell squat",
+        "glutes",
+        "quadriceps",
+        "sentadilla con mancuernas"
+      ],
+      "equipment": [
+        "dumbbell"
+      ],
+      "rawEquipment": "dumbbell",
+      "bodyPart": "upper_legs",
+      "primaryMuscles": [
+        "glutes"
+      ],
+      "secondaryMuscles": [
+        "quadriceps",
+        "hamstrings",
+        "calves"
+      ],
+      "movementPattern": "squat",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "difficulty": "intermediate",
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "substitutionGroup": "squat:upper_legs",
+      "tags": [
+        "bilateral",
+        "calves",
+        "compound",
+        "dumbbell",
+        "glutes",
+        "hamstrings",
+        "quadriceps",
+        "squat",
+        "upper_legs"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0413"
+    },
+    {
+      "id": "0416",
+      "name": "Curl de bíceps de pie con mancuernas",
+      "sourceName": "dumbbell standing biceps curl",
+      "aliases": [
+        "biceps",
+        "curl de bíceps de pie con mancuernas",
+        "dumbbell standing biceps curl",
+        "forearms"
+      ],
+      "equipment": [
+        "dumbbell"
+      ],
+      "rawEquipment": "dumbbell",
+      "bodyPart": "upper_arms",
+      "primaryMuscles": [
+        "biceps"
+      ],
+      "secondaryMuscles": [
+        "forearms"
+      ],
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "isolation:biceps",
+      "tags": [
+        "biceps",
+        "bilateral",
+        "dumbbell",
+        "forearms",
+        "isolation",
+        "upper_arms"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0416"
+    },
+    {
+      "id": "0417",
+      "name": "Elevación de talones de pie con mancuernas",
+      "sourceName": "dumbbell standing calf raise",
+      "aliases": [
+        "ankles",
+        "calves",
+        "dumbbell standing calf raise",
+        "elevación de talones de pie con mancuernas"
+      ],
+      "equipment": [
+        "dumbbell"
+      ],
+      "rawEquipment": "dumbbell",
+      "bodyPart": "lower_legs",
+      "primaryMuscles": [
+        "calves"
+      ],
+      "secondaryMuscles": [
+        "ankles"
+      ],
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "isolation:calves",
+      "tags": [
+        "ankles",
+        "bilateral",
+        "calves",
+        "dumbbell",
+        "isolation",
+        "lower_legs"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0417"
+    },
+    {
+      "id": "0430",
+      "name": "Extensión de tríceps de pie con mancuernas",
+      "sourceName": "dumbbell standing triceps extension",
+      "aliases": [
+        "dumbbell standing triceps extension",
+        "extensión de tríceps de pie con mancuernas",
+        "shoulders",
+        "triceps"
+      ],
+      "equipment": [
+        "dumbbell"
+      ],
+      "rawEquipment": "dumbbell",
+      "bodyPart": "upper_arms",
+      "primaryMuscles": [
+        "triceps"
+      ],
+      "secondaryMuscles": [
+        "shoulders"
+      ],
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "isolation:triceps",
+      "tags": [
+        "bilateral",
+        "dumbbell",
+        "isolation",
+        "shoulders",
+        "triceps",
+        "upper_arms"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0430"
+    },
+    {
+      "id": "0464",
+      "name": "Plancha frontal con giro",
+      "sourceName": "front plank with twist",
+      "aliases": [
+        "abs",
+        "front plank with twist",
+        "obliques",
+        "plancha frontal con giro"
+      ],
+      "equipment": [
+        "body_weight"
+      ],
+      "rawEquipment": "body weight",
+      "bodyPart": "waist",
+      "primaryMuscles": [
+        "abs"
+      ],
+      "secondaryMuscles": [
+        "obliques",
+        "shoulders"
+      ],
+      "movementPattern": "core",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        20
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "core:rotation_lateral",
+      "tags": [
+        "abs",
+        "bilateral",
+        "body_weight",
+        "core",
+        "isolation",
+        "obliques",
+        "shoulders",
+        "waist"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0464"
+    },
+    {
+      "id": "0472",
+      "name": "Elevación de piernas colgado",
+      "sourceName": "hanging leg raise",
+      "aliases": [
+        "abs",
+        "elevación de piernas colgado",
+        "hanging leg raise",
+        "hip flexors"
+      ],
+      "equipment": [
+        "body_weight",
+        "pull_up_bar"
+      ],
+      "rawEquipment": "body weight",
+      "bodyPart": "waist",
+      "primaryMuscles": [
+        "abs"
+      ],
+      "secondaryMuscles": [
+        "hip_flexors"
+      ],
+      "movementPattern": "core",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "intermediate",
+      "fatigueCost": "low",
+      "skillRequirement": "medium",
+      "defaultRepRange": [
+        10,
+        20
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "core:hip_flexion",
+      "tags": [
+        "abs",
+        "bilateral",
+        "body_weight",
+        "core",
+        "hip_flexors",
+        "isolation",
+        "pull_up_bar",
+        "waist"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0472"
+    },
+    {
+      "id": "0488",
+      "name": "Hiperextensión en banco",
+      "sourceName": "hyperextension (on bench)",
+      "aliases": [
+        "glutes",
+        "hiperextensión en banco",
+        "hyperextension (on bench)",
+        "spine"
+      ],
+      "equipment": [
+        "body_weight",
+        "hyperextension_bench"
+      ],
+      "rawEquipment": "body weight",
+      "bodyPart": "back",
+      "primaryMuscles": [
+        "spine"
+      ],
+      "secondaryMuscles": [
+        "glutes",
+        "hamstrings"
+      ],
+      "movementPattern": "hinge",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "difficulty": "intermediate",
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "substitutionGroup": "hinge:back",
+      "tags": [
+        "back",
+        "bilateral",
+        "body_weight",
+        "compound",
+        "glutes",
+        "hamstrings",
+        "hinge",
+        "hyperextension_bench",
+        "spine"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0488"
+    },
+    {
+      "id": "0493",
+      "name": "Flexión de brazos inclinada",
+      "sourceName": "incline push-up",
+      "aliases": [
+        "flexión de brazos inclinada",
+        "incline push-up",
+        "pectorals",
+        "triceps"
+      ],
+      "equipment": [
+        "body_weight",
+        "bench"
+      ],
+      "rawEquipment": "body weight",
+      "bodyPart": "chest",
+      "primaryMuscles": [
+        "pectorals"
+      ],
+      "secondaryMuscles": [
+        "triceps",
+        "shoulders"
+      ],
+      "movementPattern": "horizontal_push",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "medium",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "substitutionGroup": "horizontal_push:chest",
+      "tags": [
+        "bench",
+        "bilateral",
+        "body_weight",
+        "chest",
+        "compound",
+        "horizontal_push",
+        "pectorals",
+        "shoulders",
+        "triceps"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0493"
+    },
+    {
+      "id": "0534",
+      "name": "Sentadilla goblet con kettlebell",
+      "sourceName": "kettlebell goblet squat",
+      "aliases": [
+        "glutes",
+        "kettlebell goblet squat",
+        "quadriceps",
+        "sentadilla goblet con kettlebell"
+      ],
+      "equipment": [
+        "kettlebell"
+      ],
+      "rawEquipment": "kettlebell",
+      "bodyPart": "upper_legs",
+      "primaryMuscles": [
+        "glutes"
+      ],
+      "secondaryMuscles": [
+        "quadriceps",
+        "hamstrings",
+        "calves"
+      ],
+      "movementPattern": "squat",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "substitutionGroup": "squat:upper_legs",
+      "tags": [
+        "bilateral",
+        "calves",
+        "compound",
+        "glutes",
+        "hamstrings",
+        "kettlebell",
+        "quadriceps",
+        "squat",
+        "upper_legs"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0534"
+    },
+    {
+      "id": "0541",
+      "name": "Remo a un brazo con kettlebell",
+      "sourceName": "kettlebell one arm row",
+      "aliases": [
+        "biceps",
+        "kettlebell one arm row",
+        "remo a un brazo con kettlebell",
+        "upper back"
+      ],
+      "equipment": [
+        "kettlebell"
+      ],
+      "rawEquipment": "kettlebell",
+      "bodyPart": "back",
+      "primaryMuscles": [
+        "upper_back"
+      ],
+      "secondaryMuscles": [
+        "biceps",
+        "forearms"
+      ],
+      "movementPattern": "horizontal_pull",
+      "modality": "compound",
+      "laterality": "unilateral",
+      "difficulty": "intermediate",
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "substitutionGroup": "row:upper_back",
+      "tags": [
+        "back",
+        "biceps",
+        "compound",
+        "forearms",
+        "horizontal_pull",
+        "kettlebell",
+        "unilateral",
+        "upper_back"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0541"
+    },
+    {
+      "id": "0546",
+      "name": "Press sentado con kettlebell",
+      "sourceName": "kettlebell seated press",
+      "aliases": [
+        "delts",
+        "kettlebell seated press",
+        "press sentado con kettlebell",
+        "triceps"
+      ],
+      "equipment": [
+        "kettlebell",
+        "bench"
+      ],
+      "rawEquipment": "kettlebell",
+      "bodyPart": "shoulders",
+      "primaryMuscles": [
+        "delts"
+      ],
+      "secondaryMuscles": [
+        "triceps",
+        "core"
+      ],
+      "movementPattern": "vertical_push",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "difficulty": "intermediate",
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "substitutionGroup": "vertical_push:shoulders",
+      "tags": [
+        "bench",
+        "bilateral",
+        "compound",
+        "core",
+        "delts",
+        "kettlebell",
+        "shoulders",
+        "triceps",
+        "vertical_push"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0546"
+    },
+    {
+      "id": "0549",
+      "name": "Balanceo con kettlebell",
+      "sourceName": "kettlebell swing",
+      "aliases": [
+        "balanceo con kettlebell",
+        "glutes",
+        "hamstrings",
+        "kettlebell swing"
+      ],
+      "equipment": [
+        "kettlebell"
+      ],
+      "rawEquipment": "kettlebell",
+      "bodyPart": "upper_legs",
+      "primaryMuscles": [
+        "glutes"
+      ],
+      "secondaryMuscles": [
+        "hamstrings",
+        "core"
+      ],
+      "movementPattern": "hinge",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "difficulty": "intermediate",
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "defaultRepRange": [
+        10,
+        20
+      ],
+      "defaultRestSeconds": [
+        60,
+        120
+      ],
+      "substitutionGroup": "hinge:upper_legs",
+      "tags": [
+        "bilateral",
+        "compound",
+        "core",
+        "glutes",
+        "hamstrings",
+        "hinge",
+        "kettlebell",
+        "upper_legs"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0549"
+    },
+    {
+      "id": "0573",
+      "name": "Extensión lumbar en máquina",
+      "sourceName": "lever back extension",
+      "aliases": [
+        "extensión lumbar en máquina",
+        "glutes",
+        "lever back extension",
+        "spine"
+      ],
+      "equipment": [
+        "machine"
+      ],
+      "rawEquipment": "leverage machine",
+      "bodyPart": "back",
+      "primaryMuscles": [
+        "spine"
+      ],
+      "secondaryMuscles": [
+        "glutes",
+        "hamstrings"
+      ],
+      "movementPattern": "hinge",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "medium",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "substitutionGroup": "hinge:back",
+      "tags": [
+        "back",
+        "bilateral",
+        "compound",
+        "glutes",
+        "hamstrings",
+        "hinge",
+        "leverage_machine",
+        "machine",
+        "spine"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0573"
+    },
+    {
+      "id": "0576",
+      "name": "Press de pecho en máquina",
+      "sourceName": "lever chest press",
+      "aliases": [
+        "lever chest press",
+        "pectorals",
+        "press de pecho en máquina",
+        "triceps"
+      ],
+      "equipment": [
+        "machine"
+      ],
+      "rawEquipment": "leverage machine",
+      "bodyPart": "chest",
+      "primaryMuscles": [
+        "pectorals"
+      ],
+      "secondaryMuscles": [
+        "triceps",
+        "shoulders"
+      ],
+      "movementPattern": "horizontal_push",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "medium",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "substitutionGroup": "horizontal_push:chest",
+      "tags": [
+        "bilateral",
+        "chest",
+        "compound",
+        "horizontal_push",
+        "leverage_machine",
+        "machine",
+        "pectorals",
+        "shoulders",
+        "triceps"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0576"
+    },
+    {
+      "id": "0579",
+      "name": "Jalón frontal en máquina",
+      "sourceName": "lever front pulldown",
+      "aliases": [
+        "biceps",
+        "jalón frontal en máquina",
+        "lats",
+        "lever front pulldown"
+      ],
+      "equipment": [
+        "machine"
+      ],
+      "rawEquipment": "leverage machine",
+      "bodyPart": "back",
+      "primaryMuscles": [
+        "lats"
+      ],
+      "secondaryMuscles": [
+        "biceps",
+        "rhomboids",
+        "rear_deltoids"
+      ],
+      "movementPattern": "vertical_pull",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "medium",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "substitutionGroup": "vertical_pull:lats",
+      "tags": [
+        "back",
+        "biceps",
+        "bilateral",
+        "compound",
+        "lats",
+        "leverage_machine",
+        "machine",
+        "rear_deltoids",
+        "rhomboids",
+        "vertical_pull"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0579"
+    },
+    {
+      "id": "0582",
+      "name": "Curl femoral de rodillas en máquina",
+      "sourceName": "lever kneeling leg curl",
+      "aliases": [
+        "curl femoral de rodillas en máquina",
+        "glutes",
+        "hamstrings",
+        "lever kneeling leg curl"
+      ],
+      "equipment": [
+        "machine"
+      ],
+      "rawEquipment": "leverage machine",
+      "bodyPart": "upper_legs",
+      "primaryMuscles": [
+        "hamstrings"
+      ],
+      "secondaryMuscles": [
+        "glutes"
+      ],
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "isolation:hamstrings",
+      "tags": [
+        "bilateral",
+        "glutes",
+        "hamstrings",
+        "isolation",
+        "leverage_machine",
+        "machine",
+        "upper_legs"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0582"
+    },
+    {
+      "id": "0584",
+      "name": "Elevación lateral en máquina",
+      "sourceName": "lever lateral raise",
+      "aliases": [
+        "delts",
+        "elevación lateral en máquina",
+        "lever lateral raise",
+        "traps"
+      ],
+      "equipment": [
+        "machine"
+      ],
+      "rawEquipment": "leverage machine",
+      "bodyPart": "shoulders",
+      "primaryMuscles": [
+        "delts"
+      ],
+      "secondaryMuscles": [
+        "traps",
+        "upper_back"
+      ],
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "isolation:delts_lateral",
+      "tags": [
+        "bilateral",
+        "delts",
+        "isolation",
+        "leverage_machine",
+        "machine",
+        "shoulders",
+        "traps",
+        "upper_back"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0584"
+    },
+    {
+      "id": "0585",
+      "name": "Extensión de piernas en máquina",
+      "sourceName": "lever leg extension",
+      "aliases": [
+        "extensión de piernas en máquina",
+        "hamstrings",
+        "lever leg extension",
+        "quads"
+      ],
+      "equipment": [
+        "machine"
+      ],
+      "rawEquipment": "leverage machine",
+      "bodyPart": "upper_legs",
+      "primaryMuscles": [
+        "quads"
+      ],
+      "secondaryMuscles": [
+        "hamstrings"
+      ],
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "isolation:quads",
+      "tags": [
+        "bilateral",
+        "hamstrings",
+        "isolation",
+        "leverage_machine",
+        "machine",
+        "quads",
+        "upper_legs"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0585"
+    },
+    {
+      "id": "0586",
+      "name": "Curl femoral acostado en máquina",
+      "sourceName": "lever lying leg curl",
+      "aliases": [
+        "calves",
+        "curl femoral acostado en máquina",
+        "hamstrings",
+        "lever lying leg curl"
+      ],
+      "equipment": [
+        "machine"
+      ],
+      "rawEquipment": "leverage machine",
+      "bodyPart": "upper_legs",
+      "primaryMuscles": [
+        "hamstrings"
+      ],
+      "secondaryMuscles": [
+        "calves"
+      ],
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "isolation:hamstrings",
+      "tags": [
+        "bilateral",
+        "calves",
+        "hamstrings",
+        "isolation",
+        "leverage_machine",
+        "machine",
+        "upper_legs"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0586"
+    },
+    {
+      "id": "0587",
+      "name": "Press militar en máquina",
+      "sourceName": "lever military press",
+      "aliases": [
+        "delts",
+        "lever military press",
+        "press militar en máquina",
+        "triceps"
+      ],
+      "equipment": [
+        "machine"
+      ],
+      "rawEquipment": "leverage machine",
+      "bodyPart": "shoulders",
+      "primaryMuscles": [
+        "delts"
+      ],
+      "secondaryMuscles": [
+        "triceps",
+        "upper_chest"
+      ],
+      "movementPattern": "vertical_push",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "medium",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "substitutionGroup": "vertical_push:shoulders",
+      "tags": [
+        "bilateral",
+        "compound",
+        "delts",
+        "leverage_machine",
+        "machine",
+        "shoulders",
+        "triceps",
+        "upper_chest",
+        "vertical_push"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0587"
+    },
+    {
+      "id": "0592",
+      "name": "Curl predicador en máquina",
+      "sourceName": "lever preacher curl",
+      "aliases": [
+        "biceps",
+        "curl predicador en máquina",
+        "forearms",
+        "lever preacher curl"
+      ],
+      "equipment": [
+        "machine"
+      ],
+      "rawEquipment": "leverage machine",
+      "bodyPart": "upper_arms",
+      "primaryMuscles": [
+        "biceps"
+      ],
+      "secondaryMuscles": [
+        "forearms"
+      ],
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "isolation:biceps",
+      "tags": [
+        "biceps",
+        "bilateral",
+        "forearms",
+        "isolation",
+        "leverage_machine",
+        "machine",
+        "upper_arms"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0592"
+    },
+    {
+      "id": "0594",
+      "name": "Elevación de talones sentado en máquina",
+      "sourceName": "lever seated calf raise",
+      "aliases": [
+        "calves",
+        "elevación de talones sentado en máquina",
+        "lever seated calf raise",
+        "soleus"
+      ],
+      "equipment": [
+        "machine"
+      ],
+      "rawEquipment": "leverage machine",
+      "bodyPart": "lower_legs",
+      "primaryMuscles": [
+        "calves"
+      ],
+      "secondaryMuscles": [
+        "soleus",
+        "ankle_stabilizers"
+      ],
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "isolation:calves",
+      "tags": [
+        "ankle_stabilizers",
+        "bilateral",
+        "calves",
+        "isolation",
+        "leverage_machine",
+        "lower_legs",
+        "machine",
+        "soleus"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0594"
+    },
+    {
+      "id": "0595",
+      "name": "Encogimiento abdominal sentado en máquina con apoyo pectoral",
+      "sourceName": "lever seated crunch (chest pad)",
+      "aliases": [
+        "abs",
+        "encogimiento abdominal sentado en máquina con apoyo pectoral",
+        "lever seated crunch (chest pad)",
+        "obliques"
+      ],
+      "equipment": [
+        "machine"
+      ],
+      "rawEquipment": "leverage machine",
+      "bodyPart": "waist",
+      "primaryMuscles": [
+        "abs"
+      ],
+      "secondaryMuscles": [
+        "obliques"
+      ],
+      "movementPattern": "core",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        20
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "core:flexion",
+      "tags": [
+        "abs",
+        "bilateral",
+        "core",
+        "isolation",
+        "leverage_machine",
+        "machine",
+        "obliques",
+        "waist"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0595"
+    },
+    {
+      "id": "0596",
+      "name": "Apertura de pecho sentada en máquina",
+      "sourceName": "lever seated fly",
+      "aliases": [
+        "apertura de pecho sentada en máquina",
+        "deltoids",
+        "lever seated fly",
+        "pectorals"
+      ],
+      "equipment": [
+        "machine"
+      ],
+      "rawEquipment": "leverage machine",
+      "bodyPart": "chest",
+      "primaryMuscles": [
+        "pectorals"
+      ],
+      "secondaryMuscles": [
+        "deltoids",
+        "trapezius"
+      ],
+      "movementPattern": "horizontal_push",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "chest_fly:pectorals",
+      "tags": [
+        "bilateral",
+        "chest",
+        "deltoids",
+        "horizontal_push",
+        "isolation",
+        "leverage_machine",
+        "machine",
+        "pectorals",
+        "trapezius"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0596"
+    },
+    {
+      "id": "0598",
+      "name": "Aducción de cadera sentada en máquina",
+      "sourceName": "lever seated hip adduction",
+      "aliases": [
+        "adductors",
+        "aducción de cadera sentada en máquina",
+        "hamstrings",
+        "lever seated hip adduction"
+      ],
+      "equipment": [
+        "machine"
+      ],
+      "rawEquipment": "leverage machine",
+      "bodyPart": "upper_legs",
+      "primaryMuscles": [
+        "adductors"
+      ],
+      "secondaryMuscles": [
+        "hamstrings",
+        "glutes"
+      ],
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "isolation:adductors",
+      "tags": [
+        "adductors",
+        "bilateral",
+        "glutes",
+        "hamstrings",
+        "isolation",
+        "leverage_machine",
+        "machine",
+        "upper_legs"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0598"
+    },
+    {
+      "id": "0599",
+      "name": "Curl femoral sentado en máquina",
+      "sourceName": "lever seated leg curl",
+      "aliases": [
+        "calves",
+        "curl femoral sentado en máquina",
+        "hamstrings",
+        "lever seated leg curl"
+      ],
+      "equipment": [
+        "machine"
+      ],
+      "rawEquipment": "leverage machine",
+      "bodyPart": "upper_legs",
+      "primaryMuscles": [
+        "hamstrings"
+      ],
+      "secondaryMuscles": [
+        "calves"
+      ],
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "isolation:hamstrings",
+      "tags": [
+        "bilateral",
+        "calves",
+        "hamstrings",
+        "isolation",
+        "leverage_machine",
+        "machine",
+        "upper_legs"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0599"
+    },
+    {
+      "id": "0600",
+      "name": "Encogimiento abdominal con elevación de piernas en máquina",
+      "sourceName": "lever seated leg raise crunch",
+      "aliases": [
+        "abs",
+        "encogimiento abdominal con elevación de piernas en máquina",
+        "hip flexors",
+        "lever seated leg raise crunch"
+      ],
+      "equipment": [
+        "machine"
+      ],
+      "rawEquipment": "leverage machine",
+      "bodyPart": "waist",
+      "primaryMuscles": [
+        "abs"
+      ],
+      "secondaryMuscles": [
+        "hip_flexors"
+      ],
+      "movementPattern": "core",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        20
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "core:hip_flexion",
+      "tags": [
+        "abs",
+        "bilateral",
+        "core",
+        "hip_flexors",
+        "isolation",
+        "leverage_machine",
+        "machine",
+        "waist"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0600"
+    },
+    {
+      "id": "0602",
+      "name": "Vuelo posterior sentado en máquina",
+      "sourceName": "lever seated reverse fly",
+      "aliases": [
+        "delts",
+        "lever seated reverse fly",
+        "trapezius",
+        "vuelo posterior sentado en máquina"
+      ],
+      "equipment": [
+        "machine"
+      ],
+      "rawEquipment": "leverage machine",
+      "bodyPart": "shoulders",
+      "primaryMuscles": [
+        "delts"
+      ],
+      "secondaryMuscles": [
+        "trapezius",
+        "rhomboids"
+      ],
+      "movementPattern": "horizontal_pull",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "rear_delt_pull:delts",
+      "tags": [
+        "bilateral",
+        "delts",
+        "horizontal_pull",
+        "isolation",
+        "leverage_machine",
+        "machine",
+        "rhomboids",
+        "shoulders",
+        "trapezius"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0602"
+    },
+    {
+      "id": "0603",
+      "name": "Press de hombros en máquina",
+      "sourceName": "lever shoulder press",
+      "aliases": [
+        "delts",
+        "lever shoulder press",
+        "press de hombros en máquina",
+        "triceps"
+      ],
+      "equipment": [
+        "machine"
+      ],
+      "rawEquipment": "leverage machine",
+      "bodyPart": "shoulders",
+      "primaryMuscles": [
+        "delts"
+      ],
+      "secondaryMuscles": [
+        "triceps",
+        "chest"
+      ],
+      "movementPattern": "vertical_push",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "medium",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "substitutionGroup": "vertical_push:shoulders",
+      "tags": [
+        "bilateral",
+        "chest",
+        "compound",
+        "delts",
+        "leverage_machine",
+        "machine",
+        "shoulders",
+        "triceps",
+        "vertical_push"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0603"
+    },
+    {
+      "id": "0604",
+      "name": "Encogimiento de hombros en máquina",
+      "sourceName": "lever shrug",
+      "aliases": [
+        "encogimiento de hombros en máquina",
+        "lever shrug",
+        "shoulders",
+        "traps"
+      ],
+      "equipment": [
+        "machine"
+      ],
+      "rawEquipment": "leverage machine",
+      "bodyPart": "back",
+      "primaryMuscles": [
+        "traps"
+      ],
+      "secondaryMuscles": [
+        "shoulders"
+      ],
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "isolation:traps",
+      "tags": [
+        "back",
+        "bilateral",
+        "isolation",
+        "leverage_machine",
+        "machine",
+        "shoulders",
+        "traps"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0604"
+    },
+    {
+      "id": "0605",
+      "name": "Elevación de talones de pie en máquina",
+      "sourceName": "lever standing calf raise",
+      "aliases": [
+        "calves",
+        "elevación de talones de pie en máquina",
+        "lever standing calf raise",
+        "soleus"
+      ],
+      "equipment": [
+        "machine"
+      ],
+      "rawEquipment": "leverage machine",
+      "bodyPart": "lower_legs",
+      "primaryMuscles": [
+        "calves"
+      ],
+      "secondaryMuscles": [
+        "soleus",
+        "ankle_stabilizers"
+      ],
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "isolation:calves",
+      "tags": [
+        "ankle_stabilizers",
+        "bilateral",
+        "calves",
+        "isolation",
+        "leverage_machine",
+        "lower_legs",
+        "machine",
+        "soleus"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0605"
+    },
+    {
+      "id": "0606",
+      "name": "Remo en barra T en máquina",
+      "sourceName": "lever t bar row",
+      "aliases": [
+        "biceps",
+        "lever t bar row",
+        "remo en barra t en máquina",
+        "upper back"
+      ],
+      "equipment": [
+        "machine"
+      ],
+      "rawEquipment": "leverage machine",
+      "bodyPart": "back",
+      "primaryMuscles": [
+        "upper_back"
+      ],
+      "secondaryMuscles": [
+        "biceps",
+        "forearms"
+      ],
+      "movementPattern": "horizontal_pull",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "medium",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "substitutionGroup": "row:upper_back",
+      "tags": [
+        "back",
+        "biceps",
+        "bilateral",
+        "compound",
+        "forearms",
+        "horizontal_pull",
+        "leverage_machine",
+        "machine",
+        "upper_back"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0606"
+    },
+    {
+      "id": "0607",
+      "name": "Extensión de tríceps en máquina",
+      "sourceName": "lever triceps extension",
+      "aliases": [
+        "extensión de tríceps en máquina",
+        "lever triceps extension",
+        "shoulders",
+        "triceps"
+      ],
+      "equipment": [
+        "machine"
+      ],
+      "rawEquipment": "leverage machine",
+      "bodyPart": "upper_arms",
+      "primaryMuscles": [
+        "triceps"
+      ],
+      "secondaryMuscles": [
+        "shoulders"
+      ],
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "isolation:triceps",
+      "tags": [
+        "bilateral",
+        "isolation",
+        "leverage_machine",
+        "machine",
+        "shoulders",
+        "triceps",
+        "upper_arms"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0607"
+    },
+    {
+      "id": "0620",
+      "name": "Elevación de piernas acostado en banco plano",
+      "sourceName": "lying leg raise flat bench",
+      "aliases": [
+        "abs",
+        "elevación de piernas acostado en banco plano",
+        "hip flexors",
+        "lying leg raise flat bench"
+      ],
+      "equipment": [
+        "body_weight",
+        "bench"
+      ],
+      "rawEquipment": "body weight",
+      "bodyPart": "waist",
+      "primaryMuscles": [
+        "abs"
+      ],
+      "secondaryMuscles": [
+        "hip_flexors"
+      ],
+      "movementPattern": "core",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        20
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "core:hip_flexion",
+      "tags": [
+        "abs",
+        "bench",
+        "bilateral",
+        "body_weight",
+        "core",
+        "hip_flexors",
+        "isolation",
+        "waist"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0620"
+    },
+    {
+      "id": "0652",
+      "name": "Dominada",
+      "sourceName": "pull-up",
+      "aliases": [
+        "biceps",
+        "dominada",
+        "lats",
+        "pull-up"
+      ],
+      "equipment": [
+        "body_weight",
+        "pull_up_bar"
+      ],
+      "rawEquipment": "body weight",
+      "bodyPart": "back",
+      "primaryMuscles": [
+        "lats"
+      ],
+      "secondaryMuscles": [
+        "biceps",
+        "forearms"
+      ],
+      "movementPattern": "vertical_pull",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "difficulty": "intermediate",
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "substitutionGroup": "vertical_pull:lats",
+      "tags": [
+        "back",
+        "biceps",
+        "bilateral",
+        "body_weight",
+        "compound",
+        "forearms",
+        "lats",
+        "pull_up_bar",
+        "vertical_pull"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0652"
+    },
+    {
+      "id": "0659",
+      "name": "Flexión de brazos contra la pared",
+      "sourceName": "push-up (wall)",
+      "aliases": [
+        "flexión de brazos contra la pared",
+        "pectorals",
+        "push-up (wall)",
+        "triceps"
+      ],
+      "equipment": [
+        "body_weight"
+      ],
+      "rawEquipment": "body weight",
+      "bodyPart": "chest",
+      "primaryMuscles": [
+        "pectorals"
+      ],
+      "secondaryMuscles": [
+        "triceps",
+        "deltoids"
+      ],
+      "movementPattern": "horizontal_push",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "medium",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "substitutionGroup": "horizontal_push:chest",
+      "tags": [
+        "bilateral",
+        "body_weight",
+        "chest",
+        "compound",
+        "deltoids",
+        "horizontal_push",
+        "pectorals",
+        "triceps"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0659"
+    },
+    {
+      "id": "0662",
+      "name": "Flexión de brazos",
+      "sourceName": "push-up",
+      "aliases": [
+        "flexión de brazos",
+        "pectorals",
+        "push-up",
+        "triceps"
+      ],
+      "equipment": [
+        "body_weight"
+      ],
+      "rawEquipment": "body weight",
+      "bodyPart": "chest",
+      "primaryMuscles": [
+        "pectorals"
+      ],
+      "secondaryMuscles": [
+        "triceps",
+        "deltoids",
+        "core"
+      ],
+      "movementPattern": "horizontal_push",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "difficulty": "intermediate",
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "substitutionGroup": "horizontal_push:chest",
+      "tags": [
+        "bilateral",
+        "body_weight",
+        "chest",
+        "compound",
+        "core",
+        "deltoids",
+        "horizontal_push",
+        "pectorals",
+        "triceps"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0662"
+    },
+    {
+      "id": "0673",
+      "name": "Jalón dorsal en máquina con agarre supino",
+      "sourceName": "reverse grip machine lat pulldown",
+      "aliases": [
+        "biceps",
+        "jalón dorsal en máquina con agarre supino",
+        "lats",
+        "reverse grip machine lat pulldown"
+      ],
+      "equipment": [
+        "machine"
+      ],
+      "rawEquipment": "leverage machine",
+      "bodyPart": "back",
+      "primaryMuscles": [
+        "lats"
+      ],
+      "secondaryMuscles": [
+        "biceps",
+        "forearms"
+      ],
+      "movementPattern": "vertical_pull",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "medium",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "substitutionGroup": "vertical_pull:lats",
+      "tags": [
+        "back",
+        "biceps",
+        "bilateral",
+        "compound",
+        "forearms",
+        "lats",
+        "leverage_machine",
+        "machine",
+        "vertical_pull"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0673"
+    },
+    {
+      "id": "0687",
+      "name": "Giro ruso",
+      "sourceName": "russian twist",
+      "aliases": [
+        "abs",
+        "giro ruso",
+        "obliques",
+        "russian twist"
+      ],
+      "equipment": [
+        "body_weight"
+      ],
+      "rawEquipment": "body weight",
+      "bodyPart": "waist",
+      "primaryMuscles": [
+        "abs"
+      ],
+      "secondaryMuscles": [
+        "obliques"
+      ],
+      "movementPattern": "core",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        20
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "core:rotation_lateral",
+      "tags": [
+        "abs",
+        "bilateral",
+        "body_weight",
+        "core",
+        "isolation",
+        "obliques",
+        "waist"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0687"
+    },
+    {
+      "id": "0689",
+      "name": "Elevación de piernas sentado",
+      "sourceName": "seated leg raise",
+      "aliases": [
+        "abs",
+        "elevación de piernas sentado",
+        "hip flexors",
+        "seated leg raise"
+      ],
+      "equipment": [
+        "body_weight",
+        "bench"
+      ],
+      "rawEquipment": "body weight",
+      "bodyPart": "waist",
+      "primaryMuscles": [
+        "abs"
+      ],
+      "secondaryMuscles": [
+        "hip_flexors"
+      ],
+      "movementPattern": "core",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        20
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "core:hip_flexion",
+      "tags": [
+        "abs",
+        "bench",
+        "bilateral",
+        "body_weight",
+        "core",
+        "hip_flexors",
+        "isolation",
+        "waist"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0689"
+    },
+    {
+      "id": "0766",
+      "name": "Press de hombros en Smith",
+      "sourceName": "smith shoulder press",
+      "aliases": [
+        "delts",
+        "press de hombros en smith",
+        "smith shoulder press",
+        "triceps"
+      ],
+      "equipment": [
+        "smith_machine",
+        "bench"
+      ],
+      "rawEquipment": "smith machine",
+      "bodyPart": "shoulders",
+      "primaryMuscles": [
+        "delts"
+      ],
+      "secondaryMuscles": [
+        "triceps",
+        "upper_back"
+      ],
+      "movementPattern": "vertical_push",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "difficulty": "intermediate",
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "substitutionGroup": "vertical_push:shoulders",
+      "tags": [
+        "bench",
+        "bilateral",
+        "compound",
+        "delts",
+        "shoulders",
+        "smith_machine",
+        "triceps",
+        "upper_back",
+        "vertical_push"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0766"
+    },
+    {
+      "id": "0814",
+      "name": "Fondo de tríceps en banco",
+      "sourceName": "triceps dip",
+      "aliases": [
+        "chest",
+        "fondo de tríceps en banco",
+        "triceps",
+        "triceps dip"
+      ],
+      "equipment": [
+        "body_weight",
+        "bench"
+      ],
+      "rawEquipment": "body weight",
+      "bodyPart": "upper_arms",
+      "primaryMuscles": [
+        "triceps"
+      ],
+      "secondaryMuscles": [
+        "chest",
+        "shoulders"
+      ],
+      "movementPattern": "horizontal_push",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "difficulty": "intermediate",
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "substitutionGroup": "horizontal_push:upper_arms",
+      "tags": [
+        "bench",
+        "bilateral",
+        "body_weight",
+        "chest",
+        "compound",
+        "horizontal_push",
+        "shoulders",
+        "triceps",
+        "upper_arms"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0814"
+    },
+    {
+      "id": "0832",
+      "name": "Encogimiento abdominal lastrado",
+      "sourceName": "weighted crunch",
+      "aliases": [
+        "abs",
+        "encogimiento abdominal lastrado",
+        "obliques",
+        "weighted crunch"
+      ],
+      "equipment": [
+        "weighted"
+      ],
+      "rawEquipment": "weighted",
+      "bodyPart": "waist",
+      "primaryMuscles": [
+        "abs"
+      ],
+      "secondaryMuscles": [
+        "obliques"
+      ],
+      "movementPattern": "core",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        20
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "core:flexion",
+      "tags": [
+        "abs",
+        "bilateral",
+        "core",
+        "isolation",
+        "obliques",
+        "waist",
+        "weighted"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0832"
+    },
+    {
+      "id": "0841",
+      "name": "Dominada lastrada",
+      "sourceName": "weighted pull-up",
+      "aliases": [
+        "biceps",
+        "dominada lastrada",
+        "lats",
+        "weighted pull-up"
+      ],
+      "equipment": [
+        "weighted",
+        "pull_up_bar"
+      ],
+      "rawEquipment": "weighted",
+      "bodyPart": "back",
+      "primaryMuscles": [
+        "lats"
+      ],
+      "secondaryMuscles": [
+        "biceps",
+        "forearms"
+      ],
+      "movementPattern": "vertical_pull",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "difficulty": "advanced",
+      "fatigueCost": "high",
+      "skillRequirement": "high",
+      "defaultRepRange": [
+        3,
+        8
+      ],
+      "defaultRestSeconds": [
+        120,
+        180
+      ],
+      "substitutionGroup": "vertical_pull:lats",
+      "tags": [
+        "back",
+        "biceps",
+        "bilateral",
+        "compound",
+        "forearms",
+        "lats",
+        "pull_up_bar",
+        "vertical_pull",
+        "weighted"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0841"
+    },
+    {
+      "id": "0846",
+      "name": "Giro ruso lastrado",
+      "sourceName": "weighted russian twist",
+      "aliases": [
+        "abs",
+        "giro ruso lastrado",
+        "obliques",
+        "weighted russian twist"
+      ],
+      "equipment": [
+        "weighted"
+      ],
+      "rawEquipment": "weighted",
+      "bodyPart": "waist",
+      "primaryMuscles": [
+        "abs"
+      ],
+      "secondaryMuscles": [
+        "obliques",
+        "lower_back"
+      ],
+      "movementPattern": "core",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        20
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "core:rotation_lateral",
+      "tags": [
+        "abs",
+        "bilateral",
+        "core",
+        "isolation",
+        "lower_back",
+        "obliques",
+        "waist",
+        "weighted"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0846"
+    },
+    {
+      "id": "0868",
+      "name": "Curl en polea",
+      "sourceName": "cable curl",
+      "aliases": [
+        "biceps",
+        "cable curl",
+        "curl en polea",
+        "forearms"
+      ],
+      "equipment": [
+        "cable"
+      ],
+      "rawEquipment": "cable",
+      "bodyPart": "upper_arms",
+      "primaryMuscles": [
+        "biceps"
+      ],
+      "secondaryMuscles": [
+        "forearms"
+      ],
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "isolation:biceps",
+      "tags": [
+        "biceps",
+        "bilateral",
+        "cable",
+        "forearms",
+        "isolation",
+        "upper_arms"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0868"
+    },
+    {
+      "id": "0872",
+      "name": "Encogimiento abdominal inverso",
+      "sourceName": "reverse crunch",
+      "aliases": [
+        "abs",
+        "encogimiento abdominal inverso",
+        "hip flexors",
+        "reverse crunch"
+      ],
+      "equipment": [
+        "body_weight"
+      ],
+      "rawEquipment": "body weight",
+      "bodyPart": "waist",
+      "primaryMuscles": [
+        "abs"
+      ],
+      "secondaryMuscles": [
+        "hip_flexors"
+      ],
+      "movementPattern": "core",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        20
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "core:hip_flexion",
+      "tags": [
+        "abs",
+        "bilateral",
+        "body_weight",
+        "core",
+        "hip_flexors",
+        "isolation",
+        "waist"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0872"
+    },
+    {
+      "id": "0873",
+      "name": "Encogimiento abdominal inverso en polea",
+      "sourceName": "cable reverse crunch",
+      "aliases": [
+        "abs",
+        "cable reverse crunch",
+        "encogimiento abdominal inverso en polea",
+        "hip flexors"
+      ],
+      "equipment": [
+        "cable"
+      ],
+      "rawEquipment": "cable",
+      "bodyPart": "waist",
+      "primaryMuscles": [
+        "abs"
+      ],
+      "secondaryMuscles": [
+        "hip_flexors"
+      ],
+      "movementPattern": "core",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        20
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "core:hip_flexion",
+      "tags": [
+        "abs",
+        "bilateral",
+        "cable",
+        "core",
+        "hip_flexors",
+        "isolation",
+        "waist"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0873"
+    },
+    {
+      "id": "0970",
+      "name": "Dominada asistida con banda",
+      "sourceName": "band assisted pull-up",
+      "aliases": [
+        "band assisted pull-up",
+        "biceps",
+        "dominada asistida con banda",
+        "lats"
+      ],
+      "equipment": [
+        "resistance_band",
+        "pull_up_bar"
+      ],
+      "rawEquipment": "band",
+      "bodyPart": "back",
+      "primaryMuscles": [
+        "lats"
+      ],
+      "secondaryMuscles": [
+        "biceps",
+        "forearms"
+      ],
+      "movementPattern": "vertical_pull",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "substitutionGroup": "vertical_pull:lats",
+      "tags": [
+        "back",
+        "band",
+        "biceps",
+        "bilateral",
+        "compound",
+        "forearms",
+        "lats",
+        "pull_up_bar",
+        "resistance_band",
+        "vertical_pull"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0970"
+    },
+    {
+      "id": "0978",
+      "name": "Elevación frontal con banda",
+      "sourceName": "band front raise",
+      "aliases": [
+        "band front raise",
+        "delts",
+        "elevación frontal con banda",
+        "triceps"
+      ],
+      "equipment": [
+        "resistance_band"
+      ],
+      "rawEquipment": "band",
+      "bodyPart": "shoulders",
+      "primaryMuscles": [
+        "delts"
+      ],
+      "secondaryMuscles": [
+        "triceps",
+        "upper_back"
+      ],
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "isolation:delts_front",
+      "tags": [
+        "band",
+        "bilateral",
+        "delts",
+        "isolation",
+        "resistance_band",
+        "shoulders",
+        "triceps",
+        "upper_back"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0978"
+    },
+    {
+      "id": "0993",
+      "name": "Vuelo posterior con banda",
+      "sourceName": "band reverse fly",
+      "aliases": [
+        "band reverse fly",
+        "delts",
+        "upper back",
+        "vuelo posterior con banda"
+      ],
+      "equipment": [
+        "resistance_band",
+        "band_anchor"
+      ],
+      "rawEquipment": "band",
+      "bodyPart": "shoulders",
+      "primaryMuscles": [
+        "delts"
+      ],
+      "secondaryMuscles": [
+        "upper_back",
+        "trapezius"
+      ],
+      "movementPattern": "horizontal_pull",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "intermediate",
+      "fatigueCost": "low",
+      "skillRequirement": "medium",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "rear_delt_pull:delts",
+      "tags": [
+        "band",
+        "band_anchor",
+        "bilateral",
+        "delts",
+        "horizontal_pull",
+        "isolation",
+        "resistance_band",
+        "shoulders",
+        "trapezius",
+        "upper_back"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "0993"
+    },
+    {
+      "id": "1004",
+      "name": "Sentadilla con banda",
+      "sourceName": "band squat",
+      "aliases": [
+        "band squat",
+        "glutes",
+        "quadriceps",
+        "sentadilla con banda"
+      ],
+      "equipment": [
+        "resistance_band"
+      ],
+      "rawEquipment": "band",
+      "bodyPart": "upper_legs",
+      "primaryMuscles": [
+        "glutes"
+      ],
+      "secondaryMuscles": [
+        "quadriceps",
+        "hamstrings",
+        "calves"
+      ],
+      "movementPattern": "squat",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "medium",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "substitutionGroup": "squat:upper_legs",
+      "tags": [
+        "band",
+        "bilateral",
+        "calves",
+        "compound",
+        "glutes",
+        "hamstrings",
+        "quadriceps",
+        "resistance_band",
+        "squat",
+        "upper_legs"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "1004"
+    },
+    {
+      "id": "1298",
+      "name": "Press de suelo a un brazo con kettlebell",
+      "sourceName": "kettlebell one arm floor press",
+      "aliases": [
+        "kettlebell one arm floor press",
+        "pectorals",
+        "press de suelo a un brazo con kettlebell",
+        "triceps"
+      ],
+      "equipment": [
+        "kettlebell"
+      ],
+      "rawEquipment": "kettlebell",
+      "bodyPart": "chest",
+      "primaryMuscles": [
+        "pectorals"
+      ],
+      "secondaryMuscles": [
+        "triceps",
+        "shoulders"
+      ],
+      "movementPattern": "horizontal_push",
+      "modality": "compound",
+      "laterality": "unilateral",
+      "difficulty": "intermediate",
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "substitutionGroup": "horizontal_push:chest",
+      "tags": [
+        "chest",
+        "compound",
+        "horizontal_push",
+        "kettlebell",
+        "pectorals",
+        "shoulders",
+        "triceps",
+        "unilateral"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "1298"
+    },
+    {
+      "id": "1299",
+      "name": "Press de pecho inclinado en máquina",
+      "sourceName": "lever incline chest press",
+      "aliases": [
+        "lever incline chest press",
+        "pectorals",
+        "press de pecho inclinado en máquina",
+        "shoulders"
+      ],
+      "equipment": [
+        "machine"
+      ],
+      "rawEquipment": "leverage machine",
+      "bodyPart": "chest",
+      "primaryMuscles": [
+        "pectorals"
+      ],
+      "secondaryMuscles": [
+        "shoulders",
+        "triceps"
+      ],
+      "movementPattern": "horizontal_push",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "medium",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "substitutionGroup": "horizontal_push:chest",
+      "tags": [
+        "bilateral",
+        "chest",
+        "compound",
+        "horizontal_push",
+        "leverage_machine",
+        "machine",
+        "pectorals",
+        "shoulders",
+        "triceps"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "1299"
+    },
+    {
+      "id": "1300",
+      "name": "Press de pecho declinado en máquina",
+      "sourceName": "lever decline chest press",
+      "aliases": [
+        "lever decline chest press",
+        "pectorals",
+        "press de pecho declinado en máquina",
+        "triceps"
+      ],
+      "equipment": [
+        "machine"
+      ],
+      "rawEquipment": "leverage machine",
+      "bodyPart": "chest",
+      "primaryMuscles": [
+        "pectorals"
+      ],
+      "secondaryMuscles": [
+        "triceps",
+        "shoulders"
+      ],
+      "movementPattern": "horizontal_push",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "medium",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "substitutionGroup": "horizontal_push:chest",
+      "tags": [
+        "bilateral",
+        "chest",
+        "compound",
+        "horizontal_push",
+        "leverage_machine",
+        "machine",
+        "pectorals",
+        "shoulders",
+        "triceps"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "1300"
+    },
+    {
+      "id": "1314",
+      "name": "Extensión lumbar con pelota de estabilidad",
+      "sourceName": "back extension on exercise ball",
+      "aliases": [
+        "back extension on exercise ball",
+        "extensión lumbar con pelota de estabilidad",
+        "glutes",
+        "spine"
+      ],
+      "equipment": [
+        "stability_ball"
+      ],
+      "rawEquipment": "stability ball",
+      "bodyPart": "back",
+      "primaryMuscles": [
+        "spine"
+      ],
+      "secondaryMuscles": [
+        "glutes",
+        "hamstrings"
+      ],
+      "movementPattern": "hinge",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "difficulty": "intermediate",
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "substitutionGroup": "hinge:back",
+      "tags": [
+        "back",
+        "bilateral",
+        "compound",
+        "glutes",
+        "hamstrings",
+        "hinge",
+        "spine",
+        "stability_ball"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "1314"
+    },
+    {
+      "id": "1326",
+      "name": "Dominada supina",
+      "sourceName": "chin-up",
+      "aliases": [
+        "biceps",
+        "chin-up",
+        "dominada supina",
+        "lats"
+      ],
+      "equipment": [
+        "body_weight",
+        "pull_up_bar"
+      ],
+      "rawEquipment": "body weight",
+      "bodyPart": "back",
+      "primaryMuscles": [
+        "lats"
+      ],
+      "secondaryMuscles": [
+        "biceps",
+        "forearms"
+      ],
+      "movementPattern": "vertical_pull",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "difficulty": "intermediate",
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "substitutionGroup": "vertical_pull:lats",
+      "tags": [
+        "back",
+        "biceps",
+        "bilateral",
+        "body_weight",
+        "compound",
+        "forearms",
+        "lats",
+        "pull_up_bar",
+        "vertical_pull"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "1326"
+    },
+    {
+      "id": "1350",
+      "name": "Remo sentado en máquina",
+      "sourceName": "lever seated row",
+      "aliases": [
+        "biceps",
+        "lever seated row",
+        "remo sentado en máquina",
+        "upper back"
+      ],
+      "equipment": [
+        "machine"
+      ],
+      "rawEquipment": "leverage machine",
+      "bodyPart": "back",
+      "primaryMuscles": [
+        "upper_back"
+      ],
+      "secondaryMuscles": [
+        "biceps",
+        "forearms"
+      ],
+      "movementPattern": "horizontal_pull",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "medium",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "substitutionGroup": "row:upper_back",
+      "tags": [
+        "back",
+        "biceps",
+        "bilateral",
+        "compound",
+        "forearms",
+        "horizontal_pull",
+        "leverage_machine",
+        "machine",
+        "upper_back"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "1350"
+    },
+    {
+      "id": "1373",
+      "name": "Elevación de talones de pie con peso corporal",
+      "sourceName": "bodyweight standing calf raise",
+      "aliases": [
+        "ankles",
+        "bodyweight standing calf raise",
+        "calves",
+        "elevación de talones de pie con peso corporal"
+      ],
+      "equipment": [
+        "body_weight"
+      ],
+      "rawEquipment": "body weight",
+      "bodyPart": "lower_legs",
+      "primaryMuscles": [
+        "calves"
+      ],
+      "secondaryMuscles": [
+        "ankles",
+        "feet"
+      ],
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "isolation:calves",
+      "tags": [
+        "ankles",
+        "bilateral",
+        "body_weight",
+        "calves",
+        "feet",
+        "isolation",
+        "lower_legs"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "1373"
+    },
+    {
+      "id": "1375",
+      "name": "Elevación de talones de pie en polea",
+      "sourceName": "cable standing calf raise",
+      "aliases": [
+        "cable standing calf raise",
+        "calves",
+        "elevación de talones de pie en polea",
+        "hamstrings"
+      ],
+      "equipment": [
+        "cable"
+      ],
+      "rawEquipment": "cable",
+      "bodyPart": "lower_legs",
+      "primaryMuscles": [
+        "calves"
+      ],
+      "secondaryMuscles": [
+        "hamstrings",
+        "glutes"
+      ],
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "isolation:calves",
+      "tags": [
+        "bilateral",
+        "cable",
+        "calves",
+        "glutes",
+        "hamstrings",
+        "isolation",
+        "lower_legs"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "1375"
+    },
+    {
+      "id": "1379",
+      "name": "Elevación de talones sentado con mancuerna",
+      "sourceName": "dumbbell seated calf raise",
+      "aliases": [
+        "calves",
+        "dumbbell seated calf raise",
+        "elevación de talones sentado con mancuerna",
+        "hamstrings"
+      ],
+      "equipment": [
+        "dumbbell",
+        "bench",
+        "step_platform"
+      ],
+      "rawEquipment": "dumbbell",
+      "bodyPart": "lower_legs",
+      "primaryMuscles": [
+        "calves"
+      ],
+      "secondaryMuscles": [
+        "hamstrings"
+      ],
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "isolation:calves",
+      "tags": [
+        "bench",
+        "bilateral",
+        "calves",
+        "dumbbell",
+        "hamstrings",
+        "isolation",
+        "lower_legs",
+        "step_platform"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "1379"
+    },
+    {
+      "id": "1409",
+      "name": "Puente de glúteos con barra",
+      "sourceName": "barbell glute bridge",
+      "aliases": [
+        "barbell glute bridge",
+        "glutes",
+        "hamstrings",
+        "puente de glúteos con barra"
+      ],
+      "equipment": [
+        "barbell"
+      ],
+      "rawEquipment": "barbell",
+      "bodyPart": "upper_legs",
+      "primaryMuscles": [
+        "glutes"
+      ],
+      "secondaryMuscles": [
+        "hamstrings",
+        "lower_back"
+      ],
+      "movementPattern": "hinge",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "difficulty": "intermediate",
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "substitutionGroup": "hinge:upper_legs",
+      "tags": [
+        "barbell",
+        "bilateral",
+        "compound",
+        "glutes",
+        "hamstrings",
+        "hinge",
+        "lower_back",
+        "upper_legs"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "1409"
+    },
+    {
+      "id": "1429",
+      "name": "Dominada con agarre amplio",
+      "sourceName": "wide grip pull-up",
+      "aliases": [
+        "biceps",
+        "dominada con agarre amplio",
+        "lats",
+        "wide grip pull-up"
+      ],
+      "equipment": [
+        "body_weight",
+        "pull_up_bar"
+      ],
+      "rawEquipment": "body weight",
+      "bodyPart": "back",
+      "primaryMuscles": [
+        "lats"
+      ],
+      "secondaryMuscles": [
+        "biceps",
+        "forearms"
+      ],
+      "movementPattern": "vertical_pull",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "difficulty": "intermediate",
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "substitutionGroup": "vertical_pull:lats",
+      "tags": [
+        "back",
+        "biceps",
+        "bilateral",
+        "body_weight",
+        "compound",
+        "forearms",
+        "lats",
+        "pull_up_bar",
+        "vertical_pull"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "1429"
+    },
+    {
+      "id": "1430",
+      "name": "Fondo de pecho en paralelas",
+      "sourceName": "chest dip (on dip-pull-up cage)",
+      "aliases": [
+        "chest dip (on dip-pull-up cage)",
+        "fondo de pecho en paralelas",
+        "pectorals",
+        "triceps"
+      ],
+      "equipment": [
+        "body_weight",
+        "dip_bars"
+      ],
+      "rawEquipment": "body weight",
+      "bodyPart": "chest",
+      "primaryMuscles": [
+        "pectorals"
+      ],
+      "secondaryMuscles": [
+        "triceps",
+        "shoulders"
+      ],
+      "movementPattern": "horizontal_push",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "difficulty": "intermediate",
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "substitutionGroup": "horizontal_push:chest",
+      "tags": [
+        "bilateral",
+        "body_weight",
+        "chest",
+        "compound",
+        "dip_bars",
+        "horizontal_push",
+        "pectorals",
+        "shoulders",
+        "triceps"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "1430"
+    },
+    {
+      "id": "1457",
+      "name": "Press militar de pie con barra y agarre amplio",
+      "sourceName": "barbell standing wide military press",
+      "aliases": [
+        "barbell standing wide military press",
+        "delts",
+        "press militar de pie con barra y agarre amplio",
+        "triceps"
+      ],
+      "equipment": [
+        "barbell"
+      ],
+      "rawEquipment": "barbell",
+      "bodyPart": "shoulders",
+      "primaryMuscles": [
+        "delts"
+      ],
+      "secondaryMuscles": [
+        "triceps",
+        "upper_back"
+      ],
+      "movementPattern": "vertical_push",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "difficulty": "intermediate",
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "substitutionGroup": "vertical_push:shoulders",
+      "tags": [
+        "barbell",
+        "bilateral",
+        "compound",
+        "delts",
+        "shoulders",
+        "triceps",
+        "upper_back",
+        "vertical_push"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "1457"
+    },
+    {
+      "id": "1459",
+      "name": "Peso muerto rumano con mancuernas",
+      "sourceName": "dumbbell romanian deadlift",
+      "aliases": [
+        "dumbbell romanian deadlift",
+        "glutes",
+        "hamstrings",
+        "peso muerto rumano con mancuernas"
+      ],
+      "equipment": [
+        "dumbbell"
+      ],
+      "rawEquipment": "dumbbell",
+      "bodyPart": "upper_legs",
+      "primaryMuscles": [
+        "glutes"
+      ],
+      "secondaryMuscles": [
+        "hamstrings",
+        "lower_back"
+      ],
+      "movementPattern": "hinge",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "difficulty": "intermediate",
+      "fatigueCost": "high",
+      "skillRequirement": "medium",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        120,
+        180
+      ],
+      "substitutionGroup": "hinge:upper_legs",
+      "tags": [
+        "bilateral",
+        "compound",
+        "dumbbell",
+        "glutes",
+        "hamstrings",
+        "hinge",
+        "lower_back",
+        "upper_legs"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "1459"
+    },
+    {
+      "id": "1460",
+      "name": "Zancada caminando",
+      "sourceName": "walking lunge",
+      "aliases": [
+        "glutes",
+        "quadriceps",
+        "walking lunge",
+        "zancada caminando"
+      ],
+      "equipment": [
+        "body_weight"
+      ],
+      "rawEquipment": "body weight",
+      "bodyPart": "upper_legs",
+      "primaryMuscles": [
+        "glutes"
+      ],
+      "secondaryMuscles": [
+        "quadriceps",
+        "hamstrings",
+        "calves"
+      ],
+      "movementPattern": "lunge",
+      "modality": "compound",
+      "laterality": "unilateral",
+      "difficulty": "intermediate",
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "substitutionGroup": "lunge:upper_legs",
+      "tags": [
+        "body_weight",
+        "calves",
+        "compound",
+        "glutes",
+        "hamstrings",
+        "lunge",
+        "quadriceps",
+        "unilateral",
+        "upper_legs"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "1460"
+    },
+    {
+      "id": "1641",
+      "name": "Curl sentado en polea",
+      "sourceName": "cable seated curl",
+      "aliases": [
+        "biceps",
+        "cable seated curl",
+        "curl sentado en polea",
+        "forearms"
+      ],
+      "equipment": [
+        "cable"
+      ],
+      "rawEquipment": "cable",
+      "bodyPart": "upper_arms",
+      "primaryMuscles": [
+        "biceps"
+      ],
+      "secondaryMuscles": [
+        "forearms"
+      ],
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "isolation:biceps",
+      "tags": [
+        "biceps",
+        "bilateral",
+        "cable",
+        "forearms",
+        "isolation",
+        "upper_arms"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "1641"
+    },
+    {
+      "id": "1760",
+      "name": "Sentadilla goblet con mancuernas",
+      "sourceName": "dumbbell goblet squat",
+      "aliases": [
+        "dumbbell goblet squat",
+        "glutes",
+        "quads",
+        "sentadilla goblet con mancuernas"
+      ],
+      "equipment": [
+        "dumbbell"
+      ],
+      "rawEquipment": "dumbbell",
+      "bodyPart": "upper_legs",
+      "primaryMuscles": [
+        "quads"
+      ],
+      "secondaryMuscles": [
+        "glutes",
+        "hamstrings",
+        "calves"
+      ],
+      "movementPattern": "squat",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "difficulty": "intermediate",
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "substitutionGroup": "squat:upper_legs",
+      "tags": [
+        "bilateral",
+        "calves",
+        "compound",
+        "dumbbell",
+        "glutes",
+        "hamstrings",
+        "quads",
+        "squat",
+        "upper_legs"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "1760"
+    },
+    {
+      "id": "2188",
+      "name": "Extensión de tríceps sentado con mancuerna",
+      "sourceName": "dumbbell seated triceps extension",
+      "aliases": [
+        "dumbbell seated triceps extension",
+        "extensión de tríceps sentado con mancuerna",
+        "shoulders",
+        "triceps"
+      ],
+      "equipment": [
+        "dumbbell",
+        "bench"
+      ],
+      "rawEquipment": "dumbbell",
+      "bodyPart": "upper_arms",
+      "primaryMuscles": [
+        "triceps"
+      ],
+      "secondaryMuscles": [
+        "shoulders"
+      ],
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "isolation:triceps",
+      "tags": [
+        "bench",
+        "bilateral",
+        "dumbbell",
+        "isolation",
+        "shoulders",
+        "triceps",
+        "upper_arms"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "2188"
+    },
+    {
+      "id": "2285",
+      "name": "Pullover en máquina",
+      "sourceName": "lever pullover",
+      "aliases": [
+        "lats",
+        "lever pullover",
+        "pullover en máquina",
+        "triceps"
+      ],
+      "equipment": [
+        "machine"
+      ],
+      "rawEquipment": "leverage machine",
+      "bodyPart": "back",
+      "primaryMuscles": [
+        "lats"
+      ],
+      "secondaryMuscles": [
+        "triceps",
+        "shoulders"
+      ],
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "isolation:lats",
+      "tags": [
+        "back",
+        "bilateral",
+        "isolation",
+        "lats",
+        "leverage_machine",
+        "machine",
+        "shoulders",
+        "triceps"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "2285"
+    },
+    {
+      "id": "2287",
+      "name": "Prensa alternada de piernas en máquina",
+      "sourceName": "lever alternate leg press",
+      "aliases": [
+        "hamstrings",
+        "lever alternate leg press",
+        "prensa alternada de piernas en máquina",
+        "quads"
+      ],
+      "equipment": [
+        "machine"
+      ],
+      "rawEquipment": "leverage machine",
+      "bodyPart": "upper_legs",
+      "primaryMuscles": [
+        "quads"
+      ],
+      "secondaryMuscles": [
+        "hamstrings",
+        "glutes"
+      ],
+      "movementPattern": "squat",
+      "modality": "compound",
+      "laterality": "unilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "high",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        120,
+        180
+      ],
+      "substitutionGroup": "squat:upper_legs",
+      "tags": [
+        "compound",
+        "glutes",
+        "hamstrings",
+        "leverage_machine",
+        "machine",
+        "quads",
+        "squat",
+        "unilateral",
+        "upper_legs"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "2287"
+    },
+    {
+      "id": "2368",
+      "name": "Sentadilla dividida",
+      "sourceName": "split squats",
+      "aliases": [
+        "glutes",
+        "quads",
+        "sentadilla dividida",
+        "split squats"
+      ],
+      "equipment": [
+        "body_weight"
+      ],
+      "rawEquipment": "body weight",
+      "bodyPart": "upper_legs",
+      "primaryMuscles": [
+        "quads"
+      ],
+      "secondaryMuscles": [
+        "glutes",
+        "hamstrings",
+        "calves"
+      ],
+      "movementPattern": "lunge",
+      "modality": "compound",
+      "laterality": "unilateral",
+      "difficulty": "intermediate",
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "substitutionGroup": "lunge:upper_legs",
+      "tags": [
+        "body_weight",
+        "calves",
+        "compound",
+        "glutes",
+        "hamstrings",
+        "lunge",
+        "quads",
+        "unilateral",
+        "upper_legs"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "2368"
+    },
+    {
+      "id": "2611",
+      "name": "Prensa horizontal a una pierna en máquina",
+      "sourceName": "lever horizontal one leg press",
+      "aliases": [
+        "glutes",
+        "lever horizontal one leg press",
+        "prensa horizontal a una pierna en máquina",
+        "quadriceps"
+      ],
+      "equipment": [
+        "machine"
+      ],
+      "rawEquipment": "leverage machine",
+      "bodyPart": "upper_legs",
+      "primaryMuscles": [
+        "glutes"
+      ],
+      "secondaryMuscles": [
+        "quadriceps",
+        "hamstrings",
+        "calves"
+      ],
+      "movementPattern": "squat",
+      "modality": "compound",
+      "laterality": "unilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "high",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        120,
+        180
+      ],
+      "substitutionGroup": "squat:upper_legs",
+      "tags": [
+        "calves",
+        "compound",
+        "glutes",
+        "hamstrings",
+        "leverage_machine",
+        "machine",
+        "quadriceps",
+        "squat",
+        "unilateral",
+        "upper_legs"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "2611"
+    },
+    {
+      "id": "3007",
+      "name": "Extensión de piernas con banda de resistencia",
+      "sourceName": "resistance band leg extension",
+      "aliases": [
+        "extensión de piernas con banda de resistencia",
+        "hamstrings",
+        "quads",
+        "resistance band leg extension"
+      ],
+      "equipment": [
+        "resistance_band",
+        "band_anchor"
+      ],
+      "rawEquipment": "resistance band",
+      "bodyPart": "upper_legs",
+      "primaryMuscles": [
+        "quads"
+      ],
+      "secondaryMuscles": [
+        "hamstrings"
+      ],
+      "movementPattern": "isolation",
+      "modality": "isolation",
+      "laterality": "unilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "low",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        10,
+        15
+      ],
+      "defaultRestSeconds": [
+        45,
+        75
+      ],
+      "substitutionGroup": "isolation:quads",
+      "tags": [
+        "band_anchor",
+        "hamstrings",
+        "isolation",
+        "quads",
+        "resistance_band",
+        "unilateral",
+        "upper_legs"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "3007"
+    },
+    {
+      "id": "3013",
+      "name": "Puente de glúteos en el suelo",
+      "sourceName": "low glute bridge on floor",
+      "aliases": [
+        "glutes",
+        "hamstrings",
+        "low glute bridge on floor",
+        "puente de glúteos en el suelo"
+      ],
+      "equipment": [
+        "body_weight"
+      ],
+      "rawEquipment": "body weight",
+      "bodyPart": "upper_legs",
+      "primaryMuscles": [
+        "glutes"
+      ],
+      "secondaryMuscles": [
+        "hamstrings",
+        "core"
+      ],
+      "movementPattern": "hinge",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "difficulty": "beginner",
+      "fatigueCost": "medium",
+      "skillRequirement": "low",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "substitutionGroup": "hinge:upper_legs",
+      "tags": [
+        "bilateral",
+        "body_weight",
+        "compound",
+        "core",
+        "glutes",
+        "hamstrings",
+        "hinge",
+        "upper_legs"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "3013"
+    },
+    {
+      "id": "3017",
+      "name": "Remo Pendlay con barra",
+      "sourceName": "barbell pendlay row",
+      "aliases": [
+        "barbell pendlay row",
+        "biceps",
+        "remo pendlay con barra",
+        "upper back"
+      ],
+      "equipment": [
+        "barbell"
+      ],
+      "rawEquipment": "barbell",
+      "bodyPart": "back",
+      "primaryMuscles": [
+        "upper_back"
+      ],
+      "secondaryMuscles": [
+        "biceps",
+        "forearms"
+      ],
+      "movementPattern": "horizontal_pull",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "difficulty": "intermediate",
+      "fatigueCost": "medium",
+      "skillRequirement": "medium",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "substitutionGroup": "row:upper_back",
+      "tags": [
+        "back",
+        "barbell",
+        "biceps",
+        "bilateral",
+        "compound",
+        "forearms",
+        "horizontal_pull",
+        "upper_back"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "3017"
+    },
+    {
+      "id": "3193",
+      "name": "Elevación de glúteos e isquiotibiales",
+      "sourceName": "glute-ham raise",
+      "aliases": [
+        "elevación de glúteos e isquiotibiales",
+        "glute-ham raise",
+        "glutes",
+        "hamstrings"
+      ],
+      "equipment": [
+        "body_weight",
+        "glute_ham_developer"
+      ],
+      "rawEquipment": "body weight",
+      "bodyPart": "upper_legs",
+      "primaryMuscles": [
+        "hamstrings"
+      ],
+      "secondaryMuscles": [
+        "glutes",
+        "lower_back"
+      ],
+      "movementPattern": "hinge",
+      "modality": "compound",
+      "laterality": "bilateral",
+      "difficulty": "advanced",
+      "fatigueCost": "medium",
+      "skillRequirement": "high",
+      "defaultRepRange": [
+        6,
+        12
+      ],
+      "defaultRestSeconds": [
+        75,
+        120
+      ],
+      "substitutionGroup": "hinge:upper_legs",
+      "tags": [
+        "bilateral",
+        "body_weight",
+        "compound",
+        "glute_ham_developer",
+        "glutes",
+        "hamstrings",
+        "hinge",
+        "lower_back",
+        "upper_legs"
+      ],
+      "approvedForGeneration": true,
+      "mediaRef": "3193"
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "forma-routines",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-07-25",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "ai": {
+    "binding": "AI"
+  },
+  "vars": {
+    "AI_PROVIDER": "cloudflare",
+    "AI_TIMEOUT_MS": "12000",
+    "AI_DEBUG_LOGS": "false",
+    "CLOUDFLARE_AI_MODEL": "@cf/ibm-granite/granite-4.0-h-micro",
+    "CLOUDFLARE_AI_STRUCTURED_MODE": "function_calling",
+    "EXERCISE_MEDIA_MODE": "disabled",
+    "NEXT_PUBLIC_ENABLE_EXERCISE_MEDIA": "false",
+    "NEXT_PUBLIC_AUTOPLAY_EXERCISE_MEDIA": "false"
+  },
+  "observability": {
+    "enabled": true
+  }
+}

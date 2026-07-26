@@ -1,0 +1,39 @@
+.disabledPage {
+  display: grid;
+  min-height: calc(100vh - var(--header-height) - var(--mobile-nav-height));
+  place-items: center;
+  padding-block: var(--space-12);
+}
+
+.disabledPage section {
+  width: min(100%, 38rem);
+  padding: var(--space-8);
+}
+
+.disabledPage section > svg {
+  width: 2.5rem;
+  height: 2.5rem;
+  margin-bottom: var(--space-5);
+  color: var(--color-action);
+  stroke-width: 1.4;
+}
+
+.disabledPage h1 {
+  margin: var(--space-4) 0;
+  color: var(--color-brand);
+  font-size: var(--text-2xl);
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+}
+
+.description {
+  margin: 0 0 var(--space-8);
+  color: var(--color-body);
+  line-height: 1.65;
+}
+
+@media (min-width: 52rem) {
+  .disabledPage {
+    min-height: calc(100vh - var(--header-height));
+  }
+}

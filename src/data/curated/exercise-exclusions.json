@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 1,
+  "datasetCommit": "7455efae41b330c265e7cd4b78dfa848e7ce5ebd",
+  "curationReviewSha256": "9f1d32edb076e1a56fe68e14e2ab256e2e41bb7d8ca97f586f3b78ec1a3a0c7c",
+  "records": [
+    {
+      "exerciseId": "0024",
+      "reason": "Source name claims a bench front squat, but its instructions describe a standard front squat."
+    },
+    {
+      "exerciseId": "0026",
+      "reason": "Source name claims a bench squat, but its instructions describe a standard rack squat."
+    },
+    {
+      "exerciseId": "0044",
+      "reason": "Loaded barbell good mornings require expert programming review before automatic generation."
+    },
+    {
+      "exerciseId": "0068",
+      "reason": "Loaded single-leg barbell squat requires advanced balance and expert programming review."
+    },
+    {
+      "exerciseId": "0069",
+      "reason": "Overhead squats require advanced mobility, technique and expert programming review."
+    },
+    {
+      "exerciseId": "0071",
+      "reason": "Barbell press sit-up combines loaded spinal flexion and pressing beyond the initial safety scope."
+    },
+    {
+      "exerciseId": "0098",
+      "reason": "Source name claims a split squat, but its instructions describe a bilateral wide-stance squat."
+    },
+    {
+      "exerciseId": "0099",
+      "reason": "Source instructions describe a barbell split squat, not the named single-leg/Bulgarian variant."
+    },
+    {
+      "exerciseId": "2799",
+      "reason": "Barbell seated alternating leg raise is obscure and requires explicit safety/programming review."
+    },
+    {
+      "exerciseId": "1372",
+      "reason": "Duplicate standing barbell calf-raise variant; the clearer source record remains approved."
+    },
+    {
+      "exerciseId": "3235",
+      "reason": "Inverse-curl source label conflicts with instructions for a standard prone cable leg curl."
+    },
+    {
+      "exerciseId": "0861",
+      "reason": "Duplicate seated cable-row variant; the clearer reviewed source record remains approved."
+    },
+    {
+      "exerciseId": "0339",
+      "reason": "Dumbbell lying femoral record has unclear loading and strength-prescription instructions."
+    },
+    {
+      "exerciseId": "3548",
+      "reason": "Loaded carries require distance/time prescriptions that the current routine schema does not support."
+    },
+    {
+      "exerciseId": "0410",
+      "reason": "Required elevated supports are alternatives that the current equipment model cannot express."
+    },
+    {
+      "exerciseId": "2803",
+      "reason": "Duplicate ordinary dumbbell-squat instructions under a misleading supported-squat label."
+    },
+    {
+      "exerciseId": "2133",
+      "reason": "Loaded carries require distance/time prescriptions that the current routine schema does not support."
+    },
+    {
+      "exerciseId": "1511",
+      "reason": "Static hamstring stretching is not a loaded routine exercise under the current prescription model."
+    },
+    {
+      "exerciseId": "0489",
+      "reason": "Duplicate hyperextension variant; the bench-specific reviewed record remains approved."
+    },
+    {
+      "exerciseId": "0496",
+      "reason": "Source instructions describe an unloaded prone leg curl with unclear effective resistance."
+    },
+    {
+      "exerciseId": "2400",
+      "reason": "Source label/equipment conflict with instructions for a prone cable leg curl on a bench."
+    },
+    {
+      "exerciseId": "0499",
+      "reason": "The required waist-height bar or suspension trainer cannot be represented as equipment alternatives yet."
+    },
+    {
+      "exerciseId": "0533",
+      "reason": "Duplicate kettlebell goblet-squat instructions; the clearer goblet-squat record remains approved."
+    },
+    {
+      "exerciseId": "0555",
+      "reason": "Low-value kick-out sit variant is not sufficiently clear for automatic strength programming."
+    },
+    {
+      "exerciseId": "1452",
+      "reason": "Duplicate seated machine-crunch variant; the chest-pad record remains approved."
+    },
+    {
+      "exerciseId": "1403",
+      "reason": "Loaded cervical exercise requires explicit domain and safety review before generation."
+    },
+    {
+      "exerciseId": "0648",
+      "reason": "Olympic power cleans require advanced coaching and are outside the initial automatic-generation scope."
+    },
+    {
+      "exerciseId": "1587",
+      "reason": "Yoga pose sequence is outside the initial resistance-routine prescription model."
+    },
+    {
+      "exerciseId": "0716",
+      "reason": "Loaded cervical exercise requires explicit domain and safety review before generation."
+    },
+    {
+      "exerciseId": "1489",
+      "reason": "Sissy squats require explicit knee-tolerance and expert programming review."
+    },
+    {
+      "exerciseId": "0750",
+      "reason": "Smith chair-squat source and apparatus details require explicit equipment/programming review."
+    },
+    {
+      "exerciseId": "0765",
+      "reason": "Smith-machine source label conflicts with instructions for a handled seated press machine."
+    },
+    {
+      "exerciseId": "0795",
+      "reason": "Source instructions describe an unloaded standing leg curl with unclear effective resistance."
+    },
+    {
+      "exerciseId": "2135",
+      "reason": "Weighted-plank label conflicts with unweighted timed-hold source instructions."
+    },
+    {
+      "exerciseId": "0835",
+      "reason": "Weighted-hyperextension label and unstable-ball prescription require explicit review."
+    }
+  ]
+}

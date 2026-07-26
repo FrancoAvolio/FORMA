@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180" role="img" aria-labelledby="title description">
+  <title id="title">Demostración no disponible</title>
+  <desc id="description">Marcador visual neutro para un ejercicio sin medios habilitados.</desc>
+  <rect width="180" height="180" fill="#f2eee9"/>
+  <path d="M28 128h124M50 52v76M130 52v76M43 67h14M123 67h14M57 78h66v24H57z" fill="none" stroke="#002045" stroke-linecap="round" stroke-linejoin="round" stroke-width="4"/>
+  <circle cx="90" cy="44" r="9" fill="#d97745"/>
+</svg>

@@ -1,0 +1,499 @@
+.page {
+  padding-block: var(--space-8) var(--space-20);
+}
+
+.heading {
+  display: grid;
+  gap: var(--space-5);
+  align-items: end;
+}
+
+.heading h1 {
+  max-width: 15ch;
+  margin: var(--space-4) 0;
+  color: var(--color-brand);
+  font-size: var(--text-3xl);
+  letter-spacing: -0.06em;
+  line-height: 1;
+}
+
+.heading > div > p:last-child {
+  max-width: 42rem;
+  margin: 0;
+  color: var(--color-body);
+  line-height: 1.6;
+}
+
+.heading > a {
+  width: fit-content;
+}
+
+.progress {
+  max-width: 54rem;
+  margin-block: var(--space-8) var(--space-4);
+}
+
+.progress > div {
+  height: 0.3rem;
+  overflow: hidden;
+  background: var(--color-blue-200);
+}
+
+.progress > div span {
+  display: block;
+  height: 100%;
+  background: var(--color-brand);
+  transition: width 180ms ease;
+}
+
+.progress p {
+  display: flex;
+  justify-content: space-between;
+  margin: var(--space-3) 0 0;
+  color: var(--color-muted);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: var(--text-xs);
+}
+
+.progress strong {
+  color: var(--color-brand);
+  text-transform: uppercase;
+}
+
+.formCard {
+  max-width: 54rem;
+  min-height: 36rem;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  background: rgb(255 255 255 / 87%);
+  box-shadow: var(--shadow-card);
+}
+
+.step {
+  min-height: 30rem;
+  padding: var(--space-6);
+}
+
+.step > header {
+  margin-bottom: var(--space-8);
+}
+
+.step > header h2 {
+  max-width: 22ch;
+  margin: var(--space-3) 0;
+  color: var(--color-brand);
+  font-size: var(--text-2xl);
+  letter-spacing: -0.045em;
+  line-height: 1.08;
+}
+
+.step > header > p:last-child {
+  max-width: 39rem;
+  margin: 0;
+  color: var(--color-body);
+  line-height: 1.55;
+}
+
+.optionGrid {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.option {
+  position: relative;
+  display: grid;
+  min-height: 7rem;
+  gap: var(--space-2);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-sm);
+  background: var(--color-white);
+  padding: var(--space-5);
+  color: var(--color-brand);
+  cursor: pointer;
+  text-align: left;
+  transition: border 150ms ease, background 150ms ease, translate 150ms ease;
+}
+
+.option:hover {
+  border-color: var(--color-brand);
+  translate: 0 -1px;
+}
+
+.option[aria-pressed="true"] {
+  border-color: var(--color-brand);
+  background: var(--color-blue-100);
+  box-shadow: inset 4px 0 var(--color-brand);
+}
+
+.option > span {
+  position: absolute;
+  top: var(--space-3);
+  right: var(--space-3);
+  color: var(--color-success);
+}
+
+.option > span svg {
+  width: 1.2rem;
+}
+
+.option strong {
+  padding-right: var(--space-5);
+  font-size: var(--text-lg);
+}
+
+.option small {
+  color: var(--color-body);
+  font-size: var(--text-sm);
+  line-height: 1.45;
+}
+
+.fieldGrid {
+  display: grid;
+  gap: var(--space-4);
+  margin-bottom: var(--space-8);
+}
+
+.fieldGrid label,
+.textField {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.fieldGrid label > span,
+.textField > span {
+  color: var(--color-muted);
+  font-size: var(--text-xs);
+  font-weight: 750;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.fieldGrid select,
+.textField input,
+.textField textarea {
+  width: 100%;
+  min-height: 3.25rem;
+  border: 1px solid var(--color-line-strong);
+  border-radius: 0;
+  background: var(--color-white);
+  padding: var(--space-3);
+  color: var(--color-ink);
+}
+
+.textField {
+  margin-top: var(--space-6);
+}
+
+.textField textarea {
+  min-height: 7rem;
+  resize: vertical;
+}
+
+.location,
+.patterns,
+.riskQuestion {
+  margin: 0;
+  border: 0;
+  padding: 0;
+}
+
+.location > legend,
+.patterns > legend {
+  margin-bottom: var(--space-3);
+  color: var(--color-muted);
+  font-size: var(--text-xs);
+  font-weight: 750;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.checkboxGrid {
+  display: grid;
+  gap: var(--space-2);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.checkOption {
+  display: flex;
+  min-height: 3.2rem;
+  align-items: center;
+  gap: var(--space-3);
+  border: 1px solid var(--color-line);
+  background: var(--color-white);
+  padding: var(--space-3);
+  color: var(--color-ink);
+  cursor: pointer;
+  font-size: var(--text-sm);
+}
+
+.checkOption:has(input:checked) {
+  border-color: var(--color-brand);
+  background: var(--color-blue-100);
+  color: var(--color-brand);
+  font-weight: 650;
+}
+
+.checkOption input,
+.confirmation input,
+.riskQuestion input {
+  width: 1.1rem;
+  height: 1.1rem;
+  accent-color: var(--color-brand);
+  flex: 0 0 auto;
+}
+
+.inlineError {
+  color: var(--color-danger);
+  font-size: var(--text-sm);
+}
+
+.restrictionFields {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.restrictionFields .textField {
+  margin: 0;
+}
+
+.patterns {
+  margin-top: var(--space-8);
+}
+
+.safetyQuestions {
+  display: grid;
+  gap: var(--space-3);
+  margin-top: var(--space-10);
+  border-top: 1px solid var(--color-line);
+  padding-top: var(--space-6);
+}
+
+.safetyIntro {
+  display: flex;
+  gap: var(--space-3);
+  align-items: flex-start;
+  margin-bottom: var(--space-2);
+}
+
+.safetyIntro > svg {
+  color: var(--color-success);
+  flex: 0 0 auto;
+}
+
+.safetyIntro h3,
+.safetyIntro p {
+  margin: 0;
+}
+
+.safetyIntro h3 {
+  color: var(--color-brand);
+}
+
+.safetyIntro p {
+  margin-top: var(--space-1);
+  color: var(--color-body);
+  font-size: var(--text-sm);
+}
+
+.riskQuestion {
+  display: grid;
+  gap: var(--space-2);
+  align-items: center;
+  border-bottom: 1px solid var(--color-line);
+  padding-block: var(--space-3);
+  grid-template-columns: 1fr auto auto;
+}
+
+.riskQuestion legend {
+  display: contents;
+  color: var(--color-ink);
+  line-height: 1.45;
+}
+
+.riskQuestion label {
+  display: flex;
+  min-height: 2.75rem;
+  align-items: center;
+  gap: var(--space-2);
+  padding-inline: var(--space-2);
+  cursor: pointer;
+}
+
+.confirmation {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  margin-top: var(--space-3);
+  border: 1px solid var(--color-line-strong);
+  background: var(--color-blue-100);
+  padding: var(--space-4);
+  color: var(--color-brand);
+  font-weight: 650;
+  line-height: 1.45;
+}
+
+.review {
+  margin: 0 0 var(--space-6);
+  border-top: 1px solid var(--color-line);
+}
+
+.review > div {
+  display: grid;
+  gap: var(--space-2);
+  border-bottom: 1px solid var(--color-line);
+  padding-block: var(--space-4);
+}
+
+.review dt {
+  color: var(--color-muted);
+  font-size: var(--text-xs);
+  font-weight: 750;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.review dd {
+  margin: 0;
+  color: var(--color-brand);
+  line-height: 1.5;
+}
+
+.generationError,
+.safetyError {
+  display: flex;
+  gap: var(--space-3);
+  margin-top: var(--space-6);
+  border: 1px solid;
+  padding: var(--space-4);
+}
+
+.generationError {
+  border-color: #e3adb3;
+  background: var(--color-danger-soft);
+  color: var(--color-danger);
+}
+
+.safetyError {
+  border-color: #e8c18f;
+  background: var(--color-warning-soft);
+  color: var(--color-warning);
+}
+
+.generationError > svg,
+.safetyError > svg {
+  flex: 0 0 auto;
+}
+
+.generationError p,
+.safetyError p {
+  margin: var(--space-1) 0;
+  color: var(--color-body);
+  line-height: 1.5;
+}
+
+.safetyError a {
+  color: var(--color-brand);
+  font-weight: 700;
+}
+
+.navigation {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  border-top: 1px solid var(--color-line);
+  padding: var(--space-4) var(--space-6);
+}
+
+.generation {
+  display: grid;
+  max-width: 45rem;
+  min-height: calc(100vh - var(--header-height) - var(--mobile-nav-height));
+  align-content: center;
+  padding-block: var(--space-12);
+}
+
+.generation > h1 {
+  max-width: 12ch;
+  margin: var(--space-4) 0 var(--space-8);
+  color: var(--color-brand);
+  font-size: var(--text-3xl);
+  letter-spacing: -0.055em;
+  line-height: 1;
+}
+
+.spinner {
+  width: 2rem;
+  height: 2rem;
+  margin-bottom: var(--space-5);
+  color: var(--color-blue-500);
+  animation: spin 1.2s linear infinite;
+}
+
+.generation ol {
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--color-line);
+  list-style: none;
+}
+
+.generation li {
+  display: grid;
+  min-height: 4rem;
+  align-items: center;
+  border-bottom: 1px solid var(--color-line);
+  color: var(--color-subtle);
+  grid-template-columns: 2.5rem 1fr;
+}
+
+.generation li > span {
+  font-family: var(--font-geist-mono), monospace;
+  font-size: var(--text-xs);
+}
+
+.generation li > svg {
+  width: 1.2rem;
+}
+
+.generation li.active {
+  color: var(--color-brand);
+  font-weight: 700;
+}
+
+.generation li.done {
+  color: var(--color-success);
+}
+
+@keyframes spin {
+  to {
+    rotate: 360deg;
+  }
+}
+
+@media (min-width: 42rem) {
+  .heading {
+    grid-template-columns: 1fr auto;
+  }
+
+  .step {
+    padding: var(--space-8);
+  }
+
+  .navigation {
+    padding-inline: var(--space-8);
+  }
+
+  .optionGrid,
+  .fieldGrid,
+  .restrictionFields {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .checkboxGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .review > div {
+    grid-template-columns: 11rem 1fr;
+  }
+}
