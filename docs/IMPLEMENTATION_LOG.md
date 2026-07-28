@@ -139,7 +139,7 @@ Closing validation evidence for this refactor (2026-07-28, Node 22 wrapper):
 
 - `npm run validate`: passed immutable Stitch references (11 files), UTF-8 (235 files), the
   1,324-record source dataset, 156 curated generation records, 1,324 media relationships,
-  generated artifacts, typecheck, lint, 27 Vitest files/217 tests, Next production build, and
+  generated artifacts, typecheck, lint, 27 Vitest files/218 tests, Next production build, and
   the post-build media scan.
 - `npm run test:e2e:all`: desktop/mobile Playwright passed 17 tests with 3 intentional skips;
   the disabled-media fixture passed separately (1 test). These cover chat-first generation,
@@ -157,6 +157,10 @@ Closing validation evidence for this refactor (2026-07-28, Node 22 wrapper):
   are rendered only once.
 - The exact reported browser conversation passed on desktop and mobile with Mock AI and on desktop
   against the running local Ollama configuration; each run reached a validated four-day routine.
+- Follow-up Ollama reproduction found a second failure mode: model-only `pain_during_movement`,
+  `general_fitness`, and `gym_complete` labels on an ordinary profile turn. The reconciliation
+  boundary now discards model-only safety labels, derives explicit goal/location values, and keeps
+  only canonical equipment tokens.
 - `npm audit --omit=dev --audit-level=high` reported zero production vulnerabilities. The full
   audit reports 13 high-severity development/build-chain advisories (ESLint and OpenNext
   minifier transitive paths), documented in `docs/KNOWN_LIMITATIONS.md` and

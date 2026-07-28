@@ -183,6 +183,40 @@ describe("deterministic conversational safety", () => {
     });
   });
 
+  it("reconciles a false safety label and wrong profile values from an ordinary turn", () => {
+    const message =
+      "Quiero ganar musculo, puedo entrenar 5 dias a la semana, el equipamiento que cuento es con un gimnasio completo";
+    const result = reconcileParsedTurnSafety(
+      {
+        intent: "modify_routine",
+        requestPatch: {
+          goal: "general_fitness",
+          experience: "intermediate",
+          daysPerWeek: 5,
+          trainingLocation: "commercial_gym",
+          availableEquipment: ["gym_complete"],
+        },
+        limitationsConfirmation: "unknown",
+        safetySignals: ["pain_during_movement"],
+        assumptions: [],
+      },
+      message,
+      { hasCurrentRoutine: false },
+    );
+
+    expect(result).toMatchObject({
+      intent: "provide_information",
+      requestPatch: {
+        goal: "hypertrophy",
+        daysPerWeek: 5,
+        trainingLocation: "commercial_gym",
+      },
+      safetySignals: [],
+    });
+    expect(result.requestPatch).not.toHaveProperty("experience");
+    expect(result.requestPatch).not.toHaveProperty("availableEquipment");
+  });
+
   it("does not rewrite routine-modification intent when routine state is unknown", () => {
     const result = reconcileParsedTurnSafety(
       {

@@ -17,12 +17,34 @@ import type {
   SafetyAssessment,
   SafetyReasonCode,
 } from "../../domain/safety/schemas";
+import { normalizeEquipment } from "../../domain/exercises/normalization";
 import type { z } from "zod";
 
 type SafetySignal = z.output<typeof SafetySignalSchema>;
 export type AssistantSafetyResult = z.output<typeof AssistantSafetyResultSchema>;
 
 type PatchField = keyof RoutineRequestPatch;
+
+const CANONICAL_EQUIPMENT = new Set([
+  "body_weight",
+  "dumbbell",
+  "barbell",
+  "cable",
+  "machine",
+  "smith_machine",
+  "bench",
+  "pull_up_bar",
+  "dip_bars",
+  "barbell_rack",
+  "preacher_bench",
+  "hyperextension_bench",
+  "band_anchor",
+  "glute_ham_developer",
+  "stability_ball",
+  "step_platform",
+  "resistance_band",
+  "kettlebell",
+]);
 
 const PROFILE_FIELD_EVIDENCE: Readonly<Record<PatchField, RegExp>> = {
   goal:
@@ -61,13 +83,60 @@ function reconcileRequestPatch(
     .replace(/[^a-z0-9\s]/g, " ")
     .replace(/\s+/g, " ")
     .trim();
-  const entries = Object.entries(requestPatch).filter(([field]) => {
-    if (field === "limitations" && declaration === "no_limitations") {
-      return false;
+  const reconciled: Record<string, unknown> = {};
+  for (const [field, rawValue] of Object.entries(requestPatch)) {
+    const patchField = field as PatchField;
+    if (
+      (field === "limitations" && declaration === "no_limitations") ||
+      !PROFILE_FIELD_EVIDENCE[patchField].test(normalized)
+    ) {
+      continue;
     }
-    return PROFILE_FIELD_EVIDENCE[field as PatchField].test(normalized);
-  });
-  return Object.fromEntries(entries) as RoutineRequestPatch;
+
+    if (field === "goal") {
+      const explicitGoal = normalized.match(
+        /\b(?:hipertrofi\w*|ganar (?:masa|musculo)|crecer(?: musculo)?)\b/u,
+      )
+        ? "hypertrophy"
+        : normalized.match(/\bfuerza\b/u)
+          ? "strength"
+          : normalized.match(/\bresistencia muscular\b/u)
+            ? "muscular_endurance"
+            : normalized.match(/\b(?:estado fisico|fitness general)\b/u)
+              ? "general_fitness"
+              : null;
+      if (explicitGoal) reconciled[field] = explicitGoal;
+      continue;
+    }
+
+    if (field === "trainingLocation") {
+      const explicitLocation = /\b(?:gimnasio|gym)\b/u.test(normalized)
+        ? "commercial_gym"
+        : /\b(?:casa|hogar|domicilio)\b/u.test(normalized)
+          ? "home"
+          : null;
+      if (explicitLocation) reconciled[field] = explicitLocation;
+      continue;
+    }
+
+    if (field === "availableEquipment" && Array.isArray(rawValue)) {
+      if (
+        /\b(?:gimnasio|gym)\b.*\b(?:completo|commercial|comercial)\b/u.test(
+          normalized,
+        )
+      ) {
+        continue;
+      }
+      const canonical = rawValue
+        .map(normalizeEquipment)
+        .filter((item) => CANONICAL_EQUIPMENT.has(item));
+      if (canonical.length > 0) reconciled[field] = canonical;
+      continue;
+    }
+
+    reconciled[field] = rawValue;
+  }
+  return reconciled as RoutineRequestPatch;
 }
 
 const REASON_TO_SIGNAL: Partial<Record<SafetyReasonCode, SafetySignal>> = {
@@ -102,9 +171,9 @@ export function detectDeterministicSafetySignals(message: string): SafetySignal[
 }
 
 /**
- * A model may add a conservative signal, but it cannot grant an all-clear or
- * delete deterministic evidence found in the raw turn. A strong all-clear
- * found in raw text discards model-only false positives from negated terms.
+ * Deterministic evidence from the raw turn is authoritative. Model labels may
+ * enrich a turn that already has deterministic safety evidence, but they
+ * cannot pause an ordinary profile turn or grant an all-clear.
  */
 export function reconcileParsedTurnSafety(
   untrustedTurn: ParsedRoutineTurn,
@@ -119,11 +188,13 @@ export function reconcileParsedTurnSafety(
     rawMessage,
     deterministicDeclaration,
   );
+  // Model safety labels are advisory only. If the raw user message contains
+  // no deterministic safety evidence, a model-only label cannot pause an
+  // otherwise ordinary profile turn.
   const safetySignals = SafetySignalsListSchema.parse(
-    deterministicDeclaration === "no_limitations" &&
-      deterministicSignals.length === 0
-      ? []
-      : [...new Set([...deterministicSignals, ...turn.safetySignals])],
+    deterministicSignals.length > 0
+      ? [...new Set([...deterministicSignals, ...turn.safetySignals])]
+      : [],
   );
   const limitationsConfirmation =
     deterministicDeclaration === "has_limitations"
