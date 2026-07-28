@@ -119,8 +119,10 @@ The v2 browser envelope stores messages, the editable request draft, limitation 
 safety state, current validated routine, provider state, retry metadata, and update time as one
 `RoutineConversationState`. The repository, not callers or storage, derives missing fields and
 completion on every boundary. Guided-form and legacy compatibility methods update this same
-aggregate, and valid v0/v1 data migrates into it. A current routine keeps the exact request and
-safety screening that generated it as an immutable snapshot; it is not a second editable profile.
+aggregate, and valid v0/v1 data migrates into it. Chat keeps the generated plan paired with the
+exact request and safety screening that produced it; that generation snapshot is immutable during
+chat edits. The guided form may update the paired request/screening only when the existing plan
+still validates; otherwise the stale current-plan pointer is removed without touching saved plans.
 
 ## ADR-020 — Assistant prose verbalizes validated truth
 
@@ -134,17 +136,21 @@ profile or plan. Structured state changes remain atomic and require complete sch
 ## ADR-021 — Deterministic safety can only be made more conservative
 
 Raw user text is checked before and after provider extraction. Deterministic safety signals are
-unioned with model signals, never removed, and a model-only `no_limitations` value cannot grant
-the canonical all-clear. Routine generation requires an explicit deterministic confirmation,
-zero safety signals, a complete domain request, and the existing screening/domain validation.
-Provider classification is advisory and cannot turn an unsupported request into an eligible one.
+unioned with model signals, never removed by a provider, and a model-only `no_limitations` value
+cannot grant the canonical all-clear. Routine generation requires an explicit deterministic
+confirmation, zero safety signals, a complete domain request, and the existing screening/domain
+validation. A complete manual review can explicitly correct a false-positive conversational signal
+only when the domain assessment is eligible; any remaining risk keeps the signal and blocks
+generation. Provider classification is advisory and cannot turn an unsupported request into an
+eligible one.
 
 ## ADR-022 — Chat questions and changes cross bounded application services
 
 Exercise answers resolve only validated local catalog records and current-plan placements; the
 bounded context includes Spanish instructions, catalog facts, curated substitutions,
 deterministic selection reasons, and resolved media attribution. Chat modifications are parsed to
-typed commands, then executed by deterministic replace/remove/reorder/regenerate use cases and
+typed commands, then executed by deterministic replace/remove/remove-by-muscle/reorder/regenerate/
+shorten-day/exclude-equipment use cases and
 validated again. Unaffected days remain stable for local edits. A profile change retains the
 existing plan when it still validates and permits a full deterministic rebuild only when the new
 request invalidates the plan's structure.

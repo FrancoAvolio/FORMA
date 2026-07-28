@@ -31,10 +31,12 @@ automated accessibility checks, repository metadata, or a successful package bui
   before a high-volume launch without silently enabling a paid product.
 - **Browser-local data:** routines do not synchronize between browsers/devices and disappear if
   site storage is cleared. This is an explicit MVP boundary, not an authentication defect.
-- **Development audit:** the deployed production dependency audit is clean. The compatible
-  ESLint 9/Next plugin toolchain still contains legacy glob-expansion DoS advisories. It handles
-  repository-controlled lint paths only; forcing ESLint 10 currently violates plugin peer
-  contracts. Track upstream support and re-audit each release.
+- **Development/build audit:** the deployed production dependency audit is clean. The compatible
+  ESLint 9/Next plugin toolchain still contains legacy glob-expansion DoS advisories, and the
+  OpenNext build-only minifier chain retains high-severity glob/minimatch advisories. These are
+  development or packaging paths, not deployed runtime dependencies; forcing major upgrades
+  currently violates peer contracts or breaks the Cloudflare build. Track upstream support and
+  re-audit each release.
 - **Atomic AI presentation:** structured responses are not streamed into state. FORMA waits for
   complete validation, then renders the result; generation stages prevent a blank loading state.
 - **Assistive-technology sign-off:** automated Axe, keyboard semantics, reduced motion, and

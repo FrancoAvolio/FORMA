@@ -69,7 +69,7 @@ This log records material implementation work and validation evidence. It comple
   Pixel 7, Mock chat, no-AI, editor, persistence, real/disabled media, reduced-motion, medical
   blocking, and Axe accessibility flows.
 - Remediated production dependency advisories with compatible PostCSS, sharp, and OpenNext
-  build-chain overrides. Remaining ESLint-only development advisories are recorded without
+  build-chain overrides. Remaining ESLint and OpenNext build-chain development advisories are recorded without
   forcing an invalid peer graph.
 
 Final command output and Cloudflare package evidence are recorded after the closing validation
@@ -135,6 +135,22 @@ Implemented dependency slices:
   exercise cards may consume resolved media and attribution metadata but public production
   artifacts continue to use the non-protected fallback until the licensing gate is cleared.
 
-Validation evidence for this refactor is recorded only after each command is actually run. This
-entry does not claim the final `npm run validate`, Mock Playwright flow, Cloudflare package/probe,
-or real Ollama model-contract results.
+Closing validation evidence for this refactor (2026-07-28, Node 22 wrapper):
+
+- `npm run validate`: passed immutable Stitch references (11 files), UTF-8 (235 files), the
+  1,324-record source dataset, 156 curated generation records, 1,324 media relationships,
+  generated artifacts, typecheck, lint, 27 Vitest files/211 tests, Next production build, and
+  the post-build media scan.
+- `npm run test:e2e:all`: desktop/mobile Playwright passed 17 tests with 3 intentional skips;
+  the disabled-media fixture passed separately (1 test). These cover chat-first generation,
+  guided fallback, persistence, safety blocking, media attribution, responsive navigation,
+  reduced motion, provider failure, and accessibility checks.
+- `npm run test:cloudflare`: 2 files/11 tests passed. `npm run build:cloudflare` and
+  `wrangler deploy --dry-run` passed with the AI binding, Granite model configuration, and
+  production media disabled; `npm run validate:media` remained binary-free after packaging.
+- Real Ollama contract probe passed all 6 checks with the installed `qwen3:1.7b` model at one
+  repetition. `qwen3:4b` remains an explicit operator opt-in and was not downloaded.
+- `npm audit --omit=dev --audit-level=high` reported zero production vulnerabilities. The full
+  audit reports 13 high-severity development/build-chain advisories (ESLint and OpenNext
+  minifier transitive paths), documented in `docs/KNOWN_LIMITATIONS.md` and
+  `docs/SECURITY_REVIEW.md`.

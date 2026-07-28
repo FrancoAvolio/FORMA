@@ -142,7 +142,7 @@ describe("routine application use cases", () => {
         kind: "replace_exercise",
         dayId: targetDay.id,
         exerciseId: target.exerciseId,
-        requestedAlternative: null,
+        requestedAlternative: "otro ejercicio compatible",
       },
       plan,
       request,
@@ -190,6 +190,133 @@ describe("routine application use cases", () => {
     plan.days.forEach((day, index) => {
       if (index !== targetIndex) expect(result.plan.days[index]).toBe(day);
     });
+  });
+
+  it("removes one deterministic exercise for a requested muscle", () => {
+    const plan = generatedPlan();
+    const matching = plan.days.flatMap((day) =>
+      day.exercises.filter((prescribed) => {
+        const exercise = catalog.find((candidate) => candidate.id === prescribed.exerciseId);
+        return exercise?.primaryMuscles.includes("biceps") || exercise?.secondaryMuscles.includes("biceps");
+      }),
+    );
+    expect(matching.length).toBeGreaterThan(0);
+    const result = applyConversationRoutineModification({
+      modification: { kind: "remove_one_by_muscle", muscle: "bíceps" },
+      plan,
+      request,
+      safetyScreening: CLEAR_SAFETY_SCREENING,
+      catalog,
+      datasetVersion: "fixture-v1",
+      seed: "conversation-remove-muscle",
+    });
+
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    const remaining = result.plan.days.flatMap((day) => day.exercises);
+    expect(remaining).toHaveLength(
+      plan.days.flatMap((day) => day.exercises).length - 1,
+    );
+    expect(result.changedScope).toBe("exercise");
+  });
+
+  it("removes explicitly rejected equipment instead of treating it as available", () => {
+    const equipmentRequest = createRoutineRequest({
+      trainingLocation: "custom",
+      availableEquipment: ["body_weight", "barbell"],
+    });
+    const generated = generateRoutine({
+      request: equipmentRequest,
+      safetyScreening: CLEAR_SAFETY_SCREENING,
+      catalog,
+      datasetVersion: "fixture-v1",
+      seed: "equipment-exclusion",
+    });
+    if (!generated.ok) throw new Error(JSON.stringify(generated));
+
+    const result = applyConversationRoutineModification({
+      modification: { kind: "exclude_equipment", equipment: ["barbell"] },
+      plan: generated.plan,
+      request: equipmentRequest,
+      safetyScreening: CLEAR_SAFETY_SCREENING,
+      catalog,
+      datasetVersion: "fixture-v1",
+      seed: "equipment-exclusion-change",
+    });
+
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    expect(result.request.availableEquipment).toEqual(["body_weight"]);
+    expect(result.plan).toBe(generated.plan);
+  });
+
+  it("honors a requested machine constraint when replacing an exercise", () => {
+    const plan = generatedPlan();
+    const usedIds = new Set(
+      plan.days.flatMap((day) =>
+        day.exercises.map((exercise) => exercise.exerciseId),
+      ),
+    );
+    let target:
+      | { dayId: string; exerciseId: string; alternativeId: string }
+      | undefined;
+    for (const day of plan.days) {
+      for (const prescribed of day.exercises) {
+        const original = catalog.find(
+          (exercise) => exercise.id === prescribed.exerciseId,
+        );
+        const alternative = original
+          ? catalog.find(
+              (exercise) =>
+                exercise.id !== original.id &&
+                !usedIds.has(exercise.id) &&
+                exercise.substitutionGroup === original.substitutionGroup,
+            )
+          : undefined;
+        if (alternative) {
+          target = {
+            dayId: day.id,
+            exerciseId: prescribed.exerciseId,
+            alternativeId: alternative.id,
+          };
+          break;
+        }
+      }
+      if (target) break;
+    }
+    expect(target).toBeDefined();
+    if (!target) return;
+
+    const mixedCatalog = catalog.map((exercise) =>
+      exercise.id === target?.alternativeId
+        ? { ...exercise, equipment: ["machine"] }
+        : exercise,
+    );
+    const result = applyConversationRoutineModification({
+      modification: {
+        kind: "replace_exercise",
+        dayId: target.dayId,
+        exerciseId: target.exerciseId,
+        requestedAlternative: "uno con máquina",
+      },
+      plan,
+      request: {
+        ...request,
+        availableEquipment: ["body_weight", "machine"],
+      },
+      safetyScreening: CLEAR_SAFETY_SCREENING,
+      catalog: mixedCatalog,
+      datasetVersion: "fixture-v1",
+      seed: "machine-constrained-replacement",
+    });
+
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    const replacementId = result.plan.days
+      .find((day) => day.id === target?.dayId)
+      ?.exercises.find((exercise) => exercise.exerciseId === target?.alternativeId)
+      ?.exerciseId;
+    expect(replacementId).toBe(target.alternativeId);
   });
 
   it("keeps a valid plan stable when a conversational profile patch needs no rebuild", () => {

@@ -13,13 +13,18 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
-import { generateRoutineUseCase } from "@/application/routines";
+import { resolveSafetySignalsAfterManualReview } from "@/application/conversation";
+import {
+  generateRoutineUseCase,
+  reconcileCurrentRoutineAfterManualEdit,
+} from "@/application/routines";
 import type {
   CatalogExercise,
   MovementPattern,
 } from "@/domain/exercises/catalog-exercise";
 import {
   RoutineRequestDraftSchema,
+  createEmptyRoutineRequestDraft,
   type LimitationsConfirmation,
   type RoutineRequestDraft,
 } from "@/domain/profile/routine-draft";
@@ -211,6 +216,46 @@ function toRequest(state: BuilderState): RoutineRequest {
   });
 }
 
+function draftFromFormState(
+  state: BuilderState,
+  base: RoutineRequestDraft,
+  touchedFields: ReadonlySet<keyof BuilderState>,
+  commitAll: boolean,
+): RoutineRequestDraft {
+  if (commitAll) return RoutineRequestDraftSchema.parse(toRequest(state));
+
+  const next: RoutineRequestDraft = { ...base };
+  if (touchedFields.has("goal")) next.goal = state.goal;
+  if (touchedFields.has("experience")) next.experience = state.experience;
+  if (touchedFields.has("daysPerWeek")) next.daysPerWeek = state.daysPerWeek;
+  if (touchedFields.has("sessionMinutes")) {
+    next.sessionMinutes = state.sessionMinutes;
+  }
+  if (touchedFields.has("trainingLocation")) {
+    next.trainingLocation = state.trainingLocation;
+  }
+  if (touchedFields.has("availableEquipment")) {
+    next.availableEquipment = [...state.availableEquipment];
+  }
+  if (touchedFields.has("focusMuscles")) {
+    next.focusMuscles = [...state.focusMuscles];
+  }
+  if (touchedFields.has("excludedMovementPatterns")) {
+    next.excludedMovementPatterns = [...state.excludedMovementPatterns];
+  }
+  if (touchedFields.has("excludedText")) {
+    next.excludedExercises = splitList(state.excludedText);
+  }
+  if (touchedFields.has("preferredText")) {
+    next.preferredExercises = splitList(state.preferredText);
+  }
+  if (touchedFields.has("limitationsText")) {
+    next.limitations = splitList(state.limitationsText);
+  }
+  if (touchedFields.has("notes")) next.notes = state.notes.trim() || null;
+  return RoutineRequestDraftSchema.parse(next);
+}
+
 function toSafety(state: NullableSafety): SafetyScreening {
   return SafetyScreeningSchema.parse(state);
 }
@@ -277,24 +322,32 @@ function limitationsConfirmationFor(
 }
 
 function canonicalFormPatch(
-  state: BuilderState,
+  requestDraft: RoutineRequestDraft,
   safety: NullableSafety,
   safetySignals: ConversationSafetyState["signals"],
+  safetyCorrectionConfirmed: boolean,
 ) {
-  const request = toRequest(state);
-  const requestDraft = RoutineRequestDraftSchema.parse(request);
+  const requestResult = RoutineRequestSchema.safeParse(requestDraft);
   const screeningResult = SafetyScreeningSchema.safeParse(safety);
 
-  if (!screeningResult.success) return { requestDraft };
+  if (!requestResult.success || !screeningResult.success) {
+    return { requestDraft };
+  }
 
+  const request = requestResult.data;
   const screening = screeningResult.data;
+  const assessment = evaluateRoutineSafety(request, screening);
   return {
     requestDraft,
     limitationsConfirmation: limitationsConfirmationFor(request, screening),
     safety: {
-      signals: [...safetySignals],
+      signals: resolveSafetySignalsAfterManualReview(
+        safetySignals,
+        assessment,
+        safetyCorrectionConfirmed,
+      ),
       screening,
-      result: evaluateRoutineSafety(request, screening),
+      result: assessment,
     },
   };
 }
@@ -311,10 +364,17 @@ export function GuidedRoutineBuilder({
   const router = useRouter();
   const initialState = useMemo(() => preset(example), [example]);
   const [state, setState] = useState<BuilderState>(initialState);
+  const [canonicalBaseDraft, setCanonicalBaseDraft] =
+    useState<RoutineRequestDraft>(() => createEmptyRoutineRequestDraft());
+  const [touchedFields, setTouchedFields] = useState<Set<keyof BuilderState>>(
+    () => new Set(),
+  );
   const [safety, setSafety] = useState<NullableSafety>(EMPTY_SAFETY);
   const [safetySignals, setSafetySignals] = useState<
     ConversationSafetyState["signals"]
   >([]);
+  const [safetyCorrectionConfirmed, setSafetyCorrectionConfirmed] =
+    useState(false);
   const [step, setStep] = useState(0);
   const [hydrated, setHydrated] = useState(false);
   const [generationStage, setGenerationStage] = useState<number | null>(null);
@@ -326,6 +386,7 @@ export function GuidedRoutineBuilder({
       .loadRoutineConversationState()
       .then((conversationState) => {
         if (cancelled) return;
+        setCanonicalBaseDraft(conversationState.requestDraft);
         if (!example && hasDraftValues(conversationState.requestDraft)) {
           setState((current) =>
             requestToState(conversationState.requestDraft, current),
@@ -335,6 +396,7 @@ export function GuidedRoutineBuilder({
           setSafety(screeningToState(conversationState.safety.screening));
         }
         setSafetySignals(conversationState.safety.signals);
+        setSafetyCorrectionConfirmed(false);
         setHydrated(true);
       })
       .catch(() => {
@@ -349,15 +411,58 @@ export function GuidedRoutineBuilder({
   useEffect(() => {
     if (!hydrated) return;
     try {
-      const patch = canonicalFormPatch(state, safety, safetySignals);
-      void createBrowserRoutineRepository().updateRoutineConversationState(patch);
+      const requestDraft = draftFromFormState(
+        state,
+        canonicalBaseDraft,
+        touchedFields,
+        Boolean(example),
+      );
+      const patch = canonicalFormPatch(
+        requestDraft,
+        safety,
+        safetySignals,
+        safetyCorrectionConfirmed,
+      );
+      const requestResult = RoutineRequestSchema.safeParse(requestDraft);
+      const screeningResult = SafetyScreeningSchema.safeParse(safety);
+      const updatedAt = new Date().toISOString();
+      void createBrowserRoutineRepository().updateRoutineConversationState(
+        (current) => ({
+          ...patch,
+          currentRoutine: reconcileCurrentRoutineAfterManualEdit({
+            currentRoutine: current.currentRoutine,
+            nextRequest: requestResult.success ? requestResult.data : null,
+            nextSafetyScreening: screeningResult.success
+              ? screeningResult.data
+              : null,
+            catalog,
+            updatedAt,
+          }),
+        }),
+      );
     } catch {
       // Incomplete intermediate form state is intentionally kept in React until valid.
     }
-  }, [hydrated, safety, safetySignals, state]);
+  }, [
+    canonicalBaseDraft,
+    catalog,
+    example,
+    hydrated,
+    safety,
+    safetyCorrectionConfirmed,
+    safetySignals,
+    state,
+    touchedFields,
+  ]);
+
+  const markTouched = (...fields: (keyof BuilderState)[]) => {
+    setTouchedFields((current) => new Set([...current, ...fields]));
+  };
 
   const update = <Key extends keyof BuilderState>(key: Key, value: BuilderState[Key]) => {
     setState((current) => ({ ...current, [key]: value }));
+    markTouched(key);
+    if (key === "limitationsText") setSafetyCorrectionConfirmed(false);
     setError(null);
   };
 
@@ -374,6 +479,7 @@ export function GuidedRoutineBuilder({
           : [...values, value],
       };
     });
+    markTouched(key);
   };
 
   const chooseLocation = (location: TrainingLocation) => {
@@ -388,6 +494,21 @@ export function GuidedRoutineBuilder({
       trainingLocation: location,
       availableEquipment: equipment,
     }));
+    markTouched("trainingLocation", "availableEquipment");
+  };
+
+  const confirmCurrentStep = () => {
+    const fieldsByStep: ReadonlyArray<readonly (keyof BuilderState)[]> = [
+      ["goal"],
+      ["experience"],
+      ["daysPerWeek", "sessionMinutes"],
+      ["trainingLocation", "availableEquipment"],
+      ["focusMuscles", "preferredText"],
+      ["excludedText", "excludedMovementPatterns", "limitationsText"],
+      ["notes"],
+    ];
+    markTouched(...(fieldsByStep[step] ?? []));
+    setStep(step + 1);
   };
 
   const canContinue =
@@ -411,11 +532,17 @@ export function GuidedRoutineBuilder({
       return;
     }
 
-    if (safetySignals.length > 0) {
+    const safetyAssessment = evaluateRoutineSafety(request, screening);
+    const unresolvedSafetySignals = resolveSafetySignalsAfterManualReview(
+      safetySignals,
+      safetyAssessment,
+      safetyCorrectionConfirmed,
+    );
+    if (unresolvedSafetySignals.length > 0) {
       setError({
         code: "SAFETY_BLOCKED",
         message:
-          "El chat registró una señal de seguridad que este formulario no puede descartar. Volvé al chat para aclararla o seguí explorando ejercicios.",
+          "El chat registró una señal de seguridad. Para corregir una interpretación, respondé todo el chequeo actual y confirmá explícitamente la corrección.",
       });
       return;
     }
@@ -443,7 +570,12 @@ export function GuidedRoutineBuilder({
 
     const updatedAt = new Date().toISOString();
     await createBrowserRoutineRepository().updateRoutineConversationState({
-      ...canonicalFormPatch(state, safety, safetySignals),
+      ...canonicalFormPatch(
+        RoutineRequestDraftSchema.parse(request),
+        safety,
+        safetySignals,
+        safetyCorrectionConfirmed,
+      ),
       currentRoutine: {
         request,
         plan: result.plan,
@@ -451,6 +583,7 @@ export function GuidedRoutineBuilder({
         updatedAt,
       },
     });
+    setSafetySignals([]);
     router.push("/rutina");
   };
 
@@ -733,6 +866,32 @@ export function GuidedRoutineBuilder({
             </fieldset>
 
             <div className={styles.safetyQuestions}>
+              {safetySignals.length > 0 && (
+                <div className={styles.signalCorrection} role="alert">
+                  <CircleAlert aria-hidden="true" />
+                  <div>
+                    <strong>El chat marcó un posible límite de seguridad.</strong>
+                    <p>
+                      Si fue una interpretación incorrecta, respondé las seis
+                      preguntas según tu situación actual, dejá sin texto médico
+                      las limitaciones y confirmá la corrección. Una respuesta de
+                      riesgo seguirá bloqueando la generación.
+                    </p>
+                    <label>
+                      <input
+                        type="checkbox"
+                        checked={safetyCorrectionConfirmed}
+                        onChange={(event) => {
+                          setSafetyCorrectionConfirmed(event.target.checked);
+                          setError(null);
+                        }}
+                      />
+                      Confirmo que la señal anterior fue una interpretación
+                      incorrecta y que ahora solicito una rutina general.
+                    </label>
+                  </div>
+                </div>
+              )}
               <div className={styles.safetyIntro}>
                 <ShieldCheck aria-hidden="true" />
                 <div>
@@ -745,21 +904,25 @@ export function GuidedRoutineBuilder({
                   key={key}
                   question={question}
                   value={safety[key]}
-                  onChange={(value) =>
-                    setSafety((current) => ({ ...current, [key]: value }))
-                  }
+                  onChange={(value) => {
+                    setSafety((current) => ({ ...current, [key]: value }));
+                    setSafetyCorrectionConfirmed(false);
+                    setError(null);
+                  }}
                 />
               ))}
               <label className={styles.confirmation}>
                 <input
                   type="checkbox"
                   checked={safety.confirmedCurrentStatus}
-                  onChange={(event) =>
+                  onChange={(event) => {
                     setSafety((current) => ({
                       ...current,
                       confirmedCurrentStatus: event.target.checked,
-                    }))
-                  }
+                    }));
+                    setSafetyCorrectionConfirmed(false);
+                    setError(null);
+                  }}
                 />
                 Confirmo que estas respuestas describen mi situación actual.
               </label>
@@ -866,7 +1029,7 @@ export function GuidedRoutineBuilder({
               type="button"
               className="button button-primary"
               disabled={!canContinue}
-              onClick={() => setStep(step + 1)}
+              onClick={confirmCurrentStep}
             >
               Continuar <ArrowRight aria-hidden="true" size={17} />
             </button>

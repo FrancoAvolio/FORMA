@@ -12,7 +12,10 @@ import {
   detectLimitationsDeclaration,
   detectSafetyReasonCodes,
 } from "../../domain/safety/detect-safety-text";
-import type { SafetyReasonCode } from "../../domain/safety/schemas";
+import type {
+  SafetyAssessment,
+  SafetyReasonCode,
+} from "../../domain/safety/schemas";
 import type { z } from "zod";
 
 type SafetySignal = z.output<typeof SafetySignalSchema>;
@@ -86,6 +89,7 @@ export function reconcileParsedTurnSafety(
 export function deriveAssistantSafetyResult(
   confirmation: LimitationsConfirmation,
   safetySignals: readonly SafetySignal[],
+  assessment: SafetyAssessment | null = null,
 ): AssistantSafetyResult {
   const signals = SafetySignalsListSchema.parse(safetySignals);
   if (signals.length > 0) {
@@ -94,5 +98,31 @@ export function deriveAssistantSafetyResult(
   if (confirmation === "confirmed_none") {
     return { status: "clear", signals: [], generationAllowed: true };
   }
+  if (
+    confirmation !== "not_confirmed" &&
+    assessment?.allowed === true &&
+    assessment.classification === "eligible" &&
+    assessment.reasonCodes.length === 0
+  ) {
+    return { status: "clear", signals: [], generationAllowed: true };
+  }
   return { status: "needs_review", signals: [], generationAllowed: false };
+}
+
+/**
+ * A previous conversational warning can be cleared only by an explicit manual
+ * correction after the complete domain screening is eligible. This avoids a
+ * permanent dead end without letting a partial form or model output erase it.
+ */
+export function resolveSafetySignalsAfterManualReview(
+  safetySignals: readonly SafetySignal[],
+  assessment: SafetyAssessment,
+  correctionConfirmed: boolean,
+): SafetySignal[] {
+  const signals = SafetySignalsListSchema.parse(safetySignals);
+  const eligible =
+    assessment.allowed &&
+    assessment.classification === "eligible" &&
+    assessment.reasonCodes.length === 0;
+  return correctionConfirmed && eligible ? [] : [...signals];
 }

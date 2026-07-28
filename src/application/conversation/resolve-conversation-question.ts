@@ -70,6 +70,7 @@ export function resolveConversationQuestion(options: {
   plan: RoutinePlan | null;
   catalog: readonly CatalogExercise[];
   activeExercise?: ConversationExerciseTarget | null;
+  activeDayId?: string | null;
 }): ConversationQuestionResolution {
   const normalized = normalizeDomainText(options.message);
   if (!options.plan || normalized.length === 0) return { kind: "unknown" };
@@ -97,13 +98,53 @@ export function resolveConversationQuestion(options: {
         normalizeDomainText(right.exercise.name).length -
         normalizeDomainText(left.exercise.name).length,
     )[0];
+  const scopeToActiveDay =
+    /\b(este dia|dia actual|este entrenamiento)\b/u.test(normalized) &&
+    options.activeDayId;
+  const scopedPlacements = scopeToActiveDay
+    ? placements.filter((placement) => placement.dayId === options.activeDayId)
+    : placements;
+  const ignoredTokens = new Set([
+    "este",
+    "esta",
+    "ejercicio",
+    "movimiento",
+    "porque",
+    "pusiste",
+    "elegiste",
+    "explicame",
+    "trabaja",
+    "como",
+    "hacer",
+  ]);
+  const queryTokens = normalized
+    .split(/\s+/u)
+    .filter((token) => token.length >= 4 && !ignoredTokens.has(token));
+  const partialMatches = named
+    ? []
+    : scopedPlacements.filter(({ exercise }) => {
+        const searchable = [
+          exercise.name,
+          exercise.sourceName ?? "",
+          ...exercise.aliases,
+        ]
+          .map(normalizeDomainText)
+          .join(" ");
+        return queryTokens.some((token) =>
+          searchable.split(/\s+/u).some((word) => word === token),
+        );
+      });
+  const partial = partialMatches.length === 1 ? partialMatches[0] : null;
   const resolvedQuestionKind = questionKind(normalized);
   const contextualLanguage =
     /este ejercicio|ese ejercicio|este movimiento|por que lo|como lo/u.test(
       normalized,
     ) || resolvedQuestionKind === "alternatives";
-  const target = named
-    ? { exerciseId: named.exerciseId, dayId: named.dayId }
+  const target = named || partial
+    ? {
+        exerciseId: (named ?? partial)!.exerciseId,
+        dayId: (named ?? partial)!.dayId,
+      }
     : contextualLanguage && options.activeExercise
       ? options.activeExercise
       : null;

@@ -165,13 +165,13 @@ export const ComposeAssistantResponseInputDataSchema = z
     }
     if (
       value.safetyResult.status === "clear" &&
-      value.limitationsConfirmation !== "confirmed_none"
+      value.limitationsConfirmation === "not_confirmed"
     ) {
       context.addIssue({
         code: "custom",
         path: ["limitationsConfirmation"],
         message:
-          "La seguridad clara requiere una declaración explícita sin limitaciones.",
+          "La seguridad clara requiere una revisión explícita del estado actual.",
       });
     }
   });

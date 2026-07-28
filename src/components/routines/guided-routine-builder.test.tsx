@@ -4,6 +4,7 @@ import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/re
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { RoutineRequest } from "@/domain/profile/routine-request";
+import { createEmptyRoutineRequestDraft } from "@/domain/profile/routine-draft";
 import type { RoutinePlan } from "@/domain/routine/schemas";
 import { evaluateRoutineSafety } from "@/domain/safety/evaluate-safety";
 import type { SafetyScreening } from "@/domain/safety/schemas";
@@ -19,9 +20,13 @@ const { generateRoutineUseCaseMock, pushMock } = vi.hoisted(() => ({
   pushMock: vi.fn(),
 }));
 
-vi.mock("@/application/routines", () => ({
-  generateRoutineUseCase: generateRoutineUseCaseMock,
-}));
+vi.mock("@/application/routines", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@/application/routines")>();
+  return {
+    ...actual,
+    generateRoutineUseCase: generateRoutineUseCaseMock,
+  };
+});
 
 vi.mock("next/navigation", () => ({
   useRouter: () => ({ push: pushMock }),
@@ -152,7 +157,7 @@ afterEach(() => {
 });
 
 describe("GuidedRoutineBuilder canonical persistence", () => {
-  it("hydrates chat-derived request and safety, then patches only form-owned state", async () => {
+  it("hydrates chat state and removes a plan that no longer matches a manual edit", async () => {
     await seedCanonicalState();
 
     render(
@@ -178,8 +183,7 @@ describe("GuidedRoutineBuilder canonical persistence", () => {
       expect(canonical.requestDraft.goal).toBe("hypertrophy");
       expect(canonical.messages).toEqual(messages);
       expect(canonical.providerState).toEqual(providerState);
-      expect(canonical.currentRoutine?.plan).toEqual(plan);
-      expect(canonical.currentRoutine?.request.goal).toBe("strength");
+      expect(canonical.currentRoutine).toBeNull();
     });
 
     continueToStep(5);
@@ -201,7 +205,41 @@ describe("GuidedRoutineBuilder canonical persistence", () => {
       expect(canonical.safety.result?.allowed).toBe(false);
       expect(canonical.messages).toEqual(messages);
       expect(canonical.providerState).toEqual(providerState);
-      expect(canonical.currentRoutine?.plan).toEqual(plan);
+      expect(canonical.currentRoutine).toBeNull();
+    });
+  });
+
+  it("does not promote visual defaults into a partial draft merely by opening the form", async () => {
+    const repository = createBrowserRoutineRepository();
+    await repository.updateRoutineConversationState({
+      requestDraft: {
+        ...createEmptyRoutineRequestDraft(),
+        goal: "strength",
+        daysPerWeek: 4,
+      },
+      limitationsConfirmation: "not_confirmed",
+    });
+
+    render(
+      <GuidedRoutineBuilder catalog={[]} datasetVersion="test-dataset" />,
+    );
+    await waitFor(() =>
+      expect(screen.getByRole("button", { name: /Fuerza/ })).toHaveAttribute(
+        "aria-pressed",
+        "true",
+      ),
+    );
+    await waitFor(async () => {
+      const canonical = await repository.loadRoutineConversationState();
+      expect(canonical.requestDraft).toMatchObject({
+        goal: "strength",
+        daysPerWeek: 4,
+        experience: null,
+        sessionMinutes: null,
+        trainingLocation: null,
+        availableEquipment: [],
+      });
+      expect(canonical.completionPercentage).toBe(33);
     });
   });
 
@@ -225,10 +263,10 @@ describe("GuidedRoutineBuilder canonical persistence", () => {
     });
   });
 
-  it("preserves chat safety signals and refuses to bypass them through the form", async () => {
+  it("keeps a chat safety signal when the manual review still reports risk", async () => {
     await seedCanonicalState({
       currentPlan: null,
-      safetySignals: ["pregnancy_specific"],
+      safetySignals: ["recent_injury"],
     });
 
     render(
@@ -241,7 +279,25 @@ describe("GuidedRoutineBuilder canonical persistence", () => {
         "true",
       ),
     );
-    continueToStep(6);
+    continueToStep(5);
+    expect(
+      screen.getByText("El chat marcó un posible límite de seguridad."),
+    ).toBeVisible();
+    for (const answer of screen.getAllByRole("radio", { name: "No" })) {
+      fireEvent.click(answer);
+    }
+    fireEvent.click(screen.getAllByRole("radio", { name: "Sí" })[1]!);
+    fireEvent.click(
+      screen.getByRole("checkbox", {
+        name: /Confirmo que estas respuestas describen mi situación actual/,
+      }),
+    );
+    fireEvent.click(
+      screen.getByRole("checkbox", {
+        name: /señal anterior fue una interpretación incorrecta/,
+      }),
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Continuar" }));
     fireEvent.click(screen.getByRole("button", { name: /Generar rutina/ }));
 
     expect(screen.getByRole("alert")).toHaveTextContent(
@@ -250,10 +306,54 @@ describe("GuidedRoutineBuilder canonical persistence", () => {
     expect(generateRoutineUseCaseMock).not.toHaveBeenCalled();
     const canonical =
       await createBrowserRoutineRepository().loadRoutineConversationState();
-    expect(canonical.safety.signals).toEqual(["pregnancy_specific"]);
+    expect(canonical.safety.signals).toEqual(["recent_injury"]);
     expect(canonical.currentRoutine).toBeNull();
     expect(canonical.messages).toEqual(messages);
     expect(canonical.providerState).toEqual(providerState);
+  });
+
+  it("clears a false-positive chat signal only after a complete explicit review", async () => {
+    await seedCanonicalState({
+      currentPlan: null,
+      safetySignals: ["recent_injury"],
+    });
+    generateRoutineUseCaseMock.mockReturnValue({ ok: true, plan });
+
+    render(
+      <GuidedRoutineBuilder catalog={[]} datasetVersion="test-dataset" />,
+    );
+    await waitFor(() =>
+      expect(screen.getByRole("button", { name: /Fuerza/ })).toHaveAttribute(
+        "aria-pressed",
+        "true",
+      ),
+    );
+    continueToStep(5);
+    for (const answer of screen.getAllByRole("radio", { name: "No" })) {
+      fireEvent.click(answer);
+    }
+    fireEvent.click(
+      screen.getByRole("checkbox", {
+        name: /Confirmo que estas respuestas describen mi situación actual/,
+      }),
+    );
+    fireEvent.click(
+      screen.getByRole("checkbox", {
+        name: /señal anterior fue una interpretación incorrecta/,
+      }),
+    );
+
+    await waitFor(async () => {
+      const canonical =
+        await createBrowserRoutineRepository().loadRoutineConversationState();
+      expect(canonical.safety.signals).toEqual([]);
+      expect(canonical.safety.result?.allowed).toBe(true);
+    });
+
+    fireEvent.click(screen.getByRole("button", { name: "Continuar" }));
+    fireEvent.click(screen.getByRole("button", { name: /Generar rutina/ }));
+    await waitFor(() => expect(generateRoutineUseCaseMock).toHaveBeenCalled());
+    await waitFor(() => expect(pushMock).toHaveBeenCalledWith("/rutina"));
   });
 
   it("stores deterministic generation in the same currentRoutine snapshot", async () => {

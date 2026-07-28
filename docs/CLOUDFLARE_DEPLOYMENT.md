@@ -42,7 +42,8 @@ manual.
 The package pins the OpenNext build-only `@node-minify/core` dependency to compatible v8.0.6. The
 pin is not application runtime logic and must be retained until the upstream OpenNext dependency
 range makes it unnecessary. The same recorded validation run reported zero production dependency
-vulnerabilities with `npm audit --omit=dev`; detailed development-tool advisory context remains in
+vulnerabilities with `npm audit --omit=dev`; the full audit's ESLint and OpenNext build-chain
+advisories are development/packaging-only context retained in
 [`SECURITY_REVIEW.md`](SECURITY_REVIEW.md).
 
 ## Manual prerequisites

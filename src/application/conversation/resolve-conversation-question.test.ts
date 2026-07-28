@@ -94,6 +94,26 @@ describe("resolveConversationQuestion", () => {
     });
   });
 
+  it("resolves a short exercise token inside the active day", () => {
+    const renamedCatalog = catalog.map((candidate) =>
+      candidate.id === exercise.id
+        ? { ...candidate, name: "Remo con cable" }
+        : candidate,
+    );
+    expect(
+      resolveConversationQuestion({
+        message: "Explicame por qué pusiste remo en este día",
+        plan,
+        catalog: renamedCatalog,
+        activeDayId: "day-1",
+      }),
+    ).toMatchObject({
+      kind: "exercise",
+      questionKind: "selection_reason",
+      target: { exerciseId: exercise.id, dayId: "day-1" },
+    });
+  });
+
   it("recognizes a full-routine explanation question", () => {
     expect(
       resolveConversationQuestion({

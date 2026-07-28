@@ -5,6 +5,7 @@ vi.mock("server-only", () => ({}));
 import { AiProviderError, toAiFallbackState } from "../errors";
 import { MockAiProvider } from "../providers/mock-provider";
 import { describeAiProviderContract } from "../test-support/provider-contract";
+import { modificationInput } from "../test-support/fixtures";
 
 describeAiProviderContract("Mock", () => new MockAiProvider());
 
@@ -52,6 +53,10 @@ describe("MockAiProvider scenarios", () => {
       expected: { intent: "modify_routine", requestPatch: {} },
     },
     {
+      message: "No quiero usar barra",
+      expected: { intent: "modify_routine", requestPatch: {} },
+    },
+    {
       message: "¿Por qué pusiste este ejercicio?",
       expected: { intent: "ask_question", requestPatch: {} },
     },
@@ -86,6 +91,54 @@ describe("MockAiProvider scenarios", () => {
       limitationsConfirmation: "unknown",
     });
     expect(Object.keys(result.requestPatch)).toEqual(["daysPerWeek"]);
+  });
+
+  it("parses subtractive equipment and one-day shortening as typed changes", async () => {
+    const provider = new MockAiProvider();
+    await expect(
+      provider.parseRoutineModification({
+        ...modificationInput,
+        message: "No quiero usar barra.",
+      }),
+    ).resolves.toMatchObject({
+      status: "ready",
+      modification: { kind: "exclude_equipment", equipment: ["barbell"] },
+    });
+    await expect(
+      provider.parseRoutineModification({
+        ...modificationInput,
+        message: "Hacé Torso A más corto.",
+      }),
+    ).resolves.toMatchObject({
+      status: "ready",
+      modification: {
+        kind: "shorten_day",
+        dayId: "day-1",
+        targetMinutes: null,
+      },
+    });
+    await expect(
+      provider.parseRoutineModification({
+        ...modificationInput,
+        message:
+          "Cambiame el press inclinado con mancuernas por uno con máquina.",
+      }),
+    ).resolves.toMatchObject({
+      status: "ready",
+      modification: {
+        kind: "replace_exercise",
+        requestedAlternative: "uno con maquina.",
+      },
+    });
+    await expect(
+      provider.parseRoutineModification({
+        ...modificationInput,
+        message: "Sacame un ejercicio de biceps.",
+      }),
+    ).resolves.toMatchObject({
+      status: "ready",
+      modification: { kind: "remove_one_by_muscle", muscle: "biceps" },
+    });
   });
 
   it.each([

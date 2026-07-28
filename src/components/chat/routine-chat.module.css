@@ -510,6 +510,33 @@
   min-width: 0;
 }
 
+.routineSafetyHold {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+  border: 1px solid #e8c18f;
+  background: var(--color-warning-soft);
+  padding: var(--space-4);
+  color: var(--color-warning);
+}
+
+.routineSafetyHold > svg {
+  flex: 0 0 auto;
+}
+
+.routineSafetyHold strong,
+.routineSafetyHold p {
+  display: block;
+  margin: 0;
+}
+
+.routineSafetyHold p {
+  margin-top: var(--space-1);
+  color: var(--color-body);
+  line-height: 1.5;
+}
+
 .trustNote {
   display: flex;
   max-width: 54rem;

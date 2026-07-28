@@ -1,7 +1,9 @@
 import type { CatalogExercise } from "../../domain/exercises/catalog-exercise";
 import {
   hasTextMatch,
+  normalizeDomainText,
   normalizeEquipment,
+  normalizeMuscle,
 } from "../../domain/exercises/normalization";
 import {
   RoutineRequestSchema,
@@ -33,6 +35,7 @@ export type ConversationRoutineModification =
       requestedAlternative: string | null;
     }
   | { kind: "remove_exercise"; dayId: string; exerciseId: string }
+  | { kind: "remove_one_by_muscle"; muscle: string }
   | {
       kind: "reorder_exercise";
       dayId: string;
@@ -78,6 +81,42 @@ function alternativeMatches(
   exercise: CatalogExercise,
   requestedAlternative: string,
 ): boolean {
+  const normalized = normalizeDomainText(requestedAlternative);
+  const requestedEquipment: string[] = [];
+  if (/\b(polea|poleas|cable|cables)\b/u.test(normalized)) {
+    requestedEquipment.push("cable");
+  }
+  if (/\b(mancuerna|mancuernas|dumbbell|dumbbells)\b/u.test(normalized)) {
+    requestedEquipment.push("dumbbell");
+  }
+  if (/\b(barra|barbell)\b/u.test(normalized)) requestedEquipment.push("barbell");
+  if (/\b(smith|maquina smith)\b/u.test(normalized)) {
+    requestedEquipment.push("smith_machine");
+  } else if (/\b(maquina|maquinas|machine|machines)\b/u.test(normalized)) {
+    requestedEquipment.push("machine");
+  }
+  if (/\b(pesa rusa|pesas rusas|kettlebell|kettlebells)\b/u.test(normalized)) {
+    requestedEquipment.push("kettlebell");
+  }
+  if (/\b(banda|bandas|band|bands)\b/u.test(normalized)) {
+    requestedEquipment.push("resistance_band");
+  }
+  if (requestedEquipment.length > 0) {
+    const candidateEquipment = new Set(exercise.equipment.map(normalizeEquipment));
+    return requestedEquipment.some((equipment) =>
+      candidateEquipment.has(normalizeEquipment(equipment)),
+    );
+  }
+
+  const specificAlternative = normalized
+    .replace(
+      /\b(por|uno|una|un|otro|otra|ejercicio|movimiento|alternativa|opcion|compatible|que|sea)\b/gu,
+      " ",
+    )
+    .replace(/\s+/gu, " ")
+    .trim();
+  if (specificAlternative.length === 0) return true;
+
   return hasTextMatch(
     [
       exercise.id,
@@ -88,7 +127,7 @@ function alternativeMatches(
       ...exercise.primaryMuscles,
       exercise.movementPattern,
     ],
-    [requestedAlternative],
+    [specificAlternative],
   );
 }
 
@@ -163,6 +202,57 @@ export function applyConversationRoutineModification(
         "exercise",
         `Quité ${exercise?.name ?? "el ejercicio"} y la rutina sigue dentro de las reglas.`,
       );
+    }
+    case "remove_one_by_muscle": {
+      const requestedMuscle = normalizeMuscle(modification.muscle);
+      const candidates = input.plan.days.flatMap((day) =>
+        day.exercises.flatMap((prescribed) => {
+          const exercise = input.catalog.find(
+            (candidate) => candidate.id === prescribed.exerciseId,
+          );
+          if (!exercise) return [];
+          const muscles = [
+            ...exercise.primaryMuscles,
+            ...exercise.secondaryMuscles,
+          ].map(normalizeMuscle);
+          return muscles.includes(requestedMuscle)
+            ? [{ dayId: day.id, exerciseId: exercise.id, name: exercise.name }]
+            : [];
+        }),
+      );
+      if (candidates.length === 0) {
+        return {
+          ok: false,
+          code: "NO_MATCHING_EXERCISE",
+          message: `No encontramos un ejercicio de ${modification.muscle} en la rutina actual.`,
+        };
+      }
+
+      // Try the last matching placement first: this preserves the earliest,
+      // usually highest-priority movement while letting the validator decide
+      // whether each candidate can be removed safely.
+      for (const candidate of [...candidates].reverse()) {
+        const mutation = removeRoutineExercise({
+          ...common,
+          dayId: candidate.dayId,
+          exerciseId: candidate.exerciseId,
+        });
+        if (mutation.ok) {
+          return {
+            ok: true,
+            request: input.request,
+            plan: mutation.plan,
+            changedScope: "exercise",
+            summary: `Quité ${candidate.name}, un ejercicio de ${modification.muscle}, y volví a validar la rutina completa.`,
+          };
+        }
+      }
+      return {
+        ok: false,
+        code: "INVALID_MUTATION",
+        message:
+          "No se puede quitar un ejercicio de ese músculo sin romper las reglas de la rutina.",
+      };
     }
     case "reorder_exercise": {
       const day = input.plan.days.find(

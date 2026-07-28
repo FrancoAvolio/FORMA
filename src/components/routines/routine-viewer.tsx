@@ -29,6 +29,7 @@ import {
   replaceRoutineExercise,
   type RoutineMutationResult,
 } from "@/application/routines";
+import { deriveAssistantSafetyResult } from "@/application/conversation";
 import { ExerciseThumbnail } from "@/components/exercises/exercise-thumbnail";
 import type { CatalogExercise } from "@/domain/exercises/catalog-exercise";
 import { rirToRpe } from "@/domain/routine/engine/assign-prescription";
@@ -63,15 +64,24 @@ export function RoutineViewer({
     null,
   );
   const [saved, setSaved] = useState(false);
+  const [safetyBlocked, setSafetyBlocked] = useState(false);
   const byId = useMemo(
     () => new Map(catalog.map((exercise) => [exercise.id, exercise])),
     [catalog],
   );
 
   useEffect(() => {
-    void createBrowserRoutineRepository()
-      .loadCurrentRoutine()
-      .then((loaded) => {
+    const repository = createBrowserRoutineRepository();
+    void Promise.all([
+      repository.loadCurrentRoutine(),
+      repository.loadRoutineConversationState(),
+    ]).then(([loaded, conversation]) => {
+        const assistantSafety = deriveAssistantSafetyResult(
+          conversation.limitationsConfirmation,
+          conversation.safety.signals,
+          conversation.safety.result,
+        );
+        setSafetyBlocked(Boolean(loaded && !assistantSafety.generationAllowed));
         setCurrent(loaded);
         setActiveDayId(loaded?.plan.days[0]?.id ?? null);
       });
@@ -128,6 +138,13 @@ export function RoutineViewer({
   );
 
   const persistMutation = async (result: RoutineMutationResult) => {
+    if (safetyBlocked) {
+      setMessage({
+        kind: "error",
+        text: "Las acciones están pausadas hasta completar la revisión de seguridad.",
+      });
+      return;
+    }
     if (!result.ok) {
       setMessage({ kind: "error", text: result.message });
       return;
@@ -151,6 +168,7 @@ export function RoutineViewer({
   };
 
   const save = async () => {
+    if (safetyBlocked) return;
     await createBrowserRoutineRepository().save(
       current.request,
       current.plan,
@@ -161,6 +179,7 @@ export function RoutineViewer({
   };
 
   const duplicate = async () => {
+    if (safetyBlocked) return;
     const copy: RoutinePlan = {
       ...current.plan,
       id: "routine-copy-" + crypto.randomUUID(),
@@ -217,12 +236,22 @@ export function RoutineViewer({
           <Link className="button button-quiet" href="/crear">
             <Pencil aria-hidden="true" size={17} /> Editar perfil
           </Link>
-          <button className="button button-primary" type="button" onClick={() => void save()}>
+          <button className="button button-primary" type="button" onClick={() => void save()} disabled={safetyBlocked}>
             {saved ? <Check aria-hidden="true" size={17} /> : <Save aria-hidden="true" size={17} />}
             {saved ? "Guardada" : "Guardar"}
           </button>
         </div>
       </header>
+
+      {safetyBlocked ? (
+        <div className={styles.errorMessage} role="status">
+          <CircleAlert aria-hidden="true" />
+          <span>
+            Rutina conservada como referencia. Guardar, modificar y reemplazar
+            están pausados hasta revisar las señales de seguridad en el formulario.
+          </span>
+        </div>
+      ) : null}
 
       <section className={styles.summary} aria-label="Resumen de la rutina">
         <div>
@@ -284,6 +313,7 @@ export function RoutineViewer({
             <button
               type="button"
               className="button button-quiet"
+              disabled={safetyBlocked}
               onClick={() =>
                 void persistMutation(
                   regenerateRoutineDay({
@@ -309,7 +339,7 @@ export function RoutineViewer({
                     <span>{String(index + 1).padStart(2, "0")}</span>
                     <button
                       type="button"
-                      disabled={index === 0}
+                      disabled={safetyBlocked || index === 0}
                       onClick={() =>
                         void persistMutation(
                           reorderRoutineExercise({
@@ -326,7 +356,7 @@ export function RoutineViewer({
                     </button>
                     <button
                       type="button"
-                      disabled={index === activeDay.exercises.length - 1}
+                      disabled={safetyBlocked || index === activeDay.exercises.length - 1}
                       onClick={() =>
                         void persistMutation(
                           reorderRoutineExercise({
@@ -392,12 +422,14 @@ export function RoutineViewer({
                       </Link>
                       <button
                         type="button"
+                        disabled={safetyBlocked}
                         onClick={() => openReplacement(activeDay.id, exercise.id)}
                       >
                         <Repeat2 aria-hidden="true" /> Reemplazar
                       </button>
                       <PrescriptionEditor
                         prescribed={prescribed}
+                        disabled={safetyBlocked}
                         onApply={(patch) =>
                           void persistMutation(
                             editRoutineExercisePrescription({
@@ -412,6 +444,7 @@ export function RoutineViewer({
                       <button
                         type="button"
                         className={styles.remove}
+                        disabled={safetyBlocked}
                         onClick={() => {
                           if (!window.confirm("¿Querés quitar este ejercicio del día?")) return;
                           void persistMutation(
@@ -446,6 +479,7 @@ export function RoutineViewer({
                                 <li key={option.id}>
                                   <button
                                     type="button"
+                                    disabled={safetyBlocked}
                                     onClick={() =>
                                       void persistMutation(
                                         replaceRoutineExercise({
@@ -539,7 +573,7 @@ export function RoutineViewer({
       </div>
 
       <footer className={styles.footerActions}>
-        <button className="button button-secondary" type="button" onClick={() => void duplicate()}>
+        <button className="button button-secondary" type="button" onClick={() => void duplicate()} disabled={safetyBlocked}>
           <Copy aria-hidden="true" size={17} /> Duplicar rutina
         </button>
         <Link className="button button-quiet" href="/crear/chat">
@@ -553,6 +587,7 @@ export function RoutineViewer({
 function PrescriptionEditor({
   prescribed,
   onApply,
+  disabled = false,
 }: {
   prescribed: RoutineExercise;
   onApply: (patch: {
@@ -561,6 +596,7 @@ function PrescriptionEditor({
     restSeconds: number;
     rir: number | null;
   }) => void;
+  disabled?: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const [sets, setSets] = useState(prescribed.sets);
@@ -570,7 +606,7 @@ function PrescriptionEditor({
 
   if (!open) {
     return (
-      <button type="button" onClick={() => setOpen(true)}>
+      <button type="button" disabled={disabled} onClick={() => setOpen(true)}>
         <Pencil aria-hidden="true" /> Editar series
       </button>
     );
@@ -615,6 +651,7 @@ function PrescriptionEditor({
       </label>
       <button
         type="button"
+        disabled={disabled}
         onClick={() => {
           onApply({ sets, repPrescription: repetitions, restSeconds: rest, rir });
           setOpen(false);

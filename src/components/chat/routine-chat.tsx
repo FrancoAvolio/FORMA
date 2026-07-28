@@ -99,6 +99,25 @@ function serverDesktopProfile(): boolean {
   return false;
 }
 
+function matchesSavedSnapshot(
+  current: {
+    request: unknown;
+    plan: unknown;
+    safetyScreening: unknown;
+  },
+  saved: {
+    request: unknown;
+    plan: unknown;
+    safetyScreening: unknown;
+  },
+): boolean {
+  return (
+    JSON.stringify(current.request) === JSON.stringify(saved.request) &&
+    JSON.stringify(current.plan) === JSON.stringify(saved.plan) &&
+    JSON.stringify(current.safetyScreening) === JSON.stringify(saved.safetyScreening)
+  );
+}
+
 const SUGGESTIONS = [
   "Quiero ganar músculo",
   "Soy intermedio y entreno cuatro días",
@@ -341,7 +360,7 @@ function composeContext(options: {
   if (!options.safety.generationAllowed) {
     allowedNextActions.unshift("review_safety");
   }
-  if (options.plan) {
+  if (options.plan && options.safety.generationAllowed) {
     allowedNextActions.unshift(
       "show_routine",
       "modify_routine",
@@ -510,10 +529,15 @@ export function RoutineChat({
       conversationRef.current = state;
       setConversation(state);
       setActiveDayId(state.currentRoutine?.plan.days[0]?.id ?? null);
+      const savedRoutine = state.currentRoutine
+        ? routines.find((routine) => routine.id === state.currentRoutine?.plan.id)
+        : null;
       setSaved(
-        state.currentRoutine
-          ? routines.some((routine) => routine.id === state.currentRoutine?.plan.id)
-          : false,
+        Boolean(
+          state.currentRoutine &&
+            savedRoutine &&
+            matchesSavedSnapshot(state.currentRoutine, savedRoutine),
+        ),
       );
       if (state.providerState.status === "error") {
         setFallback({
@@ -634,16 +658,26 @@ export function RoutineChat({
       const safetySignals = [
         ...new Set([...baseState.safety.signals, ...result.safetySignals]),
       ];
+      const retainedSafetyAssessment =
+        parsedTurn.limitationsConfirmation === "unknown" &&
+        Object.keys(parsedTurn.requestPatch).length === 0 &&
+        result.safetySignals.length === 0 &&
+        baseState.safety.screening
+          ? baseState.safety.result
+          : null;
       const assistantSafety = deriveAssistantSafetyResult(
         result.limitationsConfirmation,
         safetySignals,
+        retainedSafetyAssessment,
       );
       const completeRequest = toCompleteRoutineRequest(
         result.requestDraft,
         result.limitationsConfirmation,
       );
       const screening = assistantSafety.generationAllowed
-        ? clearSafetyScreening()
+        ? result.limitationsConfirmation === "confirmed_none"
+          ? clearSafetyScreening()
+          : baseState.safety.screening
         : null;
       const safetyAssessment =
         completeRequest && screening
@@ -826,12 +860,17 @@ export function RoutineChat({
       }
 
       let exerciseResponseContext: unknown;
-      if (result.intent === "ask_question" && currentRoutine) {
+      if (
+        result.intent === "ask_question" &&
+        currentRoutine &&
+        assistantSafety.generationAllowed
+      ) {
         const resolution = resolveConversationQuestion({
           message: text,
           plan: currentRoutine.plan,
           catalog,
           activeExercise: explicitExerciseTarget ?? activeExercise,
+          activeDayId,
         });
         if (resolution.kind === "routine_explanation" && validatedPlan) {
           setActivity("Explicando las decisiones validadas…");
@@ -884,6 +923,7 @@ export function RoutineChat({
       const latestSafety = deriveAssistantSafetyResult(
         latestState.limitationsConfirmation,
         latestState.safety.signals,
+        latestState.safety.result,
       );
       const context = composeContext({
         result,
@@ -900,6 +940,7 @@ export function RoutineChat({
       );
     },
     [
+      activeDayId,
       activeExercise,
       appendAssistant,
       catalog,
@@ -1045,10 +1086,11 @@ export function RoutineChat({
   );
   const currentRoutine = conversation?.currentRoutine ?? null;
   const assistantSafety = conversation
-    ? deriveAssistantSafetyResult(
-        conversation.limitationsConfirmation,
-        conversation.safety.signals,
-      )
+      ? deriveAssistantSafetyResult(
+          conversation.limitationsConfirmation,
+          conversation.safety.signals,
+          conversation.safety.result,
+        )
     : null;
   const showSuggestions =
     Boolean(conversation) &&
@@ -1415,6 +1457,19 @@ export function RoutineChat({
 
         {currentRoutine ? (
           <div className={styles.inlineRoutine} data-testid="inline-routine">
+            {!assistantSafety?.generationAllowed ? (
+              <div className={styles.routineSafetyHold} role="status">
+                <ShieldAlert aria-hidden="true" />
+                <div>
+                  <strong>Rutina conservada, acciones pausadas</strong>
+                  <p>
+                    Podés revisar el plan como referencia, pero guardar, abrir,
+                    explicar o modificar queda deshabilitado hasta completar la
+                    revisión de seguridad.
+                  </p>
+                </div>
+              </div>
+            ) : null}
             <ConversationRoutinePreview
               plan={currentRoutine.plan}
               catalog={catalog}
@@ -1422,14 +1477,18 @@ export function RoutineChat({
               activeDayId={activeDayId}
               onActiveDayChange={setActiveDayId}
               saved={saved}
-              actions={{
-                onSave: () => void saveRoutine(),
-                onOpenRoutine: () => router.push("/rutina"),
-                onExplainRoutine: () =>
-                  void submitText("¿Por qué organizaste así mi rutina?"),
-                onExplainExercise: explainExercise,
-                onReplaceExercise: prepareReplacement,
-              }}
+              actions={
+                assistantSafety?.generationAllowed
+                  ? {
+                      onSave: () => void saveRoutine(),
+                      onOpenRoutine: () => router.push("/rutina"),
+                      onExplainRoutine: () =>
+                        void submitText("¿Por qué organizaste así mi rutina?"),
+                      onExplainExercise: explainExercise,
+                      onReplaceExercise: prepareReplacement,
+                    }
+                  : undefined
+              }
             />
           </div>
         ) : null}

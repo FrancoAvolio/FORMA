@@ -129,11 +129,21 @@ export function detectLimitationsDeclaration(
   }
 
   const normalized = normalizeDomainText(text);
-  const explicitAllClear = [
-    /no tengo (ningun |ninguna )?(dolor|lesion|lesiones|limitacion|limitaciones|restriccion|restricciones)/,
-    /sin (dolor|lesiones|limitaciones|restricciones)( ni (dolor|lesiones|limitaciones|restricciones))?/,
-    /ninguna lesion ni restriccion/,
-  ].some((pattern) => pattern.test(normalized));
+  const hasExplicitDenial = /\b(no tengo|sin|ningun|ninguna)\b/u.test(
+    normalized,
+  );
+  const hasContradiction =
+    /\b(pero|aunque|tuve|tengo una|tengo un|siento)\b/u.test(normalized);
+  const deniesPainOrInjury = /\b(?:dolor|lesion|lesiones)\b/u.test(normalized);
+  const deniesBroadRestrictions =
+    /\b(?:limitacion|limitaciones|restriccion|restricciones)\b/u.test(
+      normalized,
+    );
+  const explicitAllClear =
+    hasExplicitDenial &&
+    !hasContradiction &&
+    deniesPainOrInjury &&
+    deniesBroadRestrictions;
 
   return explicitAllClear ? "no_limitations" : "unknown";
 }

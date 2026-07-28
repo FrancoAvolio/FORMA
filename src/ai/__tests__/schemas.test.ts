@@ -101,6 +101,18 @@ describe("AI structured schemas", () => {
     expect(schema.safeParse(command("invented-day")).success).toBe(false);
   });
 
+  it("accepts a muscle-scoped removal without allowing model-selected IDs", () => {
+    const schema = createRoutineModificationResultSchema(
+      ParseRoutineModificationInputDataSchema.parse(modificationInput),
+    );
+    expect(
+      schema.safeParse({
+        ...modificationResult,
+        modification: { kind: "remove_one_by_muscle", muscle: "biceps" },
+      }).success,
+    ).toBe(true);
+  });
+
   it("prevents model output from dropping deterministic safety signals", () => {
     const schema = createSafetyClassificationSchema(["recent_injury"]);
     expect(

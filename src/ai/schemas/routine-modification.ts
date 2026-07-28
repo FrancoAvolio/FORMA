@@ -96,6 +96,13 @@ const RemoveExerciseModificationSchema = z
   })
   .strict();
 
+const RemoveOneByMuscleModificationSchema = z
+  .object({
+    kind: z.literal("remove_one_by_muscle"),
+    muscle: z.string().trim().min(2).max(80),
+  })
+  .strict();
+
 const ReorderExerciseModificationSchema = z
   .object({
     kind: z.literal("reorder_exercise"),
@@ -138,6 +145,7 @@ export const RoutineModificationSchema = z.discriminatedUnion("kind", [
   UpdateRequestModificationSchema,
   ReplaceExerciseModificationSchema,
   RemoveExerciseModificationSchema,
+  RemoveOneByMuscleModificationSchema,
   ReorderExerciseModificationSchema,
   RegenerateDayModificationSchema,
   ShortenDayModificationSchema,

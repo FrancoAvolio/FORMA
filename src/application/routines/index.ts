@@ -2,5 +2,6 @@ export * from "./edit-routine";
 export * from "./apply-conversation-modification";
 export * from "./generate-routine";
 export * from "./regenerate-day";
+export * from "./reconcile-current-routine";
 export * from "./replace-exercise";
 export * from "./types";

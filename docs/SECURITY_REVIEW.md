@@ -47,13 +47,13 @@ Review date: 2026-07-25
 overrides for Next's PostCSS/sharp chain and OpenNext's build-only minifier. Both the Next.js
 production build and OpenNext build are required after those overrides.
 
-The complete development audit currently reports high-severity denial-of-service advisories in
-the ESLint 9 / `eslint-config-next` plugin chain through legacy `minimatch`/`brace-expansion`.
-Those packages process repository-controlled lint globs and are absent from the deployed
-runtime. ESLint 10 contains the core fix, but the current Next ESLint plugins still declare
-peers only through ESLint 9; forcing the major produces an invalid dependency graph. Keep the
-latest compatible versions, do not lint attacker-controlled glob patterns, and recheck when the
-plugins publish ESLint 10 support.
+The complete development/build audit currently reports high-severity denial-of-service advisories
+in both the ESLint 9 / `eslint-config-next` plugin chain and OpenNext's build-only minifier chain
+through legacy `glob`/`minimatch`/`brace-expansion`. Those packages process repository-controlled
+paths and are absent from the deployed runtime. ESLint 10 and newer OpenNext transitive versions
+are not currently drop-in upgrades: forcing them breaks peer contracts or the Cloudflare build.
+Keep the latest compatible versions, do not process attacker-controlled paths, and recheck when
+upstream support lands.
 
 Commands retained as release evidence:
 

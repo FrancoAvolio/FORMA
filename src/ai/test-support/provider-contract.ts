@@ -66,6 +66,13 @@ export function describeAiProviderContract(
       const result = await createProvider().explainPlan(explanationInput);
       expect(result.length).toBeGreaterThan(0);
       expect(result.length).toBeLessThanOrEqual(2_000);
+      const normalized = result.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase();
+      expect(
+        normalized.includes("press inclinado") ||
+          normalized.includes("mancuernas") ||
+          normalized.includes("equipamiento") ||
+          normalized.includes("rir"),
+      ).toBe(true);
     });
   });
 }

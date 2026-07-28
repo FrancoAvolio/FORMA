@@ -268,6 +268,42 @@
   padding-top: var(--space-6);
 }
 
+.signalCorrection {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-3);
+  border: 1px solid #e8c18f;
+  background: var(--color-warning-soft);
+  padding: var(--space-4);
+  color: var(--color-warning);
+}
+
+.signalCorrection > svg {
+  margin-top: 0.15rem;
+}
+
+.signalCorrection strong,
+.signalCorrection p {
+  display: block;
+  margin: 0;
+}
+
+.signalCorrection p {
+  margin-top: var(--space-1);
+  color: var(--color-body);
+  line-height: 1.5;
+}
+
+.signalCorrection label {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+  color: var(--color-brand);
+  font-weight: 650;
+  line-height: 1.45;
+}
+
 .safetyIntro {
   display: flex;
   gap: var(--space-3);

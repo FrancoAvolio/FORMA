@@ -210,7 +210,15 @@ export async function runAiProviderContractProbe(
           question: "¿Por qué se eligió este ejercicio?",
           locale: "es-AR",
         });
-        return result.length > 0 && result.length <= 2_000;
+        const normalized = result.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase();
+        return (
+          result.length > 0 &&
+          result.length <= 2_000 &&
+          (normalized.includes("press inclinado") ||
+            normalized.includes("mancuernas") ||
+            normalized.includes("equipamiento") ||
+            normalized.includes("rir"))
+        );
       },
     },
   ];

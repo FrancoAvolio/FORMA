@@ -20,10 +20,11 @@ Respondé un único objeto JSON que cumpla exactamente el JSON Schema adjunto, s
 
 VALORES PERMITIDOS
 status: ready | needs_clarification | unsupported.
-kind: update_request | replace_exercise | remove_exercise | reorder_exercise | regenerate_day | shorten_day | exclude_equipment.
+kind: update_request | replace_exercise | remove_exercise | remove_one_by_muscle | reorder_exercise | regenerate_day | shorten_day | exclude_equipment.
 
 REGLAS
 - Para cambiar, quitar o mover un ejercicio, copiá exactamente el dayId y exerciseId de la misma ubicación del contexto.
+- Para quitar un solo ejercicio de un músculo, usá remove_one_by_muscle con el nombre del músculo pedido; la aplicación elegirá de forma determinista un ejercicio presente y volverá a validar.
 - Para regenerar un día, copiá exactamente un dayId del contexto.
 - Para acortar un solo día, usá shorten_day con su dayId. targetMinutes es el número explícito o null si sólo pide que sea más corto.
 - Para dejar de usar material, usá exclude_equipment con sólo los tokens canónicos nombrados: barbell, dumbbell, cable, machine, smith_machine, kettlebell, resistance_band, bench o pull_up_bar.
@@ -41,6 +42,7 @@ EJEMPLOS
 3) "Sacá ese ejercicio" con más de un candidato -> needs_clarification, sin modificación.
 4) "Hacé el día de piernas más corto" -> shorten_day para ese dayId, targetMinutes=null.
 5) "No quiero usar barra" -> exclude_equipment con equipment=["barbell"].
+6) "Sacame un ejercicio de bíceps" -> remove_one_by_muscle con muscle="biceps".
 `.trim(),
   examples: [
     {
@@ -62,6 +64,10 @@ EJEMPLOS
     {
       input: "No quiero usar barra.",
       output: "exclude_equipment con equipment=[barbell].",
+    },
+    {
+      input: "Sacame un ejercicio de bíceps.",
+      output: "remove_one_by_muscle con muscle=biceps.",
     },
   ],
 };

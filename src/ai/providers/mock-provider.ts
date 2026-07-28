@@ -3,6 +3,7 @@ import "server-only";
 import { z } from "zod";
 
 import { composeAssistantFallback } from "../../application/conversation/assistant-response-fallback";
+import { detectLimitationsDeclaration } from "../../domain/safety/detect-safety-text";
 import type { AiProvider } from "../ai-provider";
 import { AiProviderError, type AiErrorCode } from "../errors";
 import { AI_LIMITS } from "../limits";
@@ -117,6 +118,47 @@ function unique(values: readonly string[]): string[] {
   return [...new Set(values)];
 }
 
+function equipmentMentions(value: string): string[] {
+  const equipment: string[] = [];
+  if (value.includes("mancuerna")) equipment.push("dumbbell");
+  if (value.includes("barra")) equipment.push("barbell");
+  if (includesAny(value, ["polea", "cable"])) equipment.push("cable");
+  if (includesAny(value, ["maquina", "maquinas"])) equipment.push("machine");
+  if (value.includes("smith")) equipment.push("smith_machine");
+  if (includesAny(value, ["pesa rusa", "kettlebell"])) equipment.push("kettlebell");
+  if (value.includes("banda")) equipment.push("resistance_band");
+  if (includesAny(value, ["peso corporal", "sin equipo"])) {
+    equipment.push("body_weight");
+  }
+  return unique(equipment);
+}
+
+function excludedEquipmentMentions(value: string): string[] {
+  const excluded: string[] = [];
+  const excludes = (term: string) =>
+    new RegExp(
+      `(?:no quiero (?:usar|entrenar con)|evit\\w*|sin(?: usar)?)\\s+(?:la |las |el |los )?${term}\\b`,
+    ).test(value);
+
+  if (excludes("(?:barra|barbell)")) excluded.push("barbell");
+  if (excludes("(?:mancuerna|mancuernas|dumbbells?)")) excluded.push("dumbbell");
+  if (excludes("(?:polea|poleas|cables?)")) excluded.push("cable");
+  if (excludes("(?:maquina|maquinas|machines?)")) excluded.push("machine");
+  if (excludes("(?:smith|maquina smith)")) excluded.push("smith_machine");
+  if (excludes("(?:pesa rusa|pesas rusas|kettlebells?)")) excluded.push("kettlebell");
+  if (excludes("(?:banda|bandas|bands?)")) excluded.push("resistance_band");
+  return unique(excluded);
+}
+
+function requestedMuscleForRemoval(value: string): string | null {
+  if (!includesAny(value, ["saca", "sacame", "quita", "elimina"])) return null;
+  if (!includesAny(value, ["ejercicio", "movimiento"])) return null;
+  const match = value.match(
+    /\b(?:de|del)\s+(biceps|triceps|pecho|espalda|hombros?|gluteos?|cuadriceps|isquiotibiales|gemelos|pantorrillas|core|abdominales?)\b/u,
+  );
+  return match?.[1] ?? null;
+}
+
 function detectSafetySignals(value: string): SafetySignal[] {
   const signals: SafetySignal[] = [];
   if (includesAny(value, ["me lesione", "lesion reciente", "lesionado ayer"])) {
@@ -183,13 +225,10 @@ function parseMockTurn(input: ParsedTurnInput): ParsedRoutineTurn {
     requestPatch.trainingLocation = "commercial_gym";
   }
 
-  const equipment: string[] = [];
-  if (text.includes("mancuerna")) equipment.push("dumbbell");
-  if (text.includes("barra")) equipment.push("barbell");
-  if (includesAny(text, ["polea", "cable"])) equipment.push("cable");
-  if (includesAny(text, ["maquina", "maquinas"])) equipment.push("machine");
-  if (text.includes("banda")) equipment.push("resistance_band");
-  if (includesAny(text, ["peso corporal", "sin equipo"])) equipment.push("body_weight");
+  const excludedEquipment = excludedEquipmentMentions(text);
+  const equipment = equipmentMentions(text).filter(
+    (item) => !excludedEquipment.includes(item),
+  );
   if (equipment.length > 0) {
     requestPatch.availableEquipment = unique(equipment);
   }
@@ -219,16 +258,7 @@ function parseMockTurn(input: ParsedTurnInput): ParsedRoutineTurn {
 
   let limitationsConfirmation: ParsedRoutineTurn["limitationsConfirmation"] =
     "unknown";
-  if (
-    includesAny(text, [
-      "no tengo dolor",
-      "sin dolor ni restricciones",
-      "no tengo lesiones",
-      "sin limitaciones",
-      "ninguna lesion ni restriccion",
-      "no tengo ninguna lesion",
-    ])
-  ) {
+  if (detectLimitationsDeclaration(input.message) === "no_limitations") {
     limitationsConfirmation = "no_limitations";
     requestPatch.limitations = [];
   }
@@ -246,7 +276,9 @@ function parseMockTurn(input: ParsedTurnInput): ParsedRoutineTurn {
     "sacame",
     "quita el",
     "regenera el dia",
-  ]);
+    "mas corto",
+    "acorta el dia",
+  ]) || excludedEquipment.length > 0;
   const correction = includesAny(text, [
     "en realidad",
     "mejor quiero",
@@ -323,6 +355,20 @@ function parseMockModification(
     };
   }
 
+  const excludedEquipment = excludedEquipmentMentions(text);
+  if (excludedEquipment.length > 0) {
+    return {
+      status: "ready",
+      modification: {
+        kind: "exclude_equipment",
+        equipment: excludedEquipment,
+      },
+      clarificationQuestion: null,
+      safetySignals: [],
+      assumptions: [],
+    };
+  }
+
   if (text.includes("priorizar") && text.includes("espalda")) {
     return {
       status: "ready",
@@ -339,6 +385,51 @@ function parseMockModification(
   const exercises = input.plan.days.flatMap((day) =>
     day.exercises.map((exercise) => ({ ...exercise, dayId: day.dayId })),
   );
+
+  const muscleToRemove = requestedMuscleForRemoval(text);
+  if (muscleToRemove) {
+    return {
+      status: "ready",
+      modification: {
+        kind: "remove_one_by_muscle",
+        muscle: muscleToRemove,
+      },
+      clarificationQuestion: null,
+      safetySignals: [],
+      assumptions: [],
+    };
+  }
+
+  if (includesAny(text, ["mas corto", "acorta el dia", "acortar el dia"])) {
+    const matchingDays = input.plan.days.filter((day) => {
+      const dayName = normalized(day.name);
+      if (text.includes(dayName)) return true;
+      return dayName
+        .split(/\s+/u)
+        .filter((word) => word.length >= 4)
+        .some((word) => text.includes(word));
+    });
+    if (matchingDays.length === 1) {
+      return {
+        status: "ready",
+        modification: {
+          kind: "shorten_day",
+          dayId: matchingDays[0]!.dayId,
+          targetMinutes: null,
+        },
+        clarificationQuestion: null,
+        safetySignals: [],
+        assumptions: [],
+      };
+    }
+    return {
+      status: "needs_clarification",
+      modification: null,
+      clarificationQuestion: "¿Qué día querés acortar?",
+      safetySignals: [],
+      assumptions: [],
+    };
+  }
   const matches = exercises.filter((exercise) => {
     const name = normalized(exercise.displayName);
     return text.includes(name) || name.split(" ").every((word) => text.includes(word));
@@ -352,7 +443,8 @@ function parseMockModification(
           kind: "replace_exercise",
           dayId: matches[0]!.dayId,
           exerciseId: matches[0]!.exerciseId,
-          requestedAlternative: null,
+          requestedAlternative:
+            text.match(/\bpor\s+(.+)$/u)?.[1]?.trim() || null,
         },
         clarificationQuestion: null,
         safetySignals: [],
@@ -661,7 +753,10 @@ export class MockAiProvider implements AiProvider {
       typeof override === "function"
         ? override(parsed.data)
         : (override ??
-          `La rutina ${parsed.data.plan.title} fue validada con ${parsed.data.plan.days.length} días. Las decisiones de ejercicios, volumen y duración provienen del motor determinístico.`);
+          (() => {
+            const firstExercise = parsed.data.plan.days[0]?.exercises[0];
+            return `La rutina ${parsed.data.plan.title} fue validada con ${parsed.data.plan.days.length} días. ${firstExercise?.displayName ?? "Los ejercicios"} se mantuvo por ${firstExercise?.selectionReasons[0] ?? "compatibilidad con el equipamiento"}. Las decisiones de volumen y duración provienen del motor determinístico.`;
+          })());
     if (typeof output !== "string" || output.trim().length === 0) {
       throw new AiProviderError("invalid_output", {
         provider: this.id,

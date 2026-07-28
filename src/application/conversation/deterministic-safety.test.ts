@@ -4,6 +4,7 @@ import { createEmptyRoutineRequestDraft } from "../../domain/profile/routine-dra
 import {
   deriveAssistantSafetyResult,
   reconcileParsedTurnSafety,
+  resolveSafetySignalsAfterManualReview,
 } from "./deterministic-safety";
 
 const neutralTurn = {
@@ -49,6 +50,22 @@ describe("deterministic conversational safety", () => {
     });
   });
 
+  it("does not treat denial of only pain as a complete safety screening", () => {
+    const result = reconcileParsedTurnSafety(neutralTurn, "No tengo dolor");
+
+    expect(result.limitationsConfirmation).toBe("unknown");
+    expect(result.safetySignals).toEqual([]);
+  });
+
+  it("does not synthesize injury and restriction answers from pain and symptoms", () => {
+    const result = reconcileParsedTurnSafety(
+      neutralTurn,
+      "No tengo dolor ni síntomas",
+    );
+
+    expect(result.limitationsConfirmation).toBe("unknown");
+  });
+
   it("discards model-only signals caused by explicitly negated safety terms", () => {
     const result = reconcileParsedTurnSafety(
       {
@@ -70,5 +87,51 @@ describe("deterministic conversational safety", () => {
       status: "needs_review",
       generationAllowed: false,
     });
+  });
+
+  it("honors an eligible domain assessment with explicit concrete limitations", () => {
+    expect(
+      deriveAssistantSafetyResult("confirmed_with_limitations", [], {
+        allowed: true,
+        classification: "eligible",
+        reasonCodes: [],
+        message: "Restricciones concretas validadas.",
+      }),
+    ).toEqual({
+      status: "clear",
+      signals: [],
+      generationAllowed: true,
+    });
+  });
+
+  it("clears a prior warning only after an explicit eligible manual review", () => {
+    const eligible = {
+      allowed: true,
+      classification: "eligible" as const,
+      reasonCodes: [],
+      message: "Revisión completa.",
+    };
+
+    expect(
+      resolveSafetySignalsAfterManualReview(
+        ["recent_injury"],
+        eligible,
+        false,
+      ),
+    ).toEqual(["recent_injury"]);
+    expect(
+      resolveSafetySignalsAfterManualReview(
+        ["recent_injury"],
+        eligible,
+        true,
+      ),
+    ).toEqual([]);
+    expect(
+      resolveSafetySignalsAfterManualReview(
+        ["recent_injury"],
+        { ...eligible, allowed: false, classification: "professional_guidance_required" },
+        true,
+      ),
+    ).toEqual(["recent_injury"]);
   });
 });
