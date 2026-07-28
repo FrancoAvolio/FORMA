@@ -264,6 +264,55 @@ test("the Mock conversation builds, modifies, explains, saves, and restores a ro
   expect(await inlineExerciseNames(restoredRoutine)).toEqual(modifiedExercises);
 });
 
+test("a safety-only follow-up preserves the exact requested profile and builds the routine", async ({
+  page,
+}) => {
+  test.slow();
+  await page.goto("/crear/chat");
+  await expect(chatComposer(page)).toBeVisible({ timeout: 30_000 });
+
+  const profileReply = await sendChatMessage(
+    page,
+    "Quiero una rutina de hipertrofia. Soy intermedio, quiero entrenar cuatro días por semana, una hora por sesión, en un gimnasio completo. Quiero priorizar espalda y bíceps.",
+  );
+  await expect(profileReply).toContainText("hipertrofia");
+  await expect(profileReply).toContainText("nivel intermedio");
+  await expect(profileReply).toContainText("4 días por semana");
+  await expect(profileReply).toContainText("gimnasio comercial");
+  await expect(profileReply).toContainText("espalda y bíceps");
+  await expect(profileReply).not.toContainText(/glúteos|sin equipo/i);
+  await expect(page.getByTestId("chat-profile-progress")).toHaveText("83%");
+
+  const profile = page.locator("details").filter({
+    has: page.getByText("Tu punto de partida", { exact: true }),
+  });
+  await profile.locator("summary").click();
+  await expect(profile.getByText("Intermedio", { exact: true })).toBeVisible();
+  await expect(profile.getByText("4 días", { exact: true })).toBeVisible();
+  await expect(profile.getByText("60 minutos", { exact: true })).toBeVisible();
+  await expect(
+    profile.getByText("Gimnasio completo", { exact: true }),
+  ).toBeVisible();
+  await expect(profile.getByText("Espalda, Bíceps", { exact: true })).toBeVisible();
+
+  const completionReply = await sendChatMessage(
+    page,
+    "No tengo dolor al moverme, lesiones recientes, operaciones recientes, restricciones médicas, síntomas durante el ejercicio ni indicaciones profesionales que afecten mi entrenamiento.",
+    60_000,
+  );
+  await expect(completionReply).toContainText(/validado|validada|Armé/i);
+  await expect(page.getByTestId("chat-profile-progress")).toHaveText("100%");
+  await expect(page.getByTestId("inline-routine")).toBeVisible({
+    timeout: 30_000,
+  });
+  await expect(
+    page.getByText(
+      "El catálogo compatible no alcanza para completar todos los días sin duplicar ejercicios.",
+      { exact: true },
+    ),
+  ).toHaveCount(0);
+});
+
 test("provider failure preserves the request and offers the guided fallback", async ({
   page,
 }) => {

@@ -148,19 +148,21 @@ OpenNext preview connected to the intended account:
 npm run preview:cloudflare
 ```
 
-Then exercise the displayed preview URL through `/crear/chat` and the bounded APIs. Repeat the six
+Then exercise the displayed preview URL through `/crear/chat` and the bounded APIs. Repeat the seven
 semantic behaviors used by the provider contract:
 
 1. A complete request returns a valid latest-turn delta and the deterministic engine shows a
    validated routine inline.
 2. An incomplete request produces only the delta; application code derives the actual missing
    fields and asks at most two focused questions.
-3. A greeting produces a natural bounded response without modifying the profile.
-4. A change names an existing placement and deterministic modification code applies and validates
+3. A safety-only follow-up preserves every explicit profile field from the preceding turn and can
+   complete deterministic generation.
+4. A greeting produces a natural bounded response without modifying the profile.
+5. A change names an existing placement and deterministic modification code applies and validates
    it without regenerating unaffected days.
-5. Recent-injury text remains blocked by deterministic safety even if provider output is less
+6. Recent-injury text remains blocked by deterministic safety even if provider output is less
    conservative.
-6. Routine/exercise questions contain only validated plan/catalog facts and visible media
+7. Routine/exercise questions contain only validated plan/catalog facts and visible media
    attribution.
 
 Also verify response-composition fallback, quota/rate/binding errors, preserved conversation state,

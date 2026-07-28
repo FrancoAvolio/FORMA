@@ -16,6 +16,94 @@ const QUESTION_COPY: Record<RequiredRoutineField, string> = {
     "¿Dónde vas a entrenar y con qué equipamiento contás?",
 };
 
+const GOAL_COPY = {
+  hypertrophy: "hipertrofia",
+  strength: "fuerza",
+  general_fitness: "estado físico general",
+  muscular_endurance: "resistencia muscular",
+} as const;
+
+const EXPERIENCE_COPY = {
+  beginner: "nivel principiante",
+  intermediate: "nivel intermedio",
+  advanced: "nivel avanzado",
+} as const;
+
+const MUSCLE_COPY: Readonly<Record<string, string>> = {
+  back: "espalda",
+  lats: "dorsales",
+  chest: "pecho",
+  shoulders: "hombros",
+  biceps: "bíceps",
+  triceps: "tríceps",
+  legs: "piernas",
+  quadriceps: "cuádriceps",
+  quads: "cuádriceps",
+  hamstrings: "isquiotibiales",
+  glutes: "glúteos",
+  calves: "gemelos",
+  core: "zona media",
+  abs: "abdominales",
+};
+
+const EQUIPMENT_COPY: Readonly<Record<string, string>> = {
+  body_weight: "peso corporal",
+  dumbbell: "mancuernas",
+  barbell: "barra",
+  cable: "poleas",
+  machine: "máquinas",
+  smith_machine: "máquina Smith",
+  kettlebell: "pesas rusas",
+  resistance_band: "bandas",
+  bench: "banco",
+  pull_up_bar: "barra de dominadas",
+};
+
+function joinedList(values: readonly string[]): string {
+  if (values.length <= 1) return values[0] ?? "";
+  return `${values.slice(0, -1).join(", ")} y ${values.at(-1)}`;
+}
+
+function profileAcknowledgement(
+  context: ValidatedAssistantResponseContext,
+): string {
+  const draft = context.canonicalDraft;
+  const facts: string[] = [];
+  if (draft.goal) facts.push(`objetivo de ${GOAL_COPY[draft.goal]}`);
+  if (draft.experience) facts.push(EXPERIENCE_COPY[draft.experience]);
+  if (draft.daysPerWeek) facts.push(`${draft.daysPerWeek} días por semana`);
+  if (draft.sessionMinutes) {
+    facts.push(`sesiones de ${draft.sessionMinutes} minutos`);
+  }
+  if (draft.trainingLocation === "commercial_gym") {
+    facts.push("entrenamiento en gimnasio comercial");
+  } else if (draft.trainingLocation === "home") {
+    facts.push("entrenamiento en casa");
+  } else if (draft.trainingLocation === "custom") {
+    facts.push("un espacio de entrenamiento personalizado");
+  }
+  if (draft.availableEquipment.length > 0) {
+    facts.push(
+      `equipamiento: ${joinedList(
+        draft.availableEquipment.map(
+          (item) => EQUIPMENT_COPY[item] ?? item,
+        ),
+      )}`,
+    );
+  }
+  if (draft.focusMuscles.length > 0) {
+    facts.push(
+      `prioridad en ${joinedList(
+        draft.focusMuscles.map((item) => MUSCLE_COPY[item] ?? item),
+      )}`,
+    );
+  }
+
+  return facts.length > 0
+    ? `Registré ${joinedList(facts)}.`
+    : "Perfecto, guardé lo que me contaste.";
+}
+
 function allowed(
   context: ValidatedAssistantResponseContext,
   action: ValidatedAssistantResponseContext["allowedNextActions"][number],
@@ -100,11 +188,7 @@ export function composeAssistantFallback(
       : "Hola. Contame cómo querés entrenar y voy a ordenar tus preferencias paso a paso.";
   }
 
-  const acknowledged = context.canonicalDraft.focusMuscles[0]
-    ? `Registré que querés priorizar ${context.canonicalDraft.focusMuscles.join(", ")}.`
-    : context.canonicalDraft.daysPerWeek
-      ? `Registré que querés entrenar ${context.canonicalDraft.daysPerWeek} días por semana.`
-      : "Perfecto, guardé lo que me contaste.";
+  const acknowledged = profileAcknowledgement(context);
   return questions.length > 0
     ? `${acknowledged} ${questions}`
     : acknowledged;

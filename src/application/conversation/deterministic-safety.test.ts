@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { createEmptyRoutineRequestDraft } from "../../domain/profile/routine-draft";
+import { applyParsedRoutineTurn } from "./routine-turn-state";
 import {
   deriveAssistantSafetyResult,
   reconcileParsedTurnSafety,
@@ -70,7 +71,7 @@ describe("deterministic conversational safety", () => {
     const result = reconcileParsedTurnSafety(
       {
         ...neutralTurn,
-        limitationsConfirmation: "no_limitations",
+        limitationsConfirmation: "has_limitations",
         safetySignals: ["recent_injury", "pain_during_movement"],
       },
       "No tengo dolor, lesiones, s\u00edntomas ni restricciones",
@@ -89,6 +90,110 @@ describe("deterministic conversational safety", () => {
     expect(result.intent).toBe("provide_information");
     expect(result.safetySignals).toEqual([]);
     expect(result.limitationsConfirmation).toBe("no_limitations");
+  });
+
+  it("drops unrelated model fields from a safety-only turn and preserves the profile", () => {
+    const profile = {
+      ...createEmptyRoutineRequestDraft(),
+      goal: "hypertrophy" as const,
+      experience: "intermediate" as const,
+      daysPerWeek: 4,
+      sessionMinutes: 60,
+      trainingLocation: "commercial_gym" as const,
+      focusMuscles: ["back", "biceps"],
+    };
+    const message =
+      "No tengo dolor al moverme, lesiones recientes, operaciones recientes, restricciones médicas, síntomas durante el ejercicio ni indicaciones profesionales que afecten mi entrenamiento.";
+    const reconciled = reconcileParsedTurnSafety(
+      {
+        intent: "modify_profile",
+        requestPatch: {
+          goal: "general_fitness",
+          experience: "advanced",
+          daysPerWeek: 5,
+          sessionMinutes: 60,
+          trainingLocation: "home",
+          availableEquipment: [],
+          focusMuscles: [],
+          excludedExercises: [],
+          excludedMovementPatterns: [],
+          preferredExercises: [],
+          limitations: [],
+        },
+        limitationsConfirmation: "no_limitations",
+        safetySignals: [
+          "pain_during_movement",
+          "recent_injury",
+          "recent_operation",
+          "medical_restriction",
+          "symptoms_during_exercise",
+        ],
+        assumptions: [],
+      },
+      message,
+      { hasCurrentRoutine: false },
+    );
+    const applied = applyParsedRoutineTurn(
+      profile,
+      "not_confirmed",
+      reconciled,
+    );
+
+    expect(reconciled).toMatchObject({
+      intent: "provide_information",
+      requestPatch: {},
+      limitationsConfirmation: "no_limitations",
+      safetySignals: [],
+    });
+    expect(applied.requestDraft).toEqual(profile);
+    expect(applied.limitationsConfirmation).toBe("confirmed_none");
+    expect(applied.status).toBe("complete");
+  });
+
+  it("corrects initial modify-routine intent while retaining explicitly supported fields", () => {
+    const message =
+      "Quiero una rutina de hipertrofia. Soy intermedio, quiero entrenar cuatro días por semana, una hora por sesión, en un gimnasio completo. Quiero priorizar espalda y bíceps.";
+    const result = reconcileParsedTurnSafety(
+      {
+        intent: "modify_routine",
+        requestPatch: {
+          goal: "hypertrophy",
+          experience: "intermediate",
+          daysPerWeek: 4,
+          sessionMinutes: 60,
+          trainingLocation: "commercial_gym",
+          focusMuscles: ["back", "biceps"],
+        },
+        limitationsConfirmation: "unknown",
+        safetySignals: [],
+        assumptions: [],
+      },
+      message,
+      { hasCurrentRoutine: false },
+    );
+
+    expect(result.intent).toBe("provide_information");
+    expect(result.requestPatch).toEqual({
+      goal: "hypertrophy",
+      experience: "intermediate",
+      daysPerWeek: 4,
+      sessionMinutes: 60,
+      trainingLocation: "commercial_gym",
+      focusMuscles: ["back", "biceps"],
+    });
+  });
+
+  it("does not rewrite routine-modification intent when routine state is unknown", () => {
+    const result = reconcileParsedTurnSafety(
+      {
+        ...neutralTurn,
+        intent: "modify_routine",
+        requestPatch: {},
+      },
+      "Cambiame el press inclinado",
+    );
+
+    expect(result.intent).toBe("modify_routine");
   });
 
   it("keeps an unconfirmed empty draft in review", () => {

@@ -73,14 +73,15 @@ export async function runAiProviderContractProbe(
     {
       name: "complete_request",
       run: async () => {
+        const message =
+          "Soy intermedio. Quiero hipertrofia cuatro días, 45 minutos por sesión, en gimnasio con mancuernas y máquinas. Evito peso muerto. Confirmo que no tengo dolor, lesiones, síntomas ni restricciones.";
         const turn = await provider.parseRoutineTurn({
-          message:
-            "Soy intermedio. Quiero hipertrofia cuatro días, 45 minutos por sesión, en gimnasio con mancuernas y máquinas. Evito peso muerto. Confirmo que no tengo dolor, lesiones, síntomas ni restricciones.",
+          message,
           locale: "es-AR",
         });
         const reconciledTurn = reconcileParsedTurnSafety(
           turn,
-          "No tengo dolor, lesiones, sintomas ni restricciones.",
+          message,
         );
         const result = applyParsedRoutineTurn(
           createEmptyRoutineRequestDraft(),
@@ -109,6 +110,58 @@ export async function runAiProviderContractProbe(
           turn,
         );
         return result.status === "needs_input" && result.missingFields.length > 0;
+      },
+    },
+    {
+      name: "multi_turn_profile_preservation",
+      run: async () => {
+        const profileMessage =
+          "Quiero una rutina de hipertrofia. Soy intermedio, quiero entrenar cuatro días por semana, una hora por sesión, en un gimnasio completo. Quiero priorizar espalda y bíceps.";
+        const profileTurn = reconcileParsedTurnSafety(
+          await provider.parseRoutineTurn({
+            message: profileMessage,
+            locale: "es-AR",
+          }),
+          profileMessage,
+          { hasCurrentRoutine: false },
+        );
+        const profileResult = applyParsedRoutineTurn(
+          createEmptyRoutineRequestDraft(),
+          "not_confirmed",
+          profileTurn,
+        );
+        const safetyMessage =
+          "No tengo dolor al moverme, lesiones recientes, operaciones recientes, restricciones médicas, síntomas durante el ejercicio ni indicaciones profesionales que afecten mi entrenamiento.";
+        const safetyTurn = reconcileParsedTurnSafety(
+          await provider.parseRoutineTurn({
+            message: safetyMessage,
+            currentDraft: profileResult.requestDraft,
+            currentLimitationsConfirmation:
+              profileResult.limitationsConfirmation,
+            locale: "es-AR",
+          }),
+          safetyMessage,
+          { hasCurrentRoutine: false },
+        );
+        const result = applyParsedRoutineTurn(
+          profileResult.requestDraft,
+          profileResult.limitationsConfirmation,
+          safetyTurn,
+        );
+
+        return (
+          result.status === "complete" &&
+          result.limitationsConfirmation === "confirmed_none" &&
+          result.requestDraft.goal === "hypertrophy" &&
+          result.requestDraft.experience === "intermediate" &&
+          result.requestDraft.daysPerWeek === 4 &&
+          result.requestDraft.sessionMinutes === 60 &&
+          result.requestDraft.trainingLocation === "commercial_gym" &&
+          result.requestDraft.availableEquipment.length === 0 &&
+          result.requestDraft.focusMuscles.length === 2 &&
+          result.requestDraft.focusMuscles.includes("back") &&
+          result.requestDraft.focusMuscles.includes("biceps")
+        );
       },
     },
     {

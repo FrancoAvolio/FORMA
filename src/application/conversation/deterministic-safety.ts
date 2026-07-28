@@ -2,6 +2,7 @@ import { AssistantSafetyResultSchema } from "../../ai/schemas/assistant-response
 import {
   ParsedRoutineTurnSchema,
   type ParsedRoutineTurn,
+  type RoutineRequestPatch,
 } from "../../ai/schemas/routine-request";
 import {
   SafetySignalsListSchema,
@@ -20,6 +21,54 @@ import type { z } from "zod";
 
 type SafetySignal = z.output<typeof SafetySignalSchema>;
 export type AssistantSafetyResult = z.output<typeof AssistantSafetyResultSchema>;
+
+type PatchField = keyof RoutineRequestPatch;
+
+const PROFILE_FIELD_EVIDENCE: Readonly<Record<PatchField, RegExp>> = {
+  goal:
+    /\b(?:objetivo|hipertrofi\w*|ganar (?:masa|musculo)|crecer|fuerza|resistencia muscular|estado fisico|acondicionamiento|fitness general)\b/u,
+  experience: /\b(?:experiencia|nivel|principiante|intermedio|avanzado)\b/u,
+  daysPerWeek:
+    /\b(?:(?:un|uno|dos|tres|cuatro|cinco|seis|[1-6])\s+(?:dias?|veces)|(?:dias?|veces)\s+(?:por|a la)\s+semana|semanal)\b/u,
+  sessionMinutes: /\b(?:minutos?|horas?|sesion|duracion|tiempo)\b/u,
+  trainingLocation:
+    /\b(?:gimnasio|gym|casa|hogar|domicilio|lugar|ubicacion|entreno en|entrenar en)\b/u,
+  availableEquipment:
+    /\b(?:equipo|equipamiento|material|mancuernas?|barra|barbell|poleas?|cables?|maquinas?|smith|kettlebells?|pesas? rusas?|bandas?|banco|peso corporal)\b/u,
+  focusMuscles:
+    /\b(?:prioriz|enfoc|pecho|espalda|dorsal|dorsales|hombros?|biceps|triceps|piernas?|gluteos?|cuadriceps|isquiotibiales|gemelos|pantorrillas|antebrazos?|abdominales|core)\b/u,
+  excludedExercises:
+    /\b(?:evit|exclu|no quiero (?:hacer|incluir)|sin hacer|sacar?|sacame|quit|elimin)\b/u,
+  excludedMovementPatterns:
+    /\b(?:evit|exclu|no quiero (?:hacer|incluir)|sin hacer)\b.*\b(?:empuje|tiron|traccion|sentadilla|bisagra|zancada|estocada|acarreo|core|aislamiento|cardio)\b/u,
+  preferredExercises:
+    /\b(?:prefier|preferid|quiero incluir|quiero hacer|me gusta)\b/u,
+  limitations:
+    /\b(?:dolor|lesion|operacion|cirugia|restriccion|limitacion|sintoma|indicacion profesional|rehabilit)\b/u,
+  notes: /\b(?:nota|aclaracion|tene en cuenta|ten en cuenta|anota|recorda)\b/u,
+};
+
+function reconcileRequestPatch(
+  requestPatch: RoutineRequestPatch,
+  rawMessage: string,
+  declaration: ReturnType<typeof detectLimitationsDeclaration>,
+): RoutineRequestPatch {
+  const normalized = rawMessage
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[_-]+/g, " ")
+    .replace(/[^a-z0-9\s]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+  const entries = Object.entries(requestPatch).filter(([field]) => {
+    if (field === "limitations" && declaration === "no_limitations") {
+      return false;
+    }
+    return PROFILE_FIELD_EVIDENCE[field as PatchField].test(normalized);
+  });
+  return Object.fromEntries(entries) as RoutineRequestPatch;
+}
 
 const REASON_TO_SIGNAL: Partial<Record<SafetyReasonCode, SafetySignal>> = {
   PAIN_DURING_MOVEMENT: "pain_during_movement",
@@ -60,10 +109,16 @@ export function detectDeterministicSafetySignals(message: string): SafetySignal[
 export function reconcileParsedTurnSafety(
   untrustedTurn: ParsedRoutineTurn,
   rawMessage: string,
+  options: { hasCurrentRoutine?: boolean } = {},
 ): ParsedRoutineTurn {
   const turn = ParsedRoutineTurnSchema.parse(untrustedTurn);
   const deterministicSignals = detectDeterministicSafetySignals(rawMessage);
   const deterministicDeclaration = detectLimitationsDeclaration(rawMessage);
+  const requestPatch = reconcileRequestPatch(
+    turn.requestPatch,
+    rawMessage,
+    deterministicDeclaration,
+  );
   const safetySignals = SafetySignalsListSchema.parse(
     deterministicDeclaration === "no_limitations" &&
       deterministicSignals.length === 0
@@ -71,16 +126,26 @@ export function reconcileParsedTurnSafety(
       : [...new Set([...deterministicSignals, ...turn.safetySignals])],
   );
   const limitationsConfirmation =
-    deterministicDeclaration === "has_limitations" ||
-    turn.limitationsConfirmation === "has_limitations"
+    deterministicDeclaration === "has_limitations"
       ? "has_limitations"
       : deterministicDeclaration === "no_limitations"
         ? "no_limitations"
-        : "unknown";
+        : turn.limitationsConfirmation === "has_limitations"
+          ? "has_limitations"
+          : "unknown";
+  const intent =
+    safetySignals.length > 0
+      ? "unsupported"
+      : options.hasCurrentRoutine === false &&
+          (Object.keys(requestPatch).length > 0 ||
+            limitationsConfirmation !== "unknown")
+        ? "provide_information"
+        : turn.intent;
 
   return ParsedRoutineTurnSchema.parse({
     ...turn,
-    intent: safetySignals.length > 0 ? "unsupported" : turn.intent,
+    intent,
+    requestPatch,
     limitationsConfirmation,
     safetySignals,
   });

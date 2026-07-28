@@ -228,7 +228,8 @@ require no local model, Cloudflare account, credentials, or paid inference.
 
 Recorded on 2026-07-28:
 
-- Real Ollama `qwen3:1.7b`: 6/6 semantic contract checks passed in one repetition.
+- Real Ollama `qwen3:1.7b`: 7/7 semantic contract checks passed in one repetition, including
+  preservation of an explicit profile across a separate safety-confirmation turn.
 - Ollama `qwen3:4b`: not installed and not downloaded automatically; no result is claimed.
 - Simulated Cloudflare binding: 11/11 tests passed without inference usage.
 - OpenNext build and Wrangler deployment dry-run passed, and the packaged artifact scan found zero

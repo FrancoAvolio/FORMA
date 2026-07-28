@@ -99,6 +99,27 @@ describe("routine engine with the generated curated catalog", () => {
     expect(result.ok, !result.ok ? JSON.stringify(result) : undefined).toBe(true);
   });
 
+  it("supports the exact chat profile with commercial-gym defaults", () => {
+    const result = generateRoutine({
+      request: createRoutineRequest({
+        goal: "hypertrophy",
+        experience: "intermediate",
+        daysPerWeek: 4,
+        sessionMinutes: 60,
+        trainingLocation: "commercial_gym",
+        availableEquipment: [],
+        focusMuscles: ["back", "biceps"],
+      }),
+      safetyScreening: CLEAR_SAFETY_SCREENING,
+      catalog,
+      datasetVersion: "7455efae",
+      seed: "reported-chat-profile",
+    });
+
+    expect(result.ok, !result.ok ? JSON.stringify(result) : undefined).toBe(true);
+    if (result.ok) expect(result.validation.valid).toBe(true);
+  });
+
   it("supports a two-day bodyweight-only beginner routine", () => {
     const result = generateRoutine({
       request: createRoutineRequest({

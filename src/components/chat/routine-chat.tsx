@@ -596,6 +596,12 @@ export function RoutineChat({
       context: ValidatedAssistantResponseContext,
       signal: AbortSignal,
     ): Promise<{ message: string; providerError: AiFallbackState | null }> => {
+      if (!context.validatedPlan && !context.exerciseContext) {
+        return {
+          message: composeAssistantFallback(context),
+          providerError: null,
+        };
+      }
       try {
         const payload = await postApi<
           SuccessfulEnvelope & {
@@ -649,6 +655,7 @@ export function RoutineChat({
       const parsedTurn = reconcileParsedTurnSafety(
         ParsedRoutineTurnSchema.parse(interpreted.turn),
         text,
+        { hasCurrentRoutine: Boolean(baseState.currentRoutine) },
       );
       const result = applyParsedRoutineTurn(
         baseState.requestDraft,
@@ -824,7 +831,6 @@ export function RoutineChat({
           seed: createRoutineSeed(now(), crypto.randomUUID()),
         });
         if (!generated.ok) {
-          setGenerationError(generated.message);
           return appendAssistant(
             working,
             `Guardé tu perfil, pero no pude construir una rutina válida todavía: ${generated.message}`,

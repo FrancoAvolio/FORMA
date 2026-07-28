@@ -139,7 +139,7 @@ Closing validation evidence for this refactor (2026-07-28, Node 22 wrapper):
 
 - `npm run validate`: passed immutable Stitch references (11 files), UTF-8 (235 files), the
   1,324-record source dataset, 156 curated generation records, 1,324 media relationships,
-  generated artifacts, typecheck, lint, 27 Vitest files/211 tests, Next production build, and
+  generated artifacts, typecheck, lint, 27 Vitest files/217 tests, Next production build, and
   the post-build media scan.
 - `npm run test:e2e:all`: desktop/mobile Playwright passed 17 tests with 3 intentional skips;
   the disabled-media fixture passed separately (1 test). These cover chat-first generation,
@@ -148,8 +148,15 @@ Closing validation evidence for this refactor (2026-07-28, Node 22 wrapper):
 - `npm run test:cloudflare`: 2 files/11 tests passed. `npm run build:cloudflare` and
   `wrangler deploy --dry-run` passed with the AI binding, Granite model configuration, and
   production media disabled; `npm run validate:media` remained binary-free after packaging.
-- Real Ollama contract probe passed all 6 checks with the installed `qwen3:1.7b` model at one
-  repetition. `qwen3:4b` remains an explicit operator opt-in and was not downloaded.
+- Real Ollama contract probe passed all 7 checks with the installed `qwen3:1.7b` model at one
+  repetition, including the reported two-turn profile/safety conversation. `qwen3:4b` remains an
+  explicit operator opt-in and was not downloaded.
+- Hardened latest-turn reconciliation so model fields without evidence in the current user message
+  cannot overwrite the canonical profile. Profile acknowledgements before generation are now
+  deterministic, commercial-gym defaults are not described as "sin equipo", and generation errors
+  are rendered only once.
+- The exact reported browser conversation passed on desktop and mobile with Mock AI and on desktop
+  against the running local Ollama configuration; each run reached a validated four-day routine.
 - `npm audit --omit=dev --audit-level=high` reported zero production vulnerabilities. The full
   audit reports 13 high-severity development/build-chain advisories (ESLint and OpenNext
   minifier transitive paths), documented in `docs/KNOWN_LIMITATIONS.md` and

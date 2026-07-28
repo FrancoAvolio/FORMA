@@ -43,6 +43,34 @@ describe("deterministic assistant fallback", () => {
     expect(message).not.toContain("equipamiento");
   });
 
+  it("acknowledges the canonical profile without inventing equipment or priorities", () => {
+    const message = composeAssistantFallback({
+      ...baseContext,
+      latestIntent: "provide_information",
+      canonicalDraft: {
+        ...createEmptyRoutineRequestDraft(),
+        goal: "hypertrophy",
+        experience: "intermediate",
+        daysPerWeek: 4,
+        sessionMinutes: 60,
+        trainingLocation: "commercial_gym",
+        focusMuscles: ["back", "biceps"],
+      },
+      missingFields: ["limitationsConfirmation"],
+      completionPercentage: 83,
+      focusedQuestionFields: ["limitationsConfirmation"],
+    });
+
+    expect(message).toContain("hipertrofia");
+    expect(message).toContain("nivel intermedio");
+    expect(message).toContain("4 días por semana");
+    expect(message).toContain("60 minutos");
+    expect(message).toContain("gimnasio comercial");
+    expect(message).toContain("espalda y bíceps");
+    expect(message).not.toContain("glúteos");
+    expect(message).not.toContain("sin equipo");
+  });
+
   it("uses only grounded exercise facts for an exercise question", () => {
     const message = composeAssistantFallback({
       ...baseContext,

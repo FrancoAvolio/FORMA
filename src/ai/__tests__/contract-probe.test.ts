@@ -9,11 +9,12 @@ it("runs the opt-in provider contract probe without external usage in tests", as
   const report = await runAiProviderContractProbe(new MockAiProvider(), {
     repetitions: 1,
   });
+  expect(report.checks.filter((check) => !check.passed)).toEqual([]);
   expect(report).toMatchObject({
     provider: "mock",
     model: "deterministic-fixture-v1",
     repetitions: 1,
     passed: true,
   });
-  expect(report.checks).toHaveLength(6);
+  expect(report.checks).toHaveLength(7);
 });
