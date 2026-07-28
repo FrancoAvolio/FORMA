@@ -81,6 +81,16 @@ describe("deterministic conversational safety", () => {
     expect(result.limitationsConfirmation).toBe("no_limitations");
   });
 
+  it("does not turn a natural Spanish all-clear list into pain or symptom signals", () => {
+    const message =
+      "No tengo dolor al moverme, lesiones recientes, operaciones recientes, restricciones médicas, síntomas durante el ejercicio ni indicaciones profesionales que afecten mi entrenamiento.";
+    const result = reconcileParsedTurnSafety(neutralTurn, message);
+
+    expect(result.intent).toBe("provide_information");
+    expect(result.safetySignals).toEqual([]);
+    expect(result.limitationsConfirmation).toBe("no_limitations");
+  });
+
   it("keeps an unconfirmed empty draft in review", () => {
     expect(createEmptyRoutineRequestDraft().limitations).toEqual([]);
     expect(deriveAssistantSafetyResult("not_confirmed", [])).toMatchObject({

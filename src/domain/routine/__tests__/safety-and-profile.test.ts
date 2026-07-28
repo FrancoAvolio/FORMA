@@ -88,6 +88,11 @@ describe("evaluateRoutineSafety", () => {
     expect(
       detectSafetyReasonCodes("No tengo dolor, lesiones ni restricciones"),
     ).toEqual([]);
+    expect(
+      detectSafetyReasonCodes(
+        "No tengo dolor al moverme, lesiones recientes, operaciones recientes, restricciones médicas, síntomas durante el ejercicio ni indicaciones profesionales que afecten mi entrenamiento.",
+      ),
+    ).toEqual([]);
   });
 
   it("derives limitations confirmation only from explicit deterministic language", () => {

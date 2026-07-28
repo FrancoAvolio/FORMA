@@ -104,11 +104,27 @@ export const UNSUPPORTED_TEXT_REASON_CODES = new Set<SafetyReasonCode>([
   "EATING_DISORDER_REQUEST",
 ]);
 
+function isNegatedMatch(text: string, index: number): boolean {
+  const boundary = Math.max(
+    text.lastIndexOf(",", index),
+    text.lastIndexOf(";", index),
+    text.lastIndexOf(".", index),
+  );
+  const clause = text.slice(boundary + 1, index);
+  if (/\b(?:pero|aunque|tuve|tengo una|tengo un|siento)\b/u.test(clause)) {
+    return false;
+  }
+  return /\b(?:no tengo|sin|ni|ningun|ninguna)\b/u.test(clause);
+}
+
 /** Deterministic, fail-closed signals used before any model classification. */
 export function detectSafetyReasonCodes(text: string): SafetyReasonCode[] {
   const normalized = normalizeDomainText(text);
   return TEXT_SAFETY_RULES.filter(({ patterns }) =>
-    patterns.some((pattern) => pattern.test(normalized)),
+    patterns.some((pattern) => {
+      const match = pattern.exec(normalized);
+      return Boolean(match && !isNegatedMatch(normalized, match.index));
+    }),
   ).map(({ code }) => code);
 }
 
