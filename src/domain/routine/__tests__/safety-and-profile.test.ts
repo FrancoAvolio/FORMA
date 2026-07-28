@@ -93,6 +93,9 @@ describe("evaluateRoutineSafety", () => {
         "No tengo dolor al moverme, lesiones recientes, operaciones recientes, restricciones médicas, síntomas durante el ejercicio ni indicaciones profesionales que afecten mi entrenamiento.",
       ),
     ).toEqual([]);
+    expect(detectSafetyReasonCodes("No tengo dolor. Me duele al entrenar.")).toContain(
+      "PAIN_DURING_MOVEMENT",
+    );
   });
 
   it("derives limitations confirmation only from explicit deterministic language", () => {

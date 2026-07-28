@@ -111,15 +111,42 @@ function isNegatedMatch(text: string, index: number): boolean {
     text.lastIndexOf(".", index),
   );
   const clause = text.slice(boundary + 1, index);
-  if (/\b(?:pero|aunque|tuve|tengo una|tengo un|siento)\b/u.test(clause)) {
+  if (
+    /\b(?:pero|aunque|tuve|tengo una|tengo un|siento|me duele|me lesione|(?<!no )tengo dolor|(?<!no )tengo sintomas)\b/u.test(
+      clause,
+    )
+  ) {
     return false;
   }
   return /\b(?:no tengo|sin|ni|ningun|ninguna)\b/u.test(clause);
 }
 
+function isExplicitNegatedSafetyList(text: string): boolean {
+  const contradiction =
+    /\b(?:pero|aunque|tuve|tengo una|tengo un|siento|me duele|me lesione|(?<!no )tengo dolor|(?<!no )tengo sintomas)\b/u;
+  return (
+    /\b(?:no tengo|sin)\b/u.test(text) &&
+    /\bni\b/u.test(text) &&
+    /\b(?:dolor|lesion|restriccion|sintoma|operacion|indicacion)\b/u.test(text) &&
+    !contradiction.test(text)
+  );
+}
+
+function normalizeSafetyText(value: string): string {
+  return value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[_-]+/g, " ")
+    .replace(/[^a-z0-9,;.!?\s]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 /** Deterministic, fail-closed signals used before any model classification. */
 export function detectSafetyReasonCodes(text: string): SafetyReasonCode[] {
-  const normalized = normalizeDomainText(text);
+  const normalized = normalizeSafetyText(text);
+  if (isExplicitNegatedSafetyList(normalized)) return [];
   return TEXT_SAFETY_RULES.filter(({ patterns }) =>
     patterns.some((pattern) => {
       const match = pattern.exec(normalized);
