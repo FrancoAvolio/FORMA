@@ -1,0 +1,471 @@
+.preview {
+  overflow: hidden;
+  border: 1px solid var(--color-line-strong);
+  border-radius: var(--radius-md);
+  background: var(--color-white);
+  box-shadow: var(--shadow-card);
+}
+
+.heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+  border-bottom: 1px solid var(--color-line);
+  padding: var(--space-5);
+}
+
+.heading h2 {
+  margin: var(--space-2) 0;
+  color: var(--color-brand);
+  font-size: var(--text-xl);
+  letter-spacing: -0.035em;
+  line-height: 1.15;
+}
+
+.eyebrow {
+  margin: 0;
+  color: var(--color-muted);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.summary {
+  max-width: 48rem;
+  margin: 0;
+  color: var(--color-body);
+  font-size: var(--text-sm);
+  line-height: 1.55;
+}
+
+.validationBadge {
+  display: inline-flex;
+  min-height: 2rem;
+  align-items: center;
+  gap: var(--space-1);
+  border: 1px solid #acd2b8;
+  background: var(--color-success-soft);
+  padding: var(--space-1) var(--space-2);
+  color: var(--color-success);
+  flex: 0 0 auto;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.65rem;
+  font-weight: 750;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.validationBadge svg {
+  width: 0.95rem;
+}
+
+.weekSummary {
+  display: grid;
+  margin: 0;
+  border-bottom: 1px solid var(--color-line);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.weekSummary > div {
+  min-width: 0;
+  border-right: 1px solid var(--color-line);
+  border-bottom: 1px solid var(--color-line);
+  padding: var(--space-3) var(--space-4);
+}
+
+.weekSummary > div:nth-child(even) {
+  border-right: 0;
+}
+
+.weekSummary > div:nth-last-child(-n + 2) {
+  border-bottom: 0;
+}
+
+.weekSummary dt,
+.prescription dt {
+  color: var(--color-muted);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.weekSummary dd {
+  overflow: hidden;
+  margin: var(--space-1) 0 0;
+  color: var(--color-brand);
+  font-size: var(--text-sm);
+  font-weight: 750;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dayTabs {
+  display: grid;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--color-line);
+  background: var(--color-blue-100);
+  grid-auto-columns: minmax(5.5rem, 1fr);
+  grid-auto-flow: column;
+  scrollbar-width: thin;
+}
+
+.dayTabs button {
+  display: grid;
+  min-height: 3.4rem;
+  place-content: center;
+  gap: 0.15rem;
+  border: 0;
+  border-right: 1px solid var(--color-line);
+  background: transparent;
+  color: var(--color-body);
+  cursor: pointer;
+  font-size: var(--text-xs);
+  font-weight: 750;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.dayTabs button[aria-pressed="true"] {
+  background: var(--color-white);
+  color: var(--color-brand);
+  box-shadow: inset 0 -3px var(--color-brand);
+}
+
+.dayTabs small {
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.6rem;
+  font-weight: 600;
+}
+
+.day {
+  padding: var(--space-5);
+}
+
+.dayHeading {
+  display: grid;
+  gap: var(--space-3);
+  align-items: end;
+  margin-bottom: var(--space-4);
+}
+
+.dayHeading h3 {
+  margin: var(--space-1) 0;
+  color: var(--color-brand);
+  font-size: var(--text-xl);
+  letter-spacing: -0.035em;
+}
+
+.dayHeading p:not(.eyebrow) {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: var(--text-sm);
+}
+
+.dayHeading > span {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  color: var(--color-muted);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+}
+
+.dayHeading > span svg {
+  width: 0.9rem;
+}
+
+.exerciseList {
+  display: grid;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.exerciseCard {
+  position: relative;
+  display: grid;
+  overflow: hidden;
+  border: 1px solid var(--color-line);
+  background: var(--color-white);
+  grid-template-columns: minmax(6.5rem, 30%) minmax(0, 1fr);
+}
+
+.order {
+  position: absolute;
+  top: var(--space-2);
+  left: var(--space-2);
+  z-index: 1;
+  min-width: 1.75rem;
+  border: 1px solid rgb(255 255 255 / 55%);
+  background: rgb(0 32 69 / 90%);
+  padding: 0.25rem;
+  color: var(--color-white);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.62rem;
+  text-align: center;
+}
+
+.media {
+  min-width: 0;
+  border-right: 1px solid var(--color-line);
+  background: var(--color-blue-100);
+}
+
+.media figure {
+  height: 100%;
+  min-height: 9rem;
+  border-bottom: 0;
+}
+
+.media img {
+  height: 7rem;
+}
+
+.media figcaption {
+  min-height: 2rem;
+  padding: var(--space-1);
+  font-size: 0.55rem;
+  line-height: 1.25;
+}
+
+.missingMedia {
+  display: grid;
+  min-height: 9rem;
+  place-items: center;
+  padding: var(--space-3);
+  color: var(--color-muted);
+  font-size: 0.65rem;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.exerciseBody {
+  min-width: 0;
+  padding: var(--space-3);
+}
+
+.exerciseHeading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.exerciseHeading h4 {
+  margin: 0;
+  color: var(--color-brand);
+  font-size: var(--text-base);
+  letter-spacing: -0.025em;
+  line-height: 1.25;
+}
+
+.exerciseHeading p {
+  margin: var(--space-1) 0 0;
+  color: var(--color-muted);
+  font-size: 0.65rem;
+  font-weight: 650;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.exerciseHeading > span {
+  flex: 0 0 auto;
+  background: var(--color-action);
+  padding: 0.3rem;
+  color: var(--color-white);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.58rem;
+}
+
+.prescription {
+  display: grid;
+  margin: var(--space-3) 0;
+  border-block: 1px solid var(--color-line);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.prescription > div {
+  min-width: 0;
+  border-right: 1px solid var(--color-line);
+  padding: var(--space-2) var(--space-1);
+}
+
+.prescription > div:last-child {
+  border-right: 0;
+}
+
+.prescription dt {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.prescription dd {
+  margin: var(--space-1) 0 0;
+  color: var(--color-brand);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: var(--text-xs);
+  font-weight: 750;
+}
+
+.reasons {
+  color: var(--color-body);
+  font-size: var(--text-xs);
+}
+
+.reasons summary,
+.warnings summary {
+  min-height: 2.25rem;
+  color: var(--color-brand);
+  cursor: pointer;
+  font-weight: 750;
+  line-height: 2.25rem;
+}
+
+.reasons ul,
+.warnings ul {
+  margin: var(--space-2) 0 0;
+  padding-left: 1rem;
+  line-height: 1.5;
+}
+
+.exerciseActions {
+  display: flex;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.exerciseActions a,
+.exerciseActions button,
+.footer button {
+  display: inline-flex;
+  min-height: 2.5rem;
+  align-items: center;
+  gap: var(--space-1);
+  border: 1px solid var(--color-line);
+  background: transparent;
+  padding: var(--space-2);
+  color: var(--color-brand);
+  cursor: pointer;
+  font-size: 0.68rem;
+  font-weight: 750;
+  text-decoration: none;
+}
+
+.exerciseActions svg,
+.footer svg {
+  width: 0.9rem;
+}
+
+.warnings {
+  margin: 0 var(--space-5) var(--space-5);
+  border: 1px solid #e8c18f;
+  background: var(--color-warning-soft);
+  padding: var(--space-2) var(--space-4);
+  color: var(--color-warning);
+  font-size: var(--text-xs);
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  border-top: 1px solid var(--color-line);
+  background: var(--color-blue-100);
+  padding: var(--space-3) var(--space-5);
+  flex-wrap: wrap;
+}
+
+.footer > div {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.footer .openRoutine {
+  border-color: var(--color-brand);
+  background: var(--color-action);
+  color: var(--color-white);
+}
+
+@media (max-width: 31rem) {
+  .heading {
+    display: grid;
+  }
+
+  .validationBadge {
+    grid-row: 1;
+    width: fit-content;
+  }
+
+  .exerciseCard {
+    grid-template-columns: 1fr;
+  }
+
+  .media {
+    border-right: 0;
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .media figure,
+  .missingMedia {
+    min-height: 7.5rem;
+  }
+
+  .media img {
+    height: 5.5rem;
+  }
+
+  .footer,
+  .footer > div,
+  .footer button {
+    width: 100%;
+  }
+
+  .footer button {
+    justify-content: center;
+  }
+}
+
+@media (min-width: 42rem) {
+  .weekSummary {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .weekSummary > div {
+    border-bottom: 0;
+  }
+
+  .weekSummary > div:nth-child(even) {
+    border-right: 1px solid var(--color-line);
+  }
+
+  .weekSummary > div:last-child {
+    border-right: 0;
+  }
+
+  .dayHeading {
+    grid-template-columns: 1fr auto;
+  }
+
+  .exerciseCard {
+    grid-template-columns: 9.5rem minmax(0, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dayTabs,
+  .preview {
+    scroll-behavior: auto;
+  }
+}

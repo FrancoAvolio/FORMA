@@ -5,6 +5,7 @@ import Link from "next/link";
 import { RoutineChat } from "@/components/chat/routine-chat";
 import { EXERCISE_DATASET_COMMIT } from "@/data/catalog";
 import { getRoutineCatalog } from "@/data/routine-catalog";
+import { resolveExerciseMedia } from "@/media/server";
 
 import styles from "./page.module.css";
 
@@ -32,7 +33,7 @@ export default function RoutineChatPage() {
             mismo motor determinista. El catálogo, la generación y tus rutinas guardadas
             siguen disponibles.
           </p>
-          <Link className="button button-primary" href="/crear">
+          <Link className="button button-primary" href="/crear/manual">
             <ClipboardList aria-hidden="true" /> Continuar con el formulario
           </Link>
         </section>
@@ -40,10 +41,16 @@ export default function RoutineChatPage() {
     );
   }
 
+  const catalog = getRoutineCatalog();
+  const media = Object.fromEntries(
+    catalog.map((exercise) => [exercise.id, resolveExerciseMedia(exercise.id)]),
+  );
+
   return (
     <RoutineChat
-      catalog={getRoutineCatalog()}
+      catalog={catalog}
       datasetVersion={EXERCISE_DATASET_COMMIT}
+      media={media}
     />
   );
 }

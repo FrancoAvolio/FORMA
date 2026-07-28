@@ -75,3 +75,66 @@ This log records material implementation work and validation evidence. It comple
 Final command output and Cloudflare package evidence are recorded after the closing validation
 run. Account-backed Ollama/Cloudflare inference and public media permission remain explicit
 operator actions, not automated claims.
+
+## 2026-07-28 — Chat-first conversational refactor
+
+Objective: make conversation the primary creation and editing surface while retaining the guided
+form as a synchronized fallback/editor. The first dependency slice simplifies the local-model
+contract so providers extract only facts from the latest turn; deterministic application code
+merges canonical state, derives completeness and safety, generates plans, and validates every
+change.
+
+Invariants for this phase:
+
+- The model never derives profile completeness, final safety eligibility, exercise selection,
+  duration, volume, or routine validity.
+- Existing pinned dataset, protected media, curated catalog, deterministic engine, and immutable
+  Stitch reference remain intact.
+- Chat, form, profile, and current plan converge on one versioned repository state.
+- Every AI failure preserves the current turn, canonical draft, and validated plan.
+- Routine changes and exercise answers use bounded local plan/catalog context and cannot invent
+  exercise IDs.
+
+Implemented dependency slices:
+
+- Made `/crear/chat` the canonical creation entry, redirected `/crear` to it, and moved the
+  guided builder to `/crear/manual`. The landing primary action and application navigation now
+  lead to conversation; the manual form remains directly available as a secondary path. These
+  changes reuse the existing Stitch-derived tokens and layouts without modifying
+  `docs/design-reference/**`.
+- Replaced the former all-in-one parse result with a strict `ParsedRoutineTurn`: providers
+  classify the latest intent and extract only an explicit request patch, latest-turn limitation
+  declaration, possible safety signals, and assumptions. Pure application functions merge the
+  patch, derive missing fields and completion, select at most two follow-up fields, and convert a
+  complete canonical draft to `RoutineRequest`.
+- Added deterministic raw-text safety reconciliation before state merge. A model can add a
+  conservative signal, but it cannot remove a detected signal or grant the explicit
+  no-limitations confirmation needed for generation. Final safety eligibility remains an
+  application/domain result.
+- Added a provider capability for natural assistant phrasing over a strictly validated context,
+  plus a contextual deterministic fallback. The context contains canonical profile facts,
+  deterministic completeness and safety, allowed actions, and bounded summaries of validated
+  plans or retrieved exercises; it cannot change those facts.
+- Added bounded server routes for turn extraction, assistant phrasing, modification parsing,
+  validated-plan explanation, and grounded exercise context. Requests are schema-checked,
+  size-limited, rate-guarded, cancellable, and returned with `no-store`; provider/model details
+  are limited to development diagnostics.
+- Added deterministic application services for chat modifications and exercise questions.
+  Exercise replacements, removals, reordering, and single-day regeneration use the existing
+  validated use cases; profile changes retain the plan when it is still valid and rebuild it only
+  when the new request makes that necessary. Exercise answers resolve bounded facts,
+  instructions, curated substitutions, selection reasons, media metadata, and attribution from
+  the local validated catalog and current plan.
+- Consolidated editable chat, form, safety, provider, retry, and current-plan state into the
+  versioned v2 browser envelope. Repository reads and writes recompute missing fields and
+  completion, normalize transient loading to idle, discard dangling retry metadata, and migrate
+  valid v0/v1 envelopes. The plan's request and safety screening remain an immutable generation
+  snapshot rather than a competing editable profile.
+- Kept the pinned dataset, 156-record generation allow-list, protected media pipeline, and
+  central media resolver unchanged. Gym Visual binaries remain local/private only; conversational
+  exercise cards may consume resolved media and attribution metadata but public production
+  artifacts continue to use the non-protected fallback until the licensing gate is cleared.
+
+Validation evidence for this refactor is recorded only after each command is actually run. This
+entry does not claim the final `npm run validate`, Mock Playwright flow, Cloudflare package/probe,
+or real Ollama model-contract results.

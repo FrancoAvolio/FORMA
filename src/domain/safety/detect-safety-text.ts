@@ -111,3 +111,29 @@ export function detectSafetyReasonCodes(text: string): SafetyReasonCode[] {
     patterns.some((pattern) => pattern.test(normalized)),
   ).map(({ code }) => code);
 }
+
+export type DeterministicLimitationsDeclaration =
+  | "unknown"
+  | "no_limitations"
+  | "has_limitations";
+
+/**
+ * Safety confirmation cannot be granted by model output alone. This deliberately
+ * recognizes only explicit first-person declarations and fails closed otherwise.
+ */
+export function detectLimitationsDeclaration(
+  text: string,
+): DeterministicLimitationsDeclaration {
+  if (detectSafetyReasonCodes(text).length > 0) {
+    return "has_limitations";
+  }
+
+  const normalized = normalizeDomainText(text);
+  const explicitAllClear = [
+    /no tengo (ningun |ninguna )?(dolor|lesion|lesiones|limitacion|limitaciones|restriccion|restricciones)/,
+    /sin (dolor|lesiones|limitaciones|restricciones)( ni (dolor|lesiones|limitaciones|restricciones))?/,
+    /ninguna lesion ni restriccion/,
+  ].some((pattern) => pattern.test(normalized));
+
+  return explicitAllClear ? "no_limitations" : "unknown";
+}

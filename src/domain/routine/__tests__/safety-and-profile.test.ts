@@ -1,6 +1,10 @@
 import { describe, expect, it } from "vitest";
 
 import { RoutineRequestSchema } from "../../profile/routine-request";
+import {
+  detectLimitationsDeclaration,
+  detectSafetyReasonCodes,
+} from "../../safety/detect-safety-text";
 import { evaluateRoutineSafety } from "../../safety/evaluate-safety";
 import { CLEAR_SAFETY_SCREENING, createRoutineRequest } from "./fixtures";
 
@@ -63,6 +67,39 @@ describe("evaluateRoutineSafety", () => {
       CLEAR_SAFETY_SCREENING,
     );
     expect(assessment.allowed).toBe(true);
+  });
+
+  it("fails closed when limitation text contradicts an all-clear questionnaire", () => {
+    const assessment = evaluateRoutineSafety(
+      createRoutineRequest({
+        limitations: ["Me duele la rodilla cuando hago sentadillas"],
+      }),
+      CLEAR_SAFETY_SCREENING,
+    );
+
+    expect(assessment.allowed).toBe(false);
+    expect(assessment.classification).toBe("professional_guidance_required");
+    expect(assessment.reasonCodes).toContain("PAIN_DURING_MOVEMENT");
+  });
+
+  it("detects raw safety language without treating an explicit all-clear as a signal", () => {
+    expect(detectSafetyReasonCodes("Me lesioné ayer y me duele al mover el hombro"))
+      .toEqual(expect.arrayContaining(["ACUTE_INJURY_REQUEST", "PAIN_DURING_MOVEMENT"]));
+    expect(
+      detectSafetyReasonCodes("No tengo dolor, lesiones ni restricciones"),
+    ).toEqual([]);
+  });
+
+  it("derives limitations confirmation only from explicit deterministic language", () => {
+    expect(
+      detectLimitationsDeclaration(
+        "Una hora por sesión y no tengo ninguna lesión ni restricción",
+      ),
+    ).toBe("no_limitations");
+    expect(detectLimitationsDeclaration("Hola bro")).toBe("unknown");
+    expect(detectLimitationsDeclaration("Me duele la rodilla al entrenar")).toBe(
+      "has_limitations",
+    );
   });
 
   it("allows clear professional movement restrictions without interpreting medical advice", () => {

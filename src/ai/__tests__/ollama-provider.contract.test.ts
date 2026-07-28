@@ -5,7 +5,8 @@ vi.mock("server-only", () => ({}));
 import { OllamaAiProvider } from "../providers/ollama-provider";
 import {
   completeParseInput,
-  completeParseResult,
+  completeParsedTurn,
+  assistantResponseResult,
   explanationResult,
   modificationResult,
   safetyResult,
@@ -13,7 +14,8 @@ import {
 import { describeAiProviderContract } from "../test-support/provider-contract";
 
 function responseForSystemPrompt(system: string): unknown {
-  if (system.includes("borrador estructurado")) return completeParseResult;
+  if (system.includes("strict data extractor")) return completeParsedTurn;
+  if (system.includes("voz conversacional")) return assistantResponseResult;
   if (system.includes("modificación solicitada")) return modificationResult;
   if (system.includes("Clasificás señales")) return safetyResult;
   if (system.includes("Explicás en español")) return explanationResult;
@@ -59,7 +61,7 @@ describe("OllamaAiProvider transport", () => {
 
   it("sends the complete JSON Schema and disables streaming/thinking", async () => {
     const fetchImplementation = createContractFetch();
-    await new OllamaAiProvider({ fetchImplementation }).parseRoutineRequest(
+    await new OllamaAiProvider({ fetchImplementation }).parseRoutineTurn(
       completeParseInput,
     );
 
@@ -72,31 +74,37 @@ describe("OllamaAiProvider transport", () => {
     });
     expect(body.format).toMatchObject({
       type: "object",
-      properties: expect.objectContaining({ status: expect.any(Object) }),
+      properties: expect.objectContaining({
+        intent: expect.any(Object),
+        requestPatch: expect.any(Object),
+      }),
     });
+    expect(
+      (body.format as { properties: Record<string, unknown> }).properties,
+    ).not.toHaveProperty("status");
   });
 
   it("repairs invalid structured output exactly once", async () => {
     const fetchImplementation = vi
       .fn()
-      .mockResolvedValueOnce(ollamaResponse('{"status":"complete"}'))
-      .mockResolvedValueOnce(ollamaResponse(completeParseResult)) as unknown as typeof fetch;
+      .mockResolvedValueOnce(ollamaResponse('{"intent":"greeting"}'))
+      .mockResolvedValueOnce(ollamaResponse(completeParsedTurn)) as unknown as typeof fetch;
     const provider = new OllamaAiProvider({ fetchImplementation });
 
     await expect(
-      provider.parseRoutineRequest(completeParseInput),
-    ).resolves.toEqual(completeParseResult);
+      provider.parseRoutineTurn(completeParseInput),
+    ).resolves.toEqual(completeParsedTurn);
     expect(fetchImplementation).toHaveBeenCalledTimes(2);
   });
 
   it("fails closed after the single repair remains invalid", async () => {
     const fetchImplementation = vi.fn(async () =>
-      ollamaResponse('{"status":"complete"}'),
+      ollamaResponse('{"intent":"greeting"}'),
     ) as unknown as typeof fetch;
     const provider = new OllamaAiProvider({ fetchImplementation });
 
     await expect(
-      provider.parseRoutineRequest(completeParseInput),
+      provider.parseRoutineTurn(completeParseInput),
     ).rejects.toMatchObject({ code: "invalid_output" });
     expect(fetchImplementation).toHaveBeenCalledTimes(2);
   });
@@ -108,7 +116,7 @@ describe("OllamaAiProvider transport", () => {
       }) as unknown as typeof fetch,
     });
     await expect(
-      provider.parseRoutineRequest(completeParseInput),
+      provider.parseRoutineTurn(completeParseInput),
     ).rejects.toMatchObject({ code: "unavailable" });
   });
 
@@ -120,7 +128,7 @@ describe("OllamaAiProvider transport", () => {
         () => new Promise<Response>(() => undefined),
       ) as unknown as typeof fetch,
     });
-    const pending = provider.parseRoutineRequest(completeParseInput);
+    const pending = provider.parseRoutineTurn(completeParseInput);
     const assertion = expect(pending).rejects.toMatchObject({ code: "timeout" });
     await vi.advanceTimersByTimeAsync(1_001);
     await assertion;
@@ -131,8 +139,7 @@ describe("OllamaAiProvider transport", () => {
       fetchImplementation: vi.fn(async () => ollamaResponse("x".repeat(70_000))) as unknown as typeof fetch,
     });
     await expect(
-      provider.parseRoutineRequest(completeParseInput),
+      provider.parseRoutineTurn(completeParseInput),
     ).rejects.toMatchObject({ code: "response_too_large" });
   });
 });
-

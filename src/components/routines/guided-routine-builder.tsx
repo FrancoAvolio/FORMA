@@ -19,6 +19,11 @@ import type {
   MovementPattern,
 } from "@/domain/exercises/catalog-exercise";
 import {
+  RoutineRequestDraftSchema,
+  type LimitationsConfirmation,
+  type RoutineRequestDraft,
+} from "@/domain/profile/routine-draft";
+import {
   RoutineRequestSchema,
   type ExperienceLevel,
   type RoutineGoal,
@@ -31,7 +36,11 @@ import {
   SafetyScreeningSchema,
   type SafetyScreening,
 } from "@/domain/safety/schemas";
-import { createBrowserRoutineRepository } from "@/persistence";
+import { evaluateRoutineSafety } from "@/domain/safety/evaluate-safety";
+import {
+  createBrowserRoutineRepository,
+  type ConversationSafetyState,
+} from "@/persistence";
 import { exerciseLabel } from "@/presentation/exercise-labels";
 
 import styles from "./guided-routine-builder.module.css";
@@ -206,7 +215,27 @@ function toSafety(state: NullableSafety): SafetyScreening {
   return SafetyScreeningSchema.parse(state);
 }
 
-function requestToState(request: Partial<RoutineRequest>, fallback: BuilderState): BuilderState {
+function hasDraftValues(draft: RoutineRequestDraft): boolean {
+  return (
+    draft.goal !== null ||
+    draft.experience !== null ||
+    draft.daysPerWeek !== null ||
+    draft.sessionMinutes !== null ||
+    draft.trainingLocation !== null ||
+    draft.availableEquipment.length > 0 ||
+    draft.focusMuscles.length > 0 ||
+    draft.excludedExercises.length > 0 ||
+    draft.excludedMovementPatterns.length > 0 ||
+    draft.preferredExercises.length > 0 ||
+    draft.limitations.length > 0 ||
+    draft.notes !== null
+  );
+}
+
+function requestToState(
+  request: RoutineRequestDraft,
+  fallback: BuilderState,
+): BuilderState {
   return {
     ...fallback,
     ...(request.goal ? { goal: request.goal } : {}),
@@ -228,6 +257,48 @@ function requestToState(request: Partial<RoutineRequest>, fallback: BuilderState
   };
 }
 
+function screeningToState(screening: SafetyScreening): NullableSafety {
+  return { ...screening };
+}
+
+function limitationsConfirmationFor(
+  request: RoutineRequest,
+  screening: SafetyScreening,
+): LimitationsConfirmation {
+  if (!screening.confirmedCurrentStatus) return "not_confirmed";
+
+  const hasDeclaredLimitations =
+    request.limitations.length > 0 ||
+    RISK_QUESTIONS.some(([key]) => screening[key]);
+
+  return hasDeclaredLimitations
+    ? "confirmed_with_limitations"
+    : "confirmed_none";
+}
+
+function canonicalFormPatch(
+  state: BuilderState,
+  safety: NullableSafety,
+  safetySignals: ConversationSafetyState["signals"],
+) {
+  const request = toRequest(state);
+  const requestDraft = RoutineRequestDraftSchema.parse(request);
+  const screeningResult = SafetyScreeningSchema.safeParse(safety);
+
+  if (!screeningResult.success) return { requestDraft };
+
+  const screening = screeningResult.data;
+  return {
+    requestDraft,
+    limitationsConfirmation: limitationsConfirmationFor(request, screening),
+    safety: {
+      signals: [...safetySignals],
+      screening,
+      result: evaluateRoutineSafety(request, screening),
+    },
+  };
+}
+
 export function GuidedRoutineBuilder({
   catalog,
   datasetVersion,
@@ -241,30 +312,49 @@ export function GuidedRoutineBuilder({
   const initialState = useMemo(() => preset(example), [example]);
   const [state, setState] = useState<BuilderState>(initialState);
   const [safety, setSafety] = useState<NullableSafety>(EMPTY_SAFETY);
+  const [safetySignals, setSafetySignals] = useState<
+    ConversationSafetyState["signals"]
+  >([]);
   const [step, setStep] = useState(0);
-  const [hydrated, setHydrated] = useState(Boolean(example));
+  const [hydrated, setHydrated] = useState(false);
   const [generationStage, setGenerationStage] = useState<number | null>(null);
   const [error, setError] = useState<{ code: string; message: string } | null>(null);
 
   useEffect(() => {
-    if (example) return;
+    let cancelled = false;
     void createBrowserRoutineRepository()
-      .loadSetupDraft()
-      .then((draft) => {
-        if (draft) setState((current) => requestToState(draft, current));
+      .loadRoutineConversationState()
+      .then((conversationState) => {
+        if (cancelled) return;
+        if (!example && hasDraftValues(conversationState.requestDraft)) {
+          setState((current) =>
+            requestToState(conversationState.requestDraft, current),
+          );
+        }
+        if (conversationState.safety.screening) {
+          setSafety(screeningToState(conversationState.safety.screening));
+        }
+        setSafetySignals(conversationState.safety.signals);
         setHydrated(true);
+      })
+      .catch(() => {
+        if (!cancelled) setHydrated(true);
       });
+
+    return () => {
+      cancelled = true;
+    };
   }, [example]);
 
   useEffect(() => {
     if (!hydrated) return;
     try {
-      const request = toRequest(state);
-      void createBrowserRoutineRepository().saveSetupDraft(request);
+      const patch = canonicalFormPatch(state, safety, safetySignals);
+      void createBrowserRoutineRepository().updateRoutineConversationState(patch);
     } catch {
       // Incomplete intermediate form state is intentionally kept in React until valid.
     }
-  }, [hydrated, state]);
+  }, [hydrated, safety, safetySignals, state]);
 
   const update = <Key extends keyof BuilderState>(key: Key, value: BuilderState[Key]) => {
     setState((current) => ({ ...current, [key]: value }));
@@ -321,6 +411,15 @@ export function GuidedRoutineBuilder({
       return;
     }
 
+    if (safetySignals.length > 0) {
+      setError({
+        code: "SAFETY_BLOCKED",
+        message:
+          "El chat registró una señal de seguridad que este formulario no puede descartar. Volvé al chat para aclararla o seguí explorando ejercicios.",
+      });
+      return;
+    }
+
     setGenerationStage(0);
     for (let index = 0; index < GENERATION_STAGES.length; index += 1) {
       setGenerationStage(index);
@@ -342,11 +441,16 @@ export function GuidedRoutineBuilder({
       return;
     }
 
-    await createBrowserRoutineRepository().saveCurrentRoutine(
-      request,
-      result.plan,
-      screening,
-    );
+    const updatedAt = new Date().toISOString();
+    await createBrowserRoutineRepository().updateRoutineConversationState({
+      ...canonicalFormPatch(state, safety, safetySignals),
+      currentRoutine: {
+        request,
+        plan: result.plan,
+        safetyScreening: screening,
+        updatedAt,
+      },
+    });
     router.push("/rutina");
   };
 
@@ -392,7 +496,7 @@ export function GuidedRoutineBuilder({
           </p>
         </div>
         <Link className="button button-quiet" href="/crear/chat">
-          Preferir chat opcional
+          <ArrowLeft aria-hidden="true" size={17} /> Volver al chat
         </Link>
       </header>
 
@@ -706,7 +810,8 @@ export function GuidedRoutineBuilder({
                 label="Seguridad"
                 value={
                   safetyComplete
-                    ? RISK_QUESTIONS.some(([key]) => safety[key] === true)
+                    ? safetySignals.length > 0 ||
+                      RISK_QUESTIONS.some(([key]) => safety[key] === true)
                       ? "Requiere orientación profesional"
                       : "Respuestas completas, sin señales declaradas"
                     : "Falta completar el chequeo"

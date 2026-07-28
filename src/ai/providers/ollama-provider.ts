@@ -83,7 +83,7 @@ export class OllamaAiProvider extends BaseStructuredAiProvider {
       config.baseUrl ?? "http://127.0.0.1:11434",
     );
     this.model = config.model?.trim() || "qwen3:1.7b";
-    this.timeoutMs = config.timeoutMs ?? AI_LIMITS.defaultTimeoutMs;
+    this.timeoutMs = config.timeoutMs ?? AI_LIMITS.ollamaDefaultTimeoutMs;
     this.fetchImplementation = config.fetchImplementation ?? fetch;
 
     if (
@@ -195,4 +195,3 @@ export class OllamaAiProvider extends BaseStructuredAiProvider {
     }
   }
 }
-

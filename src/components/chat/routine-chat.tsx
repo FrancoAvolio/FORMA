@@ -3,382 +3,1084 @@
 import {
   ArrowRight,
   Bot,
-  Check,
+  Bug,
   CircleAlert,
   ClipboardList,
+  ExternalLink,
   LoaderCircle,
+  RotateCcw,
   Send,
+  ShieldAlert,
   ShieldCheck,
+  Square,
   UserRound,
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
 
-import type { AiFallbackState } from "@/ai/errors";
+import type { AiProviderName } from "@/ai/ai-provider";
 import {
-  ParseRoutineResultSchema,
+  AI_ERROR_CODES,
+  type AiErrorCode,
+  type AiFallbackState,
+} from "@/ai/errors";
+import {
+  AssistantResponseSchema,
+  ComposeAssistantResponseInputDataSchema,
+  GroundedExerciseResponseContextSchema,
+  ParsedRoutineTurnSchema,
+  RoutineModificationResultSchema,
+  type ValidatedAssistantResponseContext,
+} from "@/ai/schemas";
+import {
+  applyParsedRoutineTurn,
+  buildRoutinePlanContext,
+  buildValidatedPlanSummary,
+  composeAssistantFallback,
+  deriveAssistantSafetyResult,
+  reconcileParsedTurnSafety,
+  resolveConversationQuestion,
+  selectFocusedQuestionFields,
   toCompleteRoutineRequest,
-  type ParseRoutineResult,
-  type RoutineRequestDraft,
-} from "@/ai/schemas/routine-request";
-import { generateRoutineUseCase } from "@/application/routines";
+  type AssistantSafetyResult,
+  type ConversationExerciseTarget,
+  type DerivedRoutineTurnResult,
+  type ValidatedPlanSummary,
+} from "@/application/conversation";
+import {
+  applyConversationRoutineModification,
+  generateRoutineUseCase,
+} from "@/application/routines";
+import { ExerciseThumbnail } from "@/components/exercises/exercise-thumbnail";
 import type { CatalogExercise } from "@/domain/exercises/catalog-exercise";
-import {
-  RoutineRequestSchema,
-  type RoutineRequest,
-} from "@/domain/profile/routine-request";
+import type { RoutineRequest } from "@/domain/profile/routine-request";
 import { createRoutineSeed } from "@/domain/routine/engine/seed";
-import {
-  SafetyScreeningSchema,
-  type SafetyScreening,
-} from "@/domain/safety/schemas";
+import { evaluateRoutineSafety } from "@/domain/safety/evaluate-safety";
+import type { SafetyScreening } from "@/domain/safety/schemas";
+import type { ExerciseMedia } from "@/media";
 import {
   createBrowserRoutineRepository,
+  createIdleAiProviderState,
+  type AiProviderState,
   type ConversationMessage,
+  type RoutineConversationState,
+  type RoutineConversationStateUpdate,
+  type RoutineRepository,
 } from "@/persistence";
-import { exerciseLabel } from "@/presentation/exercise-labels";
+import { exerciseLabel, exerciseListLabel } from "@/presentation/exercise-labels";
 
+import { ConversationRoutinePreview } from "./conversation-routine-preview";
 import styles from "./routine-chat.module.css";
 
-const EMPTY_DRAFT: RoutineRequestDraft = {
-  goal: null,
-  experience: null,
-  daysPerWeek: null,
-  sessionMinutes: null,
-  trainingLocation: null,
-  availableEquipment: [],
-  focusMuscles: [],
-  excludedExercises: [],
-  excludedMovementPatterns: [],
-  preferredExercises: [],
-  limitations: [],
-  notes: null,
-};
+const INITIAL_MESSAGE =
+  "Hola, soy FORMA. Contame con tus palabras qué querés lograr, cuántos días podés entrenar y con qué equipamiento contás. Voy a ordenar el perfil y armar la rutina acá mismo.";
 
-const REQUIRED_LABELS = {
-  goal: "objetivo",
-  experience: "experiencia",
-  daysPerWeek: "días por semana",
-  sessionMinutes: "duración por sesión",
-  trainingLocationOrEquipment: "lugar o equipamiento",
-  limitationsConfirmation: "confirmación de limitaciones",
-} as const;
+const DESKTOP_PROFILE_QUERY = "(min-width: 58rem)";
+
+function subscribeDesktopProfile(callback: () => void): () => void {
+  const query = window.matchMedia(DESKTOP_PROFILE_QUERY);
+  query.addEventListener("change", callback);
+  return () => query.removeEventListener("change", callback);
+}
+
+function isDesktopProfile(): boolean {
+  return window.matchMedia(DESKTOP_PROFILE_QUERY).matches;
+}
+
+function serverDesktopProfile(): boolean {
+  return false;
+}
 
 const SUGGESTIONS = [
-  "Quiero hipertrofia, soy intermedio, tengo 4 días y 60 minutos. Entreno en gimnasio con barra, mancuernas, poleas y máquinas. No tengo dolor ni restricciones.",
-  "Soy principiante y quiero entrenar fuerza 3 días, 45 minutos en casa con mancuernas y peso corporal. Sin limitaciones.",
-  "Quiero acondicionamiento general 2 veces por semana, 45 minutos, con máquinas y mancuernas. No tengo lesiones ni dolor.",
+  "Quiero ganar músculo",
+  "Soy intermedio y entreno cuatro días",
+  "Tengo una hora y gimnasio completo",
 ] as const;
 
-const RISK_QUESTIONS = [
-  ["painDuringMovement", "Dolor durante algún movimiento"],
-  ["recentInjury", "Lesión reciente"],
-  ["recentOperation", "Operación reciente"],
-  ["medicalRestriction", "Restricción médica vigente"],
-  ["symptomsDuringExercise", "Síntomas durante el ejercicio"],
-  [
-    "professionalInstructionsAffectTraining",
-    "Indicaciones profesionales que afectan el entrenamiento",
-  ],
-] as const;
+const REQUIRED_LABELS = {
+  goal: "Objetivo",
+  experience: "Experiencia",
+  daysPerWeek: "Días por semana",
+  sessionMinutes: "Duración por sesión",
+  trainingLocationOrEquipment: "Lugar o equipamiento",
+  limitationsConfirmation: "Seguridad y limitaciones",
+} as const;
 
-type RiskKey = (typeof RISK_QUESTIONS)[number][0];
-type LimitationsConfirmation = ParseRoutineResult["limitationsConfirmation"];
-type SafetyAnswers = {
-  confirmedCurrentStatus: boolean;
-} & Record<RiskKey, boolean | null>;
-
-const EMPTY_SAFETY: SafetyAnswers = {
-  confirmedCurrentStatus: false,
-  painDuringMovement: null,
-  recentInjury: null,
-  recentOperation: null,
-  medicalRestriction: null,
-  symptomsDuringExercise: null,
-  professionalInstructionsAffectTraining: null,
+const GOAL_LABELS: Record<NonNullable<RoutineRequest["goal"]>, string> = {
+  hypertrophy: "Ganar masa muscular",
+  strength: "Ganar fuerza",
+  general_fitness: "Estado físico general",
+  muscular_endurance: "Resistencia muscular",
 };
 
-type InterpretSuccess = {
-  ok: true;
-  provider: { id: string; model: string | null };
-  result: unknown;
+const EXPERIENCE_LABELS: Record<
+  NonNullable<RoutineRequest["experience"]>,
+  string
+> = {
+  beginner: "Principiante",
+  intermediate: "Intermedio",
+  advanced: "Avanzado",
 };
 
-type InterpretFailure = {
-  ok: false;
-  provider?: { id: string; model: string | null };
-  error: AiFallbackState | { code: string; message: string };
+const LOCATION_LABELS: Record<
+  NonNullable<RoutineRequest["trainingLocation"]>,
+  string
+> = {
+  commercial_gym: "Gimnasio completo",
+  home: "Casa",
+  custom: "Equipamiento personalizado",
 };
 
-function draftFromProfile(profile: Partial<RoutineRequest>): RoutineRequestDraft {
+type ProviderDiagnostics = {
+  provider: AiProviderName;
+  model: string | null;
+};
+
+type SuccessfulEnvelope = { ok: true } & Record<string, unknown>;
+
+type GroundedExerciseCard = {
+  questionKind: string;
+  exercise: {
+    id: string;
+    displayName: string;
+    displayNameEs: string | null;
+    primaryMuscles: string[];
+    secondaryMuscles: string[];
+    requiredEquipment: string[];
+    instructionsEs: string;
+    instructionStepsEs: string[];
+    sourceAttribution: string;
+  };
+  routine: {
+    dayName: string;
+    prescription: {
+      sets: number;
+      repPrescription: string;
+      restSeconds: number;
+      rir: number | null;
+    };
+    selectionReasons: string[];
+  } | null;
+  alternatives: Array<{
+    id: string;
+    displayName: string;
+    displayNameEs: string | null;
+    compatibilityReasons: string[];
+  }>;
+  grounding: {
+    source: "validated_local_catalog";
+    datasetCommit: string;
+  };
+};
+
+class ChatRequestError extends Error {
+  constructor(readonly fallback: AiFallbackState) {
+    super(fallback.message);
+    this.name = "ChatRequestError";
+  }
+}
+
+function now(): string {
+  return new Date().toISOString();
+}
+
+function createMessage(
+  role: ConversationMessage["role"],
+  content: string,
+): ConversationMessage {
   return {
-    ...EMPTY_DRAFT,
-    ...profile,
-    goal: profile.goal ?? null,
-    experience: profile.experience ?? null,
-    daysPerWeek: profile.daysPerWeek ?? null,
-    sessionMinutes: profile.sessionMinutes ?? null,
-    trainingLocation: profile.trainingLocation ?? null,
-    notes: profile.notes ?? null,
+    id: crypto.randomUUID(),
+    role,
+    content,
+    createdAt: now(),
   };
 }
 
-function profileFromDraft(draft: RoutineRequestDraft): Partial<RoutineRequest> {
+function clearSafetyScreening(): SafetyScreening {
   return {
-    ...(draft.goal ? { goal: draft.goal } : {}),
-    ...(draft.experience ? { experience: draft.experience } : {}),
-    ...(draft.daysPerWeek ? { daysPerWeek: draft.daysPerWeek } : {}),
-    ...(draft.sessionMinutes ? { sessionMinutes: draft.sessionMinutes } : {}),
-    ...(draft.trainingLocation ? { trainingLocation: draft.trainingLocation } : {}),
-    availableEquipment: draft.availableEquipment,
-    focusMuscles: draft.focusMuscles,
-    excludedExercises: draft.excludedExercises,
-    excludedMovementPatterns: draft.excludedMovementPatterns,
-    preferredExercises: draft.preferredExercises,
-    limitations: draft.limitations,
-    notes: draft.notes,
+    confirmedCurrentStatus: true,
+    painDuringMovement: false,
+    recentInjury: false,
+    recentOperation: false,
+    medicalRestriction: false,
+    symptomsDuringExercise: false,
+    professionalInstructionsAffectTraining: false,
   };
 }
 
-function assistantMessage(result: ParseRoutineResult): string {
-  if (result.status === "unsupported") {
-    return "Este pedido necesita más cuidado. FORMA no puede evaluar lesiones, indicar rehabilitación ni reemplazar una orientación profesional.";
+function isAiErrorCode(value: unknown): value is AiErrorCode {
+  return (
+    typeof value === "string" &&
+    (AI_ERROR_CODES as readonly string[]).includes(value)
+  );
+}
+
+function fallbackFromPayload(
+  payload: unknown,
+  status = 503,
+): AiFallbackState {
+  const envelope =
+    payload && typeof payload === "object"
+      ? (payload as Record<string, unknown>)
+      : null;
+  const error =
+    envelope?.error && typeof envelope.error === "object"
+      ? (envelope.error as Record<string, unknown>)
+      : null;
+  const code = isAiErrorCode(error?.code)
+    ? error.code
+    : status === 429
+      ? "rate_limited"
+      : "provider_error";
+  const message =
+    typeof error?.message === "string"
+      ? error.message
+      : "El asistente no pudo completar este turno. Tu progreso sigue guardado.";
+  return {
+    code,
+    title:
+      typeof error?.title === "string"
+        ? error.title
+        : code === "rate_limited"
+          ? "Hay demasiadas solicitudes"
+          : "El asistente no está disponible",
+    message,
+    action: error?.action === "none" ? "none" : "guided_form",
+    canRetry:
+      typeof error?.canRetry === "boolean"
+        ? error.canRetry
+        : ["unavailable", "timeout", "invalid_output", "rate_limited", "provider_error"].includes(
+            code,
+          ),
+    ...(typeof error?.retryAfterSeconds === "number"
+      ? { retryAfterSeconds: error.retryAfterSeconds }
+      : {}),
+  };
+}
+
+async function postApi<T extends SuccessfulEnvelope>(
+  url: string,
+  body: unknown,
+  signal: AbortSignal,
+): Promise<T> {
+  const response = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+    signal,
+  });
+  let payload: unknown;
+  try {
+    payload = await response.json();
+  } catch {
+    throw new ChatRequestError(
+      fallbackFromPayload(null, response.status || 503),
+    );
   }
-  if (result.status === "complete") {
-    return "Ya tengo un perfil estructurado completo. Revisá el resumen y respondé el chequeo de seguridad antes de generar.";
+  if (
+    !response.ok ||
+    !payload ||
+    typeof payload !== "object" ||
+    (payload as Record<string, unknown>).ok !== true
+  ) {
+    throw new ChatRequestError(fallbackFromPayload(payload, response.status));
   }
-  const missing = result.missingFields.map((field) => REQUIRED_LABELS[field]);
-  return "Para completar el perfil todavía necesito: " + missing.join(", ") + ".";
+  return payload as T;
+}
+
+function persistentError(fallback: AiFallbackState) {
+  return {
+    code: fallback.code,
+    title: fallback.title,
+    message: fallback.message,
+    canRetry: fallback.canRetry,
+    ...(fallback.retryAfterSeconds === undefined
+      ? {}
+      : { retryAfterSeconds: fallback.retryAfterSeconds }),
+  };
+}
+
+function readyProviderState(
+  state: RoutineConversationState,
+  diagnostics?: ProviderDiagnostics,
+): AiProviderState {
+  return {
+    status: "ready",
+    providerId: diagnostics?.provider ?? state.providerState.providerId,
+    model: diagnostics?.model ?? state.providerState.model,
+    error: null,
+  };
+}
+
+function composeContext(options: {
+  result: DerivedRoutineTurnResult;
+  state: RoutineConversationState;
+  safety: AssistantSafetyResult;
+  plan: ValidatedPlanSummary | null;
+  exerciseContext?: unknown;
+  assumptions?: readonly string[];
+}): ValidatedAssistantResponseContext {
+  const allowedNextActions: ValidatedAssistantResponseContext["allowedNextActions"] = [
+    "open_guided_form",
+    "browse_exercises",
+  ];
+  if (options.state.missingFields.length > 0) {
+    allowedNextActions.unshift("ask_missing_information");
+  }
+  if (options.safety.generationAllowed && !options.plan) {
+    allowedNextActions.unshift("generate_routine");
+  }
+  if (!options.safety.generationAllowed) {
+    allowedNextActions.unshift("review_safety");
+  }
+  if (options.plan) {
+    allowedNextActions.unshift(
+      "show_routine",
+      "modify_routine",
+      "answer_question",
+      "save_routine",
+    );
+  }
+  const parseStatus =
+    options.state.missingFields.length > 0
+      ? "needs_input"
+      : options.safety.generationAllowed
+        ? "complete"
+        : "unsupported";
+
+  return ComposeAssistantResponseInputDataSchema.parse({
+    latestIntent: options.result.intent,
+    canonicalDraft: options.state.requestDraft,
+    limitationsConfirmation: options.state.limitationsConfirmation,
+    missingFields: options.state.missingFields,
+    completionPercentage: options.state.completionPercentage,
+    parseStatus,
+    safetyResult: options.safety,
+    focusedQuestionFields: selectFocusedQuestionFields(
+      options.state.missingFields,
+    ),
+    validatedPlan: options.plan,
+    exerciseContext:
+      options.exerciseContext === undefined
+        ? null
+        : GroundedExerciseResponseContextSchema.parse(options.exerciseContext),
+    allowedNextActions: [...new Set(allowedNextActions)],
+    assumptions: [...(options.assumptions ?? options.result.assumptions)],
+    locale: "es-AR",
+  });
+}
+
+function requestChanged(left: RoutineRequest, right: RoutineRequest): boolean {
+  return JSON.stringify(left) !== JSON.stringify(right);
+}
+
+function profileRows(state: RoutineConversationState) {
+  const draft = state.requestDraft;
+  return [
+    {
+      key: "goal",
+      label: REQUIRED_LABELS.goal,
+      value: draft.goal ? GOAL_LABELS[draft.goal] : null,
+    },
+    {
+      key: "experience",
+      label: REQUIRED_LABELS.experience,
+      value: draft.experience ? EXPERIENCE_LABELS[draft.experience] : null,
+    },
+    {
+      key: "daysPerWeek",
+      label: REQUIRED_LABELS.daysPerWeek,
+      value: draft.daysPerWeek ? `${draft.daysPerWeek} días` : null,
+    },
+    {
+      key: "sessionMinutes",
+      label: REQUIRED_LABELS.sessionMinutes,
+      value: draft.sessionMinutes ? `${draft.sessionMinutes} minutos` : null,
+    },
+    {
+      key: "trainingLocationOrEquipment",
+      label: REQUIRED_LABELS.trainingLocationOrEquipment,
+      value:
+        draft.availableEquipment.length > 0
+          ? exerciseListLabel(draft.availableEquipment)
+          : draft.trainingLocation
+            ? LOCATION_LABELS[draft.trainingLocation]
+            : null,
+    },
+    {
+      key: "limitationsConfirmation",
+      label: REQUIRED_LABELS.limitationsConfirmation,
+      value:
+        state.limitationsConfirmation === "confirmed_none"
+          ? "Sin dolor ni restricciones declaradas"
+          : state.limitationsConfirmation === "confirmed_with_limitations"
+            ? "Requiere revisión"
+            : null,
+    },
+  ] as const;
 }
 
 export function RoutineChat({
   catalog,
   datasetVersion,
+  media,
 }: {
   catalog: readonly CatalogExercise[];
   datasetVersion: string;
+  media: Readonly<Record<string, ExerciseMedia>>;
 }) {
   const router = useRouter();
-  const threadRef = useRef<HTMLDivElement>(null);
+  const repositoryRef = useRef<RoutineRepository | null>(null);
+  const conversationRef = useRef<RoutineConversationState | null>(null);
   const requestAbortRef = useRef<AbortController | null>(null);
-  const [messages, setMessages] = useState<ConversationMessage[]>([]);
-  const [draft, setDraft] = useState<RoutineRequestDraft>(EMPTY_DRAFT);
-  const [confirmation, setConfirmation] =
-    useState<LimitationsConfirmation>("not_confirmed");
-  const [latest, setLatest] = useState<ParseRoutineResult | null>(null);
-  const [provider, setProvider] = useState<{ id: string; model: string | null } | null>(
-    null,
-  );
+  const threadRef = useRef<HTMLDivElement>(null);
+  const composerRef = useRef<HTMLTextAreaElement>(null);
+  const [conversation, setConversation] =
+    useState<RoutineConversationState | null>(null);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [activity, setActivity] = useState("Entendiendo tu mensaje…");
   const [fallback, setFallback] = useState<AiFallbackState | null>(null);
-  const [safety, setSafety] = useState<SafetyAnswers>(EMPTY_SAFETY);
   const [generationError, setGenerationError] = useState<string | null>(null);
-  const [generating, setGenerating] = useState(false);
+  const [diagnostics, setDiagnostics] = useState<ProviderDiagnostics | null>(null);
+  const [activeDayId, setActiveDayId] = useState<string | null>(null);
+  const [activeExercise, setActiveExercise] =
+    useState<ConversationExerciseTarget | null>(null);
+  const [exerciseCard, setExerciseCard] =
+    useState<GroundedExerciseCard | null>(null);
+  const [saved, setSaved] = useState(false);
+  const desktopProfile = useSyncExternalStore(
+    subscribeDesktopProfile,
+    isDesktopProfile,
+    serverDesktopProfile,
+  );
+  const [mobileProfileOpen, setMobileProfileOpen] = useState(false);
 
-  useEffect(() => {
-    void createBrowserRoutineRepository()
-      .loadConversation()
-      .then((conversation) => {
-        setMessages(conversation.messages);
-        setDraft(draftFromProfile(conversation.structuredProfile));
-        setConfirmation(conversation.limitationsConfirmation);
-      });
-    return () => requestAbortRef.current?.abort();
-  }, []);
-
-  useEffect(() => {
-    threadRef.current?.scrollTo({ top: threadRef.current.scrollHeight });
-  }, [messages, loading]);
-
-  const persistConversation = (
-    nextMessages: ConversationMessage[],
-    nextDraft: RoutineRequestDraft,
-    nextConfirmation: LimitationsConfirmation,
-  ) =>
-    createBrowserRoutineRepository().saveConversation({
-      messages: nextMessages,
-      structuredProfile: profileFromDraft(nextDraft),
-      limitationsConfirmation: nextConfirmation,
-    });
-
-  const send = async (messageText = input) => {
-    const text = messageText.trim();
-    if (!text || loading) return;
-    setInput("");
-    setLoading(true);
-    setFallback(null);
-    setGenerationError(null);
-    requestAbortRef.current?.abort();
-    const controller = new AbortController();
-    requestAbortRef.current = controller;
-
-    const userMessage: ConversationMessage = {
-      id: crypto.randomUUID(),
-      role: "user",
-      content: text,
-      createdAt: new Date().toISOString(),
-    };
-    const withUser = [...messages, userMessage];
-    setMessages(withUser);
-    await persistConversation(withUser, draft, confirmation);
-
-    try {
-      const response = await fetch("/api/ai/interpret", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          message: text,
-          currentDraft: draft,
-          currentLimitationsConfirmation: confirmation,
-          locale: "es-AR",
-        }),
-        signal: controller.signal,
-      });
-      const payload = (await response.json()) as InterpretSuccess | InterpretFailure;
-      if (!payload.ok) {
-        const state: AiFallbackState =
-          "title" in payload.error
-            ? payload.error
-            : {
-                code: "invalid_input",
-                title: "No pudimos interpretar el mensaje",
-                message: payload.error.message,
-                action: "guided_form",
-                canRetry: false,
-              };
-        setProvider(payload.provider ?? null);
-        setFallback(state);
-        return;
+  const commit = useCallback(
+    async (update: RoutineConversationStateUpdate) => {
+      const repository = repositoryRef.current;
+      if (!repository) {
+        throw new Error("El almacenamiento local todavía no está listo.");
       }
+      const next = await repository.updateRoutineConversationState(update);
+      conversationRef.current = next;
+      setConversation(next);
+      return next;
+    },
+    [],
+  );
 
-      const result = ParseRoutineResultSchema.parse(payload.result);
-      setProvider(payload.provider);
-      setDraft(result.request);
-      setConfirmation(result.limitationsConfirmation);
-      setLatest(result);
+  useEffect(() => {
+    let mounted = true;
+    const repository = createBrowserRoutineRepository();
+    repositoryRef.current = repository;
+    void (async () => {
+      let state = await repository.loadRoutineConversationState();
+      if (state.messages.length === 0) {
+        state = await repository.updateRoutineConversationState({
+          messages: [createMessage("assistant", INITIAL_MESSAGE)],
+        });
+      }
+      if (state.currentRoutine) {
+        const validated = buildValidatedPlanSummary({
+          ...state.currentRoutine,
+          catalog,
+        });
+        if (!validated) {
+          state = await repository.updateRoutineConversationState({
+            currentRoutine: null,
+          });
+          if (mounted) {
+            setGenerationError(
+              "La rutina guardada no superó la validación actual. Conservamos tu perfil para regenerarla.",
+            );
+          }
+        }
+      }
+      const routines = await repository.list();
+      if (!mounted) return;
+      conversationRef.current = state;
+      setConversation(state);
+      setActiveDayId(state.currentRoutine?.plan.days[0]?.id ?? null);
+      setSaved(
+        state.currentRoutine
+          ? routines.some((routine) => routine.id === state.currentRoutine?.plan.id)
+          : false,
+      );
+      if (state.providerState.status === "error") {
+        setFallback({
+          ...state.providerState.error,
+          action: "guided_form",
+        });
+      }
+    })().catch(() => {
+      if (!mounted) return;
+      setGenerationError(
+        "No pudimos leer el almacenamiento local. Recargá la página antes de continuar.",
+      );
+    });
+    return () => {
+      mounted = false;
+      requestAbortRef.current?.abort();
+    };
+  }, [catalog]);
 
-      const reply: ConversationMessage = {
-        id: crypto.randomUUID(),
-        role: "assistant",
-        content: assistantMessage(result),
-        createdAt: new Date().toISOString(),
-      };
-      const nextMessages = [...withUser, reply];
-      setMessages(nextMessages);
-      await persistConversation(
-        nextMessages,
-        result.request,
+  useEffect(() => {
+    threadRef.current?.scrollTo({
+      top: threadRef.current.scrollHeight,
+      behavior: "smooth",
+    });
+  }, [conversation?.messages, loading]);
+
+  const appendAssistant = useCallback(
+    async (
+      state: RoutineConversationState,
+      content: string,
+      providerFallback?: AiFallbackState | null,
+    ) => {
+      const message = createMessage("assistant", content);
+      const next = await commit({
+        messages: [...state.messages, message],
+        retryMetadata: null,
+        providerState: providerFallback
+          ? {
+              status: "error",
+              providerId: state.providerState.providerId,
+              model: state.providerState.model,
+              error: persistentError(providerFallback),
+            }
+          : state.providerState.status === "error"
+            ? createIdleAiProviderState()
+            : state.providerState,
+      });
+      if (providerFallback) setFallback(providerFallback);
+      return next;
+    },
+    [commit],
+  );
+
+  const requestAssistantResponse = useCallback(
+    async (
+      context: ValidatedAssistantResponseContext,
+      signal: AbortSignal,
+    ): Promise<{ message: string; providerError: AiFallbackState | null }> => {
+      try {
+        const payload = await postApi<
+          SuccessfulEnvelope & {
+            response: unknown;
+            fallbackUsed?: boolean;
+            providerError?: unknown;
+          }
+        >("/api/ai/respond", context, signal);
+        const response = AssistantResponseSchema.parse(payload.response);
+        const providerError = payload.providerError
+          ? fallbackFromPayload({ error: payload.providerError })
+          : null;
+        return { message: response.message, providerError };
+      } catch (error) {
+        if (error instanceof DOMException && error.name === "AbortError") {
+          throw error;
+        }
+        return {
+          message: composeAssistantFallback(context),
+          providerError:
+            error instanceof ChatRequestError
+              ? error.fallback
+              : fallbackFromPayload(null),
+        };
+      }
+    },
+    [],
+  );
+
+  const processTurn = useCallback(
+    async (
+      text: string,
+      baseState: RoutineConversationState,
+      signal: AbortSignal,
+      explicitExerciseTarget: ConversationExerciseTarget | null,
+    ) => {
+      setActivity("Entendiendo tu mensaje…");
+      const interpreted = await postApi<
+        SuccessfulEnvelope & { turn: unknown; diagnostics?: ProviderDiagnostics }
+      >(
+        "/api/ai/interpret",
+        {
+          message: text,
+          currentDraft: baseState.requestDraft,
+          currentLimitationsConfirmation:
+            baseState.limitationsConfirmation,
+          locale: "es-AR",
+        },
+        signal,
+      );
+      const parsedTurn = reconcileParsedTurnSafety(
+        ParsedRoutineTurnSchema.parse(interpreted.turn),
+        text,
+      );
+      const result = applyParsedRoutineTurn(
+        baseState.requestDraft,
+        baseState.limitationsConfirmation,
+        parsedTurn,
+      );
+      const safetySignals = [
+        ...new Set([...baseState.safety.signals, ...result.safetySignals]),
+      ];
+      const assistantSafety = deriveAssistantSafetyResult(
+        result.limitationsConfirmation,
+        safetySignals,
+      );
+      const completeRequest = toCompleteRoutineRequest(
+        result.requestDraft,
         result.limitationsConfirmation,
       );
-
-      const complete = toCompleteRoutineRequest(result);
-      if (complete) {
-        await createBrowserRoutineRepository().saveSetupDraft(complete);
+      const screening = assistantSafety.generationAllowed
+        ? clearSafetyScreening()
+        : null;
+      const safetyAssessment =
+        completeRequest && screening
+          ? evaluateRoutineSafety(completeRequest, screening)
+          : null;
+      if (interpreted.diagnostics) {
+        setDiagnostics(interpreted.diagnostics);
       }
-    } catch (error) {
-      if (error instanceof DOMException && error.name === "AbortError") return;
-      setFallback({
-        code: "provider_error",
-        title: "El asistente no está disponible",
-        message:
-          "Tu información sigue guardada. Podés reintentar o continuar con el formulario guiado.",
-        action: "guided_form",
-        canRetry: true,
+
+      setActivity("Validando el perfil y la seguridad…");
+      let working = await commit({
+        requestDraft: result.requestDraft,
+        limitationsConfirmation: result.limitationsConfirmation,
+        safety: {
+          signals: safetySignals,
+          screening,
+          result: safetyAssessment,
+        },
+        providerState: readyProviderState(
+          baseState,
+          interpreted.diagnostics,
+        ),
+        retryMetadata: null,
       });
-    } finally {
-      if (requestAbortRef.current === controller) {
-        requestAbortRef.current = null;
-        setLoading(false);
+      let currentRoutine = working.currentRoutine;
+      let deterministicReply: string | null = null;
+
+      if (
+        currentRoutine &&
+        result.intent === "modify_routine" &&
+        completeRequest &&
+        screening
+      ) {
+        setActivity("Interpretando el cambio sobre tu rutina…");
+        const modificationPayload = await postApi<
+          SuccessfulEnvelope & { result: unknown }
+        >(
+          "/api/ai/modify",
+          {
+            message: text,
+            currentRequest: currentRoutine.request,
+            plan: buildRoutinePlanContext(currentRoutine.plan, catalog),
+            locale: "es-AR",
+          },
+          signal,
+        );
+        const modificationResult = RoutineModificationResultSchema.parse(
+          modificationPayload.result,
+        );
+        if (modificationResult.status === "needs_clarification") {
+          return appendAssistant(
+            working,
+            modificationResult.clarificationQuestion ??
+              "¿Qué parte de la rutina querés cambiar?",
+          );
+        }
+        if (modificationResult.status === "unsupported") {
+          const blockedSignals = [
+            ...new Set([
+              ...working.safety.signals,
+              ...modificationResult.safetySignals,
+            ]),
+          ];
+          working = await commit({
+            safety: {
+              signals: blockedSignals,
+              screening: null,
+              result: null,
+            },
+          });
+        } else if (modificationResult.modification) {
+          const applied = applyConversationRoutineModification({
+            modification: modificationResult.modification,
+            plan: currentRoutine.plan,
+            request: currentRoutine.request,
+            safetyScreening: screening,
+            catalog,
+            datasetVersion,
+            seed: createRoutineSeed(now(), crypto.randomUUID()),
+          });
+          if (!applied.ok) {
+            return appendAssistant(working, applied.message);
+          }
+          currentRoutine = {
+            request: applied.request,
+            plan: applied.plan,
+            safetyScreening: screening,
+            updatedAt: now(),
+          };
+          working = await commit({
+            requestDraft: applied.request,
+            currentRoutine,
+          });
+          deterministicReply = applied.summary;
+          setSaved(false);
+        }
+      } else if (
+        currentRoutine &&
+        completeRequest &&
+        screening &&
+        assistantSafety.generationAllowed &&
+        Object.keys(parsedTurn.requestPatch).length > 0 &&
+        requestChanged(currentRoutine.request, completeRequest)
+      ) {
+        const applied = applyConversationRoutineModification({
+          modification: { kind: "update_request", patch: completeRequest },
+          plan: currentRoutine.plan,
+          request: currentRoutine.request,
+          safetyScreening: screening,
+          catalog,
+          datasetVersion,
+          seed: createRoutineSeed(now(), crypto.randomUUID()),
+        });
+        if (!applied.ok) {
+          return appendAssistant(working, applied.message);
+        }
+        currentRoutine = {
+          request: applied.request,
+          plan: applied.plan,
+          safetyScreening: screening,
+          updatedAt: now(),
+        };
+        working = await commit({
+          requestDraft: applied.request,
+          currentRoutine,
+        });
+        deterministicReply = applied.summary;
+        setSaved(false);
       }
-    }
-  };
 
-  const completeRequest = useMemo(() => {
-    if (latest) return toCompleteRoutineRequest(latest);
-    if (confirmation === "not_confirmed") return null;
-    const candidate = {
-      ...draft,
-      goal: draft.goal ?? undefined,
-      experience: draft.experience ?? undefined,
-      daysPerWeek: draft.daysPerWeek ?? undefined,
-      sessionMinutes: draft.sessionMinutes ?? undefined,
-      trainingLocation: draft.trainingLocation ?? undefined,
-    };
-    const parsed = RoutineRequestSchema.safeParse(candidate);
-    return parsed.success ? parsed.data : null;
-  }, [confirmation, draft, latest]);
-  const safetyComplete =
-    safety.confirmedCurrentStatus &&
-    RISK_QUESTIONS.every(([key]) => safety[key] !== null);
+      if (
+        !currentRoutine &&
+        completeRequest &&
+        screening &&
+        assistantSafety.generationAllowed &&
+        safetyAssessment?.allowed
+      ) {
+        setActivity("Armando y validando tu rutina…");
+        const generated = generateRoutineUseCase({
+          request: completeRequest,
+          safetyScreening: screening,
+          catalog,
+          datasetVersion,
+          seed: createRoutineSeed(now(), crypto.randomUUID()),
+        });
+        if (!generated.ok) {
+          setGenerationError(generated.message);
+          return appendAssistant(
+            working,
+            `Guardé tu perfil, pero no pude construir una rutina válida todavía: ${generated.message}`,
+          );
+        }
+        currentRoutine = {
+          request: completeRequest,
+          plan: generated.plan,
+          safetyScreening: screening,
+          updatedAt: now(),
+        };
+        working = await commit({ currentRoutine });
+        setActiveDayId(generated.plan.days[0]?.id ?? null);
+        setSaved(false);
+      }
 
-  const generate = async () => {
-    if (!completeRequest || !safetyComplete) return;
-    let screening: SafetyScreening;
-    try {
-      screening = SafetyScreeningSchema.parse(safety);
-    } catch {
-      setGenerationError("Completá el chequeo de seguridad.");
-      return;
-    }
+      const validatedPlan = currentRoutine
+        ? buildValidatedPlanSummary({
+            ...currentRoutine,
+            catalog,
+          })
+        : null;
+      if (currentRoutine && !validatedPlan) {
+        setGenerationError(
+          "La rutina cambió, pero no superó la validación completa. Conservamos el perfil sin mostrar un plan inválido.",
+        );
+        working = await commit({ currentRoutine: null });
+        currentRoutine = null;
+      }
 
-    setGenerating(true);
-    setGenerationError(null);
-    await new Promise((resolve) => window.setTimeout(resolve, 250));
-    const result = generateRoutineUseCase({
-      request: completeRequest,
-      safetyScreening: screening,
+      if (deterministicReply) {
+        return appendAssistant(working, deterministicReply);
+      }
+
+      let exerciseResponseContext: unknown;
+      if (result.intent === "ask_question" && currentRoutine) {
+        const resolution = resolveConversationQuestion({
+          message: text,
+          plan: currentRoutine.plan,
+          catalog,
+          activeExercise: explicitExerciseTarget ?? activeExercise,
+        });
+        if (resolution.kind === "routine_explanation" && validatedPlan) {
+          setActivity("Explicando las decisiones validadas…");
+          const explanationPayload = await postApi<
+            SuccessfulEnvelope & {
+              explanation: unknown;
+              fallbackUsed?: boolean;
+              providerError?: unknown;
+            }
+          >(
+            "/api/ai/explain",
+            { plan: validatedPlan, question: text, locale: "es-AR" },
+            signal,
+          );
+          const explanation = AssistantResponseSchema.parse({
+            message: explanationPayload.explanation,
+          }).message;
+          const providerError = explanationPayload.providerError
+            ? fallbackFromPayload({ error: explanationPayload.providerError })
+            : null;
+          return appendAssistant(working, explanation, providerError);
+        }
+        if (resolution.kind === "exercise") {
+          setActiveExercise(resolution.target);
+          setActivity("Buscando datos en el catálogo validado…");
+          const exercisePayload = await postApi<
+            SuccessfulEnvelope & { context: unknown; responseContext: unknown }
+          >(
+            "/api/ai/exercise",
+            {
+              questionKind: resolution.questionKind,
+              target: resolution.target,
+              routinePlan: currentRoutine.plan,
+              routineRequest: currentRoutine.request,
+              requiredAlternativeEquipment:
+                resolution.requiredAlternativeEquipment,
+            },
+            signal,
+          );
+          exerciseResponseContext =
+            GroundedExerciseResponseContextSchema.parse(
+              exercisePayload.responseContext,
+            );
+          setExerciseCard(exercisePayload.context as GroundedExerciseCard);
+        }
+      }
+
+      setActivity("Redactando una respuesta breve…");
+      const latestState = conversationRef.current ?? working;
+      const latestSafety = deriveAssistantSafetyResult(
+        latestState.limitationsConfirmation,
+        latestState.safety.signals,
+      );
+      const context = composeContext({
+        result,
+        state: latestState,
+        safety: latestSafety,
+        plan: currentRoutine ? validatedPlan : null,
+        exerciseContext: exerciseResponseContext,
+      });
+      const response = await requestAssistantResponse(context, signal);
+      return appendAssistant(
+        latestState,
+        response.message,
+        response.providerError,
+      );
+    },
+    [
+      activeExercise,
+      appendAssistant,
       catalog,
+      commit,
       datasetVersion,
-      seed: createRoutineSeed(new Date().toISOString(), crypto.randomUUID()),
-    });
-    if (!result.ok) {
-      setGenerating(false);
-      setGenerationError(result.message);
-      return;
-    }
-    await createBrowserRoutineRepository().saveCurrentRoutine(
-      completeRequest,
-      result.plan,
-      screening,
-    );
-    router.push("/rutina");
-  };
+      requestAssistantResponse,
+    ],
+  );
 
-  const profileItems = [
-    ["Objetivo", draft.goal ? goalLabel(draft.goal) : null],
-    ["Nivel", draft.experience ? exerciseLabel(draft.experience) : null],
-    ["Días", draft.daysPerWeek ? String(draft.daysPerWeek) + " por semana" : null],
-    [
-      "Duración",
-      draft.sessionMinutes ? String(draft.sessionMinutes) + " minutos" : null,
-    ],
-    [
-      "Lugar",
-      draft.trainingLocation ? locationLabel(draft.trainingLocation) : null,
-    ],
-    [
-      "Equipamiento",
-      draft.availableEquipment.length
-        ? draft.availableEquipment.map(exerciseLabel).join(", ")
-        : null,
-    ],
-  ] as const;
+  const submitText = useCallback(
+    async (
+      rawText: string,
+      options?: {
+        existingUserMessageId?: string;
+        explicitExerciseTarget?: ConversationExerciseTarget | null;
+      },
+    ) => {
+      const text = rawText.trim();
+      const base = conversationRef.current;
+      if (!text || !base || loading) return;
+      setInput("");
+      setLoading(true);
+      setFallback(null);
+      setGenerationError(null);
+      setExerciseCard(null);
+      requestAbortRef.current?.abort();
+      const controller = new AbortController();
+      requestAbortRef.current = controller;
+
+      let working = base;
+      let userMessageId = options?.existingUserMessageId;
+      if (!userMessageId) {
+        const userMessage = createMessage("user", text);
+        userMessageId = userMessage.id;
+        working = await commit({
+          messages: [...base.messages, userMessage],
+          providerState: createIdleAiProviderState(),
+          retryMetadata: null,
+        });
+      }
+
+      try {
+        await processTurn(
+          text,
+          working,
+          controller.signal,
+          options?.explicitExerciseTarget ?? null,
+        );
+      } catch (error) {
+        if (error instanceof DOMException && error.name === "AbortError") {
+          return;
+        }
+        const state = conversationRef.current ?? working;
+        const nextFallback =
+          error instanceof ChatRequestError
+            ? error.fallback
+            : fallbackFromPayload(null);
+        const previousAttempt =
+          state.retryMetadata?.lastUserMessageId === userMessageId
+            ? state.retryMetadata.attemptCount
+            : 0;
+        await commit({
+          providerState: {
+            status: "error",
+            providerId: state.providerState.providerId,
+            model: state.providerState.model,
+            error: persistentError(nextFallback),
+          },
+          retryMetadata: {
+            lastUserMessageId: userMessageId,
+            failedAt: now(),
+            attemptCount: Math.min(previousAttempt + 1, 20),
+          },
+        });
+        setFallback(nextFallback);
+      } finally {
+        if (requestAbortRef.current === controller) {
+          requestAbortRef.current = null;
+          setLoading(false);
+        }
+      }
+    },
+    [commit, loading, processTurn],
+  );
+
+  const retry = useCallback(() => {
+    const state = conversationRef.current;
+    const metadata = state?.retryMetadata;
+    if (!state || !metadata) return;
+    const message = state.messages.find(
+      (candidate) =>
+        candidate.role === "user" &&
+        candidate.id === metadata.lastUserMessageId,
+    );
+    if (!message) return;
+    void submitText(message.content, {
+      existingUserMessageId: message.id,
+    });
+  }, [submitText]);
+
+  const saveRoutine = useCallback(async () => {
+    const current = conversationRef.current?.currentRoutine;
+    if (!current || !repositoryRef.current) return;
+    await repositoryRef.current.save(
+      current.request,
+      current.plan,
+      current.safetyScreening,
+    );
+    setSaved(true);
+  }, []);
+
+  const explainExercise = useCallback(
+    (target: ConversationExerciseTarget) => {
+      const exercise = catalog.find(
+        (candidate) => candidate.id === target.exerciseId,
+      );
+      setActiveExercise(target);
+      void submitText(
+        `¿Por qué elegiste ${exercise?.name ?? "este ejercicio"}?`,
+        { explicitExerciseTarget: target },
+      );
+    },
+    [catalog, submitText],
+  );
+
+  const prepareReplacement = useCallback(
+    (target: ConversationExerciseTarget) => {
+      const exercise = catalog.find(
+        (candidate) => candidate.id === target.exerciseId,
+      );
+      setActiveExercise(target);
+      setInput(
+        `Cambiame ${exercise?.name ?? "este ejercicio"} por una alternativa compatible`,
+      );
+      window.setTimeout(() => composerRef.current?.focus(), 0);
+    },
+    [catalog],
+  );
+
+  const rows = useMemo(
+    () => (conversation ? profileRows(conversation) : []),
+    [conversation],
+  );
+  const currentRoutine = conversation?.currentRoutine ?? null;
+  const assistantSafety = conversation
+    ? deriveAssistantSafetyResult(
+        conversation.limitationsConfirmation,
+        conversation.safety.signals,
+      )
+    : null;
+  const showSuggestions =
+    Boolean(conversation) &&
+    !currentRoutine &&
+    (conversation?.messages.length ?? 0) <= 3;
+
+  if (!conversation) {
+    return (
+      <div className={[styles.page, "shell"].join(" ")}>
+        <div className={styles.loadingPage} role="status">
+          <LoaderCircle aria-hidden="true" /> Recuperando tu espacio de trabajo…
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className={[styles.page, "shell"].join(" ")}>
+    <div
+      className={[styles.page, "shell"].join(" ")}
+      data-testid="routine-chat"
+    >
       <header className={styles.heading}>
         <div>
-          <p className="eyebrow">Interpretación opcional · motor determinista</p>
-          <h1>Contame cómo querés entrenar.</h1>
+          <p className="eyebrow">Tu entrenador conversacional</p>
+          <h1>Armemos una rutina que puedas entender y cambiar.</h1>
           <p>
-            El asistente sólo estructura tu pedido. No elige ejercicios ni puede saltear la
-            validación.
+            Hablá con naturalidad. FORMA estructura el pedido; el motor
+            determinista elige y valida cada ejercicio antes de mostrarlo.
           </p>
         </div>
-        <Link className="button button-quiet" href="/crear">
-          <ClipboardList aria-hidden="true" size={17} /> Completar con formulario
+        <Link className="button button-quiet" href="/crear/manual">
+          <ClipboardList aria-hidden="true" size={17} /> Usar formulario guiado
         </Link>
       </header>
 
@@ -389,222 +1091,359 @@ export function RoutineChat({
               <span className="eyebrow" id="chat-title">
                 Conversación
               </span>
-              <strong>
-                {provider
-                  ? provider.id + (provider.model ? " · " + provider.model : "")
-                  : "Proveedor al enviar"}
-              </strong>
+              <strong>FORMA mantiene el contexto validado</strong>
             </div>
-            <span className={styles.providerDot} aria-hidden="true" />
+            <span className={styles.statusDot} aria-hidden="true" />
           </div>
 
-          <div className={styles.thread} ref={threadRef} aria-live="polite">
-            {messages.length === 0 && (
-              <div className={styles.welcome}>
-                <Bot aria-hidden="true" />
-                <p>
-                  Incluí objetivo, nivel, días, minutos, lugar o equipamiento y si tenés
-                  limitaciones actuales.
-                </p>
-              </div>
-            )}
-            {messages.map((message) => (
+          <div
+            className={styles.thread}
+            ref={threadRef}
+            role="log"
+            aria-label="Mensajes de la conversación"
+            aria-live="polite"
+            tabIndex={0}
+          >
+            {conversation.messages.map((message) => (
               <article
                 key={message.id}
-                className={message.role === "user" ? styles.userMessage : styles.aiMessage}
+                className={
+                  message.role === "user"
+                    ? styles.userMessage
+                    : styles.aiMessage
+                }
+                data-message-role={message.role}
               >
-                <span>
-                  {message.role === "user" ? (
-                    <UserRound aria-hidden="true" />
-                  ) : (
-                    <Bot aria-hidden="true" />
-                  )}
-                </span>
-                <p>{message.content}</p>
+                {message.role === "user" ? (
+                  <>
+                    <p>{message.content}</p>
+                    <span aria-hidden="true">
+                      <UserRound />
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <span aria-hidden="true">
+                      <Bot />
+                    </span>
+                    <p>{message.content}</p>
+                  </>
+                )}
               </article>
             ))}
-            {loading && (
-              <div className={styles.typing}>
-                <LoaderCircle aria-hidden="true" /> Interpretando y validando el contrato…
+            {loading ? (
+              <div className={styles.typing} role="status">
+                <LoaderCircle aria-hidden="true" /> {activity}
               </div>
-            )}
+            ) : null}
           </div>
 
-          {fallback && (
+          {exerciseCard ? (
+            <article
+              className={styles.exerciseAnswer}
+              data-testid="exercise-answer-card"
+            >
+              <div className={styles.exerciseAnswerMedia}>
+                <ExerciseThumbnail
+                  name={
+                    exerciseCard.exercise.displayNameEs ??
+                    exerciseCard.exercise.displayName
+                  }
+                  media={media[exerciseCard.exercise.id]}
+                />
+              </div>
+              <div>
+                <p className="eyebrow">Datos del catálogo validado</p>
+                <h3>
+                  {exerciseCard.exercise.displayNameEs ??
+                    exerciseCard.exercise.displayName}
+                </h3>
+                <p>
+                  <strong>Foco:</strong>{" "}
+                  {exerciseListLabel(exerciseCard.exercise.primaryMuscles)}
+                  {exerciseCard.exercise.secondaryMuscles.length > 0
+                    ? ` · Secundarios: ${exerciseListLabel(exerciseCard.exercise.secondaryMuscles)}`
+                    : ""}
+                </p>
+                {exerciseCard.routine ? (
+                  <p>
+                    {exerciseCard.routine.prescription.sets} series ·{" "}
+                    {exerciseCard.routine.prescription.repPrescription} reps ·{" "}
+                    RIR {exerciseCard.routine.prescription.rir ?? "—"}
+                  </p>
+                ) : null}
+                {exerciseCard.exercise.instructionStepsEs.length > 0 ? (
+                  <details>
+                    <summary>Ver instrucciones revisadas</summary>
+                    <ol>
+                      {exerciseCard.exercise.instructionStepsEs.map((step) => (
+                        <li key={step}>{step}</li>
+                      ))}
+                    </ol>
+                  </details>
+                ) : null}
+                {exerciseCard.alternatives.length > 0 ? (
+                  <details>
+                    <summary>Alternativas aprobadas</summary>
+                    <ul>
+                      {exerciseCard.alternatives.map((alternative) => (
+                        <li key={alternative.id}>
+                          <Link href={`/ejercicios/${alternative.id}`}>
+                            {alternative.displayNameEs ?? alternative.displayName}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </details>
+                ) : null}
+                <small>
+                  Fuente: catálogo local · commit{" "}
+                  <code>{exerciseCard.grounding.datasetCommit.slice(0, 12)}</code>
+                </small>
+              </div>
+            </article>
+          ) : null}
+
+          {fallback ? (
             <div className={styles.fallback} role="alert">
               <CircleAlert aria-hidden="true" />
               <div>
                 <strong>{fallback.title}</strong>
                 <p>{fallback.message}</p>
                 <div>
-                  {fallback.canRetry && (
-                    <button
-                      type="button"
-                      onClick={() =>
-                        void send(
-                          messages.findLast((message) => message.role === "user")
-                            ?.content ?? "",
-                        )
-                      }
-                    >
-                      Reintentar
+                  {fallback.canRetry && conversation.retryMetadata ? (
+                    <button type="button" onClick={retry}>
+                      <RotateCcw aria-hidden="true" /> Reintentar el último turno
                     </button>
-                  )}
-                  <Link href="/crear">Continuar con formulario</Link>
+                  ) : null}
+                  <Link href="/crear/manual">
+                    Continuar con el formulario
+                  </Link>
                 </div>
               </div>
             </div>
-          )}
+          ) : null}
 
-          <div className={styles.suggestions}>
-            {SUGGESTIONS.map((suggestion, index) => (
-              <button type="button" key={suggestion} onClick={() => setInput(suggestion)}>
-                Ejemplo {index + 1}
-              </button>
-            ))}
-          </div>
+          {generationError ? (
+            <div className={styles.generationError} role="alert">
+              <CircleAlert aria-hidden="true" /> {generationError}
+            </div>
+          ) : null}
+
+          {showSuggestions ? (
+            <div className={styles.suggestions} aria-label="Ideas para responder">
+              {SUGGESTIONS.map((suggestion) => (
+                <button
+                  type="button"
+                  key={suggestion}
+                  onClick={() => setInput(suggestion)}
+                >
+                  {suggestion}
+                </button>
+              ))}
+            </div>
+          ) : null}
+
           <form
             className={styles.composer}
             onSubmit={(event) => {
               event.preventDefault();
-              void send();
+              if (!loading) void submitText(input);
             }}
           >
             <label>
-              <span className="sr-only">Mensaje para describir la rutina</span>
+              <span className="sr-only">Mensaje para FORMA</span>
               <textarea
+                ref={composerRef}
                 value={input}
-                maxLength={2_000}
                 onChange={(event) => setInput(event.target.value)}
-                placeholder="Ejemplo: quiero hipertrofia, cuatro días…"
+                onKeyDown={(event) => {
+                  if (event.key === "Enter" && !event.shiftKey) {
+                    event.preventDefault();
+                    if (!loading) void submitText(input);
+                  }
+                }}
+                maxLength={4_000}
+                placeholder={
+                  currentRoutine
+                    ? "Preguntá por la rutina o pedime un cambio…"
+                    : "Ej.: Quiero crecer mis bíceps y entreno cuatro días…"
+                }
               />
             </label>
-            <button type="submit" disabled={loading || !input.trim()} aria-label="Enviar mensaje">
-              <Send aria-hidden="true" />
-            </button>
+            {loading ? (
+              <button
+                type="button"
+                onClick={() => requestAbortRef.current?.abort()}
+                aria-label="Cancelar respuesta"
+              >
+                <Square aria-hidden="true" />
+              </button>
+            ) : (
+              <button
+                type="submit"
+                disabled={!input.trim()}
+                aria-label="Enviar mensaje"
+              >
+                <Send aria-hidden="true" />
+              </button>
+            )}
           </form>
         </section>
 
-        <aside className={styles.profile} aria-labelledby="profile-title">
-          <div className={styles.profileTop}>
-            <div>
-              <p className="eyebrow">Resumen estructurado</p>
-              <h2 id="profile-title">Perfil de rutina</h2>
-            </div>
-            <span>{profileItems.filter(([, value]) => value).length} de 6 datos</span>
-          </div>
-          <dl>
-            {profileItems.map(([label, value]) => (
-              <div key={label} className={value ? styles.completeField : styles.missingField}>
-                <dt>{label}</dt>
-                <dd>{value ?? "Esperando…"} </dd>
-              </div>
-            ))}
-          </dl>
-          {latest?.missingFields.length ? (
-            <div className={styles.missing}>
-              <strong>Información pendiente</strong>
-              <ul>
-                {latest.missingFields.map((field) => (
-                  <li key={field}>{REQUIRED_LABELS[field]}</li>
-                ))}
-              </ul>
-            </div>
-          ) : null}
-
-          {completeRequest && (
-            <div className={styles.chatSafety}>
-              <div>
-                <ShieldCheck aria-hidden="true" />
-                <h3>Chequeo de seguridad</h3>
-              </div>
-              <p>Confirmá explícitamente cada punto antes de generar.</p>
-              {RISK_QUESTIONS.map(([key, question]) => (
-                <fieldset key={key}>
-                  <legend>{question}</legend>
-                  <label>
-                    <input
-                      type="radio"
-                      checked={safety[key] === false}
-                      onChange={() =>
-                        setSafety((current) => ({ ...current, [key]: false }))
-                      }
-                    />
-                    No
-                  </label>
-                  <label>
-                    <input
-                      type="radio"
-                      checked={safety[key] === true}
-                      onChange={() =>
-                        setSafety((current) => ({ ...current, [key]: true }))
-                      }
-                    />
-                    Sí
-                  </label>
-                </fieldset>
-              ))}
-              <label className={styles.confirm}>
-                <input
-                  type="checkbox"
-                  checked={safety.confirmedCurrentStatus}
-                  onChange={(event) =>
-                    setSafety((current) => ({
-                      ...current,
-                      confirmedCurrentStatus: event.target.checked,
-                    }))
-                  }
-                />
-                Estas respuestas describen mi situación actual.
-              </label>
-              {generationError && (
-                <p className={styles.generateError} role="alert">
-                  {generationError}
-                </p>
-              )}
-              <button
-                type="button"
-                className="button button-primary"
-                disabled={!safetyComplete || generating}
-                onClick={() => void generate()}
+        <aside className={styles.profileColumn}>
+          <details
+            className={styles.profile}
+            open={desktopProfile || mobileProfileOpen}
+            onToggle={(event) => {
+              if (!desktopProfile) {
+                setMobileProfileOpen(event.currentTarget.open);
+              }
+            }}
+          >
+            <summary
+              aria-disabled={desktopProfile}
+              tabIndex={desktopProfile ? -1 : 0}
+              onClick={(event) => {
+                if (desktopProfile) event.preventDefault();
+              }}
+            >
+              <span>
+                <span className="eyebrow">Perfil estructurado</span>
+                <strong>Tu punto de partida</strong>
+              </span>
+              <span data-testid="chat-profile-progress">
+                {conversation.completionPercentage}%
+              </span>
+            </summary>
+            <div className={styles.profileBody}>
+              <div
+                className={styles.progress}
+                role="progressbar"
+                aria-label="Perfil completo"
+                aria-valuemin={0}
+                aria-valuemax={100}
+                aria-valuenow={conversation.completionPercentage}
               >
-                {generating ? (
-                  <LoaderCircle aria-hidden="true" />
-                ) : (
-                  <Check aria-hidden="true" />
-                )}
-                {generating ? "Validando rutina…" : "Generar rutina validada"}
-              </button>
-            </div>
-          )}
+                <span
+                  style={{ width: `${conversation.completionPercentage}%` }}
+                />
+              </div>
+              <dl>
+                {rows.map((row) => (
+                  <div
+                    key={row.key}
+                    className={
+                      row.value ? styles.completeField : styles.missingField
+                    }
+                  >
+                    <dt>{row.label}</dt>
+                    <dd>{row.value ?? "Todavía falta"}</dd>
+                  </div>
+                ))}
+                {conversation.requestDraft.focusMuscles.length > 0 ? (
+                  <div className={styles.completeField}>
+                    <dt>Prioridades</dt>
+                    <dd>
+                      {conversation.requestDraft.focusMuscles
+                        .map(exerciseLabel)
+                        .join(", ")}
+                    </dd>
+                  </div>
+                ) : null}
+              </dl>
 
-          {!completeRequest && (
-            <Link className={styles.formFallback} href="/crear">
-              Podés terminar el mismo perfil en el formulario
-              <ArrowRight aria-hidden="true" />
-            </Link>
-          )}
+              {conversation.missingFields.length > 0 ? (
+                <div className={styles.missing}>
+                  <strong>Para generar todavía falta:</strong>
+                  <ul>
+                    {conversation.missingFields.map((field) => (
+                      <li key={field}>{REQUIRED_LABELS[field]}</li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
+
+              {assistantSafety ? (
+                <div
+                  className={
+                    assistantSafety.status === "clear"
+                      ? styles.safetyClear
+                      : styles.safetyReview
+                  }
+                >
+                  {assistantSafety.status === "clear" ? (
+                    <ShieldCheck aria-hidden="true" />
+                  ) : (
+                    <ShieldAlert aria-hidden="true" />
+                  )}
+                  <div>
+                    <strong>
+                      {assistantSafety.status === "clear"
+                        ? "Confirmación explícita registrada"
+                        : "Generación pausada por seguridad"}
+                    </strong>
+                    <p>
+                      {assistantSafety.status === "clear"
+                        ? "No detectamos dolor, lesión reciente, síntomas ni restricciones declaradas."
+                        : "Revisá las limitaciones. FORMA no evalúa lesiones ni contradice indicaciones profesionales."}
+                    </p>
+                  </div>
+                </div>
+              ) : null}
+
+              <Link className={styles.formFallback} href="/crear/manual">
+                Revisar todo en el formulario
+                <ArrowRight aria-hidden="true" />
+              </Link>
+            </div>
+          </details>
+
+          {diagnostics && process.env.NODE_ENV === "development" ? (
+            <details className={styles.diagnostics}>
+              <summary>
+                <Bug aria-hidden="true" /> Diagnóstico de desarrollo
+              </summary>
+              <p>
+                Proveedor: <code>{diagnostics.provider}</code>
+                <br />
+                Modelo: <code>{diagnostics.model ?? "sin modelo"}</code>
+              </p>
+            </details>
+          ) : null}
         </aside>
+
+        {currentRoutine ? (
+          <div className={styles.inlineRoutine} data-testid="inline-routine">
+            <ConversationRoutinePreview
+              plan={currentRoutine.plan}
+              catalog={catalog}
+              media={media}
+              activeDayId={activeDayId}
+              onActiveDayChange={setActiveDayId}
+              saved={saved}
+              actions={{
+                onSave: () => void saveRoutine(),
+                onOpenRoutine: () => router.push("/rutina"),
+                onExplainRoutine: () =>
+                  void submitText("¿Por qué organizaste así mi rutina?"),
+                onExplainExercise: explainExercise,
+                onReplaceExercise: prepareReplacement,
+              }}
+            />
+          </div>
+        ) : null}
       </div>
+
+      <footer className={styles.trustNote}>
+        <ShieldCheck aria-hidden="true" />
+        <p>
+          La IA interpreta y redacta; nunca elige ejercicios ni aprueba seguridad.
+          El catálogo local, las reglas y el validador siguen siendo la fuente de
+          verdad. <Link href="/ejercicios">Explorar ejercicios</Link>
+          <ExternalLink aria-hidden="true" />
+        </p>
+      </footer>
     </div>
   );
-}
-
-function goalLabel(goal: NonNullable<RoutineRequestDraft["goal"]>): string {
-  return {
-    hypertrophy: "Hipertrofia",
-    strength: "Fuerza",
-    general_fitness: "Acondicionamiento general",
-    muscular_endurance: "Resistencia muscular",
-  }[goal];
-}
-
-function locationLabel(
-  location: NonNullable<RoutineRequestDraft["trainingLocation"]>,
-): string {
-  return {
-    commercial_gym: "Gimnasio comercial",
-    home: "Casa",
-    custom: "Otro espacio",
-  }[location];
 }

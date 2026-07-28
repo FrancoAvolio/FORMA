@@ -112,12 +112,36 @@ const RegenerateDayModificationSchema = z
   })
   .strict();
 
+const ShortenDayModificationSchema = z
+  .object({
+    kind: z.literal("shorten_day"),
+    dayId: z.string().trim().min(1).max(64),
+    targetMinutes: z.number().int().min(10).max(120).nullable(),
+  })
+  .strict();
+
+const ExcludeEquipmentModificationSchema = z
+  .object({
+    kind: z.literal("exclude_equipment"),
+    equipment: z
+      .array(z.string().trim().min(1).max(120))
+      .min(1)
+      .max(4)
+      .refine(
+        (items) => new Set(items).size === items.length,
+        "El equipamiento excluido no puede repetirse.",
+      ),
+  })
+  .strict();
+
 export const RoutineModificationSchema = z.discriminatedUnion("kind", [
   UpdateRequestModificationSchema,
   ReplaceExerciseModificationSchema,
   RemoveExerciseModificationSchema,
   ReorderExerciseModificationSchema,
   RegenerateDayModificationSchema,
+  ShortenDayModificationSchema,
+  ExcludeEquipmentModificationSchema,
 ]);
 
 export const RoutineModificationResultSchema = z
@@ -209,7 +233,11 @@ export function createRoutineModificationResultSchema(
       });
     }
 
-    if (modification.kind === "regenerate_day" && !dayIds.has(modification.dayId)) {
+    if (
+      (modification.kind === "regenerate_day" ||
+        modification.kind === "shorten_day") &&
+      !dayIds.has(modification.dayId)
+    ) {
       context.addIssue({
         code: "custom",
         path: ["modification", "dayId"],

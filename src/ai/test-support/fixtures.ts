@@ -1,10 +1,12 @@
 import type { AiProvider } from "../ai-provider";
 import type { RoutineRequest } from "../../domain/profile/routine-request";
 import type {
+  AssistantResponse,
+  ComposeAssistantResponseInput,
   ExplainPlanInput,
-  ParseRoutineInput,
+  ParsedRoutineTurn,
+  ParseRoutineTurnInput,
   ParseRoutineModificationInput,
-  ParseRoutineResult,
   RoutinePlanContextSchema,
   RoutineModificationResult,
   SafetyClassification,
@@ -27,32 +29,16 @@ export const completeRoutineRequest: RoutineRequest = {
   notes: null,
 };
 
-export const completeParseInput: ParseRoutineInput = {
+export const completeParseInput: ParseRoutineTurnInput = {
   message:
-    "Soy intermedio, quiero hipertrofia cuatro días, 45 minutos, en el gimnasio con mancuernas. No tengo dolor ni restricciones.",
-  currentDraft: {
-    goal: "hypertrophy",
-    experience: "intermediate",
-    daysPerWeek: 4,
-    sessionMinutes: 45,
-    trainingLocation: "commercial_gym",
-    availableEquipment: ["dumbbell", "machine"],
-    focusMuscles: ["back"],
-    excludedExercises: ["deadlift"],
-    excludedMovementPatterns: [],
-    preferredExercises: [],
-    limitations: [],
-    notes: null,
-  },
-  currentLimitationsConfirmation: "confirmed_none",
+    "Soy intermedio, quiero hipertrofia cuatro días, 45 minutos, en el gimnasio con mancuernas y máquinas, prioridad en espalda y sin peso muerto. No tengo dolor ni restricciones.",
   locale: "es-AR",
 };
 
-export const completeParseResult: ParseRoutineResult = {
-  status: "complete",
-  request: { ...completeRoutineRequest },
-  limitationsConfirmation: "confirmed_none",
-  missingFields: [],
+export const completeParsedTurn: ParsedRoutineTurn = {
+  intent: "provide_information",
+  requestPatch: { ...completeRoutineRequest },
+  limitationsConfirmation: "no_limitations",
   assumptions: [],
   safetySignals: [],
 };
@@ -143,12 +129,39 @@ export const explanationResult = {
     "El press inclinado fue seleccionado por ser compatible con el equipamiento indicado. El RIR 2 señala que se dejan dos repeticiones en reserva.",
 } as const;
 
+export const assistantResponseInput: ComposeAssistantResponseInput = {
+  latestIntent: "provide_information",
+  canonicalDraft: { ...completeRoutineRequest },
+  limitationsConfirmation: "confirmed_none",
+  missingFields: [],
+  completionPercentage: 100,
+  parseStatus: "complete",
+  safetyResult: {
+    status: "clear",
+    signals: [],
+    generationAllowed: true,
+  },
+  focusedQuestionFields: [],
+  validatedPlan: explanationInput.plan,
+  exerciseContext: null,
+  allowedNextActions: ["show_routine", "modify_routine", "save_routine"],
+  assumptions: [],
+  locale: "es-AR",
+};
+
+export const assistantResponseResult: AssistantResponse = {
+  message:
+    "Listo. Armé una rutina validada de un día con ejercicios compatibles con tus datos.",
+};
+
 export function responseForOperation(
   operation: string,
 ): unknown {
   switch (operation) {
-    case "parse_routine_request":
-      return completeParseResult;
+    case "parse_routine_turn":
+      return completeParsedTurn;
+    case "compose_assistant_response":
+      return assistantResponseResult;
     case "parse_routine_modification":
       return modificationResult;
     case "classify_safety":

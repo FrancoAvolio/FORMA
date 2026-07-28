@@ -49,13 +49,13 @@ describeAiProviderContract(
 describe("CloudflareAiProvider binding", () => {
   it("keeps the binding mandatory and server-injected", async () => {
     await expect(
-      new CloudflareAiProvider().parseRoutineRequest(completeParseInput),
+      new CloudflareAiProvider().parseRoutineTurn(completeParseInput),
     ).rejects.toMatchObject({ code: "binding_missing" });
   });
 
   it("passes the complete contract as a forced function call by default", async () => {
     const binding = createContractBinding();
-    await new CloudflareAiProvider({ binding }).parseRoutineRequest(
+    await new CloudflareAiProvider({ binding }).parseRoutineTurn(
       completeParseInput,
     );
     const [model, request, options] = vi.mocked(binding.run).mock.calls[0]!;
@@ -65,16 +65,19 @@ describe("CloudflareAiProvider binding", () => {
         {
           type: "function",
           function: {
-            name: "forma_parse_routine_request",
+            name: "forma_parse_routine_turn",
             parameters: expect.objectContaining({
               type: "object",
-              properties: expect.objectContaining({ status: expect.any(Object) }),
+              properties: expect.objectContaining({
+                intent: expect.any(Object),
+                requestPatch: expect.any(Object),
+              }),
             }),
           },
         },
       ],
       tool_choice: {
-        function: { name: "forma_parse_routine_request" },
+        function: { name: "forma_parse_routine_turn" },
       },
     });
     expect(options?.signal).toBeInstanceOf(AbortSignal);
@@ -87,13 +90,13 @@ describe("CloudflareAiProvider binding", () => {
           type: "json_schema",
           json_schema: expect.objectContaining({ type: "object" }),
         });
-        return responseForOperation("parse_routine_request");
+        return responseForOperation("parse_routine_turn");
       }),
     };
     await expect(
       new CloudflareAiProvider({ binding, structuredMode: "json_schema" })
-        .parseRoutineRequest(completeParseInput),
-    ).resolves.toMatchObject({ status: "complete" });
+        .parseRoutineTurn(completeParseInput),
+    ).resolves.toMatchObject({ intent: "provide_information" });
   });
 
   it("maps daily free-quota exhaustion distinctly from rate limiting", async () => {
@@ -103,7 +106,7 @@ describe("CloudflareAiProvider binding", () => {
       }),
     };
     await expect(
-      new CloudflareAiProvider({ binding }).parseRoutineRequest(
+      new CloudflareAiProvider({ binding }).parseRoutineTurn(
         completeParseInput,
       ),
     ).rejects.toMatchObject({ code: "quota_exhausted" });
@@ -122,12 +125,11 @@ describe("CloudflareAiProvider binding", () => {
     });
 
     await expect(
-      provider.parseRoutineRequest(completeParseInput),
-    ).resolves.toMatchObject({ status: "complete" });
+      provider.parseRoutineTurn(completeParseInput),
+    ).resolves.toMatchObject({ intent: "provide_information" });
     expect(run.mock.calls.map(([model]) => model)).toEqual([
       "@cf/ibm-granite/granite-4.0-h-micro",
       "@cf/meta/llama-small-contract-model",
     ]);
   });
 });
-

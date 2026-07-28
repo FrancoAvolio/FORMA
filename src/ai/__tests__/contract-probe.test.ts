@@ -15,6 +15,5 @@ it("runs the opt-in provider contract probe without external usage in tests", as
     repetitions: 1,
     passed: true,
   });
-  expect(report.checks).toHaveLength(5);
+  expect(report.checks).toHaveLength(6);
 });
-

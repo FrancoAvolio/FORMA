@@ -1,8 +1,13 @@
 import { describe, expect, it } from "vitest";
 
-import { toCompleteRoutineRequest } from "../schemas";
+import { createEmptyRoutineRequestDraft } from "../../domain/profile/routine-draft";
+import {
+  applyParsedRoutineTurn,
+  toCompleteRoutineRequest,
+} from "../../application/conversation/routine-turn-state";
 import {
   completeParseInput,
+  assistantResponseInput,
   explanationInput,
   modificationInput,
   safetyInput,
@@ -15,9 +20,19 @@ export function describeAiProviderContract(
 ): void {
   describe(`${name} AiProvider contract`, () => {
     it("returns a schema-valid request that converts to the domain contract", async () => {
-      const result = await createProvider().parseRoutineRequest(completeParseInput);
+      const turn = await createProvider().parseRoutineTurn(completeParseInput);
+      const result = applyParsedRoutineTurn(
+        createEmptyRoutineRequestDraft(),
+        "not_confirmed",
+        turn,
+      );
       expect(result.status).toBe("complete");
-      expect(toCompleteRoutineRequest(result)).not.toBeNull();
+      expect(
+        toCompleteRoutineRequest(
+          result.requestDraft,
+          result.limitationsConfirmation,
+        ),
+      ).not.toBeNull();
     });
 
     it("references only an exercise in the supplied plan context", async () => {
@@ -29,6 +44,14 @@ export function describeAiProviderContract(
         dayId: "day-1",
         exerciseId: "0047",
       });
+    });
+
+    it("verbalizes only validated application context", async () => {
+      const result = await createProvider().composeAssistantResponse(
+        assistantResponseInput,
+      );
+      expect(result.message.length).toBeGreaterThan(0);
+      expect(result.message.length).toBeLessThanOrEqual(2_000);
     });
 
     it("returns an advisory safety classification", async () => {

@@ -3,10 +3,12 @@ import "server-only";
 import type { AiProvider } from "../ai-provider";
 import { AiProviderError } from "../errors";
 import type {
+  AssistantResponse,
+  ComposeAssistantResponseInput,
   ExplainPlanInput,
-  ParseRoutineInput,
+  ParsedRoutineTurn,
+  ParseRoutineTurnInput,
   ParseRoutineModificationInput,
-  ParseRoutineResult,
   RoutineModificationResult,
   SafetyClassification,
   SafetyClassificationInput,
@@ -23,11 +25,18 @@ export class DisabledAiProvider implements AiProvider {
     });
   }
 
-  async parseRoutineRequest(
-    input: ParseRoutineInput,
-  ): Promise<ParseRoutineResult> {
+  async parseRoutineTurn(
+    input: ParseRoutineTurnInput,
+  ): Promise<ParsedRoutineTurn> {
     void input;
-    return this.unavailable("parse_routine_request");
+    return this.unavailable("parse_routine_turn");
+  }
+
+  async composeAssistantResponse(
+    input: ComposeAssistantResponseInput,
+  ): Promise<AssistantResponse> {
+    void input;
+    return this.unavailable("compose_assistant_response");
   }
 
   async parseRoutineModification(

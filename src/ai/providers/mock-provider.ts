@@ -2,31 +2,39 @@ import "server-only";
 
 import { z } from "zod";
 
+import { composeAssistantFallback } from "../../application/conversation/assistant-response-fallback";
 import type { AiProvider } from "../ai-provider";
 import { AiProviderError, type AiErrorCode } from "../errors";
 import { AI_LIMITS } from "../limits";
 import { assertMaximumBytes, withAiDeadline } from "../runtime";
 import {
+  AssistantResponseSchema,
+  ComposeAssistantResponseInputDataSchema,
   createRoutineModificationResultSchema,
   createSafetyClassificationSchema,
   ExplainPlanInputDataSchema,
-  ParseRoutineInputDataSchema,
+  ParsedRoutineTurnSchema,
+  ParseRoutineTurnInputDataSchema,
   ParseRoutineModificationInputDataSchema,
-  ParseRoutineResultSchema,
   SafetyClassificationInputDataSchema,
+  type AssistantResponse,
+  type ComposeAssistantResponseInput,
   type ExplainPlanInput,
-  type ParseRoutineInput,
+  type ParsedRoutineTurn,
+  type ParseRoutineTurnInput,
   type ParseRoutineModificationInput,
-  type ParseRoutineResult,
   type RoutineModificationResult,
-  type RoutineRequestDraft,
+  type RoutineRequestPatch,
   type SafetyClassification,
   type SafetyClassificationInput,
   type SafetySignalSchema,
 } from "../schemas";
 import type { AiOperation } from "../structured-output";
 
-type ParsedRoutineInput = z.output<typeof ParseRoutineInputDataSchema>;
+type ParsedTurnInput = z.output<typeof ParseRoutineTurnInputDataSchema>;
+type ParsedAssistantResponseInput = z.output<
+  typeof ComposeAssistantResponseInputDataSchema
+>;
 type ParsedModificationInput = z.output<
   typeof ParseRoutineModificationInputDataSchema
 >;
@@ -35,9 +43,12 @@ type ParsedExplanationInput = z.output<typeof ExplainPlanInputDataSchema>;
 type SafetySignal = z.infer<typeof SafetySignalSchema>;
 
 export type MockResponseOverrides = {
-  parseRoutineRequest?:
-    | ParseRoutineResult
-    | ((input: ParsedRoutineInput) => ParseRoutineResult);
+  parseRoutineTurn?:
+    | ParsedRoutineTurn
+    | ((input: ParsedTurnInput) => ParsedRoutineTurn);
+  composeAssistantResponse?:
+    | AssistantResponse
+    | ((input: ParsedAssistantResponseInput) => AssistantResponse);
   parseRoutineModification?:
     | RoutineModificationResult
     | ((input: ParsedModificationInput) => RoutineModificationResult);
@@ -54,21 +65,6 @@ export type MockAiProviderConfig = {
   timeoutMs?: number;
 };
 
-const EMPTY_DRAFT: RoutineRequestDraft = {
-  goal: null,
-  experience: null,
-  daysPerWeek: null,
-  sessionMinutes: null,
-  trainingLocation: null,
-  availableEquipment: [],
-  focusMuscles: [],
-  excludedExercises: [],
-  excludedMovementPatterns: [],
-  preferredExercises: [],
-  limitations: [],
-  notes: null,
-};
-
 function normalized(value: string): string {
   return value
     .normalize("NFD")
@@ -83,6 +79,7 @@ function includesAny(value: string, terms: readonly string[]): boolean {
 const SPANISH_NUMBERS: Record<string, number> = {
   uno: 1,
   un: 1,
+  una: 1,
   dos: 2,
   tres: 3,
   cuatro: 4,
@@ -146,138 +143,154 @@ function detectSafetySignals(value: string): SafetySignal[] {
   return unique(signals) as SafetySignal[];
 }
 
-function parseMockRoutine(input: ParsedRoutineInput): ParseRoutineResult {
+function parseMockTurn(input: ParsedTurnInput): ParsedRoutineTurn {
   const text = normalized(input.message);
-  const draft: RoutineRequestDraft = {
-    ...(input.currentDraft ?? EMPTY_DRAFT),
-    availableEquipment: [...(input.currentDraft?.availableEquipment ?? [])],
-    focusMuscles: [...(input.currentDraft?.focusMuscles ?? [])],
-    excludedExercises: [...(input.currentDraft?.excludedExercises ?? [])],
-    excludedMovementPatterns: [
-      ...(input.currentDraft?.excludedMovementPatterns ?? []),
-    ],
-    preferredExercises: [...(input.currentDraft?.preferredExercises ?? [])],
-    limitations: [...(input.currentDraft?.limitations ?? [])],
-  };
+  const requestPatch: RoutineRequestPatch = {};
 
   if (includesAny(text, ["hipertrof", "ganar musculo", "masa muscular"])) {
-    draft.goal = "hypertrophy";
+    requestPatch.goal = "hypertrophy";
   } else if (includesAny(text, ["fuerza", "mas fuerte"])) {
-    draft.goal = "strength";
+    requestPatch.goal = "strength";
   } else if (includesAny(text, ["resistencia muscular"])) {
-    draft.goal = "muscular_endurance";
+    requestPatch.goal = "muscular_endurance";
   } else if (includesAny(text, ["estado fisico", "fitness general", "salud general"])) {
-    draft.goal = "general_fitness";
+    requestPatch.goal = "general_fitness";
   }
 
-  if (text.includes("principiante")) draft.experience = "beginner";
-  if (text.includes("intermedio")) draft.experience = "intermediate";
-  if (text.includes("avanzado")) draft.experience = "advanced";
+  if (text.includes("principiante")) requestPatch.experience = "beginner";
+  if (text.includes("intermedio")) requestPatch.experience = "intermediate";
+  if (text.includes("avanzado")) requestPatch.experience = "advanced";
 
   const days = extractNumberBefore(text, "(?:dias|veces)(?: por semana)?");
-  if (days !== null && days >= 1 && days <= 6) draft.daysPerWeek = days;
+  if (days !== null && days >= 1 && days <= 6) {
+    requestPatch.daysPerWeek = days;
+  }
 
   const minutes = extractNumberBefore(text, "minutos?|min\\b");
   if (minutes !== null && minutes >= 15 && minutes <= 180) {
-    draft.sessionMinutes = minutes;
+    requestPatch.sessionMinutes = minutes;
+  } else {
+    const hours = extractNumberBefore(text, "horas?");
+    if (hours !== null && hours >= 1 && hours <= 2) {
+      requestPatch.sessionMinutes = hours * 60;
+    }
   }
 
   if (includesAny(text, ["en casa", "en mi casa", "hogar"])) {
-    draft.trainingLocation = "home";
+    requestPatch.trainingLocation = "home";
   }
-  if (includesAny(text, ["gimnasio", "gym comercial"])) {
-    draft.trainingLocation = "commercial_gym";
+  if (includesAny(text, ["gimnasio", "gym comercial", "gym completo"])) {
+    requestPatch.trainingLocation = "commercial_gym";
   }
 
-  const equipment = [...draft.availableEquipment];
-  const mentionedEquipment = includesAny(text, [
-    "mancuerna",
-    "barra",
-    "polea",
-    "cable",
-    "maquina",
-    "banda",
-    "peso corporal",
-    "sin equipo",
-  ]);
+  const equipment: string[] = [];
   if (text.includes("mancuerna")) equipment.push("dumbbell");
   if (text.includes("barra")) equipment.push("barbell");
   if (includesAny(text, ["polea", "cable"])) equipment.push("cable");
   if (includesAny(text, ["maquina", "maquinas"])) equipment.push("machine");
   if (text.includes("banda")) equipment.push("resistance_band");
   if (includesAny(text, ["peso corporal", "sin equipo"])) equipment.push("body_weight");
-  draft.availableEquipment = unique(equipment);
-  if (mentionedEquipment && draft.trainingLocation === null) {
-    draft.trainingLocation = "custom";
+  if (equipment.length > 0) {
+    requestPatch.availableEquipment = unique(equipment);
   }
 
-  const focus = [...draft.focusMuscles];
+  const focus: string[] = [];
   if (text.includes("pecho")) focus.push("chest");
   if (text.includes("espalda")) focus.push("back");
   if (text.includes("hombro")) focus.push("shoulders");
   if (text.includes("pierna")) focus.push("legs");
-  draft.focusMuscles = unique(focus);
-
-  if (includesAny(text, ["no quiero hacer peso muerto", "sin peso muerto"])) {
-    draft.excludedExercises = unique([
-      ...draft.excludedExercises,
-      "deadlift",
-    ]);
+  if (text.includes("biceps")) focus.push("biceps");
+  if (text.includes("triceps")) focus.push("triceps");
+  if (text.includes("glute")) focus.push("glutes");
+  if (focus.length > 0) {
+    requestPatch.focusMuscles = unique(focus);
+  }
+  if (
+    requestPatch.goal === undefined &&
+    focus.length > 0 &&
+    includesAny(text, ["crecer", "agrandar", "ganar masa"])
+  ) {
+    requestPatch.goal = "hypertrophy";
   }
 
-  let limitationsConfirmation = input.currentLimitationsConfirmation;
+  if (includesAny(text, ["no quiero hacer peso muerto", "sin peso muerto"])) {
+    requestPatch.excludedExercises = ["deadlift"];
+  }
+
+  let limitationsConfirmation: ParsedRoutineTurn["limitationsConfirmation"] =
+    "unknown";
   if (
     includesAny(text, [
       "no tengo dolor",
       "sin dolor ni restricciones",
       "no tengo lesiones",
       "sin limitaciones",
+      "ninguna lesion ni restriccion",
+      "no tengo ninguna lesion",
     ])
   ) {
-    limitationsConfirmation = "confirmed_none";
+    limitationsConfirmation = "no_limitations";
+    requestPatch.limitations = [];
   }
 
   const safetySignals = detectSafetySignals(text);
   if (safetySignals.length > 0) {
-    draft.limitations = unique([...draft.limitations, input.message.trim()]);
-    limitationsConfirmation = "confirmed_with_limitations";
+    requestPatch.limitations = [input.message.trim().slice(0, 120)];
+    limitationsConfirmation = "has_limitations";
   }
 
-  const missingFields: ParseRoutineResult["missingFields"] = [];
-  if (draft.goal === null) missingFields.push("goal");
-  if (draft.experience === null) missingFields.push("experience");
-  if (draft.daysPerWeek === null) missingFields.push("daysPerWeek");
-  if (draft.sessionMinutes === null) missingFields.push("sessionMinutes");
-  if (draft.trainingLocation === null && draft.availableEquipment.length === 0) {
-    missingFields.push("trainingLocationOrEquipment");
-  }
-  if (limitationsConfirmation === "not_confirmed") {
-    missingFields.push("limitationsConfirmation");
-  }
-
-  const unsupported = safetySignals.some((signal) =>
-    [
-      "recent_injury",
-      "recent_operation",
-      "rehabilitation_request",
-      "diagnosis_request",
-      "pregnancy_specific",
-      "medication_advice",
-      "supplement_advice",
-    ].includes(signal),
-  );
-
-  return ParseRoutineResultSchema.parse({
-    status: unsupported
+  const routineModification = includesAny(text, [
+    "cambiame",
+    "cambia el",
+    "reemplaza",
+    "sacame",
+    "quita el",
+    "regenera el dia",
+  ]);
+  const correction = includesAny(text, [
+    "en realidad",
+    "mejor quiero",
+    "cambio de idea",
+    "corregi",
+  ]);
+  const greeting = includesAny(text, [
+    "hola",
+    "buenas",
+    "buen dia",
+    "buenas tardes",
+    "buenas noches",
+  ]);
+  const question =
+    text.includes("?") ||
+    includesAny(text, [
+      "por que",
+      "que trabaja",
+      "como se hace",
+      "tenes otra",
+      "puedo",
+    ]);
+  const hasPatch = Object.keys(requestPatch).length > 0;
+  const intent: ParsedRoutineTurn["intent"] =
+    safetySignals.length > 0
       ? "unsupported"
-      : missingFields.length > 0
-        ? "needs_input"
-        : "complete",
-    request: draft,
+      : routineModification
+        ? "modify_routine"
+        : correction && hasPatch
+          ? "modify_profile"
+          : hasPatch || limitationsConfirmation !== "unknown"
+            ? "provide_information"
+            : question
+              ? "ask_question"
+              : greeting
+                ? "greeting"
+                : "other";
+
+  return ParsedRoutineTurnSchema.parse({
+    intent,
+    requestPatch: routineModification ? {} : requestPatch,
     limitationsConfirmation,
-    missingFields,
-    assumptions: [],
     safetySignals,
+    assumptions: [],
   });
 }
 
@@ -552,24 +565,45 @@ export class MockAiProvider implements AiProvider {
     return parsed.data;
   }
 
-  async parseRoutineRequest(
-    input: ParseRoutineInput,
-  ): Promise<ParseRoutineResult> {
+  async parseRoutineTurn(
+    input: ParseRoutineTurnInput,
+  ): Promise<ParsedRoutineTurn> {
     const parsed = validateInput(
       input,
-      ParseRoutineInputDataSchema,
-      "parse_routine_request",
+      ParseRoutineTurnInputDataSchema,
+      "parse_routine_turn",
     );
-    await this.beforeCall("parse_routine_request", parsed.signal);
-    const override = this.config.responses?.parseRoutineRequest;
+    await this.beforeCall("parse_routine_turn", parsed.signal);
+    const override = this.config.responses?.parseRoutineTurn;
     const output =
       typeof override === "function"
         ? override(parsed.data)
-        : (override ?? parseMockRoutine(parsed.data));
+        : (override ?? parseMockTurn(parsed.data));
     return this.validateOutput(
       output,
-      ParseRoutineResultSchema,
-      "parse_routine_request",
+      ParsedRoutineTurnSchema,
+      "parse_routine_turn",
+    );
+  }
+
+  async composeAssistantResponse(
+    input: ComposeAssistantResponseInput,
+  ): Promise<AssistantResponse> {
+    const parsed = validateInput(
+      input,
+      ComposeAssistantResponseInputDataSchema,
+      "compose_assistant_response",
+    );
+    await this.beforeCall("compose_assistant_response", parsed.signal);
+    const override = this.config.responses?.composeAssistantResponse;
+    const output =
+      typeof override === "function"
+        ? override(parsed.data)
+        : (override ?? { message: composeAssistantFallback(parsed.data) });
+    return this.validateOutput(
+      output,
+      AssistantResponseSchema,
+      "compose_assistant_response",
     );
   }
 

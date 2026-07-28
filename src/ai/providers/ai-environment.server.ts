@@ -36,21 +36,28 @@ export const AiEnvironmentSchema = z
       .optional(),
   })
   .passthrough()
-  .transform((environment) => ({
-    provider:
-      environment.AI_PROVIDER ?? defaultProvider(environment.NODE_ENV),
-    timeoutMs: environment.AI_TIMEOUT_MS ?? AI_LIMITS.defaultTimeoutMs,
-    debugLogs: environment.AI_DEBUG_LOGS === "true",
-    ollamaBaseUrl:
-      environment.OLLAMA_BASE_URL ?? "http://127.0.0.1:11434",
-    ollamaModel: environment.OLLAMA_MODEL ?? "qwen3:1.7b",
-    cloudflareModel:
-      environment.CLOUDFLARE_AI_MODEL ??
-      "@cf/ibm-granite/granite-4.0-h-micro",
-    cloudflareFallbackModel: environment.CLOUDFLARE_AI_FALLBACK_MODEL,
-    cloudflareStructuredMode:
-      environment.CLOUDFLARE_AI_STRUCTURED_MODE ?? "function_calling",
-  }));
+  .transform((environment) => {
+    const provider =
+      environment.AI_PROVIDER ?? defaultProvider(environment.NODE_ENV);
+    return {
+      provider,
+      timeoutMs:
+        environment.AI_TIMEOUT_MS ??
+        (provider === "ollama"
+          ? AI_LIMITS.ollamaDefaultTimeoutMs
+          : AI_LIMITS.defaultTimeoutMs),
+      debugLogs: environment.AI_DEBUG_LOGS === "true",
+      ollamaBaseUrl:
+        environment.OLLAMA_BASE_URL ?? "http://127.0.0.1:11434",
+      ollamaModel: environment.OLLAMA_MODEL ?? "qwen3:1.7b",
+      cloudflareModel:
+        environment.CLOUDFLARE_AI_MODEL ??
+        "@cf/ibm-granite/granite-4.0-h-micro",
+      cloudflareFallbackModel: environment.CLOUDFLARE_AI_FALLBACK_MODEL,
+      cloudflareStructuredMode:
+        environment.CLOUDFLARE_AI_STRUCTURED_MODE ?? "function_calling",
+    };
+  });
 
 export type AiEnvironment = z.output<typeof AiEnvironmentSchema>;
 

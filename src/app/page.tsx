@@ -1,4 +1,11 @@
-import { ArrowRight, BadgeCheck, ClipboardCheck, SlidersHorizontal } from "lucide-react";
+import {
+  ArrowRight,
+  BadgeCheck,
+  ClipboardCheck,
+  ClipboardList,
+  MessageSquareText,
+  SlidersHorizontal,
+} from "lucide-react";
 import Link from "next/link";
 
 import { ExerciseThumbnail } from "@/components/exercises/exercise-thumbnail";
@@ -8,6 +15,7 @@ import { resolveExerciseMedia } from "@/media/server";
 import styles from "./page.module.css";
 
 const FEATURED_EXERCISE_ID = "0025";
+
 function requireFeaturedExercise() {
   const exercise = getExerciseSummaryById(FEATURED_EXERCISE_ID);
   if (!exercise || !exercise.approvedForGeneration) {
@@ -17,6 +25,7 @@ function requireFeaturedExercise() {
   }
   return exercise;
 }
+
 const featuredExercise = requireFeaturedExercise();
 
 export default function Home() {
@@ -24,47 +33,62 @@ export default function Home() {
     <div>
       <section className={`${styles.hero} shell`}>
         <div className={styles.intro}>
-          <p className="eyebrow">Entrenamiento de fuerza · sin caja negra</p>
+          <p className="eyebrow">Tu rutina empieza con una conversación</p>
           <h1>Contá cómo querés entrenar.</h1>
           <p className={styles.lead}>
-            FORMA transforma tus objetivos, tiempo y equipamiento en una rutina clara,
-            editable y basada en ejercicios verificados.
+            Conversá con FORMA sobre tus objetivos, tiempo y equipamiento. El
+            asistente ordena tu perfil y construye una rutina clara, editable y
+            basada en ejercicios verificados.
           </p>
           <div className={styles.actions}>
-            <Link className="button button-primary" href="/crear">
-              Crear mi rutina <ArrowRight aria-hidden="true" size={18} />
+            <Link className="button button-primary" href="/crear/chat">
+              <MessageSquareText aria-hidden="true" size={18} /> Crear mi rutina
+              con FORMA <ArrowRight aria-hidden="true" size={18} />
             </Link>
             <Link className="button button-secondary" href="/ejercicios">
               Explorar ejercicios
             </Link>
           </div>
-          <p className={styles.noAiNote}>
-            El formulario guiado funciona completo sin IA. El chat es opcional.
-          </p>
+          <div className={styles.manualFallback}>
+            <Link href="/crear/manual">
+              <ClipboardList aria-hidden="true" size={17} /> Prefiero completar
+              los datos manualmente
+            </Link>
+          </div>
         </div>
 
-        <div className={styles.preview} aria-label="Vista previa de una rutina en FORMA">
+        <aside
+          className={styles.preview}
+          aria-label="Vista previa de una conversación en FORMA"
+        >
           <div className={styles.previewTop}>
-            <span>Solicitud</span>
-            <span className={styles.mono}>Procesando perfil…</span>
+            <span>Conversación</span>
+            <span className={styles.mono}>Perfil · 4 de 6 datos</span>
           </div>
           <blockquote>
-            “Quiero ganar masa muscular, tengo cuatro días por semana y entreno en un
-            gimnasio completo.”
+            “Quiero ganar masa muscular, tengo cuatro días por semana y entreno
+            en un gimnasio completo.”
           </blockquote>
           <div className={styles.planLine}>
-            <span>Plan sugerido</span>
-            <strong>Torso / pierna · 4 días</strong>
+            <span>FORMA</span>
+            <strong>
+              Perfecto. Voy a orientar la rutina a hipertrofia. ¿Cuánto tiempo
+              tenés por sesión?
+            </strong>
           </div>
           <div className={styles.realMedia}>
             <ExerciseThumbnail
-              name={featuredExercise.displayNameEs ?? featuredExercise.displayName}
+              name={
+                featuredExercise.displayNameEs ?? featuredExercise.displayName
+              }
               media={resolveExerciseMedia(featuredExercise.id)}
               priority
             />
             <div>
               <span>Ejercicio real del catálogo</span>
-              <strong>{featuredExercise.displayNameEs ?? featuredExercise.displayName}</strong>
+              <strong>
+                {featuredExercise.displayNameEs ?? featuredExercise.displayName}
+              </strong>
               <Link href={`/ejercicios/${featuredExercise.id}`}>
                 Ver técnica y demostración
               </Link>
@@ -74,42 +98,60 @@ export default function Home() {
             <span>
               <BadgeCheck aria-hidden="true" size={20} /> Ejercicios verificados
             </span>
-            <span>RIR explícito</span>
+            <span>Motor validado</span>
           </div>
-        </div>
+        </aside>
       </section>
 
-      <section className={`${styles.principles} shell`} aria-labelledby="principios-title">
+      <section
+        className={`${styles.principles} shell`}
+        aria-labelledby="principios-title"
+      >
         <div className={styles.sectionHeading}>
           <p className="eyebrow">Principios</p>
-          <h2 id="principios-title">Una rutina que podés entender y modificar.</h2>
+          <h2 id="principios-title">
+            Una conversación que termina en un plan verificable.
+          </h2>
         </div>
         <ol className={styles.principleGrid}>
           <li>
             <span>01</span>
-            <ClipboardCheck aria-hidden="true" />
+            <MessageSquareText aria-hidden="true" />
             <h3>Pedilo con tus palabras</h3>
-            <p>Usá el chat opcional o completá un formulario breve y predecible.</p>
+            <p>
+              FORMA conversa con vos y pregunta solo lo esencial para avanzar.
+            </p>
           </li>
           <li>
             <span>02</span>
-            <BadgeCheck aria-hidden="true" />
+            <ClipboardCheck aria-hidden="true" />
             <h3>Revisá cada decisión</h3>
-            <p>Vas a ver supuestos, volumen, frecuencia y criterios de seguridad.</p>
+            <p>
+              Vas a ver tu perfil, los supuestos y las validaciones de la
+              rutina.
+            </p>
           </li>
           <li>
             <span>03</span>
             <SlidersHorizontal aria-hidden="true" />
             <h3>Cambiá lo que necesites</h3>
-            <p>Reemplazá ejercicios sin romper la lógica global del programa.</p>
+            <p>
+              Pedí ajustes por chat o editá los datos sin perder el trabajo
+              anterior.
+            </p>
           </li>
         </ol>
       </section>
 
-      <section className={`${styles.examples} shell`} aria-labelledby="examples-title">
+      <section
+        className={`${styles.examples} shell`}
+        aria-labelledby="examples-title"
+      >
         <div>
           <p className="eyebrow">Ejemplos de inicio</p>
-          <h2 id="examples-title">Un punto de partida, no una plantilla cerrada.</h2>
+          <h2 id="examples-title">
+            Empezá la conversación con una idea simple.
+          </h2>
         </div>
         <div className={styles.exampleLinks}>
           {[
@@ -117,7 +159,7 @@ export default function Home() {
             ["Rutina en casa con dos mancuernas", "home"],
             ["Fuerza, 3 días, foco en sentadilla", "strength"],
           ].map(([label, example]) => (
-            <Link key={example} href={`/crear?ejemplo=${example}`}>
+            <Link key={example} href={`/crear/chat?ejemplo=${example}`}>
               <span>“{label}”</span>
               <ArrowRight aria-hidden="true" size={20} />
             </Link>

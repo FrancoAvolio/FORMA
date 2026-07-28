@@ -9,7 +9,7 @@ import { completeParseInput } from "../test-support/fixtures";
 describe("disabled provider and server-side provider factory", () => {
   it("fails immediately with the deterministic disabled state", async () => {
     await expect(
-      new DisabledAiProvider().parseRoutineRequest(completeParseInput),
+      new DisabledAiProvider().parseRoutineTurn(completeParseInput),
     ).rejects.toMatchObject({
       code: "disabled",
       fallbackRecommended: true,

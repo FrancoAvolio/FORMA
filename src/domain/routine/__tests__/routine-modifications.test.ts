@@ -4,6 +4,7 @@ import {
   editRoutineExercisePrescription,
   reorderRoutineExercise,
 } from "../../../application/routines/edit-routine";
+import { applyConversationRoutineModification } from "../../../application/routines/apply-conversation-modification";
 import { regenerateRoutineDay } from "../../../application/routines/regenerate-day";
 import {
   findRoutineExerciseSubstitutions,
@@ -130,5 +131,83 @@ describe("routine application use cases", () => {
       }
     });
     expect(result.plan.days[targetIndex]).not.toBe(plan.days[targetIndex]);
+  });
+
+  it("applies a conversational replacement through the same validated use case", () => {
+    const plan = generatedPlan();
+    const targetDay = plan.days[1]!;
+    const target = targetDay.exercises[0]!;
+    const result = applyConversationRoutineModification({
+      modification: {
+        kind: "replace_exercise",
+        dayId: targetDay.id,
+        exerciseId: target.exerciseId,
+        requestedAlternative: null,
+      },
+      plan,
+      request,
+      safetyScreening: CLEAR_SAFETY_SCREENING,
+      catalog,
+      datasetVersion: "fixture-v1",
+      seed: "conversation-replacement",
+    });
+
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    expect(result.changedScope).toBe("exercise");
+    plan.days.forEach((day, index) => {
+      if (index !== 1) expect(result.plan.days[index]).toBe(day);
+    });
+    expect(result.plan.days[1]!.exercises[0]!.exerciseId).not.toBe(
+      target.exerciseId,
+    );
+  });
+
+  it("shortens only the requested day and validates the complete plan", () => {
+    const plan = generatedPlan();
+    const targetIndex = 1;
+    const targetDay = plan.days[targetIndex]!;
+    const result = applyConversationRoutineModification({
+      modification: {
+        kind: "shorten_day",
+        dayId: targetDay.id,
+        targetMinutes: null,
+      },
+      plan,
+      request,
+      safetyScreening: CLEAR_SAFETY_SCREENING,
+      catalog,
+      datasetVersion: "fixture-v1",
+      seed: "conversation-shorten-day",
+    });
+
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    expect(result.changedScope).toBe("day");
+    expect(result.plan.days[targetIndex]!.estimatedMinutes).toBeLessThan(
+      targetDay.estimatedMinutes,
+    );
+    plan.days.forEach((day, index) => {
+      if (index !== targetIndex) expect(result.plan.days[index]).toBe(day);
+    });
+  });
+
+  it("keeps a valid plan stable when a conversational profile patch needs no rebuild", () => {
+    const plan = generatedPlan();
+    const result = applyConversationRoutineModification({
+      modification: { kind: "update_request", patch: { notes: "Prefiero entrenar temprano" } },
+      plan,
+      request,
+      safetyScreening: CLEAR_SAFETY_SCREENING,
+      catalog,
+      datasetVersion: "fixture-v1",
+      seed: "conversation-profile",
+    });
+
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    expect(result.changedScope).toBe("profile");
+    expect(result.plan).toBe(plan);
+    expect(result.request.notes).toBe("Prefiero entrenar temprano");
   });
 });

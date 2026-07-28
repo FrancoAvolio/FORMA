@@ -2,7 +2,12 @@ import "server-only";
 
 import type { AiProvider } from "./ai-provider";
 import { isAiProviderError } from "./errors";
-import { toCompleteRoutineRequest } from "./schemas";
+import { createEmptyRoutineRequestDraft } from "../domain/profile/routine-draft";
+import {
+  applyParsedRoutineTurn,
+  toCompleteRoutineRequest,
+} from "../application/conversation/routine-turn-state";
+import { reconcileParsedTurnSafety } from "../application/conversation/deterministic-safety";
 
 export type AiContractProbeCheck = {
   name: string;
@@ -48,7 +53,6 @@ export async function runAiProviderContractProbe(
     limitations: [],
     notes: null,
   };
-  const completeDraft = { ...completeRequest };
   const plan = {
     routineId: "contract-probe",
     days: [
@@ -69,24 +73,77 @@ export async function runAiProviderContractProbe(
     {
       name: "complete_request",
       run: async () => {
-        const result = await provider.parseRoutineRequest({
+        const turn = await provider.parseRoutineTurn({
           message:
             "Soy intermedio. Quiero hipertrofia cuatro días, 45 minutos por sesión, en gimnasio con mancuernas y máquinas. Evito peso muerto. Confirmo que no tengo dolor, lesiones, síntomas ni restricciones.",
-          currentDraft: completeDraft,
-          currentLimitationsConfirmation: "confirmed_none",
           locale: "es-AR",
         });
-        return toCompleteRoutineRequest(result) !== null;
+        const reconciledTurn = reconcileParsedTurnSafety(
+          turn,
+          "No tengo dolor, lesiones, sintomas ni restricciones.",
+        );
+        const result = applyParsedRoutineTurn(
+          createEmptyRoutineRequestDraft(),
+          "not_confirmed",
+          reconciledTurn,
+        );
+        return (
+          result.status === "complete" &&
+          toCompleteRoutineRequest(
+            result.requestDraft,
+            result.limitationsConfirmation,
+          ) !== null
+        );
       },
     },
     {
       name: "missing_information",
       run: async () => {
-        const result = await provider.parseRoutineRequest({
+        const turn = await provider.parseRoutineTurn({
           message: "Quiero entrenar cuatro días para ganar músculo.",
           locale: "es-AR",
         });
+        const result = applyParsedRoutineTurn(
+          createEmptyRoutineRequestDraft(),
+          "not_confirmed",
+          turn,
+        );
         return result.status === "needs_input" && result.missingFields.length > 0;
+      },
+    },
+    {
+      name: "conversational_greeting",
+      run: async () => {
+        const response = await provider.composeAssistantResponse({
+          latestIntent: "greeting",
+          canonicalDraft: createEmptyRoutineRequestDraft(),
+          limitationsConfirmation: "not_confirmed",
+          missingFields: [
+            "goal",
+            "experience",
+            "daysPerWeek",
+            "sessionMinutes",
+            "trainingLocationOrEquipment",
+            "limitationsConfirmation",
+          ],
+          completionPercentage: 0,
+          parseStatus: "needs_input",
+          safetyResult: {
+            status: "needs_review",
+            signals: [],
+            generationAllowed: false,
+          },
+          focusedQuestionFields: ["limitationsConfirmation", "goal"],
+          validatedPlan: null,
+          exerciseContext: null,
+          allowedNextActions: [
+            "ask_missing_information",
+            "open_guided_form",
+          ],
+          assumptions: [],
+          locale: "es-AR",
+        });
+        return response.message.length > 0 && response.message.length <= 2_000;
       },
     },
     {
@@ -116,7 +173,7 @@ export async function runAiProviderContractProbe(
           locale: "es-AR",
         });
         return (
-          result.classification === "unsupported_signal" &&
+          result.classification !== "no_signal" &&
           result.signals.includes("recent_injury")
         );
       },

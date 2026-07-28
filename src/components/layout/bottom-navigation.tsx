@@ -7,9 +7,9 @@ import { usePathname } from "next/navigation";
 import styles from "./bottom-navigation.module.css";
 
 const items = [
-  { href: "/crear", label: "Crear", Icon: MessageSquareText },
-  { href: "/ejercicios", label: "Ejercicios", Icon: Dumbbell },
-  { href: "/guardadas", label: "Guardadas", Icon: Bookmark },
+  { href: "/crear/chat", activeRoot: "/crear", label: "Crear", Icon: MessageSquareText },
+  { href: "/ejercicios", activeRoot: "/ejercicios", label: "Ejercicios", Icon: Dumbbell },
+  { href: "/guardadas", activeRoot: "/guardadas", label: "Guardadas", Icon: Bookmark },
 ] as const;
 
 export function BottomNavigation() {
@@ -17,8 +17,8 @@ export function BottomNavigation() {
 
   return (
     <nav className={styles.nav} aria-label="Navegación móvil">
-      {items.map(({ href, label, Icon }) => {
-        const active = pathname === href || pathname.startsWith(`${href}/`);
+      {items.map(({ href, activeRoot, label, Icon }) => {
+        const active = pathname === activeRoot || pathname.startsWith(`${activeRoot}/`);
 
         return (
           <Link

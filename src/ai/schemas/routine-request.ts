@@ -1,70 +1,126 @@
 import { z } from "zod";
 
 import {
+  LimitationsConfirmationSchema,
+  RequiredRoutineFieldSchema,
+  RoutineRequestDraftSchema,
+  type LimitationsConfirmation,
+  type RequiredRoutineField,
+  type RoutineRequestDraft,
+} from "../../domain/profile/routine-draft";
+import {
   ExperienceLevelSchema,
   RoutineGoalSchema,
   RoutineRequestSchema,
   TrainingLocationSchema,
-  type RoutineRequest,
 } from "../../domain/profile/routine-request";
-import { AI_LIMITS } from "../limits";
-import {
-  BoundedTextListSchema,
-  BoundedTextSchema,
-  LocaleSchema,
-  UserMessageSchema,
-} from "./common";
+import { BoundedTextSchema, LocaleSchema, UserMessageSchema } from "./common";
 import type { AiRequestControls } from "./common";
 import { SafetySignalsListSchema } from "./safety";
 
-export const REQUIRED_ROUTINE_FIELD_VALUES = [
-  "goal",
-  "experience",
-  "daysPerWeek",
-  "sessionMinutes",
-  "trainingLocationOrEquipment",
-  "limitationsConfirmation",
+export {
+  LimitationsConfirmationSchema,
+  RequiredRoutineFieldSchema,
+  RoutineRequestDraftSchema,
+};
+export type {
+  LimitationsConfirmation,
+  RequiredRoutineField,
+  RoutineRequestDraft,
+};
+
+export const ROUTINE_TURN_INTENT_VALUES = [
+  "greeting",
+  "provide_information",
+  "modify_profile",
+  "modify_routine",
+  "ask_question",
+  "unsupported",
+  "other",
 ] as const;
 
-export const RequiredRoutineFieldSchema = z.enum(
-  REQUIRED_ROUTINE_FIELD_VALUES,
-);
+export const RoutineTurnIntentSchema = z.enum(ROUTINE_TURN_INTENT_VALUES);
+export type RoutineTurnIntent = z.output<typeof RoutineTurnIntentSchema>;
 
-export const LIMITATIONS_CONFIRMATION_VALUES = [
-  "not_confirmed",
-  "confirmed_none",
-  "confirmed_with_limitations",
+export const LATEST_TURN_LIMITATIONS_CONFIRMATION_VALUES = [
+  "unknown",
+  "no_limitations",
+  "has_limitations",
 ] as const;
-
-export const LimitationsConfirmationSchema = z.enum(
-  LIMITATIONS_CONFIRMATION_VALUES,
-);
 
 /**
- * The draft is deliberately explicit: every key must be returned and unknown
- * keys fail validation. Null represents information the user has not supplied.
+ * This enum describes only what was explicitly said in the latest turn. It is
+ * intentionally separate from the canonical confirmation stored by the app.
  */
-export const RoutineRequestDraftSchema = z
+export const LatestTurnLimitationsConfirmationSchema = z.enum(
+  LATEST_TURN_LIMITATIONS_CONFIRMATION_VALUES,
+);
+
+export type LatestTurnLimitationsConfirmation = z.output<
+  typeof LatestTurnLimitationsConfirmationSchema
+>;
+
+const UniqueEquipmentListSchema = RoutineRequestSchema.shape.availableEquipment
+  .max(32)
+  .superRefine((values, context) => {
+    if (new Set(values).size !== values.length) {
+      context.addIssue({
+        code: "custom",
+        message: "Los valores de equipamiento no pueden repetirse.",
+      });
+    }
+  });
+
+const UniquePreferenceListSchema = z
+  .array(BoundedTextSchema)
+  .max(48)
+  .superRefine((values, context) => {
+    if (new Set(values).size !== values.length) {
+      context.addIssue({
+        code: "custom",
+        message: "Los valores de la lista no pueden repetirse.",
+      });
+    }
+  });
+
+const UniqueMovementPatternListSchema =
+  RoutineRequestSchema.shape.excludedMovementPatterns.superRefine(
+    (values, context) => {
+      if (new Set(values).size !== values.length) {
+        context.addIssue({
+          code: "custom",
+          message: "Los patrones de movimiento no pueden repetirse.",
+        });
+      }
+    },
+  );
+
+/**
+ * A latest-turn delta. Missing keys mean "not mentioned"; null means the user
+ * explicitly cleared that value. Empty patches are valid for greetings and
+ * questions.
+ */
+export const RoutineRequestPatchSchema = z
   .object({
     goal: RoutineGoalSchema.nullable(),
     experience: ExperienceLevelSchema.nullable(),
     daysPerWeek: RoutineRequestSchema.shape.daysPerWeek.nullable(),
     sessionMinutes: RoutineRequestSchema.shape.sessionMinutes.nullable(),
     trainingLocation: TrainingLocationSchema.nullable(),
-    availableEquipment: BoundedTextListSchema,
-    focusMuscles: BoundedTextListSchema,
-    excludedExercises: BoundedTextListSchema,
-    excludedMovementPatterns:
-      RoutineRequestSchema.shape.excludedMovementPatterns,
-    preferredExercises: BoundedTextListSchema,
-    limitations: BoundedTextListSchema,
-    notes: z.string().trim().max(AI_LIMITS.notesCharacters).nullable(),
+    availableEquipment: UniqueEquipmentListSchema.nullable(),
+    focusMuscles: UniquePreferenceListSchema.nullable(),
+    excludedExercises: UniquePreferenceListSchema.nullable(),
+    excludedMovementPatterns: UniqueMovementPatternListSchema.nullable(),
+    preferredExercises: UniquePreferenceListSchema.nullable(),
+    limitations: UniquePreferenceListSchema.nullable(),
+    notes: RoutineRequestSchema.shape.notes,
   })
+  .partial()
   .strict();
 
-export type RoutineRequestDraft = z.output<typeof RoutineRequestDraftSchema>;
+export type RoutineRequestPatch = z.output<typeof RoutineRequestPatchSchema>;
 
-export const ParseRoutineInputDataSchema = z
+export const ParseRoutineTurnInputDataSchema = z
   .object({
     message: UserMessageSchema,
     currentDraft: RoutineRequestDraftSchema.optional(),
@@ -75,124 +131,27 @@ export const ParseRoutineInputDataSchema = z
   })
   .strict();
 
-export type ParseRoutineInput = z.input<typeof ParseRoutineInputDataSchema> &
+export type ParseRoutineTurnInput = z.input<
+  typeof ParseRoutineTurnInputDataSchema
+> &
   AiRequestControls;
 
-export const ParseRoutineResultSchema = z
+/**
+ * Hostile model output. It contains latest-turn extraction only: no derived
+ * completeness, missing fields, safety eligibility, or routine validity.
+ */
+export const ParsedRoutineTurnSchema = z
   .object({
-    status: z.enum(["complete", "needs_input", "unsupported"]),
-    request: RoutineRequestDraftSchema,
-    limitationsConfirmation: LimitationsConfirmationSchema,
-    missingFields: z.array(RequiredRoutineFieldSchema).max(6),
-    assumptions: z.array(BoundedTextSchema).max(12),
+    intent: RoutineTurnIntentSchema,
+    requestPatch: RoutineRequestPatchSchema,
+    limitationsConfirmation: LatestTurnLimitationsConfirmationSchema,
     safetySignals: SafetySignalsListSchema,
+    assumptions: z.array(BoundedTextSchema).max(12),
   })
-  .strict()
-  .superRefine((value, context) => {
-    if (new Set(value.missingFields).size !== value.missingFields.length) {
-      context.addIssue({
-        code: "custom",
-        path: ["missingFields"],
-        message: "missingFields no admite duplicados.",
-      });
-    }
+  .strict();
 
-    const requestCandidate = {
-      ...value.request,
-      goal: value.request.goal ?? undefined,
-      experience: value.request.experience ?? undefined,
-      daysPerWeek: value.request.daysPerWeek ?? undefined,
-      sessionMinutes: value.request.sessionMinutes ?? undefined,
-      trainingLocation: value.request.trainingLocation ?? undefined,
-    };
-    const requestIsComplete = RoutineRequestSchema.safeParse(requestCandidate).success;
-    const confirmationIsComplete =
-      value.limitationsConfirmation !== "not_confirmed";
+export type ParsedRoutineTurn = z.output<typeof ParsedRoutineTurnSchema>;
 
-    if (value.status !== "unsupported") {
-      const derivedMissing: (typeof REQUIRED_ROUTINE_FIELD_VALUES)[number][] = [];
-      if (value.request.goal === null) derivedMissing.push("goal");
-      if (value.request.experience === null) derivedMissing.push("experience");
-      if (value.request.daysPerWeek === null) derivedMissing.push("daysPerWeek");
-      if (value.request.sessionMinutes === null) {
-        derivedMissing.push("sessionMinutes");
-      }
-      if (
-        value.request.trainingLocation === null &&
-        value.request.availableEquipment.length === 0
-      ) {
-        derivedMissing.push("trainingLocationOrEquipment");
-      }
-      if (!confirmationIsComplete) {
-        derivedMissing.push("limitationsConfirmation");
-      }
-      for (const missingField of derivedMissing) {
-        if (!value.missingFields.includes(missingField)) {
-          context.addIssue({
-            code: "custom",
-            path: ["missingFields"],
-            message: `Falta declarar el campo requerido: ${missingField}.`,
-          });
-        }
-      }
-    }
-
-    if (value.status === "complete") {
-      if (value.missingFields.length > 0) {
-        context.addIssue({
-          code: "custom",
-          path: ["missingFields"],
-          message: "Una solicitud completa no puede tener campos faltantes.",
-        });
-      }
-      if (!requestIsComplete || !confirmationIsComplete) {
-        context.addIssue({
-          code: "custom",
-          path: ["status"],
-          message:
-            "complete requiere un RoutineRequest válido y confirmación de limitaciones.",
-        });
-      }
-    }
-
-    if (value.status === "needs_input" && value.missingFields.length === 0) {
-      context.addIssue({
-        code: "custom",
-        path: ["missingFields"],
-        message: "needs_input requiere al menos un campo faltante.",
-      });
-    }
-
-    if (value.status === "unsupported" && value.safetySignals.length === 0) {
-      context.addIssue({
-        code: "custom",
-        path: ["safetySignals"],
-        message: "unsupported requiere una señal de seguridad.",
-      });
-    }
-  });
-
-export type ParseRoutineResult = z.output<typeof ParseRoutineResultSchema>;
-
-export function toCompleteRoutineRequest(
-  result: ParseRoutineResult,
-): RoutineRequest | null {
-  if (
-    result.status !== "complete" ||
-    result.limitationsConfirmation === "not_confirmed"
-  ) {
-    return null;
-  }
-
-  const candidate = {
-    ...result.request,
-    goal: result.request.goal ?? undefined,
-    experience: result.request.experience ?? undefined,
-    daysPerWeek: result.request.daysPerWeek ?? undefined,
-    sessionMinutes: result.request.sessionMinutes ?? undefined,
-    trainingLocation: result.request.trainingLocation ?? undefined,
-  };
-
-  const parsed = RoutineRequestSchema.safeParse(candidate);
-  return parsed.success ? parsed.data : null;
-}
+/** Input aliases retained while callers migrate to the clearer turn naming. */
+export const ParseRoutineInputDataSchema = ParseRoutineTurnInputDataSchema;
+export type ParseRoutineInput = ParseRoutineTurnInput;

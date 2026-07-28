@@ -12,7 +12,8 @@ import { assertMaximumBytes } from "./runtime";
 export type JsonSchema = Record<string, unknown>;
 
 export type AiOperation =
-  | "parse_routine_request"
+  | "parse_routine_turn"
+  | "compose_assistant_response"
   | "parse_routine_modification"
   | "classify_safety"
   | "explain_plan";
@@ -191,4 +192,3 @@ export async function executeStructuredWithRepair<
     message: "Model output remained invalid after one repair attempt",
   });
 }
-

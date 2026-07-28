@@ -1,8 +1,10 @@
 import type {
+  AssistantResponse,
+  ComposeAssistantResponseInput,
   ExplainPlanInput,
-  ParseRoutineInput,
+  ParsedRoutineTurn,
+  ParseRoutineTurnInput,
   ParseRoutineModificationInput,
-  ParseRoutineResult,
   RoutineModificationResult,
   SafetyClassification,
   SafetyClassificationInput,
@@ -21,7 +23,11 @@ export interface AiProvider {
   readonly id: AiProviderName;
   readonly model: string | null;
 
-  parseRoutineRequest(input: ParseRoutineInput): Promise<ParseRoutineResult>;
+  parseRoutineTurn(input: ParseRoutineTurnInput): Promise<ParsedRoutineTurn>;
+
+  composeAssistantResponse(
+    input: ComposeAssistantResponseInput,
+  ): Promise<AssistantResponse>;
 
   parseRoutineModification(
     input: ParseRoutineModificationInput,
@@ -33,4 +39,3 @@ export interface AiProvider {
 
   explainPlan(input: ExplainPlanInput): Promise<string>;
 }
-

@@ -1,135 +1,101 @@
-import { createAiProvider } from "@/ai/providers/provider-factory";
-import { getCloudflareAiBinding } from "@/ai/cloudflare-binding.server";
-import { isAiProviderError, toAiFallbackState } from "@/ai/errors";
-import { ParseRoutineInputDataSchema } from "@/ai/schemas/routine-request";
-import { createFixedWindowRateLimiter } from "@/ai/request-rate-limiter";
+import {
+  ParsedRoutineTurnSchema,
+  ParseRoutineTurnInputDataSchema,
+} from "@/ai/schemas/routine-request";
+import {
+  detectDeterministicSafetySignals,
+  reconcileParsedTurnSafety,
+} from "@/application/conversation/deterministic-safety";
+import { normalizeDomainText } from "@/domain/exercises/normalization";
+
+import {
+  aiFailureResponse,
+  createConfiguredProvider,
+  invalidInputResponse,
+  rateLimitResponse,
+  readBoundedJson,
+  successResponse,
+} from "../_shared";
 
 export const dynamic = "force-dynamic";
 
-const MAXIMUM_REQUEST_BYTES = 32_000;
-const requestLimiter = createFixedWindowRateLimiter({
-  maximumRequests: 10,
-  windowMs: 60_000,
-});
-
-function clientKey(request: Request): string {
-  const cloudflareAddress = request.headers.get("cf-connecting-ip")?.trim();
-  if (cloudflareAddress) return cloudflareAddress;
-  if (process.env.NODE_ENV !== "production") {
-    return request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "local";
-  }
-  return "anonymous";
+function isGreetingOnly(message: string): boolean {
+  return /^(hola|buenas|buen dia|buenas tardes|buenas noches|hey|holi)( bro| forma)?$/u.test(
+    normalizeDomainText(message),
+  );
 }
 
 export async function POST(request: Request): Promise<Response> {
-  const rateLimit = requestLimiter.check(clientKey(request));
-  if (!rateLimit.allowed) {
-    return Response.json(
-      {
-        ok: false,
-        error: {
-          code: "rate_limited",
-          title: "Demasiados intentos seguidos",
-          message: "Esperá un momento o continuá con el formulario guiado.",
-          action: "guided_form",
-          canRetry: true,
-        },
-      },
-      {
-        status: 429,
-        headers: {
-          "Cache-Control": "no-store",
-          "Retry-After": String(rateLimit.retryAfterSeconds),
-        },
-      },
-    );
-  }
+  const limited = rateLimitResponse(request);
+  if (limited) return limited;
 
-  const contentLength = Number(request.headers.get("content-length") ?? 0);
-  if (contentLength > MAXIMUM_REQUEST_BYTES) {
-    return Response.json(
-      { ok: false, error: { code: "invalid_input", message: "El mensaje es demasiado largo." } },
-      { status: 413 },
-    );
-  }
-
-  let payload: unknown;
-  try {
-    const text = await request.text();
-    if (new TextEncoder().encode(text).byteLength > MAXIMUM_REQUEST_BYTES) {
-      return Response.json(
-        {
-          ok: false,
-          error: { code: "invalid_input", message: "El mensaje es demasiado largo." },
-        },
-        { status: 413 },
-      );
-    }
-    payload = JSON.parse(text);
-  } catch {
-    return Response.json(
-      { ok: false, error: { code: "invalid_input", message: "Solicitud inválida." } },
-      { status: 400 },
-    );
-  }
-
-  const parsed = ParseRoutineInputDataSchema.safeParse(payload);
+  const body = await readBoundedJson(request);
+  if (!body.ok) return body.response;
+  const parsed = ParseRoutineTurnInputDataSchema.safeParse(body.payload);
   if (!parsed.success) {
-    return Response.json(
-      {
-        ok: false,
-        error: {
-          code: "invalid_input",
-          message: "El mensaje o el perfil parcial no respetan el contrato.",
-        },
-      },
-      { status: 400 },
+    return invalidInputResponse(
+      "El mensaje o el perfil actual no respetan el contrato de conversación.",
     );
   }
 
-  const configuredProvider =
-    process.env.AI_PROVIDER ??
-    (process.env.NODE_ENV === "production" ? "cloudflare" : "ollama");
-  const cloudflareBinding =
-    configuredProvider === "cloudflare" ? await getCloudflareAiBinding() : null;
-  const provider = createAiProvider({
-    environment: process.env,
-    cloudflareBinding,
-  });
+  const deterministicSignals = detectDeterministicSafetySignals(
+    parsed.data.message,
+  );
+  if (isGreetingOnly(parsed.data.message)) {
+    return successResponse({
+      turn: ParsedRoutineTurnSchema.parse({
+        intent: "greeting",
+        requestPatch: {},
+        limitationsConfirmation: "unknown",
+        safetySignals: [],
+        assumptions: [],
+      }),
+    });
+  }
+  if (deterministicSignals.length > 0) {
+    return successResponse({
+      turn: ParsedRoutineTurnSchema.parse({
+        intent: "unsupported",
+        requestPatch: {},
+        limitationsConfirmation: "has_limitations",
+        safetySignals: deterministicSignals,
+        assumptions: [],
+      }),
+    });
+  }
 
+  const provider = await createConfiguredProvider();
   try {
-    const result = await provider.parseRoutineRequest(parsed.data);
-    return Response.json(
-      {
-        ok: true,
-        provider: { id: provider.id, model: provider.model },
-        result,
-      },
-      { headers: { "Cache-Control": "no-store" } },
-    );
+    const extracted = await provider.parseRoutineTurn({
+      message: parsed.data.message,
+      locale: parsed.data.locale,
+      signal: request.signal,
+    });
+    const turn = reconcileParsedTurnSafety(extracted, parsed.data.message);
+
+    // Advisory model classification can only add caution. The reconciled turn
+    // already blocks generation and remains authoritative if this second call fails.
+    if (turn.safetySignals.length > 0) {
+      try {
+        await provider.classifySafety({
+          message: parsed.data.message,
+          declaredLimitations: turn.requestPatch.limitations ?? [],
+          deterministicSignals: turn.safetySignals,
+          locale: parsed.data.locale,
+          signal: request.signal,
+        });
+      } catch {
+        // Fail closed with the validated signals already present.
+      }
+    }
+
+    return successResponse({
+      turn,
+      ...(process.env.NODE_ENV === "development"
+        ? { diagnostics: { provider: provider.id, model: provider.model } }
+        : {}),
+    });
   } catch (error) {
-    const fallback = toAiFallbackState(error);
-    const status =
-      fallback.code === "invalid_input"
-        ? 400
-        : fallback.code === "quota_exhausted" || fallback.code === "rate_limited"
-          ? 429
-          : 503;
-    return Response.json(
-      {
-        ok: false,
-        provider: { id: provider.id, model: provider.model },
-        error: fallback,
-      },
-      {
-        status,
-        headers: {
-          "Cache-Control": "no-store",
-          ...(isAiProviderError(error) && error.retryAfterSeconds
-            ? { "Retry-After": String(error.retryAfterSeconds) }
-            : {}),
-        },
-      },
-    );
+    return aiFailureResponse(error, provider);
   }
 }

@@ -94,3 +94,66 @@ OpenNext packages the Node.js runtime for Workers, but FORMA adds no R2, D1, KV,
 or server routine store. Generated catalogs are immutable bundled data and routines remain in
 the versioned browser repository. This keeps the useful no-AI product independent of external
 state and avoids silently adding paid services.
+
+## ADR-017 — Conversation is the canonical creation surface
+
+`/crear/chat` is FORMA's primary creation workspace and `/crear` redirects there. The guided
+builder remains at `/crear/manual` as a provider-independent fallback, accessibility alternative,
+and precise editor of the same profile. This changes product hierarchy without replacing the
+Stitch-derived visual system: `docs/design-reference/**` remains immutable evidence, while the
+chat workspace reuses the established tokens, navigation, responsive patterns, and accessibility
+priority.
+
+## ADR-018 — Models extract a latest-turn delta, not application state
+
+`ParsedRoutineTurn` contains only latest-turn intent, an explicit `RoutineRequest` patch, the
+latest limitation declaration, possible safety signals, and assumptions. Empty patches are valid
+for greetings and questions. Missing fields, completion percentage, parse status, final safety
+eligibility, and routine validity are deliberately absent from model output and are recomputed by
+pure application/domain functions after strict Zod validation and canonical merge. Small-model
+compatibility cannot justify weakening this boundary or accepting partial output.
+
+## ADR-019 — One versioned conversation aggregate owns editable state
+
+The v2 browser envelope stores messages, the editable request draft, limitation confirmation,
+safety state, current validated routine, provider state, retry metadata, and update time as one
+`RoutineConversationState`. The repository, not callers or storage, derives missing fields and
+completion on every boundary. Guided-form and legacy compatibility methods update this same
+aggregate, and valid v0/v1 data migrates into it. A current routine keeps the exact request and
+safety screening that generated it as an immutable snapshot; it is not a second editable profile.
+
+## ADR-020 — Assistant prose verbalizes validated truth
+
+Natural response composition is a provider capability over `ComposeAssistantResponseInput`, a
+strict and bounded projection of canonical profile state, deterministic safety/completeness,
+allowed actions, and optional validated plan or grounded exercise summaries. The provider may
+choose wording only. If composition, plan explanation, or the provider fails, application code
+returns a contextual deterministic response and a typed provider error without changing the
+profile or plan. Structured state changes remain atomic and require complete schema validation.
+
+## ADR-021 — Deterministic safety can only be made more conservative
+
+Raw user text is checked before and after provider extraction. Deterministic safety signals are
+unioned with model signals, never removed, and a model-only `no_limitations` value cannot grant
+the canonical all-clear. Routine generation requires an explicit deterministic confirmation,
+zero safety signals, a complete domain request, and the existing screening/domain validation.
+Provider classification is advisory and cannot turn an unsupported request into an eligible one.
+
+## ADR-022 — Chat questions and changes cross bounded application services
+
+Exercise answers resolve only validated local catalog records and current-plan placements; the
+bounded context includes Spanish instructions, catalog facts, curated substitutions,
+deterministic selection reasons, and resolved media attribution. Chat modifications are parsed to
+typed commands, then executed by deterministic replace/remove/reorder/regenerate use cases and
+validated again. Unaffected days remain stable for local edits. A profile change retains the
+existing plan when it still validates and permits a full deterministic rebuild only when the new
+request invalidates the plan's structure.
+
+## ADR-023 — Provider differences stay operational, not architectural
+
+Mock, Disabled, Ollama, and Cloudflare remain behind the same server-only contract. Ollama uses a
+local 60-second default, temperature zero, disabled thinking where supported, JSON Schema output,
+bounded responses, and one repair attempt. Cloudflare uses the Workers AI binding and its own
+bounded timeout/error mapping. The shared taxonomy distinguishes unavailable, timeout,
+invalid-output, rate-limit, quota, binding, configuration, and unsupported-model failures; normal
+production UI does not expose provider or model identifiers.

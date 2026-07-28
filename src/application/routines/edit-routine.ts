@@ -164,3 +164,104 @@ export function editRoutineExercisePrescription(
     input,
   );
 }
+
+/**
+ * Makes one day shorter without touching any other day. The deterministic
+ * search first reduces low-priority prescriptions, then removes a trailing
+ * exercise only when the complete routine still validates.
+ */
+export function shortenRoutineDay(
+  input: SharedEditInput & { targetMinutes?: number | null },
+): RoutineMutationResult {
+  const dayIndex = input.plan.days.findIndex((day) => day.id === input.dayId);
+  const originalDay = input.plan.days[dayIndex];
+  if (!originalDay) {
+    return {
+      ok: false,
+      code: "DAY_NOT_FOUND",
+      message: "No se encontró el día indicado.",
+    };
+  }
+
+  const targetMinutes =
+    input.targetMinutes == null
+      ? Math.max(1, originalDay.estimatedMinutes - 10)
+      : input.targetMinutes;
+  if (
+    !Number.isInteger(targetMinutes) ||
+    targetMinutes < 1 ||
+    targetMinutes >= originalDay.estimatedMinutes
+  ) {
+    return {
+      ok: false,
+      code: "INVALID_PRESCRIPTION",
+      message:
+        "Indicá un tiempo menor que la duración actual para acortar ese día.",
+    };
+  }
+
+  let workingPlan = input.plan;
+  const maximumAttempts = originalDay.exercises.length * 7;
+
+  for (let attempt = 0; attempt < maximumAttempts; attempt += 1) {
+    const workingDay = workingPlan.days[dayIndex];
+    if (!workingDay || workingDay.estimatedMinutes <= targetMinutes) break;
+
+    const exerciseCandidates: RoutineExercise[][] = [];
+    for (let index = workingDay.exercises.length - 1; index >= 0; index -= 1) {
+      const exercise = workingDay.exercises[index];
+      if (!exercise || exercise.sets <= 1) continue;
+      exerciseCandidates.push(
+        workingDay.exercises.map((candidate, candidateIndex) =>
+          candidateIndex === index
+            ? { ...candidate, sets: candidate.sets - 1 }
+            : candidate,
+        ),
+      );
+    }
+    if (workingDay.exercises.length > 1) {
+      for (let index = workingDay.exercises.length - 1; index >= 0; index -= 1) {
+        exerciseCandidates.push(
+          workingDay.exercises.filter((_, candidateIndex) => candidateIndex !== index),
+        );
+      }
+    }
+
+    let nextPlan: RoutinePlan | null = null;
+    for (const exercises of exerciseCandidates) {
+      const nextDay = {
+        ...workingDay,
+        exercises,
+        estimatedMinutes: estimateSessionDuration(exercises, input.catalog),
+      };
+      const candidatePlan = {
+        ...workingPlan,
+        days: workingPlan.days.map((day, index) =>
+          index === dayIndex ? nextDay : day,
+        ),
+      };
+      if (validateMutation(candidatePlan, input).ok) {
+        nextPlan = candidatePlan;
+        break;
+      }
+    }
+
+    if (!nextPlan) break;
+    workingPlan = nextPlan;
+  }
+
+  const shortenedDay = workingPlan.days[dayIndex];
+  if (
+    !shortenedDay ||
+    shortenedDay.estimatedMinutes >= originalDay.estimatedMinutes
+  ) {
+    return {
+      ok: false,
+      code: "INVALID_ROUTINE",
+      message:
+        "No pude acortar ese día sin romper el volumen, el equipamiento o la validación del plan.",
+    };
+  }
+
+  return validateMutation(workingPlan, input);
+}

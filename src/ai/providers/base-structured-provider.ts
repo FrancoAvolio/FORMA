@@ -8,6 +8,10 @@ import { AI_LIMITS } from "../limits";
 import type { AiLogger } from "../logger";
 import { silentAiLogger } from "../logger";
 import {
+  buildComposeAssistantResponseUserPrompt,
+  COMPOSE_ASSISTANT_RESPONSE_PROMPT,
+} from "../prompts/compose-assistant-response";
+import {
   buildClassifySafetyUserPrompt,
   CLASSIFY_SAFETY_PROMPT,
 } from "../prompts/classify-safety";
@@ -20,23 +24,27 @@ import {
   PARSE_ROUTINE_MODIFICATION_PROMPT,
 } from "../prompts/parse-routine-modification";
 import {
-  buildParseRoutineRequestUserPrompt,
-  PARSE_ROUTINE_REQUEST_PROMPT,
+  buildParseRoutineTurnUserPrompt,
+  PARSE_ROUTINE_TURN_PROMPT,
 } from "../prompts/parse-routine-request";
 import { assertMaximumBytes } from "../runtime";
 import {
+  AssistantResponseSchema,
+  ComposeAssistantResponseInputDataSchema,
   createRoutineModificationResultSchema,
   createSafetyClassificationSchema,
   ExplainPlanInputDataSchema,
   ExplainPlanResultSchema,
-  ParseRoutineInputDataSchema,
+  ParsedRoutineTurnSchema,
+  ParseRoutineTurnInputDataSchema,
   ParseRoutineModificationInputDataSchema,
-  ParseRoutineResultSchema,
   SafetyClassificationInputDataSchema,
+  type AssistantResponse,
+  type ComposeAssistantResponseInput,
   type ExplainPlanInput,
-  type ParseRoutineInput,
+  type ParsedRoutineTurn,
+  type ParseRoutineTurnInput,
   type ParseRoutineModificationInput,
-  type ParseRoutineResult,
   type RoutineModificationResult,
   type SafetyClassification,
   type SafetyClassificationInput,
@@ -131,22 +139,42 @@ export abstract class BaseStructuredAiProvider implements AiProvider {
     }
   }
 
-  async parseRoutineRequest(
-    input: ParseRoutineInput,
-  ): Promise<ParseRoutineResult> {
+  async parseRoutineTurn(
+    input: ParseRoutineTurnInput,
+  ): Promise<ParsedRoutineTurn> {
     const parsed = this.parseInput(
       input,
-      ParseRoutineInputDataSchema,
-      "parse_routine_request",
+      ParseRoutineTurnInputDataSchema,
+      "parse_routine_turn",
     );
     return this.execute({
-      operation: "parse_routine_request",
+      operation: "parse_routine_turn",
       prompt: {
-        system: PARSE_ROUTINE_REQUEST_PROMPT.system,
-        user: buildParseRoutineRequestUserPrompt(parsed.data),
-        version: PARSE_ROUTINE_REQUEST_PROMPT.version,
+        system: PARSE_ROUTINE_TURN_PROMPT.system,
+        user: buildParseRoutineTurnUserPrompt(parsed.data),
+        version: PARSE_ROUTINE_TURN_PROMPT.version,
       },
-      schema: ParseRoutineResultSchema,
+      schema: ParsedRoutineTurnSchema,
+      ...(parsed.signal ? { signal: parsed.signal } : {}),
+    });
+  }
+
+  async composeAssistantResponse(
+    input: ComposeAssistantResponseInput,
+  ): Promise<AssistantResponse> {
+    const parsed = this.parseInput(
+      input,
+      ComposeAssistantResponseInputDataSchema,
+      "compose_assistant_response",
+    );
+    return this.execute({
+      operation: "compose_assistant_response",
+      prompt: {
+        system: COMPOSE_ASSISTANT_RESPONSE_PROMPT.system,
+        user: buildComposeAssistantResponseUserPrompt(parsed.data),
+        version: COMPOSE_ASSISTANT_RESPONSE_PROMPT.version,
+      },
+      schema: AssistantResponseSchema,
       ...(parsed.signal ? { signal: parsed.signal } : {}),
     });
   }
@@ -210,4 +238,3 @@ export abstract class BaseStructuredAiProvider implements AiProvider {
     return result.explanation;
   }
 }
-

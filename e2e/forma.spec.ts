@@ -1,10 +1,14 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Locator, type Page } from "@playwright/test";
 
-const COMPLETE_CHAT_REQUEST =
-  "Quiero hipertrofia, soy intermedio, tengo 4 días y 60 minutos. " +
-  "Entreno en gimnasio con barra, mancuernas, poleas y máquinas. " +
-  "No tengo dolor ni restricciones.";
+const CHAT_TURNS = {
+  greeting: "Hola bro",
+  priority: "Quiero crecer mis bíceps",
+  availability:
+    "Soy intermedio, entreno cuatro días y tengo gimnasio completo",
+  completion:
+    "Una hora por sesión y no tengo ninguna lesión ni restricción",
+} as const;
 
 test.beforeEach(async ({ page }) => {
   await page.addInitScript(() => {
@@ -22,7 +26,12 @@ test("landing page leads to filtered exercise details and a safe media state", a
 }) => {
   await page.goto("/");
 
-  await expect(page.getByRole("link", { name: "Crear mi rutina" })).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: "Crear mi rutina con FORMA" }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: "Prefiero completar los datos manualmente" }),
+  ).toHaveAttribute("href", "/crear/manual");
   await expectNoSeriousAccessibilityViolations(page, "landing page");
   await page.getByRole("link", { name: "Explorar ejercicios" }).first().click();
 
@@ -52,6 +61,29 @@ test("landing page leads to filtered exercise details and a safe media state", a
   const attribution = page.getByLabel(/Atribuci/);
   await expect(attribution).toContainText("licencia separada");
   await expect(attribution.getByRole("link", { name: /condiciones y auditor/ })).toBeVisible();
+});
+
+test("the primary creation entry opens the canonical chat workspace", async ({ page }) => {
+  await page.goto("/");
+
+  const primaryEntry = page.getByRole("link", {
+    name: "Crear mi rutina con FORMA",
+  });
+  await expect(primaryEntry).toHaveAttribute("href", "/crear/chat");
+  await primaryEntry.click();
+
+  await expect(page).toHaveURL(/\/crear\/chat$/);
+  await expect(
+    chatComposer(page),
+  ).toBeVisible();
+
+  await page.goto("/crear");
+  await expect(page).toHaveURL(/\/crear\/chat$/);
+
+  await page.goto("/crear/manual");
+  await expect(
+    page.getByRole("heading", { level: 1, name: "Armemos tu perfil de rutina." }),
+  ).toBeVisible();
 });
 
 test("guided form generates, replaces one exercise, saves, and reopens without AI", async ({
@@ -122,49 +154,139 @@ test("guided form generates, replaces one exercise, saves, and reopens without A
   expect(await activeExerciseLinks(page)).toEqual(replacedExercises);
 });
 
-test("the configured Mock provider creates a routine from chat", async ({ page }) => {
+test("the Mock conversation builds, modifies, explains, saves, and restores a routine", async ({
+  page,
+  isMobile,
+}) => {
   test.slow();
   await page.goto("/crear/chat");
-  await fillChatComposer(page, COMPLETE_CHAT_REQUEST);
-  await page.getByRole("button", { name: "Enviar mensaje" }).click();
+  await expect(chatComposer(page)).toBeVisible();
+  await expect(page.getByTestId("chat-profile-progress")).toHaveText("0%");
+  await expect(page.locator('[data-message-role="assistant"]')).toHaveCount(1);
 
-  await expect(page.getByText(/Ya tengo un perfil estructurado completo/)).toBeVisible();
-  await expect(
-    page.getByRole("heading", { level: 2, name: "Perfil de rutina" }),
-  ).toBeVisible();
-  await expect(page.getByText(/mock/).first()).toBeVisible();
-  await expect(page.getByText("4 por semana")).toBeVisible();
+  const greetingReply = await sendChatMessage(page, CHAT_TURNS.greeting);
+  await expect(greetingReply).toContainText(/Hola/i);
+  await expect(page.getByTestId("chat-profile-progress")).toHaveText("0%");
 
-  await completeChatSafetyCheck(page);
+  const priorityReply = await sendChatMessage(page, CHAT_TURNS.priority);
+  await expect(priorityReply).toContainText(/b[ií]ceps/i);
+  await expect(page.getByTestId("chat-profile-progress")).toHaveText("17%");
 
-  const generate = page.getByRole("button", {
-    name: "Generar rutina validada",
+  const profile = page.locator("details").filter({
+    has: page.getByText("Tu punto de partida", { exact: true }),
   });
-  await expect(generate).toBeEnabled();
-  await generate.click();
+  await profile.locator("summary").click();
+  await expect(profile.getByText("Bíceps", { exact: true })).toBeVisible();
 
-  await expect(page).toHaveURL(/\/rutina$/, { timeout: 20_000 });
+  await sendChatMessage(page, CHAT_TURNS.availability);
+  await expect(page.getByTestId("chat-profile-progress")).toHaveText("67%");
+  await expect(profile.getByText("Intermedio", { exact: true })).toBeVisible();
+  await expect(profile.getByText("4 días", { exact: true })).toBeVisible();
+  await expect(profile.getByText("Gimnasio completo", { exact: true })).toBeVisible();
+
+  const completionReply = await sendChatMessage(
+    page,
+    CHAT_TURNS.completion,
+    30_000,
+  );
+  await expect(completionReply).toContainText(/rutina validada|Armé/i);
+  await expect(page.getByTestId("chat-profile-progress")).toHaveText("100%");
+  await expect(profile.getByText("60 minutos", { exact: true })).toBeVisible();
   await expect(
-    page.getByRole("heading", { level: 2, name: "Rutina validada" }),
+    profile.getByText("Sin dolor ni restricciones declaradas", { exact: true }),
   ).toBeVisible();
+
+  const inlineRoutine = page.getByTestId("inline-routine");
+  await expect(inlineRoutine).toBeVisible({ timeout: 30_000 });
+  await expect(page).toHaveURL(/\/crear\/chat$/);
+  await expect(
+    inlineRoutine.getByLabel("Rutina validada", { exact: true }),
+  ).toBeVisible();
+  await expectNoSeriousAccessibilityViolations(page, "chat with inline routine");
+
+  const originalExercises = await inlineExerciseNames(inlineRoutine);
+  expect(originalExercises.length).toBeGreaterThan(1);
+  const exerciseToReplace = originalExercises[0]!;
+
+  const modificationReply = await sendChatMessage(
+    page,
+    `Cambiame ${exerciseToReplace} por otro ejercicio compatible`,
+    30_000,
+  );
+  await expect(modificationReply).toContainText(/Reemplacé|volví a validar/i);
+
+  const modifiedExercises = await inlineExerciseNames(inlineRoutine);
+  expect(modifiedExercises).toHaveLength(originalExercises.length);
+  expect(modifiedExercises[0]).not.toBe(exerciseToReplace);
+  expect(modifiedExercises.slice(1)).toEqual(originalExercises.slice(1));
+
+  const assistantCountBeforeExplanation = await page
+    .locator('[data-message-role="assistant"]')
+    .count();
+  await inlineRoutine.getByRole("button", { name: "Preguntar por la rutina" }).click();
+  await expect(page.locator('[data-message-role="assistant"]')).toHaveCount(
+    assistantCountBeforeExplanation + 1,
+    { timeout: 30_000 },
+  );
+  await expect(lastAssistantMessage(page)).toContainText(
+    /motor determinístico|fue validada/i,
+  );
+
+  await inlineRoutine.getByRole("button", { name: "Guardar", exact: true }).click();
+  await expect(
+    inlineRoutine.getByRole("button", { name: "Guardada", exact: true }),
+  ).toBeVisible();
+
+  if (isMobile) {
+    await expect(chatComposer(page)).toBeVisible();
+    await expect(profile.locator("summary")).toBeVisible();
+    await expect(inlineRoutine).toBeVisible();
+    const horizontalOverflow = await page.evaluate(
+      () => document.documentElement.scrollWidth - window.innerWidth,
+    );
+    expect(horizontalOverflow).toBeLessThanOrEqual(1);
+  }
+
+  await page.reload();
+  await expect(chatComposer(page)).toBeVisible();
+  await expect(page.getByText(CHAT_TURNS.priority, { exact: true })).toBeVisible();
+  await expect(
+    page.getByText(`Cambiame ${exerciseToReplace} por otro ejercicio compatible`, {
+      exact: true,
+    }),
+  ).toBeVisible();
+  await expect(page.getByTestId("chat-profile-progress")).toHaveText("100%");
+  const restoredRoutine = page.getByTestId("inline-routine");
+  await expect(restoredRoutine).toBeVisible();
+  await expect(
+    restoredRoutine.getByRole("button", { name: "Guardada", exact: true }),
+  ).toBeVisible();
+  expect(await inlineExerciseNames(restoredRoutine)).toEqual(modifiedExercises);
 });
 
 test("provider failure preserves the request and offers the guided fallback", async ({
   page,
 }) => {
-  const requestText = "Quiero una rutina de fuerza tres días por semana.";
+  const preservedProfileText = "Quiero fuerza y entrenar cuatro días";
+  const failedRequestText = "También tengo una hora por sesión";
+  let failedInterpretCalls = 0;
+
+  await page.goto("/crear/chat");
+  await sendChatMessage(page, preservedProfileText);
+  await expect(page.getByTestId("chat-profile-progress")).toHaveText("33%");
+
   await page.route("**/api/ai/interpret", async (route) => {
+    failedInterpretCalls += 1;
     await route.fulfill({
-      status: 503,
+      status: 502,
       contentType: "application/json",
       body: JSON.stringify({
         ok: false,
-        provider: { id: "mock", model: "deterministic-fixture-v1" },
         error: {
-          code: "provider_unavailable",
-          title: "El asistente conversacional no está disponible",
+          code: "invalid_output",
+          title: "No pude estructurar este mensaje",
           message:
-            "Tu información sigue guardada. Podés completar la rutina mediante el formulario.",
+            "El modelo local no pudo estructurar este mensaje. Tu progreso sigue guardado.",
           action: "guided_form",
           canRetry: true,
         },
@@ -172,38 +294,63 @@ test("provider failure preserves the request and offers the guided fallback", as
     });
   });
 
-  await page.goto("/crear/chat");
-  await fillChatComposer(page, requestText);
+  await fillChatComposer(page, failedRequestText);
   await page.getByRole("button", { name: "Enviar mensaje" }).click();
 
   const fallback = page.getByRole("region", { name: /Conversaci/ }).getByRole("alert");
-  await expect(fallback).toContainText("no está disponible");
-  await expect(fallback).toContainText("información sigue guardada");
-  await expect(page.getByText(requestText)).toBeVisible();
+  await expect(fallback).toContainText("No pude estructurar este mensaje");
+  await expect(fallback).toContainText("progreso sigue guardado");
+  await expect(page.getByText(failedRequestText, { exact: true })).toBeVisible();
+  await expect(
+    fallback.getByRole("button", { name: "Reintentar el último turno" }),
+  ).toBeVisible();
+  await expect(
+    fallback.getByRole("link", { name: "Continuar con el formulario" }),
+  ).toHaveAttribute("href", "/crear/manual");
 
-  await fallback.getByRole("link", { name: "Continuar con formulario" }).click();
-  await expect(page).toHaveURL(/\/crear$/);
+  await fallback.getByRole("button", { name: "Reintentar el último turno" }).click();
+  await expect.poll(() => failedInterpretCalls).toBe(2);
+  await expect(fallback).toBeVisible();
+  await expect(
+    page.getByText(failedRequestText, { exact: true }),
+  ).toHaveCount(1);
+
+  await fallback
+    .getByRole("link", { name: "Continuar con el formulario" })
+    .click();
+  await expect(page).toHaveURL(/\/crear\/manual$/);
   await expect(
     page.getByRole("heading", { level: 1, name: "Armemos tu perfil de rutina." }),
   ).toBeVisible();
 
+  const strength = page.getByRole("button", { name: /Fuerza/ });
+  await expect(strength).toHaveAttribute("aria-pressed", "true");
+  await continueForm(page, 2);
+  await continueForm(page, 3);
+  await expect(page.getByRole("combobox").nth(0)).toHaveValue("4");
+
   await page.goto("/crear/chat");
-  await expect(page.getByText(requestText)).toBeVisible();
+  await expect(page.getByText(preservedProfileText, { exact: true })).toBeVisible();
+  await expect(page.getByText(failedRequestText, { exact: true })).toBeVisible();
+  await expect(page.getByTestId("chat-profile-progress")).not.toHaveText("0%");
 });
 
 test("unsupported medical and rehabilitation requests are blocked", async ({ page }) => {
+  const injuryRequest = "Me lesioné ayer, armame una rutina";
   await page.goto("/crear/chat");
-  await fillChatComposer(
-    page,
-    "Me lesioné ayer y quiero que me armes una rehabilitación para el hombro.",
-  );
-  await page.getByRole("button", { name: "Enviar mensaje" }).click();
+  const reply = await sendChatMessage(page, injuryRequest);
 
-  await expect(page.getByText(/FORMA no puede evaluar lesiones/)).toBeVisible();
-  await expect(
-    page.getByRole("button", { name: "Generar rutina validada" }),
-  ).toHaveCount(0);
-  await expect(page.getByRole("link", { name: /terminar el mismo perfil/ })).toBeVisible();
+  await expect(page.getByText(injuryRequest, { exact: true })).toBeVisible();
+  await expect(reply).toContainText(/Este pedido necesita más cuidado/i);
+  await expect(reply).toContainText(/FORMA no puede evaluar lesiones/i);
+  await expect(page.getByTestId("inline-routine")).toHaveCount(0);
+
+  const profile = page.locator("details").filter({
+    has: page.getByText("Tu punto de partida", { exact: true }),
+  });
+  await profile.locator("summary").click();
+  await expect(profile.getByText("Generación pausada por seguridad")).toBeVisible();
+  await expect(page.getByRole("link", { name: "Explorar ejercicios" }).last()).toBeVisible();
 });
 
 test.describe("reduced motion", () => {
@@ -292,13 +439,16 @@ test("mobile project exposes the persistent core navigation", async ({ page, isM
 
   const mobileNavigation = page.getByRole("navigation", { name: /Navegaci.*m.vil/ });
   await expect(mobileNavigation).toBeVisible();
-  await expect(mobileNavigation.getByRole("link", { name: "Crear" })).toBeVisible();
+  await expect(mobileNavigation.getByRole("link", { name: "Crear" })).toHaveAttribute(
+    "href",
+    "/crear/chat",
+  );
   await expect(mobileNavigation.getByRole("link", { name: "Ejercicios" })).toBeVisible();
   await expect(mobileNavigation.getByRole("link", { name: "Guardadas" })).toBeVisible();
 });
 
 async function generateWithGuidedForm(page: Page): Promise<void> {
-  await page.goto("/crear");
+  await page.goto("/crear/manual");
 
   await expect(
     page.getByRole("heading", { level: 1, name: "Armemos tu perfil de rutina." }),
@@ -368,9 +518,7 @@ async function continueForm(page: Page, expectedStep: number): Promise<void> {
 }
 
 async function fillChatComposer(page: Page, text: string): Promise<void> {
-  const composer = page.getByRole("textbox", {
-    name: "Mensaje para describir la rutina",
-  });
+  const composer = chatComposer(page);
   const send = page.getByRole("button", { name: "Enviar mensaje" });
 
   await expect(async () => {
@@ -379,13 +527,33 @@ async function fillChatComposer(page: Page, text: string): Promise<void> {
   }).toPass({ timeout: 10_000 });
 }
 
-async function completeChatSafetyCheck(page: Page): Promise<void> {
-  const safeAnswers = page.getByRole("radio", { name: "No", exact: true });
-  await expect(safeAnswers).toHaveCount(6);
-  for (let index = 0; index < 6; index += 1) {
-    await safeAnswers.nth(index).check();
-  }
-  await page.getByRole("checkbox", { name: /Estas respuestas describen/ }).check();
+function chatComposer(page: Page): Locator {
+  return page.getByRole("textbox", { name: "Mensaje para FORMA" });
+}
+
+function lastAssistantMessage(page: Page): Locator {
+  return page.locator('[data-message-role="assistant"]').last();
+}
+
+async function sendChatMessage(
+  page: Page,
+  text: string,
+  timeout = 20_000,
+): Promise<Locator> {
+  const assistantMessages = page.locator('[data-message-role="assistant"]');
+  await expect(assistantMessages.first()).toBeVisible();
+  const assistantCount = await assistantMessages.count();
+  await fillChatComposer(page, text);
+  await page.getByRole("button", { name: "Enviar mensaje" }).click();
+  await expect(page.getByText(text, { exact: true }).last()).toBeVisible();
+  await expect(assistantMessages).toHaveCount(assistantCount + 1, { timeout });
+  await expect(page.getByRole("button", { name: "Cancelar respuesta" })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Enviar mensaje" })).toBeVisible();
+  return lastAssistantMessage(page);
+}
+
+async function inlineExerciseNames(inlineRoutine: Locator): Promise<string[]> {
+  return inlineRoutine.locator("ol > li h4").allTextContents();
 }
 
 function activeDay(page: Page): Locator {
