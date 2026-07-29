@@ -134,4 +134,70 @@ describe("deterministic assistant fallback", () => {
     expect(message).toContain("dolor al moverte");
     expect(message).not.toContain("restricción para entrenar");
   });
+
+  it("asks for missing profile data after safety is fully confirmed", () => {
+    const message = composeAssistantFallback({
+      ...baseContext,
+      latestIntent: "provide_information",
+      canonicalDraft: {
+        ...createEmptyRoutineRequestDraft(),
+        goal: "hypertrophy",
+        daysPerWeek: 4,
+        sessionMinutes: 60,
+        trainingLocation: "commercial_gym",
+      },
+      limitationsConfirmation: "confirmed_none",
+      missingFields: ["experience"],
+      completionPercentage: 83,
+      parseStatus: "needs_input",
+      focusedQuestionFields: ["experience"],
+      safetyMissingFields: [],
+      safetyAnsweredFields: [
+        "painDuringMovement",
+        "recentInjury",
+        "recentOperation",
+        "medicalRestriction",
+        "symptomsDuringExercise",
+        "professionalInstructionsAffectTraining",
+      ],
+      safetyAnsweredCount: 6,
+      safetyResult: {
+        status: "clear",
+        signals: [],
+        generationAllowed: true,
+      },
+    });
+
+    expect(message).toContain("nivel actual");
+    expect(message).not.toContain("dolor al moverte");
+  });
+
+  it("explains the explicit all-clear wording when no safety field is answered", () => {
+    const message = composeAssistantFallback({
+      ...baseContext,
+      latestIntent: "provide_information",
+      canonicalDraft: {
+        ...createEmptyRoutineRequestDraft(),
+        goal: "hypertrophy",
+        daysPerWeek: 4,
+        sessionMinutes: 60,
+        trainingLocation: "commercial_gym",
+      },
+      missingFields: ["limitationsConfirmation"],
+      completionPercentage: 83,
+      focusedQuestionFields: ["limitationsConfirmation"],
+      safetyMissingFields: [
+        "painDuringMovement",
+        "recentInjury",
+        "recentOperation",
+        "medicalRestriction",
+        "symptomsDuringExercise",
+        "professionalInstructionsAffectTraining",
+      ],
+      safetyAnsweredFields: [],
+      safetyAnsweredCount: 0,
+    });
+
+    expect(message).toContain("No tengo dolor al moverme, lesiones recientes");
+  });
 });

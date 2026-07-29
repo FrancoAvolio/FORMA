@@ -62,6 +62,9 @@ const EQUIPMENT_COPY: Readonly<Record<string, string>> = {
   pull_up_bar: "barra de dominadas",
 };
 
+const COMPLETE_SAFETY_EXAMPLE =
+  "No tengo dolor al moverme, lesiones recientes, operaciones recientes, restricciones médicas, síntomas durante el ejercicio ni indicaciones profesionales que afecten mi entrenamiento.";
+
 function joinedList(values: readonly string[]): string {
   if (values.length <= 1) return values[0] ?? "";
   const last = values.at(-1) ?? "";
@@ -79,7 +82,9 @@ function safetyFollowUp(context: ValidatedAssistantResponseContext): string {
     (field) => CONVERSATIONAL_SAFETY_FIELD_LABELS[field],
   );
   const question = `Para completar la revisión, confirmame también si tenés ${joinedList(missing)}.`;
-  if (answered.length === 0) return question;
+  if (answered.length === 0) {
+    return `${question} Si todo es negativo, podés responder: “${COMPLETE_SAFETY_EXAMPLE}”`;
+  }
   return `Entendido: registré que no declaraste ${joinedList(answered)}. ${question}`;
 }
 
@@ -200,7 +205,7 @@ export function composeAssistantFallback(
       ? context.focusedQuestionFields
       : selectFocusedQuestionFields(context.missingFields);
   const questions =
-    context.safetyAnsweredCount > 0 || context.safetyMissingFields.length > 0
+    context.safetyMissingFields.length > 0
       ? safetyFollowUp(context)
       : focused.map((field) => QUESTION_COPY[field]).join(" ");
 

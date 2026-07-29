@@ -357,6 +357,33 @@ test("collects conversational safety fields incrementally without repeating answ
   });
 });
 
+test("asks for missing profile data after explicit safety confirmation", async ({
+  page,
+}) => {
+  test.slow();
+  await page.goto("/crear/chat");
+  await expect(chatComposer(page)).toBeVisible({ timeout: 30_000 });
+
+  await sendChatMessage(
+    page,
+    "Quiero una rutina de hipertrofia, cuatro dias por semana, una hora por sesion, en un gimnasio completo.",
+  );
+
+  const safetyReply = await sendChatMessage(
+    page,
+    "No tengo dolor al moverme, lesiones recientes, operaciones recientes, restricciones medicas, sintomas durante el ejercicio ni indicaciones profesionales que afecten mi entrenamiento.",
+  );
+  await expect(safetyReply).toContainText(/nivel actual|principiante|intermedio|avanzado/i);
+  await expect(safetyReply).not.toContainText(/dolor al moverte/i);
+  await expect(page.getByTestId("chat-profile-progress")).toHaveText("83%");
+
+  await sendChatMessage(page, "Soy intermedio", 60_000);
+  await expect(page.getByTestId("chat-profile-progress")).toHaveText("100%");
+  await expect(page.getByTestId("inline-routine")).toBeVisible({
+    timeout: 30_000,
+  });
+});
+
 test("provider failure preserves the request and offers the guided fallback", async ({
   page,
 }) => {
