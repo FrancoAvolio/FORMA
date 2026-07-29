@@ -38,9 +38,8 @@ export default function PrivacyPage() {
           <p>
             Al exportar una rutina, FORMA genera el PDF completo dentro de este navegador y
             descarga las imágenes estáticas necesarias desde el mismo sitio. Después elegís
-            si querés guardarlo o compartirlo con el menú nativo del teléfono; la versión TXT
-            sigue disponible como alternativa liviana. FORMA no sube esa copia a un servidor
-            propio.
+            si querés guardarlo o compartirlo con el menú nativo del teléfono. FORMA no sube
+            esa copia a un servidor propio.
           </p>
         </section>
 

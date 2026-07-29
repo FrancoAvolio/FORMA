@@ -18,30 +18,15 @@
   height: 1rem;
 }
 
-.textExport {
-  appearance: none;
-  align-items: center;
-  background: transparent;
-  border: 0;
-  color: var(--color-muted);
-  cursor: pointer;
-  display: inline-flex;
-  font: inherit;
-  font-size: 0.7rem;
-  font-weight: 700;
-  gap: 0.35rem;
-  padding: 0.2rem 0;
-  text-decoration: underline;
-  text-underline-offset: 0.2rem;
+.root .savePdf {
+  border-color: var(--color-brand);
+  background: var(--color-action);
+  color: var(--color-white);
 }
 
-.textExport:hover:not(:disabled) {
-  color: var(--color-ink);
-}
-
-.textExport:disabled {
-  cursor: not-allowed;
-  opacity: 0.5;
+.root .savePdf:hover {
+  background: var(--color-brand);
+  color: var(--color-white);
 }
 
 .status {

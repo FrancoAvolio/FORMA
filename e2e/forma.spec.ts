@@ -377,7 +377,7 @@ test("the Mock conversation builds, modifies, explains, saves, and restores a ro
   await expect(page.getByRole("button", { name: /Abrir rutina/ })).toBeVisible();
 });
 
-test("routine export creates a rich PDF and keeps TXT as a lightweight alternative", async ({
+test("routine export creates a legible rich PDF without the retired TXT action", async ({
   page,
   isMobile,
 }) => {
@@ -394,16 +394,29 @@ test("routine export creates a rich PDF and keeps TXT as a lightweight alternati
   });
   await generateWithGuidedForm(page);
 
-  const routineTitle = await page.getByRole("heading", { level: 1 }).textContent();
-  expect(routineTitle).toBeTruthy();
+  await expect(
+    page.getByRole("button", { name: /Descargar.*TXT/i }),
+  ).toHaveCount(0);
   await page.getByRole("button", { name: "Exportar PDF" }).click();
   await expect(
     page.getByRole("status").filter({
       hasText: "PDF listo. Ahora podés guardarlo o compartirlo.",
     }),
   ).toBeVisible({ timeout: 60_000 });
+  const savePdf = page.getByRole("button", { name: "Guardar PDF" });
+  await expect(savePdf).toContainText("Guardar PDF");
+  const savePdfColors = await savePdf.evaluate((button) => {
+    const style = getComputedStyle(button);
+    return {
+      background: style.backgroundColor,
+      color: style.color,
+    };
+  });
+  expect(savePdfColors.color).toBe("rgb(255, 255, 255)");
+  expect(savePdfColors.background).not.toBe("rgba(0, 0, 0, 0)");
+  expect(savePdfColors.background).not.toBe(savePdfColors.color);
   if (isMobile) {
-    await expect(page.getByRole("button", { name: "Guardar PDF" })).toBeVisible();
+    await expect(savePdf).toBeVisible();
     const horizontalOverflow = await page.evaluate(
       () => document.documentElement.scrollWidth - window.innerWidth,
     );
@@ -411,7 +424,7 @@ test("routine export creates a rich PDF and keeps TXT as a lightweight alternati
   }
 
   const pdfDownloadPromise = page.waitForEvent("download");
-  await page.getByRole("button", { name: "Guardar PDF" }).click();
+  await savePdf.click();
   const pdfDownload = await pdfDownloadPromise;
   expect(pdfDownload.suggestedFilename()).toMatch(/^forma-[a-z0-9-]+\.pdf$/);
   const pdfPath = await pdfDownload.path();
@@ -429,26 +442,9 @@ test("routine export creates a rich PDF and keeps TXT as a lightweight alternati
       hasText: "Descargamos tu rutina en PDF.",
     }),
   ).toBeVisible();
-
-  const textDownloadPromise = page.waitForEvent("download");
-  await page.getByRole("button", { name: "Descargar versión TXT" }).click();
-  const textDownload = await textDownloadPromise;
-  expect(textDownload.suggestedFilename()).toMatch(/^forma-[a-z0-9-]+\.txt$/);
-  const textPath = await textDownload.path();
-  expect(textPath).not.toBeNull();
-  const exportedText = await readFile(textPath!, "utf8");
-  expect(exportedText).toContain("FORMA · RUTINA VALIDADA");
-  expect(exportedText).toContain(routineTitle!);
-  expect(exportedText).toContain("DÍA 1");
-  expect(exportedText).toMatch(/Ficha: https?:\/\/[^\s]+\/ejercicios\/[^\s]+/);
-  expect(exportedText).toMatch(
-    /Fuentes y atribuciones: https?:\/\/[^\s]+\/atribuciones/,
-  );
   await expect(
-    page.getByRole("status").filter({
-      hasText: "Descargamos la versión liviana en TXT.",
-    }),
-  ).toBeVisible();
+    page.getByRole("button", { name: /Descargar.*TXT/i }),
+  ).toHaveCount(0);
 });
 
 test("a safety-only follow-up preserves the exact requested profile and builds the routine", async ({

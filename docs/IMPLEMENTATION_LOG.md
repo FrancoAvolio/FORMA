@@ -334,9 +334,10 @@ preserves the validated routine structure, technique instructions and visible me
 - Added a final warnings, assumptions, sources, attribution and pending-license section. Static
   thumbnails keep their original bytes and watermark; GIFs are not embedded and source media is
   not exposed as a standalone download.
-- Kept TXT as a deliberately secondary lightweight option. PDF preparation and native sharing
-  are separate actions so the eventual `Compartir PDF` click retains a fresh mobile user gesture;
-  `Guardar PDF` remains the universal fallback.
+- Retired the earlier TXT action after product review so the portable flow exposes one complete,
+  unambiguous format. PDF preparation and native sharing are separate actions so the eventual
+  `Compartir PDF` click retains a fresh mobile user gesture; `Guardar PDF` remains the universal
+  fallback.
 - Extended the repository owner's limited personal-use media authorization specifically to
   contextual JPG thumbnails in personal routine PDFs. This is still not represented as Gym
   Visual permission or public/commercial license clearance.

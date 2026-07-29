@@ -244,7 +244,8 @@ A missing or disabled image becomes a designed placeholder and does not invalida
 animations are never embedded: every card links back to the exercise page for the user-controlled
 demonstration. Because mobile native sharing requires a fresh user action, generation and
 sharing are separate steps: after preparation, the person explicitly chooses `Guardar PDF` or
-`Compartir PDF`. UTF-8 TXT remains a secondary lightweight alternative.
+`Compartir PDF`. The earlier TXT export was retired to keep one complete, unambiguous portable
+format.
 
 The repository owner's limited personal-use authorization is extended specifically to JPGs
 rendered inside personal routine PDFs. Original pixels/watermarks and per-image attribution stay

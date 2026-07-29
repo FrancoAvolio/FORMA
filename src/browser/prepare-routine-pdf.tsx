@@ -5,9 +5,9 @@ import {
   routineExerciseIds,
   RoutineExerciseExportDetailsDocumentSchema,
   type RoutineExerciseExportDetail,
+  type RoutineExportCatalog,
   type RoutinePdfMediaCatalog,
 } from "@/application/routines/routine-pdf-export";
-import type { RoutineExportCatalog } from "@/application/routines/export-routine";
 import type { RoutinePlan } from "@/domain/routine/schemas";
 import type { ExerciseMedia } from "@/media";
 

@@ -1,13 +1,9 @@
 "use client";
 
-import { Download, FileText, Share2 } from "lucide-react";
+import { Download, Share2 } from "lucide-react";
 import { useState } from "react";
 
-import {
-  createRoutineTextExport,
-  type RoutineExportCatalog,
-} from "@/application/routines/export-routine";
-import { exportRoutineToDevice } from "@/browser/export-routine-to-device";
+import type { RoutineExportCatalog } from "@/application/routines/routine-pdf-export";
 import {
   prepareRoutinePdf,
   type PreparedRoutinePdf,
@@ -41,7 +37,7 @@ export function ExportRoutineButton({
     plan: RoutinePlan;
     text: string;
   } | null>(null);
-  const [working, setWorking] = useState<"pdf" | "text" | null>(null);
+  const [working, setWorking] = useState(false);
   const [preparedState, setPreparedState] = useState<{
     plan: RoutinePlan;
     pdf: PreparedRoutinePdf;
@@ -52,7 +48,7 @@ export function ExportRoutineButton({
     setStatusState(text === null ? null : { plan, text });
 
   const preparePdf = () => {
-    setWorking("pdf");
+    setWorking(true);
     setPreparedState(null);
     setStatus("Armando el PDF con imágenes e instrucciones…");
     void prepareRoutinePdf({
@@ -68,29 +64,7 @@ export function ExportRoutineButton({
       .catch(() =>
         setStatus("No pudimos crear el PDF. Intentá nuevamente."),
       )
-      .finally(() => setWorking(null));
-  };
-
-  const downloadText = () => {
-    const exported = createRoutineTextExport({
-      plan,
-      catalog,
-      origin: window.location.origin,
-    });
-    setWorking("text");
-    setStatus(null);
-    void exportRoutineToDevice(exported)
-      .then((outcome) => {
-        if (outcome === "shared") {
-          setStatus("Versión de texto lista para compartir.");
-        } else if (outcome === "downloaded") {
-          setStatus("Descargamos la versión liviana en TXT.");
-        }
-      })
-      .catch(() =>
-        setStatus("No pudimos preparar el archivo. Intentá nuevamente."),
-      )
-      .finally(() => setWorking(null));
+      .finally(() => setWorking(false));
   };
 
   return (
@@ -99,11 +73,11 @@ export function ExportRoutineButton({
         <button
           className="button button-secondary"
           type="button"
-          disabled={disabled || working !== null}
+          disabled={disabled || working}
           onClick={preparePdf}
         >
           <Download aria-hidden="true" />
-          {working === "pdf"
+          {working
             ? "Creando PDF…"
             : preparedPdf
               ? "Volver a crear PDF"
@@ -113,7 +87,7 @@ export function ExportRoutineButton({
         {preparedPdf ? (
           <span className={styles.readyActions}>
             <button
-              className="button button-primary"
+              className={`button button-primary ${styles.savePdf}`}
               type="button"
               onClick={() => {
                 downloadRoutinePdf(preparedPdf);
@@ -145,15 +119,6 @@ export function ExportRoutineButton({
         ) : null}
       </div>
 
-      <button
-        className={styles.textExport}
-        type="button"
-        disabled={disabled || working !== null}
-        onClick={downloadText}
-      >
-        <FileText aria-hidden="true" />
-        {working === "text" ? "Preparando TXT…" : "Descargar versión TXT"}
-      </button>
       {status ? (
         <span className={styles.status} role="status">
           {status}

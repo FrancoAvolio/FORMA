@@ -12,8 +12,6 @@ import {
   exerciseListLabel,
 } from "@/presentation/exercise-labels";
 
-import type { RoutineExportCatalog } from "./export-routine";
-
 export const RoutineExerciseExportDetailSchema = z
   .object({
     id: z.string().trim().min(1).max(128),
@@ -53,6 +51,10 @@ export const RoutineExerciseExportDetailsDocumentSchema = z
 export type RoutineExerciseExportDetail = z.infer<
   typeof RoutineExerciseExportDetailSchema
 >;
+
+export type RoutineExportCatalog =
+  | readonly CatalogExercise[]
+  | ReadonlyMap<string, CatalogExercise>;
 
 export type RoutinePdfMediaCatalog =
   | Readonly<Record<string, ExerciseMedia>>
