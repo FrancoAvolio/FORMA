@@ -2,7 +2,7 @@ import { z } from "zod";
 
 import { RoutineGoalSchema } from "../../domain/profile/routine-request";
 import { AI_LIMITS } from "../limits";
-import { BoundedTextListSchema, LocaleSchema } from "./common";
+import { BoundedTextListSchema, LocaleSchema, UserMessageSchema } from "./common";
 import type { AiRequestControls } from "./common";
 
 const ExplainExerciseSchema = z
@@ -40,7 +40,7 @@ export const ValidatedPlanSummarySchema = z
 export const ExplainPlanInputDataSchema = z
   .object({
     plan: ValidatedPlanSummarySchema,
-    question: z.string().trim().min(1).max(1_000).nullable().default(null),
+    question: UserMessageSchema.nullable().default(null),
     locale: LocaleSchema,
   })
   .strict();
@@ -59,4 +59,3 @@ export const ExplainPlanResultSchema = z
   .strict();
 
 export type ExplainPlanResult = z.output<typeof ExplainPlanResultSchema>;
-

@@ -1,6 +1,7 @@
 import type { CatalogExercise } from "../../domain/exercises/catalog-exercise";
 import type { RoutineRequest } from "../../domain/profile/routine-request";
 import type { SafetyScreening } from "../../domain/safety/schemas";
+import { buildSessionBlocks } from "../../domain/routine/engine/build-session-blocks";
 import { estimateSessionDuration } from "../../domain/routine/engine/estimate-session-duration";
 import {
   RoutineExerciseSchema,
@@ -63,10 +64,19 @@ export function removeRoutineExercise(
   const nextExercises = day.exercises.filter(
     (exercise) => exercise.exerciseId !== input.exerciseId,
   );
+  const sessionBlocks = buildSessionBlocks(
+    input.request.sessionMinutes,
+    nextExercises,
+  );
   const nextDay = {
     ...day,
     exercises: nextExercises,
-    estimatedMinutes: estimateSessionDuration(nextExercises, input.catalog),
+    estimatedMinutes: estimateSessionDuration(
+      nextExercises,
+      input.catalog,
+      sessionBlocks,
+    ),
+    sessionBlocks,
   };
   return validateMutation(
     {
@@ -152,7 +162,11 @@ export function editRoutineExercisePrescription(
   const nextDay = {
     ...day,
     exercises: nextExercises,
-    estimatedMinutes: estimateSessionDuration(nextExercises, input.catalog),
+    estimatedMinutes: estimateSessionDuration(
+      nextExercises,
+      input.catalog,
+      day.sessionBlocks,
+    ),
   };
   return validateMutation(
     {
@@ -229,10 +243,19 @@ export function shortenRoutineDay(
 
     let nextPlan: RoutinePlan | null = null;
     for (const exercises of exerciseCandidates) {
+      const sessionBlocks = buildSessionBlocks(
+        input.request.sessionMinutes,
+        exercises,
+      );
       const nextDay = {
         ...workingDay,
         exercises,
-        estimatedMinutes: estimateSessionDuration(exercises, input.catalog),
+        estimatedMinutes: estimateSessionDuration(
+          exercises,
+          input.catalog,
+          sessionBlocks,
+        ),
+        sessionBlocks,
       };
       const candidatePlan = {
         ...workingPlan,

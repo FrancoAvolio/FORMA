@@ -26,6 +26,8 @@ describe("conversation domain relevance", () => {
     expect(isClearlyOffTopicMessage("No tengo nada de eso")).toBe(false);
     expect(isClearlyOffTopicMessage("Hola")).toBe(false);
     expect(isClearlyOffTopicMessage("No")).toBe(false);
+    expect(isClearlyOffTopicMessage("Una hora y media")).toBe(false);
+    expect(isClearlyOffTopicMessage("90 min")).toBe(false);
   });
 
   it("provides a stable redirect message", () => {

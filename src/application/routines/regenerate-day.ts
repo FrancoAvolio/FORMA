@@ -7,6 +7,7 @@ import {
   buildRoutineDay,
   correctWeeklyVolume,
 } from "../../domain/routine/engine/generate-routine";
+import { fitRoutineSessionDurations } from "../../domain/routine/engine/fit-session-duration";
 import type { RoutinePlan } from "../../domain/routine/schemas";
 import { validateRoutine } from "../../domain/routine/validators/validate-routine";
 import type { RoutineMutationResult } from "./types";
@@ -71,12 +72,19 @@ export function regenerateRoutineDay(
       index === dayIndex ? regenerated : day,
     ),
   };
-  const nextPlan = correctWeeklyVolume(
+  const volumeCorrected = correctWeeklyVolume(
     uncorrectedPlan,
     input.request,
     input.catalog,
     { mutableDayIndexes: new Set([dayIndex]) },
   );
+  const nextPlan = fitRoutineSessionDurations({
+    plan: volumeCorrected,
+    request: input.request,
+    catalog: input.catalog,
+    split,
+    mutableDayIndexes: new Set([dayIndex]),
+  });
   const validation = validateRoutine(
     nextPlan,
     input.request,

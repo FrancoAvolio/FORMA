@@ -201,3 +201,38 @@ presented as working from a clean Git/Cloudflare CI checkout.
 The `workers.dev` target is `app.forma-gym.workers.dev`: `app` is the Worker name and `forma-gym`
 is the account-wide Workers subdomain. The old Worker is retained until live verification. Browser
 local data is origin-scoped and therefore does not migrate automatically to the new hostname.
+
+## ADR-026 — Long chat input is bounded visibly and never silently truncated
+
+Chat messages retain the existing 4,000-character provider/security ceiling and add a 600-word
+ceiling. Both counters are always visible. The browser keeps pasted text intact, prevents sending
+only while either boundary is exceeded, and explains how to continue; the same word/character
+contract is rechecked by the server schema before any provider call. The textarea grows with its
+content up to a viewport-relative maximum and keeps overflow scrollable while visually hiding the
+native internal scrollbar.
+
+## ADR-027 — Session time is a deterministic target with explicit non-working blocks
+
+An unqualified duration such as 90 minutes is a planning target rather than a permissive ceiling.
+The duration model separates effective exercise work from visible general warm-up, specific
+approach/technique and cooldown/logging blocks. These blocks never count as effective sets or
+weekly volume and are rendered in the routine and portable export instead of being hidden padding.
+
+After the ordinary plan passes volume correction, a deterministic fitter may raise rests only to
+the configured goal/modality maximum, restore prescribed sets only while the weekly maximum still
+holds, and add only unique approved/equipment-compatible exercises. It never raises medical,
+equipment or volume boundaries to fill the clock. Generation must reach the shared target band or
+return a typed failure rather than silently presenting a materially short session. A changed
+session duration forces a complete deterministic rebuild. Earlier persisted plans remain readable
+through default empty blocks and their stored engine version.
+
+## ADR-028 — Portable routine export is text-first; demonstrations stay user-controlled
+
+“Exportar al teléfono” builds a UTF-8 text representation locally, including prescriptions,
+visible session blocks, detail-page links and the attribution-page link. On supported phones it
+uses the native Web Share sheet with a `.txt` file, falls back to sharing text, and finally to a
+normal browser download. It never embeds or packages protected image/GIF binaries.
+
+Routine cards retain a separate `Ver ficha` link and add an explicit inline JPG/GIF toggle. At
+most one animation is active per routine surface; no list animation autoplays or restores itself
+after navigation. The resolved dimensions, watermark and visible attribution remain unchanged.

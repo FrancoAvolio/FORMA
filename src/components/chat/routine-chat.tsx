@@ -20,6 +20,7 @@ import { useRouter } from "next/navigation";
 import {
   useCallback,
   useEffect,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -62,6 +63,10 @@ import {
 } from "@/application/routines";
 import { ExerciseThumbnail } from "@/components/exercises/exercise-thumbnail";
 import type { CatalogExercise } from "@/domain/exercises/catalog-exercise";
+import {
+  getUserMessageMetrics,
+  USER_MESSAGE_LIMITS,
+} from "@/domain/conversation/user-message";
 import type { RoutineRequest } from "@/domain/profile/routine-request";
 import { createRoutineSeed } from "@/domain/routine/engine/seed";
 import { evaluateRoutineSafety } from "@/domain/safety/evaluate-safety";
@@ -500,6 +505,8 @@ export function RoutineChat({
     serverDesktopProfile,
   );
   const [mobileProfileOpen, setMobileProfileOpen] = useState(false);
+  const inputMetrics = useMemo(() => getUserMessageMetrics(input), [input]);
+  const inputExceedsLimit = !inputMetrics.valid;
 
   const commit = useCallback(async (update: RoutineConversationStateUpdate) => {
     const repository = repositoryRef.current;
@@ -580,6 +587,13 @@ export function RoutineChat({
       behavior: "smooth",
     });
   }, [conversation?.messages, loading]);
+
+  useLayoutEffect(() => {
+    const textarea = composerRef.current;
+    if (!textarea) return;
+    textarea.style.height = "auto";
+    textarea.style.height = `${textarea.scrollHeight}px`;
+  }, [input]);
 
   const appendAssistant = useCallback(
     async (
@@ -990,6 +1004,7 @@ export function RoutineChat({
         explicitExerciseTarget?: ConversationExerciseTarget | null;
       },
     ) => {
+      if (!getUserMessageMetrics(rawText).valid) return;
       const text = rawText.trim();
       const base = conversationRef.current;
       if (!text || !base || loading) return;
@@ -1370,28 +1385,45 @@ export function RoutineChat({
             className={styles.composer}
             onSubmit={(event) => {
               event.preventDefault();
-              if (!loading) void submitText(input);
+              if (!loading && !inputExceedsLimit) void submitText(input);
             }}
           >
-            <label>
+            <label className={styles.composerField}>
               <span className="sr-only">Mensaje para FORMA</span>
               <textarea
                 ref={composerRef}
                 value={input}
                 onChange={(event) => setInput(event.target.value)}
+                aria-describedby="chat-message-limit"
+                aria-invalid={inputExceedsLimit}
                 onKeyDown={(event) => {
                   if (event.key === "Enter" && !event.shiftKey) {
                     event.preventDefault();
-                    if (!loading) void submitText(input);
+                    if (!loading && !inputExceedsLimit) void submitText(input);
                   }
                 }}
-                maxLength={4_000}
                 placeholder={
                   currentRoutine
                     ? "Preguntá por la rutina o pedime un cambio…"
                     : "Ej.: Quiero crecer mis bíceps y entreno cuatro días…"
                 }
               />
+              <span
+                id="chat-message-limit"
+                className={
+                  inputExceedsLimit
+                    ? styles.messageLimitError
+                    : styles.messageLimit
+                }
+              >
+                {inputMetrics.words}/{USER_MESSAGE_LIMITS.words} palabras ·{" "}
+                {inputMetrics.characters}/{USER_MESSAGE_LIMITS.characters} caracteres
+              </span>
+              {inputExceedsLimit ? (
+                <span className={styles.limitAlert} role="status">
+                  Acortá el mensaje para enviarlo. El texto no se cortó.
+                </span>
+              ) : null}
             </label>
             {loading ? (
               <button
@@ -1404,7 +1436,7 @@ export function RoutineChat({
             ) : (
               <button
                 type="submit"
-                disabled={!input.trim()}
+                disabled={!input.trim() || inputExceedsLimit}
                 aria-label="Enviar mensaje"
               >
                 <Send aria-hidden="true" />

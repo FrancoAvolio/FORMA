@@ -35,7 +35,8 @@ automated accessibility checks, repository metadata, or a successful package bui
 - **Browser-local data:** routines do not synchronize between browsers/devices and disappear if
   site storage is cleared. They also do not migrate between hostnames, including the move from
   `forma-routines.fran40v.workers.dev` to `app.forma-gym.workers.dev`. This is an explicit MVP
-  boundary, not an authentication defect.
+  boundary, not an authentication defect. The portable text export provides a manual copy/share
+  path, but importing that file back into FORMA and automatic synchronization remain out of scope.
 - **Development/build audit:** the deployed production dependency audit is clean. The compatible
   ESLint 9/Next plugin toolchain still contains legacy glob-expansion DoS advisories, and the
   OpenNext build-only minifier chain retains high-severity glob/minimatch advisories. These are

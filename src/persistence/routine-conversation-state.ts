@@ -37,6 +37,7 @@ import {
   safetyScreeningToConversationalDraft,
   type ConversationalSafetyScreeningDraft,
 } from "@/domain/safety/conversational-screening";
+import { USER_MESSAGE_LIMITS } from "@/domain/conversation/user-message";
 
 export const CONVERSATION_MESSAGE_ROLES = ["user", "assistant"] as const;
 
@@ -44,7 +45,7 @@ export const ConversationMessageSchema = z
   .object({
     id: z.string().trim().min(1).max(160),
     role: z.enum(CONVERSATION_MESSAGE_ROLES),
-    content: z.string().trim().min(1).max(4_000),
+    content: z.string().trim().min(1).max(USER_MESSAGE_LIMITS.characters),
     createdAt: z.string().datetime({ offset: true }),
   })
   .strict();

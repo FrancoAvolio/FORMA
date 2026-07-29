@@ -9,6 +9,7 @@ import {
   type SafetySignalSchema,
 } from "../../ai/schemas/safety";
 import type { LimitationsConfirmation } from "../../domain/profile/routine-draft";
+import { parseSessionDuration } from "../../domain/profile/parse-session-duration";
 import {
   detectLimitationsDeclaration,
   detectSafetyReasonCodes,
@@ -176,16 +177,8 @@ function extractDeterministicRequestPatch(
     if (value >= 1 && value <= 6) patch.daysPerWeek = value;
   }
 
-  const minutes = normalized.match(/\b(\d{1,3})\s*minutos?\b/u);
-  const hours = normalized.match(
-    /\b(\d|un|uno|una|dos)\s*horas?\b/u,
-  );
-  if (minutes?.[1]) {
-    patch.sessionMinutes = Number(minutes[1]);
-  } else if (hours?.[1]) {
-    const value = Number(hours[1]) || SPANISH_NUMBERS[hours[1]];
-    if (value >= 1 && value <= 2) patch.sessionMinutes = value * 60;
-  }
+  const sessionMinutes = parseSessionDuration(normalized);
+  if (sessionMinutes !== null) patch.sessionMinutes = sessionMinutes;
 
   if (/\b(?:gimnasio|gym)\b/u.test(normalized)) {
     patch.trainingLocation = "commercial_gym";

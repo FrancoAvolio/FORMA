@@ -386,6 +386,12 @@
   width: 1rem;
 }
 
+.exerciseActions > button[aria-pressed="true"] {
+  border-color: var(--color-action);
+  background: var(--color-action);
+  color: var(--color-white);
+}
+
 .exerciseActions .remove {
   color: var(--color-danger);
 }

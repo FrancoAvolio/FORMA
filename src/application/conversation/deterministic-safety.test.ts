@@ -216,6 +216,18 @@ describe("deterministic conversational safety", () => {
     expect(result.requestPatch).toEqual({ experience: "advanced" });
   });
 
+  it.each(["Una hora y media por sesión", "90 min", "1 h 30"])(
+    "keeps the explicit ninety-minute duration from %s",
+    (message) => {
+      const result = reconcileParsedTurnSafety(neutralTurn, message, {
+        hasCurrentRoutine: true,
+      });
+
+      expect(result.intent).toBe("modify_profile");
+      expect(result.requestPatch).toEqual({ sessionMinutes: 90 });
+    },
+  );
+
   it("does not treat equipment in an exercise name as a profile change", () => {
     const result = reconcileParsedTurnSafety(
       { ...neutralTurn, intent: "modify_routine" },

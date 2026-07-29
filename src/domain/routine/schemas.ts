@@ -16,12 +16,31 @@ export const RoutineExerciseSchema = z.object({
   selectionReasons: z.array(z.string().trim().min(1).max(300)).min(1).max(16),
 });
 
+export const RoutineSessionBlockSchema = z
+  .object({
+    kind: z.enum([
+      "general_warmup",
+      "specific_preparation",
+      "cooldown",
+    ]),
+    title: z.string().trim().min(1).max(120),
+    description: z.string().trim().min(1).max(400),
+    estimatedMinutes: z.number().int().min(1).max(30),
+    relatedExerciseIds: z
+      .array(z.string().trim().min(1).max(128))
+      .max(4)
+      .default([]),
+  })
+  .strict();
+
 export const RoutineDaySchema = z.object({
   id: z.string().trim().min(1).max(160),
   name: z.string().trim().min(1).max(160),
   focus: z.array(z.string().trim().min(1).max(120)).min(1).max(16),
   estimatedMinutes: z.number().int().min(1).max(180),
   exercises: z.array(RoutineExerciseSchema).min(1).max(12),
+  /** Missing means a plan persisted before explicit session blocks existed. */
+  sessionBlocks: z.array(RoutineSessionBlockSchema).max(3).optional(),
 });
 
 export const RoutinePlanSchema = z.object({
@@ -42,5 +61,6 @@ export const RoutinePlanSchema = z.object({
 });
 
 export type RoutineExercise = z.infer<typeof RoutineExerciseSchema>;
+export type RoutineSessionBlock = z.infer<typeof RoutineSessionBlockSchema>;
 export type RoutineDay = z.infer<typeof RoutineDaySchema>;
 export type RoutinePlan = z.infer<typeof RoutinePlanSchema>;

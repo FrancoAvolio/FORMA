@@ -4,7 +4,9 @@ import type { RoutineRequest } from "../../domain/profile/routine-request";
 import type { SafetyScreening } from "../../domain/safety/schemas";
 import { assignPrescription } from "../../domain/routine/engine/assign-prescription";
 import { buildCandidatePool } from "../../domain/routine/engine/build-candidate-pool";
+import { buildSessionBlocks } from "../../domain/routine/engine/build-session-blocks";
 import { estimateSessionDuration } from "../../domain/routine/engine/estimate-session-duration";
+import { fitRoutineSessionDurations } from "../../domain/routine/engine/fit-session-duration";
 import { findSubstitutions } from "../../domain/routine/engine/find-substitutions";
 import { correctWeeklyVolume } from "../../domain/routine/engine/generate-routine";
 import { selectionReasons } from "../../domain/routine/engine/score-exercise";
@@ -133,19 +135,37 @@ export function replaceRoutineExercise(
       index === exerciseIndex ? replacementPrescription : exercise,
     ),
   };
-  nextDay.estimatedMinutes = estimateSessionDuration(nextDay.exercises, input.catalog);
+  nextDay.sessionBlocks = buildSessionBlocks(
+    input.request.sessionMinutes,
+    nextDay.exercises,
+  );
+  nextDay.estimatedMinutes = estimateSessionDuration(
+    nextDay.exercises,
+    input.catalog,
+    nextDay.sessionBlocks,
+  );
   const uncorrectedPlan = {
     ...input.plan,
     days: input.plan.days.map((routineDay, index) =>
       index === dayIndex ? nextDay : routineDay,
     ),
   };
-  const nextPlan = correctWeeklyVolume(
+  const volumeCorrected = correctWeeklyVolume(
     uncorrectedPlan,
     input.request,
     input.catalog,
     { mutableDayIndexes: new Set([dayIndex]) },
   );
+  const split = getSplitTemplate(input.plan.splitId);
+  const nextPlan = split
+    ? fitRoutineSessionDurations({
+        plan: volumeCorrected,
+        request: input.request,
+        catalog: input.catalog,
+        split,
+        mutableDayIndexes: new Set([dayIndex]),
+      })
+    : volumeCorrected;
   const validation = validateRoutine(
     nextPlan,
     input.request,

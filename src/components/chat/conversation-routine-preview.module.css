@@ -366,6 +366,12 @@
   width: 0.9rem;
 }
 
+.exerciseActions button[aria-pressed="true"] {
+  border-color: var(--color-action);
+  background: var(--color-action);
+  color: var(--color-white);
+}
+
 .warnings {
   margin: 0 var(--space-5) var(--space-5);
   border: 1px solid #e8c18f;

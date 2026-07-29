@@ -10,11 +10,13 @@ import {
   CircleAlert,
   Clock3,
   Copy,
+  ExternalLink,
   Pencil,
   Play,
   RefreshCw,
   Repeat2,
   Save,
+  Square,
   Trash2,
 } from "lucide-react";
 import Link from "next/link";
@@ -31,6 +33,8 @@ import {
 } from "@/application/routines";
 import { deriveAssistantSafetyResult } from "@/application/conversation";
 import { ExerciseThumbnail } from "@/components/exercises/exercise-thumbnail";
+import { ExportRoutineButton } from "@/components/routines/export-routine-button";
+import { SessionBlocks } from "@/components/routines/session-blocks";
 import type { CatalogExercise } from "@/domain/exercises/catalog-exercise";
 import { rirToRpe } from "@/domain/routine/engine/assign-prescription";
 import type { RoutineExercise, RoutinePlan } from "@/domain/routine/schemas";
@@ -65,6 +69,9 @@ export function RoutineViewer({
   );
   const [saved, setSaved] = useState(false);
   const [safetyBlocked, setSafetyBlocked] = useState(false);
+  const [activeDemonstrationKey, setActiveDemonstrationKey] = useState<
+    string | null
+  >(null);
   const byId = useMemo(
     () => new Map(catalog.map((exercise) => [exercise.id, exercise])),
     [catalog],
@@ -156,6 +163,7 @@ export function RoutineViewer({
     );
     setCurrent(next);
     setReplacement(null);
+    setActiveDemonstrationKey(null);
     setSaved(false);
     setMessage({ kind: "success", text: "Cambio aplicado y rutina revalidada." });
   };
@@ -201,6 +209,7 @@ export function RoutineViewer({
     );
     setCurrent(next);
     setActiveDayId(copy.days[0]?.id ?? null);
+    setActiveDemonstrationKey(null);
     setSaved(true);
     setMessage({ kind: "success", text: "Copia creada y guardada." });
   };
@@ -236,6 +245,11 @@ export function RoutineViewer({
           <Link className="button button-quiet" href="/crear">
             <Pencil aria-hidden="true" size={17} /> Editar perfil
           </Link>
+          <ExportRoutineButton
+            plan={current.plan}
+            catalog={catalog}
+            disabled={safetyBlocked}
+          />
           <button className="button button-primary" type="button" onClick={() => void save()} disabled={safetyBlocked}>
             {saved ? <Check aria-hidden="true" size={17} /> : <Save aria-hidden="true" size={17} />}
             {saved ? "Guardada" : "Guardar"}
@@ -292,7 +306,10 @@ export function RoutineViewer({
             type="button"
             role="tab"
             aria-selected={day.id === activeDay?.id}
-            onClick={() => setActiveDayId(day.id)}
+            onClick={() => {
+              setActiveDemonstrationKey(null);
+              setActiveDayId(day.id);
+            }}
           >
             Día {index + 1}
           </button>
@@ -328,11 +345,16 @@ export function RoutineViewer({
             </button>
           </header>
 
+          <SessionBlocks blocks={activeDay.sessionBlocks} />
+
           <ol className={styles.exerciseList}>
             {activeDay.exercises.map((prescribed, index) => {
               const exercise = byId.get(prescribed.exerciseId);
               if (!exercise) return null;
               const exerciseMedia = media[exercise.id];
+              const demonstrationKey = `${activeDay.id}:${exercise.id}`;
+              const demonstrationActive =
+                activeDemonstrationKey === demonstrationKey;
               return (
                 <li key={exercise.id} className={styles.exerciseCard}>
                   <div className={styles.orderControls} aria-label={"Orden de " + exercise.name}>
@@ -374,7 +396,11 @@ export function RoutineViewer({
                   </div>
                   {exerciseMedia && (
                     <div className={styles.exerciseImage}>
-                      <ExerciseThumbnail name={exercise.name} media={exerciseMedia} />
+                      <ExerciseThumbnail
+                        name={exercise.name}
+                        media={exerciseMedia}
+                        animated={demonstrationActive}
+                      />
                     </div>
                   )}
                   <div className={styles.exerciseContent}>
@@ -417,8 +443,28 @@ export function RoutineViewer({
                     </details>
 
                     <div className={styles.exerciseActions}>
+                      {exerciseMedia?.available && exerciseMedia.animationUrl ? (
+                        <button
+                          type="button"
+                          aria-pressed={demonstrationActive}
+                          onClick={() =>
+                            setActiveDemonstrationKey((currentKey) =>
+                              currentKey === demonstrationKey
+                                ? null
+                                : demonstrationKey,
+                            )
+                          }
+                        >
+                          {demonstrationActive ? (
+                            <Square aria-hidden="true" />
+                          ) : (
+                            <Play aria-hidden="true" />
+                          )}
+                          {demonstrationActive ? "Detener" : "Ver demostración"}
+                        </button>
+                      ) : null}
                       <Link href={"/ejercicios/" + exercise.id}>
-                        <Play aria-hidden="true" /> Ver demostración
+                        <ExternalLink aria-hidden="true" /> Ver ficha
                       </Link>
                       <button
                         type="button"

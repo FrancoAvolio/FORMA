@@ -11,6 +11,7 @@ import {
   RoutineGoalSchema,
 } from "../../profile/routine-request";
 import { COMMERCIAL_GYM_DEFAULT_EQUIPMENT } from "../engine/build-candidate-pool";
+import { sessionTimeBounds } from "../config/session-time";
 import { generateRoutine } from "../engine/generate-routine";
 import { CLEAR_SAFETY_SCREENING, createRoutineRequest } from "./fixtures";
 
@@ -118,6 +119,34 @@ describe("routine engine with the generated curated catalog", () => {
 
     expect(result.ok, !result.ok ? JSON.stringify(result) : undefined).toBe(true);
     if (result.ok) expect(result.validation.valid).toBe(true);
+  });
+
+  it("fills every day of the reported 90-minute profile to the target band", () => {
+    const request = createRoutineRequest({
+      goal: "hypertrophy",
+      experience: "intermediate",
+      daysPerWeek: 4,
+      sessionMinutes: 90,
+      trainingLocation: "commercial_gym",
+      availableEquipment: [],
+      focusMuscles: ["back", "biceps"],
+    });
+    const result = generateRoutine({
+      request,
+      safetyScreening: CLEAR_SAFETY_SCREENING,
+      catalog,
+      datasetVersion: "7455efae",
+      seed: "reported-chat-profile-90-minutes",
+    });
+
+    expect(result.ok, !result.ok ? JSON.stringify(result) : undefined).toBe(true);
+    if (!result.ok) return;
+    const bounds = sessionTimeBounds(request.sessionMinutes);
+    for (const day of result.plan.days) {
+      expect(day.estimatedMinutes).toBeGreaterThanOrEqual(bounds.lower);
+      expect(day.estimatedMinutes).toBeLessThanOrEqual(bounds.upper);
+      expect(day.sessionBlocks).toHaveLength(3);
+    }
   });
 
   it("keeps an advanced priority muscle above its direct-volume minimum", () => {

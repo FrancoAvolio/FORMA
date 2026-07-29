@@ -198,7 +198,7 @@ export function composeAssistantFallback(
     const duration = Math.max(
       ...context.validatedPlan.days.map((day) => day.estimatedMinutes),
     );
-    return `Listo. Armé ${context.validatedPlan.title}, una rutina validada de ${days} días con sesiones de hasta ${duration} minutos. Podés revisarla y seguir pidiéndome cambios desde acá.`;
+    return `Listo. Armé ${context.validatedPlan.title}, una rutina validada de ${days} días con sesiones de aproximadamente ${duration} minutos. Podés revisarla y seguir pidiéndome cambios desde acá.`;
   }
 
   if (context.parseStatus === "complete") {

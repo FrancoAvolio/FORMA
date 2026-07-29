@@ -1,5 +1,6 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Locator, type Page } from "@playwright/test";
+import { readFile } from "node:fs/promises";
 
 const CHAT_TURNS = {
   greeting: "Hola bro",
@@ -84,6 +85,57 @@ test("the primary creation entry opens the canonical chat workspace", async ({ p
   await expect(
     page.getByRole("heading", { level: 1, name: "Armemos tu perfil de rutina." }),
   ).toBeVisible();
+});
+
+test("the chat keeps long drafts, exposes both limits, and grows without a visible scrollbar", async ({
+  page,
+}) => {
+  await page.goto("/crear/chat");
+
+  const composer = chatComposer(page);
+  const send = page.getByRole("button", { name: "Enviar mensaje" });
+  await expect(composer).toBeVisible();
+  const initialHeight = await composer.evaluate(
+    (textarea) => textarea.getBoundingClientRect().height,
+  );
+  const longDraft = Array.from(
+    { length: 601 },
+    (_, index) => `entrenamiento-${index}`,
+  ).join(" ");
+  expect(longDraft.length).toBeGreaterThan(4_000);
+
+  await composer.fill(longDraft);
+
+  await expect(composer).toHaveValue(longDraft);
+  await expect(composer).toHaveAttribute("aria-invalid", "true");
+  await expect(page.locator("#chat-message-limit")).toContainText(
+    "601/600 palabras",
+  );
+  await expect(page.locator("#chat-message-limit")).toContainText(
+    `${longDraft.length}/4000 caracteres`,
+  );
+  await expect(
+    page.getByRole("status").filter({
+      hasText: "Acortá el mensaje para enviarlo. El texto no se cortó.",
+    }),
+  ).toBeVisible();
+  await expect(send).toBeDisabled();
+
+  await expect
+    .poll(() =>
+      composer.evaluate((textarea) => textarea.getBoundingClientRect().height),
+    )
+    .toBeGreaterThan(initialHeight);
+  const textareaLayout = await composer.evaluate((textarea) => {
+    const style = getComputedStyle(textarea);
+    return {
+      clientHeight: textarea.clientHeight,
+      scrollHeight: textarea.scrollHeight,
+      scrollbarWidth: style.getPropertyValue("scrollbar-width"),
+    };
+  });
+  expect(textareaLayout.scrollHeight).toBeGreaterThan(textareaLayout.clientHeight);
+  expect(textareaLayout.scrollbarWidth).toBe("none");
 });
 
 test("redirects messages outside the training domain without asking safety questions", async ({
@@ -220,6 +272,34 @@ test("the Mock conversation builds, modifies, explains, saves, and restores a ro
   ).toBeVisible();
   await expectNoSeriousAccessibilityViolations(page, "chat with inline routine");
 
+  const previewUrl = page.url();
+  const firstPreviewExercise = inlineRoutine.locator("ol > li").first();
+  const exerciseDetails = firstPreviewExercise.getByRole("link", {
+    name: "Ver ficha",
+  });
+  await expect(exerciseDetails).toHaveAttribute("href", /\/ejercicios\/[^/]+$/);
+  await expect(
+    firstPreviewExercise.locator('img[src*="/api/exercise-media/images/"]'),
+  ).toBeVisible();
+
+  await firstPreviewExercise
+    .getByRole("button", { name: "Ver demostración" })
+    .click();
+
+  await expect(page).toHaveURL(previewUrl);
+  await expect(
+    firstPreviewExercise.locator('img[src*="/api/exercise-media/videos/"]'),
+  ).toBeVisible();
+  await expect(
+    firstPreviewExercise.getByRole("button", { name: "Detener" }),
+  ).toHaveAttribute("aria-pressed", "true");
+
+  await firstPreviewExercise.getByRole("button", { name: "Detener" }).click();
+  await expect(page).toHaveURL(previewUrl);
+  await expect(
+    firstPreviewExercise.locator('img[src*="/api/exercise-media/images/"]'),
+  ).toBeVisible();
+
   const experienceChangeReply = await sendChatMessage(
     page,
     "Cambiame el nivel de experiencia de intermedio a avanzado",
@@ -295,6 +375,46 @@ test("the Mock conversation builds, modifies, explains, saves, and restores a ro
 
   await page.goto("/guardadas");
   await expect(page.getByRole("button", { name: /Abrir rutina/ })).toBeVisible();
+});
+
+test("routine export downloads a portable text file when native sharing is unavailable", async ({
+  page,
+}) => {
+  test.slow();
+  await page.addInitScript(() => {
+    Object.defineProperty(window.navigator, "share", {
+      configurable: true,
+      value: undefined,
+    });
+    Object.defineProperty(window.navigator, "canShare", {
+      configurable: true,
+      value: undefined,
+    });
+  });
+  await generateWithGuidedForm(page);
+
+  const routineTitle = await page.getByRole("heading", { level: 1 }).textContent();
+  expect(routineTitle).toBeTruthy();
+  const downloadPromise = page.waitForEvent("download");
+  await page.getByRole("button", { name: "Exportar al teléfono" }).click();
+  const download = await downloadPromise;
+
+  expect(download.suggestedFilename()).toMatch(/^forma-[a-z0-9-]+\.txt$/);
+  const downloadedPath = await download.path();
+  expect(downloadedPath).not.toBeNull();
+  const exportedText = await readFile(downloadedPath!, "utf8");
+  expect(exportedText).toContain("FORMA · RUTINA VALIDADA");
+  expect(exportedText).toContain(routineTitle!);
+  expect(exportedText).toContain("DÍA 1");
+  expect(exportedText).toMatch(/Ficha: https?:\/\/[^\s]+\/ejercicios\/[^\s]+/);
+  expect(exportedText).toMatch(
+    /Fuentes y atribuciones: https?:\/\/[^\s]+\/atribuciones/,
+  );
+  await expect(
+    page.getByRole("status").filter({
+      hasText: "Descargamos la rutina en formato de texto.",
+    }),
+  ).toBeVisible();
 });
 
 test("a safety-only follow-up preserves the exact requested profile and builds the routine", async ({

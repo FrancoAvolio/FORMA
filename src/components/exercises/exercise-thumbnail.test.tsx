@@ -1,8 +1,8 @@
 /** @vitest-environment jsdom */
 
-import { render, screen } from "@testing-library/react";
+import { cleanup, render, screen } from "@testing-library/react";
 import type { ImgHTMLAttributes } from "react";
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import type { ExerciseMedia } from "@/media";
 
@@ -15,6 +15,8 @@ vi.mock("next/image", () => ({
     <img {...properties} alt={properties.alt ?? ""} />
   ),
 }));
+
+afterEach(cleanup);
 
 const availableMedia: ExerciseMedia = {
   exerciseId: "0025",
@@ -36,6 +38,42 @@ describe("ExerciseThumbnail", () => {
       screen.getByAltText("Demostración estática de Press de banca con barra"),
     ).toHaveAttribute("width", "180");
     expect(screen.getByText("© Gym Visual")).toBeVisible();
+  });
+
+  it("loads the animation only when playback is explicitly requested", () => {
+    const { rerender } = render(
+      <ExerciseThumbnail name="Press de banca con barra" media={availableMedia} />,
+    );
+
+    expect(
+      screen.getByAltText("Demostración estática de Press de banca con barra"),
+    ).toHaveAttribute("src", availableMedia.thumbnailUrl);
+
+    rerender(
+      <ExerciseThumbnail
+        name="Press de banca con barra"
+        media={availableMedia}
+        animated
+      />,
+    );
+
+    expect(
+      screen.getByAltText("Demostración animada de Press de banca con barra"),
+    ).toHaveAttribute("src", availableMedia.animationUrl);
+  });
+
+  it("keeps the static image when no animation is available", () => {
+    render(
+      <ExerciseThumbnail
+        name="Press de banca con barra"
+        media={{ ...availableMedia, animationUrl: null }}
+        animated
+      />,
+    );
+
+    expect(
+      screen.getByAltText("Demostración estática de Press de banca con barra"),
+    ).toHaveAttribute("src", availableMedia.thumbnailUrl);
   });
 
   it("keeps an explicit, non-broken placeholder state", () => {

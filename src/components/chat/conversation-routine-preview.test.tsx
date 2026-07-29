@@ -78,6 +78,15 @@ const plan: RoutinePlan = {
       name: "Torso A",
       focus: ["chest", "back"],
       estimatedMinutes: 55,
+      sessionBlocks: [
+        {
+          kind: "general_warmup",
+          title: "Entrada en calor general",
+          description: "Movimiento suave y progresivo.",
+          estimatedMinutes: 6,
+          relatedExerciseIds: [],
+        },
+      ],
       exercises: [
         {
           exerciseId: "press-01",
@@ -158,12 +167,53 @@ describe("ConversationRoutinePreview", () => {
     expect(screen.getByText("Torso / Piernas")).toBeVisible();
     expect(screen.getByText("100 min aprox.")).toBeVisible();
     expect(screen.getByText("Press inclinado con mancuernas")).toBeVisible();
+    expect(screen.getByText("Entrada en calor general")).toBeVisible();
     expect(screen.getByText("3")).toBeVisible();
     expect(screen.getByText("8–12")).toBeVisible();
     expect(
       screen.getByText("© Gym Visual — https://gymvisual.com/"),
     ).toBeVisible();
     expect(screen.queryByText("Remo sentado en polea")).not.toBeInTheDocument();
+  });
+
+  it("plays and stops the real demonstration in place while retaining the detail link", async () => {
+    const user = userEvent.setup();
+    render(
+      <ConversationRoutinePreview
+        plan={plan}
+        catalog={catalog}
+        media={{ "press-01": availableMedia, "row-01": placeholderMedia }}
+        activeDayId="day-upper"
+        onActiveDayChange={vi.fn()}
+      />,
+    );
+
+    const demonstration = screen.getByRole("button", {
+      name: "Ver demostración",
+    });
+    expect(demonstration).toHaveAttribute("aria-pressed", "false");
+    expect(
+      screen.getByAltText("Demostración estática de Press inclinado con mancuernas"),
+    ).toHaveAttribute("src", availableMedia.thumbnailUrl);
+
+    await user.click(demonstration);
+
+    expect(screen.getByRole("button", { name: "Detener" })).toHaveAttribute(
+      "aria-pressed",
+      "true",
+    );
+    expect(
+      screen.getByAltText("Demostración animada de Press inclinado con mancuernas"),
+    ).toHaveAttribute("src", availableMedia.animationUrl);
+    expect(screen.getByRole("link", { name: "Ver ficha" })).toHaveAttribute(
+      "href",
+      "/ejercicios/press-01",
+    );
+
+    await user.click(screen.getByRole("button", { name: "Detener" }));
+    expect(
+      screen.getByAltText("Demostración estática de Press inclinado con mancuernas"),
+    ).toHaveAttribute("src", availableMedia.thumbnailUrl);
   });
 
   it("delegates day selection and contextual actions without mutating the plan", async () => {
@@ -221,7 +271,8 @@ describe("ConversationRoutinePreview", () => {
     expect(
       screen.getByText("Media protegida · no disponible en este entorno"),
     ).toBeVisible();
-    expect(screen.getByRole("link", { name: "Ver ejercicio" })).toHaveAttribute(
+    expect(screen.queryByRole("button", { name: "Ver demostración" })).not.toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Ver ficha" })).toHaveAttribute(
       "href",
       "/ejercicios/row-01",
     );

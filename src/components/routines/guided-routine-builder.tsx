@@ -779,7 +779,7 @@ export function GuidedRoutineBuilder({
           <FormStep
             eyebrow="Disponibilidad"
             title="¿Cuánto tiempo tenés de verdad?"
-            description="La duración es un techo por sesión. FORMA no agrega trabajo para llenar tiempo."
+            description="La duración es un objetivo aproximado. FORMA ajusta trabajo, descansos y bloques visibles sin exceder el volumen seguro."
           >
             <div className={styles.fieldGrid}>
               <label>

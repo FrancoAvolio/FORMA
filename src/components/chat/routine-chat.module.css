@@ -333,16 +333,48 @@
   min-width: 0;
 }
 
+.composerField {
+  display: grid;
+  gap: var(--space-1);
+}
+
 .composer textarea {
   width: 100%;
   min-height: 4.5rem;
-  max-height: 12rem;
-  resize: vertical;
+  max-height: min(42vh, 24rem);
+  resize: none;
+  overflow-y: auto;
   border: 1px solid var(--color-line-strong);
   background: var(--color-white);
   padding: var(--space-3);
   color: var(--color-ink);
   line-height: 1.45;
+  scrollbar-width: none;
+}
+
+.composer textarea::-webkit-scrollbar {
+  display: none;
+}
+
+.composer textarea[aria-invalid="true"] {
+  border-color: var(--color-warning);
+}
+
+.messageLimit,
+.messageLimitError,
+.limitAlert {
+  font-size: 0.68rem;
+  line-height: 1.35;
+}
+
+.messageLimit {
+  color: var(--color-muted);
+}
+
+.messageLimitError,
+.limitAlert {
+  color: var(--color-warning);
+  font-weight: 700;
 }
 
 .composer > button {

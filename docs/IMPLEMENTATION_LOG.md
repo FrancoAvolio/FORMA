@@ -264,3 +264,21 @@ override while keeping attribution and unresolved licensing status visible.
   the dashboard flow. Production therefore remains temporarily at
   `https://app.fran40v.workers.dev`; the final manual dashboard action is recorded rather than
   attempting a destructive delete/re-register workaround.
+
+## 2026-07-29 — Message, duration and portable-routine UX hardening
+
+Objective: make long chat input understandable, treat requested session time as a real planning
+target, expose exercise demonstrations without leaving the routine, and let a person take a
+portable text copy of the validated plan through the phone's native share surface.
+
+Invariants for this phase:
+
+- User text is never silently truncated. Client, server and persisted-message character limits
+  stay aligned, and the additional word limit is enforced before any provider call.
+- Duration parsing and fitting remain deterministic. No provider chooses exercises, volume,
+  timing or validity, and time is never filled by weakening safety, equipment or volume limits.
+- Routine export contains structured text and exercise-detail links only; protected JPG/GIF
+  binaries are not packaged or redistributed through the export action.
+- Animated demonstrations are user-triggered, load at most one GIF per routine surface, preserve
+  attribution and dimensions, and retain the exercise detail route as a separate action.
+- `docs/design-reference/**`, source dataset records and imported media remain unchanged.

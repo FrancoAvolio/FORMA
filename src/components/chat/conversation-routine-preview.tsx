@@ -6,13 +6,17 @@ import {
   Clock3,
   ExternalLink,
   MessageCircleQuestion,
+  Play,
   RefreshCw,
   Save,
+  Square,
 } from "lucide-react";
 import Link from "next/link";
-import { useId, useMemo } from "react";
+import { useId, useMemo, useState } from "react";
 
 import { ExerciseThumbnail } from "@/components/exercises/exercise-thumbnail";
+import { ExportRoutineButton } from "@/components/routines/export-routine-button";
+import { SessionBlocks } from "@/components/routines/session-blocks";
 import type { CatalogExercise } from "@/domain/exercises/catalog-exercise";
 import type { RoutinePlan } from "@/domain/routine/schemas";
 import type { ExerciseMedia } from "@/media";
@@ -83,6 +87,9 @@ export function ConversationRoutinePreview({
   className,
 }: ConversationRoutinePreviewProps) {
   const previewId = useId();
+  const [activeDemonstrationKey, setActiveDemonstrationKey] = useState<
+    string | null
+  >(null);
   const exercisesById = useMemo(() => toExerciseMap(catalog), [catalog]);
   const activeDay =
     plan.days.find((day) => day.id === activeDayId) ?? plan.days[0];
@@ -142,7 +149,10 @@ export function ConversationRoutinePreview({
             key={day.id}
             type="button"
             aria-pressed={day.id === activeDay.id}
-            onClick={() => onActiveDayChange(day.id)}
+            onClick={() => {
+              setActiveDemonstrationKey(null);
+              onActiveDayChange(day.id);
+            }}
           >
             <span>Día {index + 1}</span>
             <small>{day.estimatedMinutes} min</small>
@@ -163,6 +173,8 @@ export function ConversationRoutinePreview({
           </span>
         </header>
 
+        <SessionBlocks blocks={activeDay.sessionBlocks} />
+
         <ol className={styles.exerciseList}>
           {activeDay.exercises.map((prescription, index) => {
             const exercise = exercisesById.get(prescription.exerciseId);
@@ -172,6 +184,9 @@ export function ConversationRoutinePreview({
               dayId: activeDay.id,
               exerciseId: prescription.exerciseId,
             };
+            const demonstrationKey = `${activeDay.id}:${prescription.exerciseId}`;
+            const demonstrationActive =
+              activeDemonstrationKey === demonstrationKey;
 
             return (
               <li key={prescription.exerciseId} className={styles.exerciseCard}>
@@ -181,7 +196,11 @@ export function ConversationRoutinePreview({
 
                 <div className={styles.media}>
                   {exerciseMedia ? (
-                    <ExerciseThumbnail name={name} media={exerciseMedia} />
+                    <ExerciseThumbnail
+                      name={name}
+                      media={exerciseMedia}
+                      animated={demonstrationActive}
+                    />
                   ) : (
                     <div className={styles.missingMedia}>
                       Vista previa no disponible
@@ -230,8 +249,28 @@ export function ConversationRoutinePreview({
                   </details>
 
                   <div className={styles.exerciseActions}>
+                    {exerciseMedia?.available && exerciseMedia.animationUrl ? (
+                      <button
+                        type="button"
+                        aria-pressed={demonstrationActive}
+                        onClick={() =>
+                          setActiveDemonstrationKey((current) =>
+                            current === demonstrationKey
+                              ? null
+                              : demonstrationKey,
+                          )
+                        }
+                      >
+                        {demonstrationActive ? (
+                          <Square aria-hidden="true" />
+                        ) : (
+                          <Play aria-hidden="true" />
+                        )}
+                        {demonstrationActive ? "Detener" : "Ver demostración"}
+                      </button>
+                    ) : null}
                     <Link href={`/ejercicios/${prescription.exerciseId}`}>
-                      <ExternalLink aria-hidden="true" /> Ver ejercicio
+                      <ExternalLink aria-hidden="true" /> Ver ficha
                     </Link>
                     {actions?.onExplainExercise ? (
                       <button
@@ -280,6 +319,11 @@ export function ConversationRoutinePreview({
               <Save aria-hidden="true" /> {saved ? "Guardada" : "Guardar"}
             </button>
           ) : null}
+          <ExportRoutineButton
+            plan={plan}
+            catalog={catalog}
+            disabled={!actions}
+          />
         </div>
         {actions?.onOpenRoutine ? (
           <button className={styles.openRoutine} type="button" onClick={actions.onOpenRoutine}>

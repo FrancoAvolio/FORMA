@@ -3,6 +3,7 @@ import "server-only";
 import { z } from "zod";
 
 import { composeAssistantFallback } from "../../application/conversation/assistant-response-fallback";
+import { parseSessionDuration } from "../../domain/profile/parse-session-duration";
 import { detectLimitationsDeclaration } from "../../domain/safety/detect-safety-text";
 import type { AiProvider } from "../ai-provider";
 import { AiProviderError, type AiErrorCode } from "../errors";
@@ -208,15 +209,8 @@ function parseMockTurn(input: ParsedTurnInput): ParsedRoutineTurn {
     requestPatch.daysPerWeek = days;
   }
 
-  const minutes = extractNumberBefore(text, "minutos?|min\\b");
-  if (minutes !== null && minutes >= 15 && minutes <= 180) {
-    requestPatch.sessionMinutes = minutes;
-  } else {
-    const hours = extractNumberBefore(text, "horas?");
-    if (hours !== null && hours >= 1 && hours <= 2) {
-      requestPatch.sessionMinutes = hours * 60;
-    }
-  }
+  const sessionMinutes = parseSessionDuration(text);
+  if (sessionMinutes !== null) requestPatch.sessionMinutes = sessionMinutes;
 
   if (includesAny(text, ["en casa", "en mi casa", "hogar"])) {
     requestPatch.trainingLocation = "home";
@@ -341,13 +335,13 @@ function parseMockModification(
     };
   }
 
-  const minutes = extractNumberBefore(text, "minutos?|min\\b");
-  if (minutes !== null && minutes >= 15 && minutes <= 180) {
+  const sessionMinutes = parseSessionDuration(text);
+  if (sessionMinutes !== null) {
     return {
       status: "ready",
       modification: {
         kind: "update_request",
-        patch: { sessionMinutes: minutes },
+        patch: { sessionMinutes },
       },
       clarificationQuestion: null,
       safetySignals: [],

@@ -1,4 +1,5 @@
 import { normalizeDomainText } from "../../domain/exercises/normalization";
+import { parseSessionDuration } from "../../domain/profile/parse-session-duration";
 
 const DOMAIN_TERMS = [
   "rutina",
@@ -115,6 +116,7 @@ export function isClearlyOffTopicMessage(message: string): boolean {
   if (!normalized || BENIGN_SHORT_MESSAGES.test(normalized) || GREETING.test(normalized)) {
     return false;
   }
+  if (parseSessionDuration(message) !== null) return false;
 
   const hasExplicitNonTrainingTask = NON_TRAINING_TASK_TERMS.some((term) =>
     containsTerm(normalized, term),

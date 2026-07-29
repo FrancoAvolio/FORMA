@@ -151,6 +151,19 @@ describe("prescription, time, and substitutions", () => {
     expect(minutes).toBeGreaterThan(6);
   });
 
+  it("keeps the legacy warm-up estimate when persisted plans have no blocks", () => {
+    const exercise = createCatalog(1)[0]!;
+    const prescription = {
+      exerciseId: exercise.id,
+      ...assignPrescription(exercise, createRoutineRequest()),
+      selectionReasons: ["Fixture reason"],
+    };
+
+    expect(estimateSessionDuration([prescription], [exercise], [])).toBe(
+      estimateSessionDuration([prescription], [exercise]),
+    );
+  });
+
   it("ranks a compatible exercise from the same substitution group first", () => {
     const catalog = createCatalog(4);
     const original = catalog.find(

@@ -1,5 +1,8 @@
+import { USER_MESSAGE_LIMITS } from "@/domain/conversation/user-message";
+
 export const AI_LIMITS = {
-  messageCharacters: 4_000,
+  messageCharacters: USER_MESSAGE_LIMITS.characters,
+  messageWords: USER_MESSAGE_LIMITS.words,
   notesCharacters: 1_000,
   listItems: 48,
   listItemCharacters: 120,

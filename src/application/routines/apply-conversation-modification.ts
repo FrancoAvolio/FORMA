@@ -368,13 +368,15 @@ export function applyConversationRoutineModification(
         };
       }
       const nextRequest = parsedRequest.data;
+      const durationChanged =
+        nextRequest.sessionMinutes !== input.request.sessionMinutes;
       const currentValidation = validateRoutine(
         input.plan,
         nextRequest,
         input.catalog,
         input.safetyScreening,
       );
-      if (currentValidation.valid) {
+      if (!durationChanged && currentValidation.valid) {
         return {
           ok: true,
           request: nextRequest,

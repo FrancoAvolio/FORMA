@@ -49,6 +49,13 @@ describe("MockAiProvider scenarios", () => {
       },
     },
     {
+      message: "Una hora y media por sesión",
+      expected: {
+        intent: "provide_information",
+        requestPatch: { sessionMinutes: 90 },
+      },
+    },
+    {
       message: "Cambiame el press por una máquina",
       expected: { intent: "modify_routine", requestPatch: {} },
     },
@@ -95,6 +102,18 @@ describe("MockAiProvider scenarios", () => {
 
   it("parses subtractive equipment and one-day shortening as typed changes", async () => {
     const provider = new MockAiProvider();
+    await expect(
+      provider.parseRoutineModification({
+        ...modificationInput,
+        message: "Ahora tengo una hora y media.",
+      }),
+    ).resolves.toMatchObject({
+      status: "ready",
+      modification: {
+        kind: "update_request",
+        patch: { sessionMinutes: 90 },
+      },
+    });
     await expect(
       provider.parseRoutineModification({
         ...modificationInput,

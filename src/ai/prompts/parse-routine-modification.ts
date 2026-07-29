@@ -5,7 +5,7 @@ import { serializePromptData, type VersionedPrompt } from "./prompt-contract";
 
 export const PARSE_ROUTINE_MODIFICATION_PROMPT: VersionedPrompt = {
   id: "parse-routine-modification",
-  version: "1.0.0",
+  version: "1.1.0",
   purpose:
     "Clasificar un cambio solicitado sobre una rutina existente sin ejecutar lógica de programación.",
   system: `
@@ -29,7 +29,7 @@ REGLAS
 - Para acortar un solo día, usá shorten_day con su dayId. targetMinutes es el número explícito o null si sólo pide que sea más corto.
 - Para dejar de usar material, usá exclude_equipment con sólo los tokens canónicos nombrados: barbell, dumbbell, cable, machine, smith_machine, kettlebell, resistance_band, bench o pull_up_bar.
 - replace_exercise identifica el ejercicio actual; no elige el reemplazo. requestedAlternative puede conservar el texto solicitado.
-- update_request extrae sólo restricciones o preferencias explícitamente modificadas.
+- update_request extrae sólo restricciones o preferencias explícitamente modificadas. Normalizá "una hora y media", "1 h 30" y "noventa minutos" como sessionMinutes=90.
 - Si la referencia es ambigua, pedí una sola aclaración breve.
 - Señalá pedidos no soportados sin diagnosticar.
 
@@ -43,6 +43,7 @@ EJEMPLOS
 4) "Hacé el día de piernas más corto" -> shorten_day para ese dayId, targetMinutes=null.
 5) "No quiero usar barra" -> exclude_equipment con equipment=["barbell"].
 6) "Sacame un ejercicio de bíceps" -> remove_one_by_muscle con muscle="biceps".
+7) "Ahora tengo una hora y media" -> update_request con sessionMinutes=90.
 `.trim(),
   examples: [
     {
@@ -68,6 +69,10 @@ EJEMPLOS
     {
       input: "Sacame un ejercicio de bíceps.",
       output: "remove_one_by_muscle con muscle=biceps.",
+    },
+    {
+      input: "Ahora tengo una hora y media.",
+      output: "update_request con sessionMinutes=90.",
     },
   ],
 };

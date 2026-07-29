@@ -11,7 +11,7 @@ import {
   REST_LIMITS_SECONDS,
   SET_LIMITS,
 } from "../config/rep-rules";
-import { SESSION_TIME_RULES } from "../config/session-time";
+import { sessionTimeBounds } from "../config/session-time";
 import { getSplitTemplate } from "../config/split-templates";
 import { WEEKLY_VOLUME_RULES } from "../config/volume-rules";
 import {
@@ -48,6 +48,7 @@ export type RoutineValidationCode =
   | "INVALID_REP_PRESCRIPTION"
   | "INVALID_REST"
   | "INVALID_RIR"
+  | "INVALID_SESSION_BLOCK_REFERENCE"
   | "DURATION_MISMATCH"
   | "DURATION_OUT_OF_RANGE"
   | "WEEKLY_VOLUME_TOO_HIGH"
@@ -258,6 +259,24 @@ export function validateRoutine(
   const seenExerciseIds = new Set<string>();
 
   plan.days.forEach((day, dayIndex) => {
+    const dayExerciseIds = new Set(
+      day.exercises.map((exercise) => exercise.exerciseId),
+    );
+    (day.sessionBlocks ?? []).forEach((block, blockIndex) => {
+      const unknownReference = block.relatedExerciseIds.find(
+        (exerciseId) => !dayExerciseIds.has(exerciseId),
+      );
+      if (unknownReference) {
+        pushIssue(
+          issues,
+          "INVALID_SESSION_BLOCK_REFERENCE",
+          "error",
+          `El bloque ${block.title} referencia un ejercicio que no pertenece a ese d\u00eda.`,
+          `days.${dayIndex}.sessionBlocks.${blockIndex}`,
+        );
+      }
+    });
+
     day.exercises.forEach((prescribed, exerciseIndex) => {
       const path = `days.${dayIndex}.exercises.${exerciseIndex}`;
       const exercise = catalogById.get(prescribed.exerciseId);
@@ -350,7 +369,11 @@ export function validateRoutine(
       }
     });
 
-    const estimated = estimateSessionDuration(day.exercises, catalog);
+    const estimated = estimateSessionDuration(
+      day.exercises,
+      catalog,
+      day.sessionBlocks ?? [],
+    );
     if (Math.abs(estimated - day.estimatedMinutes) > 1) {
       pushIssue(
         issues,
@@ -360,10 +383,9 @@ export function validateRoutine(
         `days.${dayIndex}.estimatedMinutes`,
       );
     }
-    const lowerBound = Math.floor(
-      request.sessionMinutes * SESSION_TIME_RULES.lowerToleranceRatio,
+    const { lower: lowerBound, upper: upperBound } = sessionTimeBounds(
+      request.sessionMinutes,
     );
-    const upperBound = request.sessionMinutes + SESSION_TIME_RULES.upperToleranceMinutes;
     if (estimated > upperBound) {
       pushIssue(
         issues,
@@ -377,7 +399,7 @@ export function validateRoutine(
         issues,
         "DURATION_OUT_OF_RANGE",
         "warning",
-        `${day.name} dura aproximadamente ${estimated} minutos. Es menor que la referencia de ${lowerBound}, pero respeta el tiempo disponible.`,
+        `${day.name} dura aproximadamente ${estimated} minutos y queda por debajo del objetivo m\u00ednimo de ${lowerBound}.`,
         `days.${dayIndex}.estimatedMinutes`,
       );
     }

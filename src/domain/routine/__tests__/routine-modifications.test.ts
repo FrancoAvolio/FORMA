@@ -11,6 +11,7 @@ import {
   replaceRoutineExercise,
 } from "../../../application/routines/replace-exercise";
 import { generateRoutine } from "../engine/generate-routine";
+import { sessionTimeBounds } from "../config/session-time";
 import { CLEAR_SAFETY_SCREENING, createCatalog, createRoutineRequest } from "./fixtures";
 
 const catalog = createCatalog();
@@ -336,5 +337,28 @@ describe("routine application use cases", () => {
     expect(result.changedScope).toBe("profile");
     expect(result.plan).toBe(plan);
     expect(result.request.notes).toBe("Prefiero entrenar temprano");
+  });
+
+  it("rebuilds a 60-minute routine when the conversation changes it to 90 minutes", () => {
+    const plan = generatedPlan();
+    const result = applyConversationRoutineModification({
+      modification: { kind: "update_request", patch: { sessionMinutes: 90 } },
+      plan,
+      request,
+      safetyScreening: CLEAR_SAFETY_SCREENING,
+      catalog,
+      datasetVersion: "fixture-v1",
+      seed: "conversation-duration-90",
+    });
+
+    expect(result.ok, !result.ok ? JSON.stringify(result) : undefined).toBe(true);
+    if (!result.ok) return;
+    expect(result.changedScope).toBe("routine");
+    expect(result.plan).not.toBe(plan);
+    const bounds = sessionTimeBounds(90);
+    for (const day of result.plan.days) {
+      expect(day.estimatedMinutes).toBeGreaterThanOrEqual(bounds.lower);
+      expect(day.estimatedMinutes).toBeLessThanOrEqual(bounds.upper);
+    }
   });
 });

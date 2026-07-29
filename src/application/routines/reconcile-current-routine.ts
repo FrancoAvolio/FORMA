@@ -39,6 +39,9 @@ export function reconcileCurrentRoutineAfterManualEdit(options: {
   const nextRequest = nextResult.data;
 
   if (sameRequest(current.request, nextRequest)) return current;
+  if (current.request.sessionMinutes !== nextRequest.sessionMinutes) {
+    return null;
+  }
   if (!options.nextSafetyScreening) return null;
   if (!evaluateRoutineSafety(nextRequest, options.nextSafetyScreening).allowed) {
     return null;

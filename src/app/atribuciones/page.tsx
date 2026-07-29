@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Database, ExternalLink, ImageOff, ShieldCheck } from "lucide-react";
+import { Database, ExternalLink, Images, ShieldCheck } from "lucide-react";
 
 import source from "@/data/source/dataset-source.json";
 
@@ -34,9 +34,9 @@ export default function AttributionsPage() {
           <strong>{source.commit.slice(0, 10)}</strong>
         </article>
         <article className="card">
-          <ImageOff aria-hidden="true" />
+          <Images aria-hidden="true" />
           <span>Media pública</span>
-          <strong>Desactivada</strong>
+          <strong>Uso limitado autorizado</strong>
         </article>
       </section>
 
@@ -84,17 +84,19 @@ export default function AttributionsPage() {
             fuente no concede una licencia para reutilizarlas.
           </p>
           <div className={styles.notice} role="note">
-            <ImageOff aria-hidden="true" />
+            <Images aria-hidden="true" />
             <div>
-              <strong>Exclusión productiva activa</strong>
+              <strong>Despliegue limitado · licencia pendiente</strong>
               <p>
-                FORMA permite importar estos binarios sólo para desarrollo local o evaluación
-                privada. La build pública no los copia ni los incluye hasta confirmar permiso.
+                El propietario del repositorio autorizó este despliegue personal de los
+                archivos fijados, con atribución y marcas intactas. Esa decisión operativa no
+                equivale a un permiso de Gym Visual ni cierra la revisión de licencia para un
+                uso público o comercial.
               </p>
             </div>
           </div>
           <p>
-            Si el modo local está habilitado, cada ejercicio conserva la indicación{" "}
+            Cuando la media está habilitada, cada ejercicio conserva la indicación{" "}
             <strong>© Gym visual</strong> junto a la media y respeta la resolución de 180 × 180.
           </p>
           <a

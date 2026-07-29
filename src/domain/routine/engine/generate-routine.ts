@@ -6,18 +6,20 @@ import { SafetyScreeningSchema, type SafetyAssessment, type SafetyScreening } fr
 import { exerciseCountForSession, SESSION_TIME_RULES } from "../config/session-time";
 import type { SplitDayTemplate, SplitTemplate } from "../config/split-templates";
 import { WEEKLY_VOLUME_RULES } from "../config/volume-rules";
-import { RoutinePlanSchema, type RoutineDay, type RoutineExercise, type RoutinePlan } from "../schemas";
+import { RoutinePlanSchema, type RoutineDay, type RoutineExercise, type RoutinePlan, type RoutineSessionBlock } from "../schemas";
 import { validateRoutine, type RoutineValidationResult } from "../validators/validate-routine";
 import { assignPrescription } from "./assign-prescription";
 import { buildCandidatePool } from "./build-candidate-pool";
+import { buildSessionBlocks } from "./build-session-blocks";
 import { calculateWeeklyVolume } from "./calculate-weekly-volume";
 import { chooseSplit } from "./choose-split";
 import { estimateSessionDuration } from "./estimate-session-duration";
+import { fitRoutineSessionDurations } from "./fit-session-duration";
 import { deterministicId, generatedAtFromSeed } from "./seed";
 import { selectExercises } from "./select-exercises";
 import { selectionReasons } from "./score-exercise";
 
-export const ENGINE_VERSION = "1.0.0";
+export const ENGINE_VERSION = "1.1.0";
 
 export type GenerateRoutineInput = {
   request: RoutineRequest;
@@ -86,21 +88,25 @@ function fitSessionDuration(
   exercises: readonly RoutineExercise[],
   catalog: readonly CatalogExercise[],
   sessionMinutes: number,
+  sessionBlocks: readonly RoutineSessionBlock[],
 ): RoutineExercise[] {
   let fitted = exercises.map((exercise) => ({ ...exercise }));
   const upperBound = sessionMinutes + SESSION_TIME_RULES.upperToleranceMinutes;
 
   while (
     fitted.length > SESSION_TIME_RULES.minimumExerciseCount &&
-    estimateSessionDuration(fitted, catalog) > upperBound
+    estimateSessionDuration(fitted, catalog, sessionBlocks) > upperBound
   ) {
     fitted = fitted.slice(0, -1);
   }
 
   let reductionCursor = fitted.length - 1;
-  while (estimateSessionDuration(fitted, catalog) > upperBound && reductionCursor >= 0) {
+  while (
+    estimateSessionDuration(fitted, catalog, sessionBlocks) > upperBound &&
+    reductionCursor >= 0
+  ) {
     const current = fitted[reductionCursor];
-    if (current && current.sets > 2) {
+    if (current && current.sets > 1) {
       fitted[reductionCursor] = { ...current, sets: current.sets - 1 };
     } else {
       reductionCursor -= 1;
@@ -137,18 +143,33 @@ export function buildRoutineDay(input: BuildRoutineDayInput): RoutineDay | null 
     return null;
   }
 
+  const prescribedExercises = buildPrescribedExercises(
+    selected,
+    input.request,
+    input.dayTemplate,
+  );
+  const sessionBlocks = buildSessionBlocks(
+    input.request.sessionMinutes,
+    prescribedExercises,
+  );
   const exercises = fitSessionDuration(
-    buildPrescribedExercises(selected, input.request, input.dayTemplate),
+    prescribedExercises,
     input.catalog,
     input.request.sessionMinutes,
+    sessionBlocks,
   );
-  const estimatedMinutes = estimateSessionDuration(exercises, input.catalog);
+  const estimatedMinutes = estimateSessionDuration(
+    exercises,
+    input.catalog,
+    sessionBlocks,
+  );
   return {
     id: deterministicId("day", `${input.planIdentity}:${input.dayTemplate.key}:${input.dayIndex}`),
     name: input.dayTemplate.name,
     focus: [...input.dayTemplate.focus],
     estimatedMinutes,
     exercises,
+    sessionBlocks,
   };
 }
 
@@ -242,7 +263,11 @@ export function correctWeeklyVolume(
           return {
             ...day,
             exercises,
-            estimatedMinutes: estimateSessionDuration(exercises, catalog),
+            estimatedMinutes: estimateSessionDuration(
+              exercises,
+              catalog,
+              day.sessionBlocks ?? [],
+            ),
           };
         }),
       };
@@ -307,10 +332,19 @@ export function correctWeeklyVolume(
         const exercises = day.exercises.filter(
           (_, exerciseIndex) => exerciseIndex !== removal.exerciseIndex,
         );
+        const sessionBlocks = buildSessionBlocks(
+          request.sessionMinutes,
+          exercises,
+        );
         return {
           ...day,
           exercises,
-          estimatedMinutes: estimateSessionDuration(exercises, catalog),
+          estimatedMinutes: estimateSessionDuration(
+            exercises,
+            catalog,
+            sessionBlocks,
+          ),
+          sessionBlocks,
         };
       }),
     };
@@ -384,7 +418,17 @@ function buildPlan(
     datasetVersion: input.datasetVersion,
     seed: input.seed,
   };
-  return correctWeeklyVolume(uncorrectedPlan, request, input.catalog);
+  const volumeCorrected = correctWeeklyVolume(
+    uncorrectedPlan,
+    request,
+    input.catalog,
+  );
+  return fitRoutineSessionDurations({
+    plan: volumeCorrected,
+    request,
+    catalog: input.catalog,
+    split,
+  });
 }
 
 export function generateRoutine(input: GenerateRoutineInput): RoutineGenerationResult {
