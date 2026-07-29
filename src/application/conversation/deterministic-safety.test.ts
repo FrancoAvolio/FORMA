@@ -184,6 +184,28 @@ describe("deterministic conversational safety", () => {
     });
   });
 
+  it("uses the destination experience when a profile correction names both levels", () => {
+    const result = reconcileParsedTurnSafety(
+      neutralTurn,
+      "Cambiame el nivel de experiencia de intermedio a avanzado",
+      { hasCurrentRoutine: true },
+    );
+
+    expect(result.intent).toBe("modify_profile");
+    expect(result.requestPatch).toEqual({ experience: "advanced" });
+  });
+
+  it("does not treat equipment in an exercise name as a profile change", () => {
+    const result = reconcileParsedTurnSafety(
+      { ...neutralTurn, intent: "modify_routine" },
+      "Cambiame remo inclinado con mancuernas por otro ejercicio compatible",
+      { hasCurrentRoutine: true },
+    );
+
+    expect(result.intent).toBe("modify_routine");
+    expect(result.requestPatch).toEqual({});
+  });
+
   it("reconciles a false safety label and wrong profile values from an ordinary turn", () => {
     const message =
       "Quiero ganar musculo, puedo entrenar 5 dias a la semana, el equipamiento que cuento es con un gimnasio completo";

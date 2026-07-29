@@ -29,6 +29,21 @@ export type AssistantSafetyResult = z.output<typeof AssistantSafetyResultSchema>
 
 type PatchField = keyof RoutineRequestPatch;
 
+const PROFILE_PATCH_FIELDS: readonly PatchField[] = [
+  "goal",
+  "experience",
+  "daysPerWeek",
+  "sessionMinutes",
+  "trainingLocation",
+  "availableEquipment",
+  "focusMuscles",
+  "excludedExercises",
+  "excludedMovementPatterns",
+  "preferredExercises",
+  "limitations",
+  "notes",
+];
+
 const SPANISH_NUMBERS: Readonly<Record<string, number>> = {
   un: 1,
   uno: 1,
@@ -85,6 +100,36 @@ const PROFILE_FIELD_EVIDENCE: Readonly<Record<PatchField, RegExp>> = {
   notes: /\b(?:nota|aclaracion|tene en cuenta|ten en cuenta|anota|recorda)\b/u,
 };
 
+/**
+ * Exercise names often contain words such as "mancuernas", "barra" or
+ * "bíceps". Those mentions are not profile changes when the turn is clearly
+ * asking to replace/remove a movement. Keep only field-specific language in
+ * that case so a replacement command cannot accidentally rebuild the profile.
+ */
+const EXPLICIT_PROFILE_CHANGE_EVIDENCE: Readonly<Record<PatchField, RegExp>> = {
+  goal:
+    /\b(?:objetivo|hipertrofi\w*|ganar (?:masa|musculo)|crecer|fuerza|resistencia muscular|estado fisico|acondicionamiento|fitness general)\b/u,
+  experience: /\b(?:experiencia|nivel|principiante|intermedio|avanzado)\b/u,
+  daysPerWeek:
+    /\b(?:(?:un|uno|dos|tres|cuatro|cinco|seis|[1-6])\s+(?:dias?|veces)|(?:dias?|veces)\s+(?:por|a la)\s+semana|semanal)\b/u,
+  sessionMinutes: /\b(?:minutos?|horas?|sesion|duracion|tiempo)\b/u,
+  trainingLocation:
+    /\b(?:entreno|entrenar|gimnasio|gym|casa|hogar|domicilio|lugar|ubicacion)\b/u,
+  availableEquipment:
+    /\b(?:equipo|equipamiento|material|cuento con|tengo|dispon(?:go|ible)|usar|utilizar|solamente|solo)\b/u,
+  focusMuscles:
+    /\b(?:prioriz|enfoc|grupo(?:s)? muscular(?:es)?|objetivo)\w*\b/u,
+  excludedExercises:
+    /\b(?:ejercicio(?:s)?|movimiento(?:s)?)\b.*\b(?:evit|exclu|sin hacer|sacar?|quit|elimin)\w*\b/u,
+  excludedMovementPatterns:
+    /\b(?:patron(?:es)?|movimiento(?:s)?)\b.*\b(?:evit|exclu|sin hacer)\w*\b/u,
+  preferredExercises:
+    /\b(?:prefier|preferid|quiero incluir|quiero hacer|me gusta)\w*\b/u,
+  limitations:
+    /\b(?:dolor|lesion|operacion|cirugia|restriccion|limitacion|sintoma|indicacion profesional|rehabilit)\w*\b/u,
+  notes: /\b(?:nota|aclaracion|tene en cuenta|ten en cuenta|anota|recorda)\w*\b/u,
+};
+
 function extractDeterministicRequestPatch(
   normalized: string,
 ): RoutineRequestPatch {
@@ -99,9 +144,20 @@ function extractDeterministicRequestPatch(
     patch.goal = "general_fitness";
   }
 
-  const experience = normalized.match(
-    /\b(principiante|intermedio|avanzado)\b/u,
+  const experienceMatches = normalized.match(
+    /\b(?:principiante|intermedio|avanzado)\b/gu,
+  );
+  const correctionTarget = normalized.match(
+    /\b(?:a|por)\s+(principiante|intermedio|avanzado)\b/u,
   )?.[1];
+  const experience =
+    correctionTarget ??
+    (experienceMatches &&
+    /\b(?:cambi|modific|actualiz|pas|sub|baj|ahora|mejor|en realidad|sino|pero)\w*\b/u.test(
+      normalized,
+    )
+      ? experienceMatches.at(-1)
+      : experienceMatches?.[0]);
   if (experience) {
     patch.experience =
       experience === "principiante"
@@ -297,11 +353,29 @@ export function reconcileParsedTurnSafety(
   const turn = ParsedRoutineTurnSchema.parse(untrustedTurn);
   const deterministicSignals = detectDeterministicSafetySignals(rawMessage);
   const deterministicDeclaration = detectLimitationsDeclaration(rawMessage);
-  const requestPatch = reconcileRequestPatch(
+  const reconciledPatch = reconcileRequestPatch(
     turn.requestPatch,
     rawMessage,
     deterministicDeclaration,
   );
+  const normalizedMessage = rawMessage
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[_-]+/g, " ")
+    .replace(/[^a-z0-9\s]/g, " ")
+    .replace(/\s+/gu, " ")
+    .trim();
+  const requestPatch =
+    turn.intent === "modify_routine"
+      ? (Object.fromEntries(
+          Object.entries(reconciledPatch).filter(([field]) =>
+            EXPLICIT_PROFILE_CHANGE_EVIDENCE[field as PatchField]?.test(
+              normalizedMessage,
+            ),
+          ),
+        ) as RoutineRequestPatch)
+      : reconciledPatch;
   // Model safety labels are advisory only. If the raw user message contains
   // no deterministic safety evidence, a model-only label cannot pause an
   // otherwise ordinary profile turn.
@@ -318,9 +392,14 @@ export function reconcileParsedTurnSafety(
         : turn.limitationsConfirmation === "has_limitations"
           ? "has_limitations"
           : "unknown";
+  const hasProfilePatch = PROFILE_PATCH_FIELDS.some(
+    (field) => requestPatch[field] !== undefined,
+  );
   const intent =
     safetySignals.length > 0
       ? "unsupported"
+      : options.hasCurrentRoutine && hasProfilePatch
+        ? "modify_profile"
       : options.hasCurrentRoutine === false &&
           (Object.keys(requestPatch).length > 0 ||
             limitationsConfirmation !== "unknown")

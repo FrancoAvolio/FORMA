@@ -120,6 +120,29 @@ describe("routine engine with the generated curated catalog", () => {
     if (result.ok) expect(result.validation.valid).toBe(true);
   });
 
+  it("keeps an advanced priority muscle above its direct-volume minimum", () => {
+    const result = generateRoutine({
+      request: createRoutineRequest({
+        goal: "hypertrophy",
+        experience: "advanced",
+        daysPerWeek: 4,
+        sessionMinutes: 60,
+        trainingLocation: "commercial_gym",
+        availableEquipment: [],
+        focusMuscles: ["back", "biceps"],
+      }),
+      safetyScreening: CLEAR_SAFETY_SCREENING,
+      catalog,
+      datasetVersion: "7455efae",
+      seed: "advanced-biceps-priority",
+    });
+
+    expect(result.ok, !result.ok ? JSON.stringify(result) : undefined).toBe(true);
+    if (result.ok) {
+      expect(result.validation.valid).toBe(true);
+    }
+  });
+
   it("supports a two-day bodyweight-only beginner routine", () => {
     const result = generateRoutine({
       request: createRoutineRequest({

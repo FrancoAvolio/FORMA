@@ -61,7 +61,11 @@ function buildPrescribedExercises(
   return selected.map((exercise, index) => {
     const desiredPattern = day.patternSequence[index % day.patternSequence.length];
     const prescription = assignPrescription(exercise, request, {
-      isPrimaryForDay: index < 2,
+      // A requested focus can land in a later isolation slot (for example
+      // biceps in a limbs day). Treat that direct focus movement as primary
+      // for prescription purposes so advanced plans still reach their
+      // minimum direct focus volume without relying on duplicate exercises.
+      isPrimaryForDay: index < 2 || priorityMuscleMatch(exercise, request),
       isPriorityMuscle: priorityMuscleMatch(exercise, request),
     });
     return {

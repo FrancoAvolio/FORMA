@@ -204,6 +204,14 @@ test("the Mock conversation builds, modifies, explains, saves, and restores a ro
   ).toBeVisible();
   await expectNoSeriousAccessibilityViolations(page, "chat with inline routine");
 
+  const experienceChangeReply = await sendChatMessage(
+    page,
+    "Cambiame el nivel de experiencia de intermedio a avanzado",
+    60_000,
+  );
+  await expect(profile.getByText("Avanzado", { exact: true })).toBeVisible();
+  await expect(experienceChangeReply).toContainText(/valid|cambi|actualiz/i);
+
   const originalExercises = await inlineExerciseNames(inlineRoutine);
   expect(originalExercises.length).toBeGreaterThan(1);
   const exerciseToReplace = originalExercises[0]!;
@@ -305,6 +313,15 @@ test("a safety-only follow-up preserves the exact requested profile and builds t
   await expect(page.getByTestId("inline-routine")).toBeVisible({
     timeout: 30_000,
   });
+  if ((page.viewportSize()?.width ?? 0) >= 900) {
+    const routineBox = await page.getByTestId("inline-routine").boundingBox();
+    const profileBox = await page.locator("aside").first().boundingBox();
+    expect(routineBox).not.toBeNull();
+    expect(profileBox).not.toBeNull();
+    expect(routineBox!.x + routineBox!.width).toBeLessThanOrEqual(
+      profileBox!.x + 1,
+    );
+  }
   await expect(
     page.getByText(
       "El catálogo compatible no alcanza para completar todos los días sin duplicar ejercicios.",
