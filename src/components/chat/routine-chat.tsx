@@ -1088,7 +1088,7 @@ export function RoutineChat({
     if (loading || !repositoryRef.current) return;
 
     const confirmed = window.confirm(
-      "Se va a borrar la conversaciónn y la rutina activa. Las rutinas guardadas no se borrarán. Querés continuar?",
+      "Se va a borrar la conversación y la rutina activa. Las rutinas guardadas no se borrarán. Querés continuar igual?",
     );
     if (!confirmed) return;
 
