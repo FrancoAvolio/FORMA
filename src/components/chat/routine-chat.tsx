@@ -98,6 +98,7 @@ const INITIAL_MESSAGE =
   "Hola, soy FORMA. Contame con tus palabras qué querés lograr, cuántos días podés entrenar y con qué equipamiento contás. Voy a ordenar el perfil y armar la rutina acá mismo.";
 
 const DESKTOP_PROFILE_QUERY = "(min-width: 58rem)";
+const MESSAGE_COUNT_FORMATTER = new Intl.NumberFormat("es-AR");
 
 function subscribeDesktopProfile(callback: () => void): () => void {
   const query = window.matchMedia(DESKTOP_PROFILE_QUERY);
@@ -1416,8 +1417,10 @@ export function RoutineChat({
                     : styles.messageLimit
                 }
               >
-                {inputMetrics.words}/{USER_MESSAGE_LIMITS.words} palabras ·{" "}
-                {inputMetrics.characters}/{USER_MESSAGE_LIMITS.characters} caracteres
+                {MESSAGE_COUNT_FORMATTER.format(inputMetrics.words)} de{" "}
+                {MESSAGE_COUNT_FORMATTER.format(USER_MESSAGE_LIMITS.words)} palabras ·{" "}
+                {MESSAGE_COUNT_FORMATTER.format(inputMetrics.characters)} de{" "}
+                {MESSAGE_COUNT_FORMATTER.format(USER_MESSAGE_LIMITS.characters)} caracteres
               </span>
               {inputExceedsLimit ? (
                 <span className={styles.limitAlert} role="status">

@@ -45,13 +45,13 @@ export function sessionBlockBudget(
   sessionMinutes: number,
 ): SessionBlockBudget {
   return {
-    generalWarmupMinutes: clamp(Math.ceil(sessionMinutes * 0.1), 3, 12),
+    generalWarmupMinutes: clamp(Math.ceil(sessionMinutes * 0.09), 2, 8),
     specificPreparationMinutes: clamp(
-      Math.ceil(sessionMinutes * 0.125),
-      3,
-      15,
+      Math.ceil(sessionMinutes * 0.09),
+      2,
+      8,
     ),
-    cooldownMinutes: clamp(Math.ceil(sessionMinutes * 0.075), 2, 8),
+    cooldownMinutes: clamp(Math.ceil(sessionMinutes * 0.05), 1, 5),
   };
 }
 

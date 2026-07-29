@@ -51,6 +51,7 @@ describe("routine engine with the generated curated catalog", () => {
 
   it("builds every goal, level, day, and guided-duration combination", () => {
     const failures: string[] = [];
+    const durationFailures: string[] = [];
     const durations = [30, 45, 60, 75, 90, 120] as const;
 
     for (const goal of RoutineGoalSchema.options) {
@@ -74,6 +75,18 @@ describe("routine engine with the generated curated catalog", () => {
             });
             if (!result.ok) {
               failures.push(`${key}: ${result.code} ${result.message}`);
+            } else {
+              const bounds = sessionTimeBounds(sessionMinutes);
+              for (const day of result.plan.days) {
+                if (
+                  day.estimatedMinutes < bounds.lower ||
+                  day.estimatedMinutes > bounds.upper
+                ) {
+                  durationFailures.push(
+                    `${key}/${day.name}: ${day.estimatedMinutes} min (esperado ${bounds.lower}-${bounds.upper})`,
+                  );
+                }
+              }
             }
           }
         }
@@ -81,6 +94,7 @@ describe("routine engine with the generated curated catalog", () => {
     }
 
     expect(failures, failures.join("\n")).toEqual([]);
+    expect(durationFailures, durationFailures.join("\n")).toEqual([]);
   }, 60_000);
 
   it("supports a dumbbell/bodyweight request with a back priority", () => {

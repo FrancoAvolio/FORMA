@@ -71,6 +71,11 @@ export type RoutineValidationResult = {
   warnings: RoutineValidationIssue[];
 };
 
+export type RoutineValidationOptions = {
+  /** Explicit per-day shortening is an intentional edit, not a generation target. */
+  allowShorterDayIds?: ReadonlySet<string>;
+};
+
 function pushIssue(
   issues: RoutineValidationIssue[],
   code: RoutineValidationCode,
@@ -205,6 +210,7 @@ export function validateRoutine(
   request: RoutineRequest,
   catalog: readonly CatalogExercise[],
   safetyScreening?: SafetyScreening,
+  options: RoutineValidationOptions = {},
 ): RoutineValidationResult {
   const issues: RoutineValidationIssue[] = [];
   const planShape = RoutinePlanSchema.safeParse(plan);
@@ -395,10 +401,12 @@ export function validateRoutine(
         `days.${dayIndex}.estimatedMinutes`,
       );
     } else if (estimated < lowerBound) {
+      const intentionallyShortened = options.allowShorterDayIds?.has(day.id);
+      const legacyPlanWithoutBlocks = !day.sessionBlocks?.length;
       pushIssue(
         issues,
         "DURATION_OUT_OF_RANGE",
-        "warning",
+        intentionallyShortened || legacyPlanWithoutBlocks ? "warning" : "error",
         `${day.name} dura aproximadamente ${estimated} minutos y queda por debajo del objetivo m\u00ednimo de ${lowerBound}.`,
         `days.${dayIndex}.estimatedMinutes`,
       );

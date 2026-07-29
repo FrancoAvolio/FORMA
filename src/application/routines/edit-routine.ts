@@ -1,14 +1,20 @@
 import type { CatalogExercise } from "../../domain/exercises/catalog-exercise";
 import type { RoutineRequest } from "../../domain/profile/routine-request";
 import type { SafetyScreening } from "../../domain/safety/schemas";
-import { buildSessionBlocks } from "../../domain/routine/engine/build-session-blocks";
+import {
+  buildSessionBlocks,
+  expandSessionBlocksToTarget,
+} from "../../domain/routine/engine/build-session-blocks";
 import { estimateSessionDuration } from "../../domain/routine/engine/estimate-session-duration";
 import {
   RoutineExerciseSchema,
   type RoutineExercise,
   type RoutinePlan,
 } from "../../domain/routine/schemas";
-import { validateRoutine } from "../../domain/routine/validators/validate-routine";
+import {
+  validateRoutine,
+  type RoutineValidationOptions,
+} from "../../domain/routine/validators/validate-routine";
 import type { RoutineMutationResult } from "./types";
 
 type SharedEditInput = {
@@ -22,12 +28,14 @@ type SharedEditInput = {
 function validateMutation(
   plan: RoutinePlan,
   input: SharedEditInput,
+  options: RoutineValidationOptions = {},
 ): RoutineMutationResult {
   const validation = validateRoutine(
     plan,
     input.request,
     input.catalog,
     input.safetyScreening,
+    options,
   );
   if (!validation.valid) {
     return {
@@ -68,15 +76,24 @@ export function removeRoutineExercise(
     input.request.sessionMinutes,
     nextExercises,
   );
+  const baselineMinutes = estimateSessionDuration(
+    nextExercises,
+    input.catalog,
+    sessionBlocks,
+  );
+  const fittedSessionBlocks = expandSessionBlocksToTarget(
+    sessionBlocks,
+    input.request.sessionMinutes - baselineMinutes,
+  );
   const nextDay = {
     ...day,
     exercises: nextExercises,
     estimatedMinutes: estimateSessionDuration(
       nextExercises,
       input.catalog,
-      sessionBlocks,
+      fittedSessionBlocks,
     ),
-    sessionBlocks,
+    sessionBlocks: fittedSessionBlocks,
   };
   return validateMutation(
     {
@@ -159,14 +176,27 @@ export function editRoutineExercisePrescription(
   const nextExercises = day.exercises.map((routineExercise, index) =>
     index === exerciseIndex ? parsed.data : routineExercise,
   );
+  const currentBlocks =
+    day.sessionBlocks ??
+    buildSessionBlocks(input.request.sessionMinutes, nextExercises);
+  const baselineMinutes = estimateSessionDuration(
+    nextExercises,
+    input.catalog,
+    currentBlocks,
+  );
+  const sessionBlocks = expandSessionBlocksToTarget(
+    currentBlocks,
+    input.request.sessionMinutes - baselineMinutes,
+  );
   const nextDay = {
     ...day,
     exercises: nextExercises,
     estimatedMinutes: estimateSessionDuration(
       nextExercises,
       input.catalog,
-      day.sessionBlocks,
+      sessionBlocks,
     ),
+    sessionBlocks,
   };
   return validateMutation(
     {
@@ -263,7 +293,11 @@ export function shortenRoutineDay(
           index === dayIndex ? nextDay : day,
         ),
       };
-      if (validateMutation(candidatePlan, input).ok) {
+      if (
+        validateMutation(candidatePlan, input, {
+          allowShorterDayIds: new Set([input.dayId]),
+        }).ok
+      ) {
         nextPlan = candidatePlan;
         break;
       }
@@ -286,5 +320,7 @@ export function shortenRoutineDay(
     };
   }
 
-  return validateMutation(workingPlan, input);
+  return validateMutation(workingPlan, input, {
+    allowShorterDayIds: new Set([input.dayId]),
+  });
 }

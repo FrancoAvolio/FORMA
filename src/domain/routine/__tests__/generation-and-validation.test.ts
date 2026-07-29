@@ -2,6 +2,7 @@ import fc from "fast-check";
 import { describe, expect, it } from "vitest";
 
 import { calculateWeeklyVolume } from "../engine/calculate-weekly-volume";
+import { estimateSessionDuration } from "../engine/estimate-session-duration";
 import { generateRoutine } from "../engine/generate-routine";
 import { createRoutineSeed } from "../engine/seed";
 import { validateRoutine } from "../validators/validate-routine";
@@ -89,6 +90,45 @@ describe("generateRoutine", () => {
     expect(validation.errors.some((issue) => issue.code === "UNKNOWN_EXERCISE")).toBe(true);
   });
 
+  it("rejects a new plan whose visible blocks make it materially shorter than requested", () => {
+    const request = createRoutineRequest({ daysPerWeek: 1, sessionMinutes: 60 });
+    const result = generateRoutine({
+      request,
+      safetyScreening: CLEAR_SAFETY_SCREENING,
+      catalog,
+      datasetVersion: "fixture-v1",
+      seed: "short-session-validation",
+    });
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+
+    const originalDay = result.plan.days[0]!;
+    const sessionBlocks = originalDay.sessionBlocks!.map((block) => ({
+      ...block,
+      estimatedMinutes: 1,
+    }));
+    const shortDay = {
+      ...originalDay,
+      sessionBlocks,
+      estimatedMinutes: estimateSessionDuration(
+        originalDay.exercises,
+        catalog,
+        sessionBlocks,
+      ),
+    };
+    const validation = validateRoutine(
+      { ...result.plan, days: [shortDay] },
+      request,
+      catalog,
+      CLEAR_SAFETY_SCREENING,
+    );
+
+    expect(validation.valid).toBe(false);
+    expect(
+      validation.errors.some((issue) => issue.code === "DURATION_OUT_OF_RANGE"),
+    ).toBe(true);
+  });
+
   it("satisfies generation invariants across supported request dimensions", () => {
     fc.assert(
       fc.property(
@@ -131,6 +171,9 @@ describe("generateRoutine", () => {
           expect(ids.every((id) => catalog.some((exercise) => exercise.id === id))).toBe(true);
           expect(result.validation.valid).toBe(true);
           for (const day of result.plan.days) {
+            expect(day.estimatedMinutes).toBeGreaterThanOrEqual(
+              sessionMinutes - 5,
+            );
             expect(day.estimatedMinutes).toBeLessThanOrEqual(sessionMinutes + 6);
             expect(day.exercises.every((exercise) => exercise.rir !== null)).toBe(true);
           }

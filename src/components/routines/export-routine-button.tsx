@@ -59,9 +59,11 @@ export function ExportRoutineButton({
         )}
         {working ? "Preparando…" : "Exportar al teléfono"}
       </button>
-      <span className={styles.status} role="status">
-        {status}
-      </span>
+      {status ? (
+        <span className={styles.status} role="status">
+          {status}
+        </span>
+      ) : null}
     </span>
   );
 }

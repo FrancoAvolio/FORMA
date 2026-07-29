@@ -109,10 +109,10 @@ test("the chat keeps long drafts, exposes both limits, and grows without a visib
   await expect(composer).toHaveValue(longDraft);
   await expect(composer).toHaveAttribute("aria-invalid", "true");
   await expect(page.locator("#chat-message-limit")).toContainText(
-    "601/600 palabras",
+    "601 de 600 palabras",
   );
   await expect(page.locator("#chat-message-limit")).toContainText(
-    `${longDraft.length}/4000 caracteres`,
+    `${longDraft.length.toLocaleString("es-AR")} de 4.000 caracteres`,
   );
   await expect(
     page.getByRole("status").filter({

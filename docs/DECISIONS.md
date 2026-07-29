@@ -221,10 +221,14 @@ weekly volume and are rendered in the routine and portable export instead of bei
 After the ordinary plan passes volume correction, a deterministic fitter may raise rests only to
 the configured goal/modality maximum, restore prescribed sets only while the weekly maximum still
 holds, and add only unique approved/equipment-compatible exercises. It never raises medical,
-equipment or volume boundaries to fill the clock. Generation must reach the shared target band or
-return a typed failure rather than silently presenting a materially short session. A changed
-session duration forces a complete deterministic rebuild. Earlier persisted plans remain readable
-through default empty blocks and their stored engine version.
+equipment or volume boundaries to fill the clock. Once that safe working prescription is fixed,
+any remaining difference is assigned deterministically to the visible mobility, technical
+practice and cooldown/logging blocks, each with a hard 30-minute schema ceiling. Generation must
+reach the shared target band or return a typed failure rather than silently presenting a
+materially short session. An explicit single-day shortening remains an intentional, warned edit;
+it does not weaken generation validation. A changed session duration forces a complete
+deterministic rebuild. Earlier persisted plans remain readable through missing optional blocks and
+their stored engine version.
 
 ## ADR-028 — Portable routine export is text-first; demonstrations stay user-controlled
 

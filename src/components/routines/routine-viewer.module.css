@@ -71,6 +71,11 @@
   cursor: pointer;
 }
 
+.headingActions > button:last-child {
+  grid-column: 1 / -1;
+  justify-content: center;
+}
+
 .summary {
   display: grid;
   margin-block: var(--space-8);
@@ -601,6 +606,14 @@
 @media (min-width: 42rem) {
   .heading {
     grid-template-columns: 1fr auto;
+  }
+
+  .headingActions {
+    grid-template-columns: repeat(3, max-content);
+  }
+
+  .headingActions > button:last-child {
+    grid-column: auto;
   }
 
   .summary {

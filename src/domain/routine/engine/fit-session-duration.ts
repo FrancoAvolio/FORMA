@@ -15,7 +15,10 @@ import type {
 } from "../schemas";
 import { assignPrescription } from "./assign-prescription";
 import { buildCandidatePool } from "./build-candidate-pool";
-import { buildSessionBlocks } from "./build-session-blocks";
+import {
+  buildSessionBlocks,
+  expandSessionBlocksToTarget,
+} from "./build-session-blocks";
 import { calculateWeeklyVolume } from "./calculate-weekly-volume";
 import {
   estimateExerciseWorkSeconds,
@@ -435,6 +438,32 @@ export function fitRoutineSessionDurations(
 
     blocked.add(target.dayIndex);
   }
+
+  fitted = {
+    ...fitted,
+    days: fitted.days.map((day, dayIndex) => {
+      if (
+        !mutableDayIndexes.has(dayIndex) ||
+        day.estimatedMinutes >= bounds.target
+      ) {
+        return day;
+      }
+      const sessionBlocks = expandSessionBlocksToTarget(
+        day.sessionBlocks ??
+          buildSessionBlocks(input.request.sessionMinutes, day.exercises),
+        bounds.target - day.estimatedMinutes,
+      );
+      return {
+        ...day,
+        sessionBlocks,
+        estimatedMinutes: estimateSessionDuration(
+          day.exercises,
+          input.catalog,
+          sessionBlocks,
+        ),
+      };
+    }),
+  };
 
   return fitted;
 }

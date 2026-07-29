@@ -282,3 +282,36 @@ Invariants for this phase:
 - Animated demonstrations are user-triggered, load at most one GIF per routine surface, preserve
   attribution and dimensions, and retain the exercise detail route as a separate action.
 - `docs/design-reference/**`, source dataset records and imported media remain unchanged.
+
+Implemented boundaries:
+
+- The chat now shows a 600-word and 4,000-character budget, preserves over-limit drafts, prevents
+  only submission, grows with content and visually hides its internal scrollbar.
+- Spanish duration parsing normalizes `90 min`, `noventa minutos`, `1 h 30`, decimal hours and
+  `una hora y media` before the AI result reaches domain state.
+- Engine `1.1.0` estimates active repetitions, configured recovery, equipment transitions and
+  explicit mobility/preparation/closure blocks. It fits safe work first, then assigns any remaining
+  target difference to those visible low-fatigue blocks without increasing effective-set volume.
+- The full real-catalog matrix now asserts both successful validation and duration tolerance for
+  every goal, experience, 1–6 day frequency and 30/45/60/75/90/120-minute guided value. The
+  reported four-day intermediate hypertrophy profile produces four 90-minute days, and a
+  conversational 60→90 minute change forces complete regeneration.
+- Routine cards toggle one inline JPG/GIF demonstration at a time while preserving `Ver ficha`,
+  source attribution and the protected-media boundary.
+- `Exportar al teléfono` prefers native Web Share with a local UTF-8 `.txt` file, falls back to
+  text sharing and then browser download. The export includes prescriptions, session blocks,
+  exercise-detail links and attribution, but never media binaries.
+
+Validation evidence prepared for release:
+
+- `npm run validate` covers the 11 immutable Stitch files, UTF-8, all 1,324 source/media
+  relationships, 156 approved generation records, TypeScript, zero-warning lint, the complete
+  Vitest suite and the production Next build.
+- The real-catalog duration matrix covers 432 request combinations and now rejects any generated
+  day outside the shared target band. A separate regression rejects a materially short new plan
+  even when its stored duration matches its visible blocks.
+- `npm run test:e2e:all` covers desktop/mobile long input, native-share fallback, inline JPG/GIF
+  toggling without navigation, guided generation/edit/save, Mock conversation behavior,
+  accessibility, reduced motion, local protected media and the isolated disabled-media build.
+- Manual screenshots at 1,440 px and 390 px widths confirmed the growing composer, visible count,
+  responsive routine actions and explicit session blocks without changing Stitch references.
