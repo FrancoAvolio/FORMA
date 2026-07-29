@@ -6,6 +6,7 @@ import {
   detectDeterministicSafetySignals,
   reconcileParsedTurnSafety,
 } from "@/application/conversation/deterministic-safety";
+import { isClearlyOffTopicMessage } from "@/application/conversation/domain-relevance";
 import { normalizeDomainText } from "@/domain/exercises/normalization";
 
 import {
@@ -59,6 +60,17 @@ export async function POST(request: Request): Promise<Response> {
         requestPatch: {},
         limitationsConfirmation: "has_limitations",
         safetySignals: deterministicSignals,
+        assumptions: [],
+      }),
+    });
+  }
+  if (isClearlyOffTopicMessage(parsed.data.message)) {
+    return successResponse({
+      turn: ParsedRoutineTurnSchema.parse({
+        intent: "off_topic",
+        requestPatch: {},
+        limitationsConfirmation: "unknown",
+        safetySignals: [],
         assumptions: [],
       }),
     });

@@ -22,6 +22,7 @@ import {
   deriveConversationalSafetyStatus,
   type ConversationalSafetyScreeningDraft,
 } from "../../domain/safety/conversational-screening";
+import { isClearlyOffTopicMessage } from "./domain-relevance";
 import type { z } from "zod";
 
 type SafetySignal = z.output<typeof SafetySignalSchema>;
@@ -352,6 +353,18 @@ export function reconcileParsedTurnSafety(
 ): ParsedRoutineTurn {
   const turn = ParsedRoutineTurnSchema.parse(untrustedTurn);
   const deterministicSignals = detectDeterministicSafetySignals(rawMessage);
+  if (
+    deterministicSignals.length === 0 &&
+    isClearlyOffTopicMessage(rawMessage)
+  ) {
+    return ParsedRoutineTurnSchema.parse({
+      ...turn,
+      intent: "off_topic",
+      requestPatch: {},
+      limitationsConfirmation: "unknown",
+      safetySignals: [],
+    });
+  }
   const deterministicDeclaration = detectLimitationsDeclaration(rawMessage);
   const reconciledPatch = reconcileRequestPatch(
     turn.requestPatch,

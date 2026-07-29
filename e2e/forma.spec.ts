@@ -86,6 +86,22 @@ test("the primary creation entry opens the canonical chat workspace", async ({ p
   ).toBeVisible();
 });
 
+test("redirects messages outside the training domain without asking safety questions", async ({
+  page,
+}) => {
+  await page.goto("/crear/chat");
+  await expect(chatComposer(page)).toBeVisible();
+
+  const reply = await sendChatMessage(
+    page,
+    "Quiero hacer una pizza con jamón y queso",
+  );
+
+  await expect(reply).toContainText(/rutinas|ejercicios|equipamiento/i);
+  await expect(reply).not.toContainText(/dolor|lesiones|restricciones/i);
+  await expect(page.getByTestId("chat-profile-progress")).toHaveText("0%");
+});
+
 test("guided form generates, replaces one exercise, saves, and reopens without AI", async ({
   page,
 }) => {

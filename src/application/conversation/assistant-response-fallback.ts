@@ -7,6 +7,7 @@ import {
   CONVERSATIONAL_SAFETY_FIELD_LABELS,
 } from "../../domain/safety/conversational-screening";
 import { selectFocusedQuestionFields } from "./routine-turn-state";
+import { OFF_TOPIC_REPLY } from "./domain-relevance";
 
 const QUESTION_COPY: Record<RequiredRoutineField, string> = {
   limitationsConfirmation:
@@ -166,6 +167,10 @@ export function composeAssistantFallback(
   const context = ComposeAssistantResponseInputDataSchema.parse(
     untrustedContext,
   );
+
+  if (context.latestIntent === "off_topic") {
+    return OFF_TOPIC_REPLY;
+  }
 
   if (
     context.safetyResult.status === "unsupported" ||

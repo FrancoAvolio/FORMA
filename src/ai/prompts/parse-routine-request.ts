@@ -5,7 +5,7 @@ import { serializePromptData, type VersionedPrompt } from "./prompt-contract";
 
 export const PARSE_ROUTINE_TURN_PROMPT: VersionedPrompt = {
   id: "parse-routine-turn",
-  version: "2.1.0",
+  version: "2.2.0",
   purpose:
     "Extract only explicit facts from the latest user turn as a small patch.",
   system: `
@@ -28,7 +28,7 @@ EXTRACTION RULES
 - limitationsConfirmation=no_limitations only when the latest message explicitly denies current pain, injury, symptoms, and restrictions. Use has_limitations when it declares one. Otherwise use unknown.
 - A correction beginning with language such as "en realidad" or "mejor" uses intent=modify_profile.
 - A request to change an existing routine uses intent=modify_routine and requestPatch={}.
-- A question uses intent=ask_question; a greeting uses greeting; explicit medical/out-of-scope content uses unsupported.
+- A question uses intent=ask_question; a greeting uses greeting; clearly unrelated requests use off_topic; explicit medical or safety-blocked content uses unsupported.
 - For greeting, question, routine modification, or unrelated text, an empty patch is valid.
 - safetySignals lists only signals explicitly present in the latest message. Never diagnose.
 - assumptions is normally []. Do not put extracted facts into assumptions.

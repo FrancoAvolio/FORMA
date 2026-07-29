@@ -206,6 +206,21 @@ describe("deterministic conversational safety", () => {
     expect(result.requestPatch).toEqual({});
   });
 
+  it("redirects clearly unrelated requests without asking safety questions", () => {
+    const result = reconcileParsedTurnSafety(
+      {
+        ...neutralTurn,
+        intent: "provide_information",
+        requestPatch: { goal: "hypertrophy" },
+      },
+      "Quiero hacer una pizza con jamón y queso",
+    );
+
+    expect(result.intent).toBe("off_topic");
+    expect(result.requestPatch).toEqual({});
+    expect(result.limitationsConfirmation).toBe("unknown");
+  });
+
   it("reconciles a false safety label and wrong profile values from an ordinary turn", () => {
     const message =
       "Quiero ganar musculo, puedo entrenar 5 dias a la semana, el equipamiento que cuento es con un gimnasio completo";

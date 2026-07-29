@@ -35,6 +35,7 @@ export const ROUTINE_TURN_INTENT_VALUES = [
   "modify_profile",
   "modify_routine",
   "ask_question",
+  "off_topic",
   "unsupported",
   "other",
 ] as const;

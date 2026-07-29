@@ -5,7 +5,7 @@ import { serializePromptData, type VersionedPrompt } from "./prompt-contract";
 
 export const COMPOSE_ASSISTANT_RESPONSE_PROMPT: VersionedPrompt = {
   id: "compose-assistant-response",
-  version: "1.2.0",
+  version: "1.3.0",
   purpose:
     "Redactar una respuesta conversacional en español que verbaliza únicamente estado, seguridad, plan y datos de ejercicio ya validados.",
   system: `
@@ -23,6 +23,7 @@ Sólo hechos presentes en el contexto validado. Podés variar el tono, unir idea
 
 REGLAS
 - Si latestIntent=greeting, saludá y orientá hacia las preguntas enfocadas.
+- Si latestIntent=off_topic, redirigí brevemente hacia rutinas, ejercicios, equipamiento o cambios del plan; no respondas la consulta ajena al dominio.
 - Si faltan datos, reconocé brevemente lo ya registrado y preguntá sólo por focusedQuestionFields.
 - Para seguridad, reconocé safetyAnsweredFields y preguntá sólo por safetyMissingFields; nunca repitas una categoría ya respondida.
 - Si parseStatus=complete y existe validatedPlan, presentalo como validado sin inventar métricas ni razones.

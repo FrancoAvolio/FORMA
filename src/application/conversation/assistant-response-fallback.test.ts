@@ -112,6 +112,16 @@ describe("deterministic assistant fallback", () => {
     expect(message).not.toMatch(/diagnóstico|rehabilitación/i);
   });
 
+  it("redirects off-topic messages without repeating the safety review", () => {
+    const message = composeAssistantFallback({
+      ...baseContext,
+      latestIntent: "off_topic",
+    });
+
+    expect(message).toMatch(/rutinas|ejercicios|equipamiento/i);
+    expect(message).not.toMatch(/dolor|lesiones|restricciones/i);
+  });
+
   it("acknowledges a partial safety answer and asks only unresolved categories", () => {
     const message = composeAssistantFallback({
       ...baseContext,

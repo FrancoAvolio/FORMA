@@ -3,6 +3,10 @@ import {
   RoutineModificationResultSchema,
 } from "@/ai/schemas/routine-modification";
 import { detectDeterministicSafetySignals } from "@/application/conversation/deterministic-safety";
+import {
+  isClearlyOffTopicMessage,
+  OFF_TOPIC_REPLY,
+} from "@/application/conversation/domain-relevance";
 
 import {
   aiFailureResponse,
@@ -38,6 +42,17 @@ export async function POST(request: Request): Promise<Response> {
         modification: null,
         clarificationQuestion: null,
         safetySignals: deterministicSignals,
+        assumptions: [],
+      }),
+    });
+  }
+  if (isClearlyOffTopicMessage(parsed.data.message)) {
+    return successResponse({
+      result: RoutineModificationResultSchema.parse({
+        status: "needs_clarification",
+        modification: null,
+        clarificationQuestion: OFF_TOPIC_REPLY,
+        safetySignals: [],
         assumptions: [],
       }),
     });

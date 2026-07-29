@@ -46,6 +46,7 @@ import {
   buildValidatedPlanSummary,
   composeAssistantFallback,
   deriveAssistantSafetyResult,
+  OFF_TOPIC_REPLY,
   reconcileParsedTurnSafety,
   resolveConversationQuestion,
   selectFocusedQuestionFields,
@@ -731,6 +732,10 @@ export function RoutineChat({
       });
       let currentRoutine = working.currentRoutine;
       let deterministicReply: string | null = null;
+
+      if (result.intent === "off_topic") {
+        return appendAssistant(working, OFF_TOPIC_REPLY);
+      }
 
       if (
         currentRoutine &&
