@@ -1,7 +1,11 @@
 export const EXERCISE_MEDIA_PLACEHOLDER =
   "/exercises/placeholders/exercise-media.svg" as const;
 
-export type ExerciseMediaMode = "disabled" | "local_private" | "licensed_replacements";
+export type ExerciseMediaMode =
+  | "disabled"
+  | "local_private"
+  | "licensed_replacements"
+  | "owner_authorized_source";
 export type ExerciseMediaUnavailableReason =
   | "disabled_by_configuration"
   | "production_license_pending"
@@ -89,9 +93,9 @@ function validateReplacement(exerciseId: string, replacement: LicensedMediaRepla
 }
 
 /**
- * The protected upstream binaries are only addressable through a private local
- * route outside production. Production can use separately licensed replacement
- * files, but never falls through to the protected manifest URLs.
+ * Local source media remains development-only. Production source media has a
+ * separate, explicit owner-authorized mode and a static-assets namespace so it
+ * cannot be enabled accidentally by the local development flag.
  */
 export function createExerciseMediaResolver(
   options: ExerciseMediaResolverOptions,
@@ -132,11 +136,15 @@ export function createExerciseMediaResolver(
 
       const entry = entries.get(exerciseId);
       if (!entry) return placeholder(exerciseId, "missing_manifest_entry");
+      const mediaBaseUrl =
+        effectiveMode === "owner_authorized_source"
+          ? "/exercises/source-media"
+          : "/api/exercise-media";
       return {
         exerciseId,
         available: true,
-        thumbnailUrl: `/api/exercise-media/images/${entry.thumbnail.filename}`,
-        animationUrl: `/api/exercise-media/videos/${entry.animation.filename}`,
+        thumbnailUrl: `${mediaBaseUrl}/images/${entry.thumbnail.filename}`,
+        animationUrl: `${mediaBaseUrl}/videos/${entry.animation.filename}`,
         width: entry.thumbnail.width,
         height: entry.thumbnail.height,
         attribution: entry.attribution,

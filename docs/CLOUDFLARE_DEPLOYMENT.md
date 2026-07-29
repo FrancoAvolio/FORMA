@@ -1,9 +1,11 @@
 # Cloudflare Workers deployment
 
 FORMA is packaged for Cloudflare Workers with `@opennextjs/cloudflare`. The checked-in
-`wrangler.jsonc` declares the server-side `AI` binding and configures
-`@cf/ibm-granite/granite-4.0-h-micro` in forced function-calling mode. No account ID, token,
-credential, binding object, or provider configuration belongs in a `NEXT_PUBLIC_` variable.
+`wrangler.jsonc` declares the server-side `AI` binding, configures
+`@cf/ibm-granite/granite-4.0-h-micro` in forced function-calling mode, and fails closed with media
+disabled. The separate `wrangler.authorized-media.jsonc` is used only by the explicitly named
+owner-authorized deployment command. No account ID, token, credential, binding object, or provider
+configuration belongs in a `NEXT_PUBLIC_` variable.
 
 The production provider interprets only the latest conversational turn and optionally phrases a
 bounded response. Deterministic application/domain code owns canonical merge, completeness,
@@ -19,7 +21,8 @@ available through `/crear/manual` if the binding, model, quota, or provider is u
 - A 12-second Cloudflare provider deadline and 1,500-character assistant/explanation bound.
 - Best-effort per-isolate endpoint burst limiting plus provider quota/rate error mapping.
 - Canonical v2 browser persistence and a guided no-AI route independent of Cloudflare.
-- Production exclusion and post-build scanning of protected Gym Visual binaries.
+- Pinned source-media staging with exact filename/size/hash validation and an isolated static
+  namespace; attribution and the pending licensing status remain visible.
 - Simulated Workers AI binding contract tests that consume no inference.
 
 FORMA does not configure R2, D1, KV, authentication, a server routine store, or a paid cache.
@@ -64,6 +67,26 @@ This evidence clears first deployment and smoke testing only. Repeated checks fo
 operation, quota exhaustion, account usage/billing acceptance, and the non-Cloudflare legal,
 professional, language, accessibility, and media-license gates remain open.
 
+## Owner-authorized media deployment — 2026-07-29
+
+- Worker: `app`.
+- Current verified URL: `https://app.fran40v.workers.dev`.
+- Target URL after the account-dashboard rename: `https://app.forma-gym.workers.dev`.
+- Verified deployment version: `36a2799e-9de6-4962-b5b3-c3d1513d9cab`.
+- The explicit authorized lifecycle validated and uploaded 1,324 JPG plus 1,324 GIF files
+  (137,616,454 bytes) from the pinned dataset and removed local staging afterward.
+- Live checks returned exact manifest SHA-256 values for JPG and GIF responses, correct MIME types,
+  real-media URLs in exercise/chat HTML, visible `gymvisual.com` attribution, immutable one-year
+  browser caching and `X-Content-Type-Options: nosniff`.
+- The ordinary `wrangler.jsonc`, validator and Cloudflare lifecycle remain media-disabled and
+  binary-free. Only the separate authorized config/command can package this bundle.
+- Cloudflare's public account-subdomain API returned code `10036` because the account already has
+  `fran40v`; current Cloudflare documentation requires changing an existing value in Dashboard →
+  Workers & Pages → **Change** next to **Your subdomain**. The preflight reported `forma-gym`
+  available, but it is not reserved until that dashboard action is completed.
+- The previous `forma-routines` Worker is intentionally retained until the final hostname is
+  verified. Browser-local routines/conversations do not migrate between the old and new origins.
+
 The package pins the OpenNext build-only `@node-minify/core` dependency to compatible v8.0.6. The
 pin is not application runtime logic and must be retained until the upstream OpenNext dependency
 range makes it unnecessary. The same recorded validation run reported zero production dependency
@@ -79,7 +102,9 @@ advisories are development/packaging-only context retained in
 4. Complete Workers onboarding, including a `workers.dev` subdomain when requested.
 5. Review `wrangler.jsonc`, especially Worker name, compatibility date/flags, binding, model,
    12-second timeout, and media flags.
-6. Keep `EXERCISE_MEDIA_MODE=disabled` until the separate Gym Visual launch gate is cleared.
+6. Review the explicit `owner_authorized_source` exception and the still-pending Gym Visual
+   licensing gate before using this configuration for any audience beyond the recorded limited
+   personal deployment.
 
 Local Wrangler preview using Workers AI can consume the target account's allocation. Pricing and
 limits change; verify the current
@@ -101,8 +126,19 @@ npx wrangler deploy --dry-run
 npm run validate:media
 ```
 
-`test:cloudflare` is simulated. `build:cloudflare` creates `.open-next/`; always run the media scan
-after packaging so protected source bytes cannot enter the upload.
+`test:cloudflare` is simulated. The commands above build the fail-closed, binary-free package.
+The owner-authorized package is a separate local-only path:
+
+```bash
+npm run build:cloudflare:authorized-media
+npm run validate:media:authorized
+```
+
+That explicit build requires `.local-media/exercises-dataset`, which is ignored by Git and is not
+available in a clean GitHub/Cloudflare checkout. It validates and stages exactly 2,648 pinned
+assets under `/exercises/source-media/`. The authorized scanner rejects modified, incomplete,
+renamed, extra or out-of-namespace files and validates the deployment notice. The default scanner
+rejects any staged source-media bundle unless the explicit authorization flag is present.
 
 ## Authenticate
 
@@ -202,11 +238,22 @@ function-calling model against the identical contract, record the evidence, and 
 
 ## Deploy
 
-The repository's default OpenNext lifecycle command is:
+The repository's default, binary-free OpenNext lifecycle command is:
 
 ```bash
 npm run deploy:cloudflare
 ```
+
+The repository-owner exception must use the visibly distinct local command:
+
+```bash
+npm run deploy:cloudflare:authorized-media
+```
+
+This command requires the exact `--authorize-owner-source-media` gate internally, uses
+`wrangler.authorized-media.jsonc`, validates source and staged bytes immediately before upload,
+and removes the local staged bundle after a successful or failed deployment attempt. The ordinary
+build/deploy config remains disabled and cannot opt in through a stale `.env` value.
 
 The underlying Wrangler command requested by the project is also available after packaging:
 
@@ -215,9 +262,9 @@ npm run build:cloudflare
 npx wrangler deploy
 ```
 
-Do not use both deployment commands for the same release. `deploy:cloudflare` includes the
-OpenNext packaging lifecycle; direct Wrangler deployment expects the already-built `.open-next`
-package.
+Do not use multiple deployment commands for the same release. Each lifecycle command includes its
+own OpenNext build; direct Wrangler deployment expects a matching already-built `.open-next`
+package and matching Wrangler config.
 
 ## Post-deploy smoke test
 
@@ -229,10 +276,11 @@ package.
 5. Disable or exhaust AI and generate/edit the same product through `/crear/manual` without losing
    the draft.
 6. Confirm provider/model identifiers are absent from normal production UI and responses.
-7. Confirm exercise media uses the neutral production placeholder while attribution/licensing
-   status stays visible.
-8. Run `npm run validate:media` against the exact `.open-next` package before upload and retain the
-   zero-protected-binaries result as release evidence.
+7. For a default deploy, confirm the neutral placeholder. For the owner-authorized deploy, confirm
+   JPG/GIF responses match pinned hashes and visible Gym Visual attribution remains present.
+8. Run `npm run validate:media` for the default package or
+   `npm run validate:media:authorized` for the exact authorized package before upload and retain
+   the result as release evidence.
 9. Review Workers AI usage, quota behavior, alerts, and runtime logs in the target account.
 
 For a new account, account creation and browser authorization remain explicit operator actions.

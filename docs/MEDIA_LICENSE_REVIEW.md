@@ -1,6 +1,7 @@
 # Gym Visual media license review
 
-Status: **pending — public production distribution is disabled**.
+Status: **pending — the repository owner authorized a limited source-media deployment on
+2026-07-29; this is not a licensing approval**.
 
 ## Evidence preserved
 
@@ -16,14 +17,19 @@ licensed. The launch gate below still requires a legal/licensing determination f
 intended use.
 
 - Import the pinned 180×180 JPG and GIF files into ignored local storage.
-- Use them for local development and private evaluation.
-- Serve them only through a development-only, private local route.
-- Display the source attribution whenever a protected asset is shown.
-- Fall back to a neutral local SVG in production.
+- Keep `local_private` development-only and fail closed in production.
+- Permit production source files only through the separate
+  `owner_authorized_source` mode requested by the repository owner.
+- Before packaging, validate all 2,648 filenames, byte sizes and SHA-256 hashes against the pinned
+  manifest; reject missing, modified, renamed or out-of-path binaries.
+- Stage exactly one copy under `/exercises/source-media/{images,videos}/` and keep the source
+  repository, `.git` data and duplicate files out of the artifact.
+- Display `© Gym visual — https://gymvisual.com/` whenever a protected asset is shown.
+- Keep the neutral SVG fallback for disabled, missing or unrecognized media.
 
 ## Current prohibited project behavior
 
-- Copy protected binaries into `public/`, `.next/`, `out/`, `.open-next/` or another public deployment package.
+- Copy protected binaries anywhere except the exact owner-authorized OpenNext static namespace.
 - Treat the upstream MIT license as a media license.
 - Remove watermarks or attribution.
 - Alter, upscale, regenerate, or offer the media as standalone downloads.
@@ -37,4 +43,7 @@ intended use.
 - [ ] Confirm the required visible attribution.
 - [ ] Only then enable separately licensed public replacements or establish a reviewed distribution process.
 
-Until every applicable item is resolved, `local_private` is forced to disabled in production and protected manifest entries have `publicProductionUrl: null`.
+Until every applicable item is resolved, the licensing status remains pending and protected
+manifest entries retain `publicProductionUrl: null`. `local_private` remains forced off in
+production. The distinct `owner_authorized_source` mode records the owner's deployment decision;
+it must not be described as permission from Gym Visual or as public/commercial license clearance.

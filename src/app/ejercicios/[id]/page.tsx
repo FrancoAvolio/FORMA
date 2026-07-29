@@ -8,7 +8,10 @@ import { RoutinePlacement } from "@/components/exercises/routine-placement";
 import { getExerciseDetailById } from "@/data/details";
 import { getRoutineCatalog } from "@/data/routine-catalog";
 import { resolveExerciseMedia } from "@/media/server";
-import { exerciseLabel, exerciseListLabel } from "@/presentation/exercise-labels";
+import {
+  exerciseLabel,
+  exerciseListLabel,
+} from "@/presentation/exercise-labels";
 
 import styles from "./page.module.css";
 
@@ -39,7 +42,9 @@ export default async function ExerciseDetailPage({
   if (!exercise) notFound();
 
   const routineCatalog = getRoutineCatalog();
-  const approvedExercise = routineCatalog.find((item) => item.id === exercise.id);
+  const approvedExercise = routineCatalog.find(
+    (item) => item.id === exercise.id,
+  );
   const substitutions = approvedExercise
     ? routineCatalog
         .filter(
@@ -60,13 +65,18 @@ export default async function ExerciseDetailPage({
       <header className={styles.heading}>
         <div>
           <p className="eyebrow">
-            {exerciseLabel(exercise.bodyPart)} · {exerciseListLabel(exercise.requiredEquipment)}
+            {exerciseLabel(exercise.bodyPart)} ·{" "}
+            {exerciseListLabel(exercise.requiredEquipment)}
           </p>
           <h1>{name}</h1>
-          <p className={styles.sourceName}>Nombre de origen: {exercise.sourceName}</p>
+          <p className={styles.sourceName}>
+            Nombre de origen: {exercise.sourceName}
+          </p>
         </div>
         <span
-          className={exercise.approvedForGeneration ? styles.approved : styles.unreviewed}
+          className={
+            exercise.approvedForGeneration ? styles.approved : styles.unreviewed
+          }
         >
           {exercise.approvedForGeneration ? (
             <BadgeCheck aria-hidden="true" />
@@ -80,13 +90,19 @@ export default async function ExerciseDetailPage({
       </header>
 
       <div className={styles.mainGrid}>
-        <ExerciseMediaViewer name={name} media={resolveExerciseMedia(exercise.id)} />
+        <ExerciseMediaViewer
+          name={name}
+          media={resolveExerciseMedia(exercise.id)}
+        />
 
         <section className={styles.facts} aria-labelledby="facts-title">
           <p className="eyebrow">Ficha técnica</p>
           <h2 id="facts-title">Clasificación</h2>
           <dl>
-            <Fact label="Músculo principal" value={exerciseListLabel(exercise.primaryMuscles)} />
+            <Fact
+              label="Músculo principal"
+              value={exerciseListLabel(exercise.primaryMuscles)}
+            />
             <Fact
               label="Músculos secundarios"
               value={exerciseListLabel(exercise.secondaryMuscles)}
@@ -95,16 +111,31 @@ export default async function ExerciseDetailPage({
               label="Equipamiento requerido"
               value={exerciseListLabel(exercise.requiredEquipment)}
             />
-            <Fact label="Parte del cuerpo" value={exerciseLabel(exercise.bodyPart)} />
-            <Fact label="Patrón" value={exerciseLabel(exercise.movementPattern)} />
-            <Fact label="Dificultad" value={exerciseLabel(exercise.difficulty)} />
+            <Fact
+              label="Parte del cuerpo"
+              value={exerciseLabel(exercise.bodyPart)}
+            />
+            <Fact
+              label="Patrón"
+              value={exerciseLabel(exercise.movementPattern)}
+            />
+            <Fact
+              label="Dificultad"
+              value={exerciseLabel(exercise.difficulty)}
+            />
             <Fact label="Tipo" value={exerciseLabel(exercise.modality)} />
-            <Fact label="Lateralidad" value={exerciseLabel(exercise.laterality)} />
+            <Fact
+              label="Lateralidad"
+              value={exerciseLabel(exercise.laterality)}
+            />
           </dl>
         </section>
       </div>
 
-      <section className={styles.instructions} aria-labelledby="instructions-title">
+      <section
+        className={styles.instructions}
+        aria-labelledby="instructions-title"
+      >
         <p className="eyebrow">Técnica del dataset</p>
         <h2 id="instructions-title">Cómo realizarlo</h2>
         <p>{exercise.instructionsEs}</p>
@@ -124,7 +155,10 @@ export default async function ExerciseDetailPage({
           <RoutinePlacement exerciseId={exercise.id} />
         </section>
 
-        <section className={styles.substitutions} aria-labelledby="substitution-title">
+        <section
+          className={styles.substitutions}
+          aria-labelledby="substitution-title"
+        >
           <p className="eyebrow">Mismo grupo funcional</p>
           <h2 id="substitution-title">Sustituciones aprobadas</h2>
           {substitutions.length > 0 ? (
@@ -140,23 +174,29 @@ export default async function ExerciseDetailPage({
             </ul>
           ) : (
             <p>
-              No hay sustituciones curadas para este ejercicio. FORMA no va a inventar una
-              alternativa fuera del catálogo aprobado.
+              No hay sustituciones curadas para este ejercicio. FORMA no va a
+              inventar una alternativa fuera del catálogo aprobado.
             </p>
           )}
         </section>
       </div>
 
-      <aside className={styles.attribution} aria-label="Atribución del ejercicio">
+      <aside
+        className={styles.attribution}
+        aria-label="Atribución del ejercicio"
+      >
         <p>
-          <strong>Datos:</strong> {exercise.sourceAttribution}. Texto sujeto a la licencia MIT
-          del repositorio fuente.
+          <strong>Datos:</strong> {exercise.sourceAttribution}. Texto sujeto a
+          la licencia MIT del repositorio fuente.
         </p>
         <p>
           <strong>Media:</strong>{" "}
           {exercise.sourceMedia?.attribution ??
             "Sin referencia de media en el registro fuente."}{" "}
-          La media está sujeta a una licencia separada y se excluye de producción.
+          La media está sujeta a una licencia separada. Este despliegue usa la
+          copia original por decisión explícita del propietario de esta
+          aplicación para un uso personal limitado; no representa permiso de Gym
+          Visual.
         </p>
         <Link href="/atribuciones">Ver condiciones y auditoría</Link>
       </aside>

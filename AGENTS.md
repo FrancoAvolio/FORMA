@@ -16,7 +16,7 @@ The language model is an untrusted parser and optional explanation layer.
 2. Inspect the repository before editing.
 3. Preserve `docs/design-reference/**` exactly. MOBILE FIRST WEB APP.
 4. Never overwrite the original Stitch reference.
-5. Import source exercise JPG and GIF media only through the pinned, validated and attributed import pipeline. Repository media may be used for local development and private evaluation. Protected Gym Visual binaries must be excluded from public production deployment artifacts until the licensing review or permission is confirmed.
+5. Import source exercise JPG and GIF media only through the pinned, validated and attributed import pipeline. Protected Gym Visual binaries must be excluded from public production artifacts unless the repository owner explicitly authorizes a named deployment. An owner-authorized exception must keep filenames, hashes, dimensions, watermarks and visible attribution intact; use an isolated deployment path; and continue documenting the licensing review as pending rather than implying permission.
 6. Do not silently add paid services.
 7. Do not add authentication, databases or vector stores without an explicit requirement.
 8. Do not place programming logic inside React components.
@@ -284,7 +284,7 @@ A task is not complete until the relevant validation command passes.
 
 Stop and document the issue instead of inventing a workaround when:
 
-* The media license is unclear.
+* The media license is unclear and no explicit repository-owner deployment authorization is recorded.
 * The dataset schema changes unexpectedly.
 * A requirement would require medical judgment.
 * A requested service is no longer free.

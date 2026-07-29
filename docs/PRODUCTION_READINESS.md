@@ -9,7 +9,8 @@ professional-review actions that cannot be automated safely.
 - [x] Dataset source commit pinned; source license and notices preserved.
 - [x] Source, generated, curation, aliases, substitutions, and media relationships validated.
 - [x] Protected media attribution and separate-license boundary visible in the product.
-- [x] Protected source media excluded and hash-scanned from public production artifacts.
+- [x] Protected source media is restricted to an explicit namespace and checked against pinned
+  filenames, sizes and hashes before deployment.
 - [x] AI failure, timeout, invalid-output, quota, rate-limit, and guided fallback contracts tested.
 - [x] Public AI route input/size validation and best-effort burst limiting enabled.
 - [x] Deterministic safety behavior and routine invariants unit/property/integration tested.
@@ -37,13 +38,19 @@ professional-review actions that cannot be automated safely.
 - [ ] Final deployed URLs, date, commit, dataset digest, curation digest, and validation logs are
   attached to release evidence.
 
-Until the media gate is cleared, production must keep:
+The repository-owner exception uses `wrangler.authorized-media.jsonc` through
+`npm run deploy:cloudflare:authorized-media`:
 
 ```env
-EXERCISE_MEDIA_MODE=disabled
-NEXT_PUBLIC_ENABLE_EXERCISE_MEDIA=false
+EXERCISE_MEDIA_MODE=owner_authorized_source
+NEXT_PUBLIC_ENABLE_EXERCISE_MEDIA=true
 NEXT_PUBLIC_AUTOPLAY_EXERCISE_MEDIA=false
 ```
+
+This exception does not check the public/commercial permission item above. Any deployment that is
+not covered by the owner's recorded limited-use decision must return to `disabled` or use reviewed
+`licensed_replacements`. The default `wrangler.jsonc` remains `disabled`; a clean Git/Cloudflare
+checkout cannot build the authorized bundle because `.local-media` is intentionally ignored.
 
 Until the remaining Cloudflare gates are cleared, the guided form remains the provider-independent
 authoritative fallback. Account-backed conversational inference may be described only as the

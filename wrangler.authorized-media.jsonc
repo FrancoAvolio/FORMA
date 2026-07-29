@@ -19,8 +19,8 @@
     "AI_DEBUG_LOGS": "false",
     "CLOUDFLARE_AI_MODEL": "@cf/ibm-granite/granite-4.0-h-micro",
     "CLOUDFLARE_AI_STRUCTURED_MODE": "function_calling",
-    "EXERCISE_MEDIA_MODE": "disabled",
-    "NEXT_PUBLIC_ENABLE_EXERCISE_MEDIA": "false",
+    "EXERCISE_MEDIA_MODE": "owner_authorized_source",
+    "NEXT_PUBLIC_ENABLE_EXERCISE_MEDIA": "true",
     "NEXT_PUBLIC_AUTOPLAY_EXERCISE_MEDIA": "false"
   },
   "observability": {

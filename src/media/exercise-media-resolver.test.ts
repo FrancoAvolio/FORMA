@@ -43,6 +43,23 @@ describe("exercise media resolver", () => {
     });
   });
 
+  it("uses the isolated static namespace for an owner-authorized production bundle", () => {
+    const resolver = createExerciseMediaResolver({
+      requestedMode: "owner_authorized_source",
+      runtime: "production",
+      manifestEntries: [entry],
+    });
+
+    expect(resolver.getMedia("0001")).toMatchObject({
+      available: true,
+      thumbnailUrl: "/exercises/source-media/images/0001-2gPfomN.jpg",
+      animationUrl: "/exercises/source-media/videos/0001-2gPfomN.gif",
+      attribution: entry.attribution,
+      protectedMedia: true,
+      unavailableReason: null,
+    });
+  });
+
   it("returns a stable placeholder for missing optional media", () => {
     const resolver = createExerciseMediaResolver({
       requestedMode: "local_private",

@@ -228,3 +228,39 @@ This is deployment and smoke-test evidence, not final public-launch approval. Wo
 quota and billing acceptance, repeated account-backed testing of every semantic operation,
 quota-exhaustion behavior, legal/privacy review, native-language review, professional programming
 review, and the Gym Visual licensing decision remain explicit launch gates.
+
+## 2026-07-29 — Owner-authorized media bundle and hostname migration
+
+Objective: replace production placeholders with the repository's exact pinned exercise media and
+move the Worker toward `app.forma-gym.workers.dev`, following the repository owner's explicit
+override while keeping attribution and unresolved licensing status visible.
+
+- Added `owner_authorized_source` as a production-only opt-in distinct from the development
+  `local_private` mode and separately licensed replacements.
+- Added a deterministic staging step that validates and copies exactly 1,324 JPG plus 1,324 GIF
+  files (137,616,454 bytes) from ignored local storage into the isolated OpenNext static namespace.
+- Tightened the artifact scanner to accept protected bytes only at manifest-derived paths with
+  matching SHA-256 hashes and an explicit validation flag, and to reject partial bundles, extra
+  files, modified notices, renamed copies or leaks elsewhere. The standard validator remains
+  fail-closed.
+- Kept `wrangler.jsonc` and the ordinary Cloudflare lifecycle media-disabled. The separate
+  `wrangler.authorized-media.jsonc` and `*:cloudflare:authorized-media` commands require a named
+  opt-in, validate destination bytes immediately before upload, and clean local staging after
+  deploy. This path requires the ignored local import and is not Git/Cloudflare-CI deployable.
+- Wrapped the default Cloudflare lifecycle as well: it forcibly overrides stale shell/`.env`
+  media flags to `disabled`, removes only the exact staging namespace, builds with the default
+  config and runs the fail-closed scanner. A hostile preflight with source-media environment
+  values still produced a 45-asset binary-free dry-run with disabled runtime bindings.
+- Configured the target Worker name as `app`, disabled preview URLs, retained Workers AI and
+  deterministic fallback configuration, and recorded that a hostname change does not migrate
+  browser-local routines or conversations.
+- Preserved original media attribution and watermarks. Public/commercial permission is still
+  recorded as pending; the owner's limited-use decision is not represented as legal clearance.
+- Deployed Worker `app`; final verified version `36a2799e-9de6-4962-b5b3-c3d1513d9cab`. Live JPG and GIF
+  responses matched pinned hashes, exercise/chat HTML referenced the source-media namespace and
+  retained attribution, and static responses gained immutable caching plus `nosniff`.
+- `forma-gym` passed the account-subdomain availability preflight, but Cloudflare rejected the
+  public API update with code `10036` because an existing subdomain can be changed only through
+  the dashboard flow. Production therefore remains temporarily at
+  `https://app.fran40v.workers.dev`; the final manual dashboard action is recorded rather than
+  attempting a destructive delete/re-register workaround.

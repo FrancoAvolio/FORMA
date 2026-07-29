@@ -14,7 +14,9 @@ function configuredMode(): ExerciseMediaMode {
     return "disabled";
   }
   const mode = process.env.EXERCISE_MEDIA_MODE ?? "disabled";
-  return mode === "local_private" || mode === "licensed_replacements"
+  return mode === "local_private" ||
+    mode === "licensed_replacements" ||
+    mode === "owner_authorized_source"
     ? mode
     : "disabled";
 }

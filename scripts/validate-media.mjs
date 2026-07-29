@@ -17,9 +17,13 @@ import {
   mediaInventoryDigest,
   parseJsonBuffer,
 } from "./lib/dataset-pipeline.mjs";
+import { sourceMediaNotice } from "./stage-source-media.mjs";
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const requireLocal = process.argv.includes("--require-local");
+const allowOwnerAuthorizedSource = process.argv.includes(
+  "--allow-owner-authorized-source",
+);
 
 async function fileExists(filePath) {
   try {
@@ -57,6 +61,7 @@ const issues = [];
 const recordById = new Map(records.map((record) => [record.id, record]));
 const protectedFilenames = new Set();
 const protectedHashes = new Set();
+const protectedDeploymentPaths = new Map();
 const manifestIds = new Set();
 const runtimeIds = new Set();
 const manifestFilenames = new Set();
@@ -207,6 +212,32 @@ for (const entry of manifest.entries) {
   }
   protectedFilenames.add(entry.thumbnail.filename);
   protectedFilenames.add(entry.animation.filename);
+  protectedDeploymentPaths.set(
+    path.normalize(
+      path.join(
+        ".open-next",
+        "assets",
+        "exercises",
+        "source-media",
+        "images",
+        entry.thumbnail.filename,
+      ),
+    ),
+    entry.thumbnail.sha256,
+  );
+  protectedDeploymentPaths.set(
+    path.normalize(
+      path.join(
+        ".open-next",
+        "assets",
+        "exercises",
+        "source-media",
+        "videos",
+        entry.animation.filename,
+      ),
+    ),
+    entry.animation.sha256,
+  );
 
   if (requireLocal) {
     const imagePath = path.join(
@@ -246,20 +277,91 @@ for (const id of runtimeIds) {
   if (!recordById.has(id)) issues.push(`${id}: runtime media entry has no source record`);
 }
 
+const authorizedDeploymentFiles = new Set();
 for (const artifactRoot of ["public", ".next", ".open-next", "out"]) {
   for (const filePath of await listFiles(path.join(projectRoot, artifactRoot))) {
+    const relativePath = path.normalize(path.relative(projectRoot, filePath));
+    const artifactHash = sha256(await readFile(filePath));
+    const expectedAuthorizedHash = protectedDeploymentPaths.get(relativePath);
+    if (expectedAuthorizedHash) {
+      if (!allowOwnerAuthorizedSource) {
+        continue;
+      }
+      if (artifactHash !== expectedAuthorizedHash) {
+        issues.push(`owner-authorized production media hash mismatch: ${relativePath}`);
+      } else {
+        authorizedDeploymentFiles.add(relativePath);
+      }
+      continue;
+    }
     if (protectedFilenames.has(path.basename(filePath))) {
       issues.push(
-        `protected Gym Visual binary leaked into production-controlled path: ${path.relative(projectRoot, filePath)}`,
+        `protected Gym Visual binary exists outside its owner-authorized deployment path: ${relativePath}`,
       );
       continue;
     }
-    const artifactHash = sha256(await readFile(filePath));
     if (protectedHashes.has(artifactHash)) {
       issues.push(
-        `renamed protected Gym Visual binary leaked into production-controlled path: ${path.relative(projectRoot, filePath)}`,
+        `renamed protected Gym Visual binary exists outside its owner-authorized deployment path: ${relativePath}`,
       );
     }
+  }
+}
+
+const authorizedDeploymentRoot = path.join(
+  projectRoot,
+  ".open-next",
+  "assets",
+  "exercises",
+  "source-media",
+);
+const stagedDeploymentPaths = new Set(
+  (await listFiles(authorizedDeploymentRoot)).map((filePath) =>
+    path.normalize(path.relative(projectRoot, filePath)),
+  ),
+);
+
+if (stagedDeploymentPaths.size > 0 && !allowOwnerAuthorizedSource) {
+  issues.push(
+    `source-media deployment bundle is present without --allow-owner-authorized-source (${stagedDeploymentPaths.size} files)`,
+  );
+}
+
+if (allowOwnerAuthorizedSource) {
+  const expectedDeploymentPaths = new Set([
+    ...protectedDeploymentPaths.keys(),
+    path.normalize(
+      path.join(
+        ".open-next",
+        "assets",
+        "exercises",
+        "source-media",
+        "NOTICE.txt",
+      ),
+    ),
+  ]);
+  const unexpectedPaths = [...stagedDeploymentPaths].filter(
+    (filePath) => !expectedDeploymentPaths.has(filePath),
+  );
+  const missingPaths = [...expectedDeploymentPaths].filter(
+    (filePath) => !stagedDeploymentPaths.has(filePath),
+  );
+  if (unexpectedPaths.length > 0 || missingPaths.length > 0) {
+    issues.push(
+      `owner-authorized deployment whitelist mismatch: expected ${expectedDeploymentPaths.size}, received ${stagedDeploymentPaths.size}, missing ${missingPaths.length}, unexpected ${unexpectedPaths.length}`,
+    );
+  }
+  const noticePath = path.join(authorizedDeploymentRoot, "NOTICE.txt");
+  if (
+    (await fileExists(noticePath)) &&
+    (await readFile(noticePath, "utf8")) !== sourceMediaNotice()
+  ) {
+    issues.push("owner-authorized source-media NOTICE.txt is missing or modified");
+  }
+  if (authorizedDeploymentFiles.size !== protectedDeploymentPaths.size) {
+    issues.push(
+      `owner-authorized production media bundle is incomplete: expected ${protectedDeploymentPaths.size}, received ${authorizedDeploymentFiles.size}`,
+    );
   }
 }
 
@@ -268,7 +370,9 @@ if (issues.length > 0) {
 }
 
 console.log(
-  `Validated ${manifest.entries.length} media relationships; production remains binary-free${
-    requireLocal ? "; local import is complete" : ""
-  }.`,
+  `Validated ${manifest.entries.length} media relationships${
+    allowOwnerAuthorizedSource && authorizedDeploymentFiles.size > 0
+      ? `; owner-authorized production bundle contains ${authorizedDeploymentFiles.size} pinned files and licensing review remains pending`
+      : "; current build artifacts remain binary-free"
+  }${requireLocal ? "; local import is complete" : ""}.`,
 );

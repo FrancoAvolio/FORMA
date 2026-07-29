@@ -178,3 +178,26 @@ The production model remains `@cf/ibm-granite/granite-4.0-h-micro`. A live Grani
 the requested function call once the real envelope was recognized. A bounded Qwen3 30B comparison
 spent its output budget reasoning without emitting the call, so it was not promoted merely because
 it is larger or shares the local Ollama model family.
+
+## ADR-025 — Owner-authorized source media uses a pinned static namespace
+
+ADR-002 and ADR-012 remain the default containment policy, but the repository owner explicitly
+overrode the public-artifact prohibition for the limited personal deployment on 2026-07-29. This
+does not represent a completed Gym Visual licensing review. Production uses the distinct
+`owner_authorized_source` mode; `local_private` remains development-only and separately licensed
+replacements retain their existing path.
+
+The Cloudflare build reads only `.local-media/exercises-dataset`, validates all 1,324 JPG/GIF
+pairs against the pinned manifest, and stages one copy under
+`.open-next/assets/exercises/source-media/{images,videos}`. The artifact validator allows
+protected hashes only when the explicit authorization flag is present, at their exact expected
+paths, and requires the entire 2,648-file bundle plus the exact notice with no extras. The default
+Wrangler config and lifecycle stay binary-free and disabled; the separate authorized config and
+command cannot run without the named opt-in. Attribution, dimensions and watermarks are preserved.
+Neither the upstream repository clone nor its `.git` directory enters the deployment. Because the
+source files are Git-ignored, this exception is deliberately a local deploy path and is not
+presented as working from a clean Git/Cloudflare CI checkout.
+
+The `workers.dev` target is `app.forma-gym.workers.dev`: `app` is the Worker name and `forma-gym`
+is the account-wide Workers subdomain. The old Worker is retained until live verification. Browser
+local data is origin-scoped and therefore does not migrate automatically to the new hostname.

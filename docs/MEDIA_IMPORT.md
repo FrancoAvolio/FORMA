@@ -29,7 +29,11 @@ The `.local-media` directory ignores everything except its own `.gitignore`; bin
 
 Protected media is resolved centrally to `/api/exercise-media/images/` and `/api/exercise-media/videos/` only in local-private mode. The implemented server route accepts only manifest-listed basenames from the fixed ignored directory, rejects traversal and unknown files, and returns 404 outside development/private evaluation.
 
-The central resolver in `src/media/exercise-media-resolver.ts` always converts `local_private` to disabled in production. A production build therefore displays the static placeholder and keeps Spanish instructions, search and deterministic generation working.
+The central resolver in `src/media/exercise-media-resolver.ts` always converts `local_private` to
+disabled in production. The separately named `owner_authorized_source` mode can resolve the pinned
+bundle from `/exercises/source-media/` only after the Cloudflare staging step verifies every file.
+If that explicit mode is disabled or a record is missing, the static placeholder keeps Spanish
+instructions, search and deterministic generation working.
 
 ## Validation modes
 

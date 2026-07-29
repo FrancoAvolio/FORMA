@@ -4,7 +4,10 @@ The following items do not block a complete local product but require external a
 review before a public launch. They must not be reported as completed from simulated providers,
 automated accessibility checks, repository metadata, or a successful package build alone.
 
-- **Gym Visual media licence:** source JPG/GIF binaries remain excluded from production until written permission or a compatible licence is confirmed. Attribution metadata stays visible even when media is disabled.
+- **Gym Visual media licence:** written permission or a compatible public/commercial licence is
+  not confirmed. On 2026-07-29 the repository owner explicitly authorized the pinned source JPG/GIF
+  bundle for this limited deployment. Hash/path validation, original watermarks and visible
+  attribution remain enforced; this operator decision is not legal clearance.
 - **Training-domain sign-off:** all 156 approved records received an implementation
   source-consistency review and are digest-gated, but difficulty, fatigue, movement,
   prescription, substitution, and safety assumptions still require acceptance by a qualified
@@ -30,7 +33,9 @@ automated accessibility checks, repository metadata, or a successful package bui
   to stop bursts, not provide a globally consistent user quota. Review target-account controls
   before a high-volume launch without silently enabling a paid product.
 - **Browser-local data:** routines do not synchronize between browsers/devices and disappear if
-  site storage is cleared. This is an explicit MVP boundary, not an authentication defect.
+  site storage is cleared. They also do not migrate between hostnames, including the move from
+  `forma-routines.fran40v.workers.dev` to `app.forma-gym.workers.dev`. This is an explicit MVP
+  boundary, not an authentication defect.
 - **Development/build audit:** the deployed production dependency audit is clean. The compatible
   ESLint 9/Next plugin toolchain still contains legacy glob-expansion DoS advisories, and the
   OpenNext build-only minifier chain retains high-severity glob/minimatch advisories. These are
