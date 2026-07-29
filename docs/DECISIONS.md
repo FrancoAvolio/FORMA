@@ -163,3 +163,18 @@ bounded responses, and one repair attempt. Cloudflare uses the Workers AI bindin
 bounded timeout/error mapping. The shared taxonomy distinguishes unavailable, timeout,
 invalid-output, rate-limit, quota, binding, configuration, and unsupported-model failures; normal
 production UI does not expose provider or model identifiers.
+
+## ADR-024 — Normalize Cloudflare chat-completion envelopes inside the provider
+
+The live Workers AI binding may return forced function calls at the response root or inside an
+OpenAI-compatible `result.choices[].message.tool_calls` / `choices[].message.tool_calls` envelope.
+This transport variation is normalized only in `CloudflareAiProvider`: tool arguments take
+precedence, structured `message.content` remains available for `json_schema`/`json_object` modes,
+and every extracted value still crosses the same byte limit, whole-JSON parse, strict Zod schema,
+and one-repair boundary. The adapter deliberately avoids a generic recursive search that could
+mistake arbitrary model prose for authoritative structured data.
+
+The production model remains `@cf/ibm-granite/granite-4.0-h-micro`. A live Granite probe emitted
+the requested function call once the real envelope was recognized. A bounded Qwen3 30B comparison
+spent its output budget reasoning without emitting the call, so it was not promoted merely because
+it is larger or shares the local Ollama model family.

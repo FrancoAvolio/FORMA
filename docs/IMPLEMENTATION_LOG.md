@@ -169,3 +169,62 @@ Closing validation evidence for this refactor (2026-07-28, Node 22 wrapper):
   audit reports 13 high-severity development/build-chain advisories (ESLint and OpenNext
   minifier transitive paths), documented in `docs/KNOWN_LIMITATIONS.md` and
   `docs/SECURITY_REVIEW.md`.
+
+## 2026-07-29 — First account-backed Cloudflare deployment
+
+Objective: publish the existing production package to the authenticated Cloudflare account and
+verify the real Workers AI path without weakening the provider contract, deterministic safety,
+or the protected-media launch boundary.
+
+Invariants for this deployment:
+
+- Granite remains an untrusted latest-turn parser behind the server-only `AI` binding; Zod and
+  deterministic application/domain validation remain authoritative.
+- No Cloudflare credential, account identifier, prompt, or raw model response is exposed to the
+  browser or committed configuration.
+- Protected Gym Visual binaries remain excluded from the public package and production media
+  flags remain disabled.
+- The guided form and deterministic routine engine remain usable if Workers AI fails or reaches
+  quota.
+
+Deployment and live evidence:
+
+- Registered the account's first `workers.dev` subdomain and deployed Worker `forma-routines` to
+  `https://forma-routines.fran40v.workers.dev` with the `AI` and `ASSETS` bindings.
+- `npm run build:cloudflare` passed and `npm run validate:media` validated 1,324 media
+  relationships while confirming the deployed package remained protected-binary-free.
+- The first live Granite call exposed an adapter defect: Workers AI returned valid forced tool
+  arguments inside the OpenAI-compatible `choices[].message.tool_calls` envelope, while the
+  adapter only read root-level calls. The provider now accepts both documented envelopes, prefers
+  tool arguments over message content, supports structured content envelopes, and still submits
+  the extracted payload to the unchanged strict schema and one-repair boundary.
+- A live comparison probe did not select Qwen3 30B: the candidate consumed the bounded response
+  reasoning without issuing the forced call, while Granite issued valid arguments. Production
+  therefore retains the GOAL-specified Granite model.
+- The combined profile/all-clear sentence also exposed an overly broad safety contradiction
+  check: `tengo un gimnasio` was treated like a medical contradiction. The detector now scopes
+  affirmative contradictions to safety terms while retaining fail-closed handling for actual
+  pain, injury, operation, restriction, symptom, or professional-instruction statements. A broad
+  all-clear can no longer suppress independently unsupported pregnancy-specific, minor, or
+  complex-medical-condition requests, and direct `No siento dolor...` phrasing is recognized as
+  negation rather than pain.
+- Provider contract tests pass 15/15; focused conversation/domain safety tests pass 40/40;
+  typecheck and lint pass for the changed boundaries.
+- Post-deploy HTTP checks returned 200 for the landing page, chat, explorer, saved routines, and
+  attribution page. The off-topic API returned `off_topic`, and the complete UTF-8 profile turn
+  returned the expected goal, experience, three days, 60 minutes, commercial gym, and explicit
+  no-limitations confirmation.
+- A headless Chromium smoke test against the public URL reached 100% profile completion and a
+  validated inline `Hipertrofia · 3 días` routine without browser console errors.
+- The final deployed version `0adf2829-0b19-4ea4-98bd-44c01c8d0e0b` repeated that browser smoke
+  test and returned deterministic `pregnancy_specific` blocking in three consecutive public API
+  checks after edge propagation.
+- Final `npm run validate` passed 11 immutable Stitch references, UTF-8 validation across 239
+  text files, the 1,324-record source/generated/media boundaries, 156 approved generation
+  records, typecheck, zero-warning lint, 29 Vitest files/250 tests, the Next production build,
+  and the post-build protected-media scan.
+
+This is deployment and smoke-test evidence, not final public-launch approval. Workers/Workers AI
+quota and billing acceptance, repeated account-backed testing of every semantic operation,
+quota-exhaustion behavior, legal/privacy review, native-language review, professional programming
+review, and the Gym Visual licensing decision remain explicit launch gates.

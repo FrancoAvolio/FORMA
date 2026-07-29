@@ -104,7 +104,26 @@ export const UNSUPPORTED_TEXT_REASON_CODES = new Set<SafetyReasonCode>([
   "EATING_DISORDER_REQUEST",
 ]);
 
+function hasAffirmativeSafetyContradiction(text: string): boolean {
+  return (
+    /(?<!\bno )\b(?:me duele|me lesione|siento (?:dolor|sintomas?)|tuve (?:una? )?(?:lesion|operacion|cirugia))\b/u.test(
+      text,
+    ) ||
+    /(?<!\bno )\btengo (?:un )?(?:dolor|sintomas?)\b/u.test(text) ||
+    /(?<!\bno )\btengo (?:una?|alguna?) (?:lesion|operacion|cirugia|restriccion|limitacion|indicacion profesional)\b/u.test(
+      text,
+    ) ||
+    /\b(?:pero|aunque) (?:si )?(?:tengo |tuve |siento )?(?:un |una )?(?:dolor|lesion|operacion|cirugia|restriccion|limitacion|sintoma|indicacion profesional)\b/u.test(
+      text,
+    )
+  );
+}
+
 function isNegatedMatch(text: string, index: number): boolean {
+  const immediatePrefix = text.slice(Math.max(0, index - 12), index);
+  if (/\bno\s*$/u.test(immediatePrefix)) {
+    return true;
+  }
   const boundary = Math.max(
     text.lastIndexOf(",", index),
     text.lastIndexOf(";", index),
@@ -112,23 +131,22 @@ function isNegatedMatch(text: string, index: number): boolean {
   );
   const clause = text.slice(boundary + 1, index);
   if (
-    /\b(?:pero|aunque|tuve|tengo una|tengo un|siento|me duele|me lesione|(?<!no )tengo dolor|(?<!no )tengo sintomas)\b/u.test(
-      clause,
-    )
+    /\b(?:pero|aunque)\b/u.test(clause) ||
+    hasAffirmativeSafetyContradiction(clause)
   ) {
     return false;
   }
-  return /\b(?:no tengo|sin|ni|ningun|ninguna)\b/u.test(clause);
+  return /\b(?:no tengo|no siento|no me|sin|ni|ningun|ninguna)\b/u.test(
+    clause,
+  );
 }
 
 function isExplicitNegatedSafetyList(text: string): boolean {
-  const contradiction =
-    /\b(?:pero|aunque|tuve|tengo una|tengo un|siento|me duele|me lesione|(?<!no )tengo dolor|(?<!no )tengo sintomas)\b/u;
   return (
     /\b(?:no tengo|sin)\b/u.test(text) &&
     /\bni\b/u.test(text) &&
     /\b(?:dolor|lesion|restriccion|sintoma|operacion|indicacion)\b/u.test(text) &&
-    !contradiction.test(text)
+    !hasAffirmativeSafetyContradiction(text)
   );
 }
 
@@ -146,13 +164,20 @@ function normalizeSafetyText(value: string): string {
 /** Deterministic, fail-closed signals used before any model classification. */
 export function detectSafetyReasonCodes(text: string): SafetyReasonCode[] {
   const normalized = normalizeSafetyText(text);
-  if (isExplicitNegatedSafetyList(normalized)) return [];
-  return TEXT_SAFETY_RULES.filter(({ patterns }) =>
+  const detected = TEXT_SAFETY_RULES.filter(({ patterns }) =>
     patterns.some((pattern) => {
       const match = pattern.exec(normalized);
       return Boolean(match && !isNegatedMatch(normalized, match.index));
     }),
   ).map(({ code }) => code);
+  if (!isExplicitNegatedSafetyList(normalized)) {
+    return detected;
+  }
+
+  // A broad all-clear may suppress false matches inside its comma-separated
+  // safety list, but it can never suppress an independently unsupported
+  // request (for example pregnancy-specific programming or a minor).
+  return detected.filter((code) => UNSUPPORTED_TEXT_REASON_CODES.has(code));
 }
 
 export type DeterministicLimitationsDeclaration =
@@ -172,11 +197,10 @@ export function detectLimitationsDeclaration(
   }
 
   const normalized = normalizeDomainText(text);
-  const hasExplicitDenial = /\b(no tengo|sin|ningun|ninguna)\b/u.test(
+  const hasExplicitDenial = /\b(no tengo|no siento|sin|ningun|ninguna)\b/u.test(
     normalized,
   );
-  const hasContradiction =
-    /\b(pero|aunque|tuve|tengo una|tengo un|siento)\b/u.test(normalized);
+  const hasContradiction = hasAffirmativeSafetyContradiction(normalized);
   const deniesPainOrInjury = /\b(?:dolor|lesion|lesiones)\b/u.test(normalized);
   const deniesBroadRestrictions =
     /\b(?:limitacion|limitaciones|restriccion|restricciones)\b/u.test(

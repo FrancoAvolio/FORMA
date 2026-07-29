@@ -17,6 +17,8 @@ professional-review actions that cannot be automated safely.
   disabled-media browser flows automated.
 - [x] Privacy behavior and attribution/legal boundaries have dedicated Spanish product pages.
 - [x] Production Next.js build and post-build protected-media scan automated by `npm run validate`.
+- [x] Cloudflare account onboarding, `workers.dev` publication, real `AI` binding, and a complete
+  account-backed chat-to-validated-routine smoke test completed on 2026-07-29.
 
 ## Manual launch gates
 
@@ -26,7 +28,7 @@ professional-review actions that cannot be automated safely.
 - [ ] Gym Visual public/commercial media permission or replacement licensing is confirmed.
 - [ ] A legal/privacy reviewer has accepted `/atribuciones`, `/privacidad`, provider terms, and
   the intended jurisdiction/use.
-- [ ] Cloudflare account and Workers onboarding are complete.
+- [x] Cloudflare account and Workers onboarding are complete.
 - [ ] The real `AI` binding and configured model pass the repeated account-backed contract.
 - [ ] Current Cloudflare Workers/Workers AI usage limits and billing behavior are accepted.
 - [ ] The deployed quota-exhaustion fallback is smoke-tested in the target account.
@@ -43,6 +45,6 @@ NEXT_PUBLIC_ENABLE_EXERCISE_MEDIA=false
 NEXT_PUBLIC_AUTOPLAY_EXERCISE_MEDIA=false
 ```
 
-Until the Cloudflare gate is cleared, the guided form remains the authoritative usable path and
-the deployment must not claim that account-backed conversational inference was verified.
-
+Until the remaining Cloudflare gates are cleared, the guided form remains the provider-independent
+authoritative fallback. Account-backed conversational inference may be described only as the
+recorded 2026-07-29 smoke test, not as a completed repeated provider/quota certification.

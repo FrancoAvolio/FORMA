@@ -15,11 +15,12 @@ automated accessibility checks, repository metadata, or a successful package bui
 - **Legal and deployed-domain review:** attribution, privacy, safety disclaimer, third-party
   notices, analytics/cookie behavior if later enabled, and presentation on the final public web
   domain require human legal/privacy review. Repository documentation is not legal advice.
-- **Cloudflare account and live-model verification:** the Workers AI adapter and deployment
-  package can be built and contract-tested with a simulated binding. The account owner must run
-  `npx wrangler login`, complete browser authorization, confirm the real `AI` binding and account
-  quota, and exercise the configured production model in the target account before launch. A
-  local `npm run test:cloudflare` result does not satisfy this live gate.
+- **Cloudflare release verification:** account onboarding, the real `AI` binding, first deployment,
+  live Granite interpretation, deterministic off-topic handling, and one complete browser routine
+  smoke test passed on 2026-07-29. The repeated account-backed contract for every interpretation,
+  modification, composition, safety, and explanation behavior is not yet recorded. The owner must
+  also accept current quota/billing behavior and smoke-test deployed quota exhaustion before a
+  high-volume or final public launch; local `npm run test:cloudflare` remains simulated evidence.
 - **Ollama model matrix:** the guided form and deterministic generator work without Ollama.
   `qwen3:4b` is the configured local default, but each release must record its real external
   contract result separately from standard validation. If it is not installed, the operator must run

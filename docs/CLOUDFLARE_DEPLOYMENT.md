@@ -37,7 +37,32 @@ Browser routines remain local and the catalog is bundled read-only.
 
 These checks prove adapter/package behavior, not target-account authorization, live Granite
 structured-output reliability, current quota, or successful deployment. Those gates remain
-manual.
+manual for the 2026-07-28 evidence above.
+
+## Live deployment evidence — 2026-07-29
+
+- Worker: `forma-routines`.
+- Public URL: `https://forma-routines.fran40v.workers.dev`.
+- Verified deployment version: `0adf2829-0b19-4ea4-98bd-44c01c8d0e0b`.
+- Bindings confirmed by Wrangler: server-only Workers AI `AI` and static `ASSETS`.
+- Production model/mode: `@cf/ibm-granite/granite-4.0-h-micro` with forced function calling.
+- Production media: disabled; the exact OpenNext package passed the 1,324-relationship scan and
+  contained no protected Gym Visual binaries.
+- Live pages returned 200 for `/`, `/crear/chat`, `/ejercicios`, `/guardadas`, and
+  `/atribuciones`.
+- Live API checks passed deterministic `off_topic` handling and a complete UTF-8 profile turn.
+- Headless Chromium reached a 100% profile and a validated three-day inline routine without
+  console errors.
+
+The initial live model response revealed that Workers AI used an OpenAI-compatible
+`choices[].message.tool_calls` envelope. The provider now normalizes that known transport shape
+before the existing strict schema boundary; it does not accept partial data or arbitrary nested
+JSON. The same deployment also narrowed safety-contradiction recognition so the equipment phrase
+`tengo un gimnasio` cannot invalidate an otherwise explicit all-clear.
+
+This evidence clears first deployment and smoke testing only. Repeated checks for every semantic
+operation, quota exhaustion, account usage/billing acceptance, and the non-Cloudflare legal,
+professional, language, accessibility, and media-license gates remain open.
 
 The package pins the OpenNext build-only `@node-minify/core` dependency to compatible v8.0.6. The
 pin is not application runtime logic and must be retained until the upstream OpenNext dependency
@@ -210,6 +235,8 @@ package.
    zero-protected-binaries result as release evidence.
 9. Review Workers AI usage, quota behavior, alerts, and runtime logs in the target account.
 
-Account creation, browser authorization, live Granite inference, quota/terms review, and final
-deployment remain explicit operator actions. Do not mark public release ready until they are
-recorded in [`PRODUCTION_READINESS.md`](PRODUCTION_READINESS.md).
+For a new account, account creation and browser authorization remain explicit operator actions.
+For the currently recorded account, onboarding, first deployment, and a live Granite smoke test
+are complete; quota/terms acceptance and final release approval remain operator actions. Do not
+mark public release ready until every remaining gate is recorded in
+[`PRODUCTION_READINESS.md`](PRODUCTION_READINESS.md).

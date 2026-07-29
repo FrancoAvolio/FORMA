@@ -92,6 +92,27 @@ describe("deterministic conversational safety", () => {
     expect(result.limitationsConfirmation).toBe("no_limitations");
   });
 
+  it("keeps an all-clear valid when the same turn says the user has a full gym", () => {
+    const message =
+      "Quiero ganar masa muscular. Soy intermedio, entreno 3 d\u00edas por semana, 60 minutos por sesi\u00f3n y tengo un gimnasio completo. No tengo dolor al moverme, lesiones recientes, operaciones recientes, restricciones m\u00e9dicas, s\u00edntomas durante el ejercicio ni indicaciones profesionales que afecten mi entrenamiento.";
+    const result = reconcileParsedTurnSafety(neutralTurn, message, {
+      hasCurrentRoutine: false,
+    });
+
+    expect(result).toMatchObject({
+      intent: "provide_information",
+      requestPatch: {
+        goal: "hypertrophy",
+        experience: "intermediate",
+        daysPerWeek: 3,
+        sessionMinutes: 60,
+        trainingLocation: "commercial_gym",
+      },
+      limitationsConfirmation: "no_limitations",
+      safetySignals: [],
+    });
+  });
+
   it("drops unrelated model fields from a safety-only turn and preserves the profile", () => {
     const profile = {
       ...createEmptyRoutineRequestDraft(),

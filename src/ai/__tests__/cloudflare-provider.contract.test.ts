@@ -83,6 +83,62 @@ describe("CloudflareAiProvider binding", () => {
     expect(options?.signal).toBeInstanceOf(AbortSignal);
   });
 
+  it.each([
+    [
+      "a chat completion",
+      (operation: string) => ({
+        choices: [
+          {
+            message: {
+              tool_calls: [
+                {
+                  type: "function",
+                  function: {
+                    name: `forma_${operation}`,
+                    arguments: JSON.stringify(responseForOperation(operation)),
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      }),
+    ],
+    [
+      "a REST result envelope",
+      (operation: string) => ({
+        result: {
+          choices: [
+            {
+              message: {
+                tool_calls: [
+                  {
+                    type: "function",
+                    function: {
+                      name: `forma_${operation}`,
+                      arguments: JSON.stringify(responseForOperation(operation)),
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      }),
+    ],
+  ])("extracts tool arguments from %s", async (_label, responseFor) => {
+    const binding: CloudflareAiBinding = {
+      run: vi.fn(async (_model, request) =>
+        responseFor(operationFromRequest(request)),
+      ),
+    };
+
+    await expect(
+      new CloudflareAiProvider({ binding }).parseRoutineTurn(completeParseInput),
+    ).resolves.toMatchObject({ intent: "provide_information" });
+    expect(binding.run).toHaveBeenCalledTimes(1);
+  });
+
   it("supports Workers AI json_schema mode without changing the provider interface", async () => {
     const binding: CloudflareAiBinding = {
       run: vi.fn(async (_model, request) => {
@@ -97,6 +153,51 @@ describe("CloudflareAiProvider binding", () => {
       new CloudflareAiProvider({ binding, structuredMode: "json_schema" })
         .parseRoutineTurn(completeParseInput),
     ).resolves.toMatchObject({ intent: "provide_information" });
+  });
+
+  it("extracts json_schema content from a REST chat-completion envelope", async () => {
+    const binding: CloudflareAiBinding = {
+      run: vi.fn(async () => ({
+        result: {
+          choices: [
+            {
+              message: {
+                content: JSON.stringify(
+                  responseForOperation("parse_routine_turn"),
+                ),
+              },
+            },
+          ],
+        },
+      })),
+    };
+
+    await expect(
+      new CloudflareAiProvider({ binding, structuredMode: "json_schema" })
+        .parseRoutineTurn(completeParseInput),
+    ).resolves.toMatchObject({ intent: "provide_information" });
+  });
+
+  it("rejects message content when forced function calling emits no tool call", async () => {
+    const binding: CloudflareAiBinding = {
+      run: vi.fn(async () => ({
+        choices: [
+          {
+            message: {
+              content: JSON.stringify(
+                responseForOperation("parse_routine_turn"),
+              ),
+              tool_calls: [],
+            },
+          },
+        ],
+      })),
+    };
+
+    await expect(
+      new CloudflareAiProvider({ binding }).parseRoutineTurn(completeParseInput),
+    ).rejects.toMatchObject({ code: "invalid_output" });
+    expect(binding.run).toHaveBeenCalledTimes(2);
   });
 
   it("maps daily free-quota exhaustion distinctly from rate limiting", async () => {

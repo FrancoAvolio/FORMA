@@ -110,6 +110,35 @@ describe("evaluateRoutineSafety", () => {
     );
   });
 
+  it.each([
+    [
+      "pregnancy-specific programming",
+      "No tengo dolor ni restricciones, pero estoy embarazada y quiero una rutina.",
+      "PREGNANCY_SPECIFIC_REQUEST",
+    ],
+    [
+      "a complex medical condition",
+      "No tengo dolor ni restricciones, pero tengo c\u00e1ncer.",
+      "COMPLEX_MEDICAL_REQUEST",
+    ],
+    [
+      "a minor",
+      "No tengo dolor ni restricciones, aunque soy menor.",
+      "MINOR_REQUEST",
+    ],
+  ] as const)("does not let a broad all-clear hide %s", (_label, message, code) => {
+    expect(detectSafetyReasonCodes(message)).toContain(code);
+    expect(detectLimitationsDeclaration(message)).toBe("has_limitations");
+  });
+
+  it("recognizes direct first-person negation without treating it as pain", () => {
+    const message =
+      "No siento dolor al moverme ni tengo lesiones ni restricciones m\u00e9dicas.";
+
+    expect(detectSafetyReasonCodes(message)).toEqual([]);
+    expect(detectLimitationsDeclaration(message)).toBe("no_limitations");
+  });
+
   it("allows clear professional movement restrictions without interpreting medical advice", () => {
     const assessment = evaluateRoutineSafety(
       createRoutineRequest({ excludedMovementPatterns: ["hinge"] }),

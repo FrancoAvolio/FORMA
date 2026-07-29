@@ -127,23 +127,71 @@ function findToolArguments(value: unknown): unknown | undefined {
       ? record.toolCalls
       : null;
 
-  if (!toolCalls || toolCalls.length === 0) {
-    return undefined;
+  if (toolCalls) {
+    for (const toolCall of toolCalls) {
+      if (typeof toolCall !== "object" || toolCall === null) {
+        continue;
+      }
+      const toolCallRecord = toolCall as Record<string, unknown>;
+      const fn = toolCallRecord.function;
+      if (typeof fn === "object" && fn !== null && "arguments" in fn) {
+        return (fn as Record<string, unknown>).arguments;
+      }
+      if ("arguments" in toolCallRecord) {
+        return toolCallRecord.arguments;
+      }
+    }
   }
 
-  const first = toolCalls[0];
-  if (typeof first !== "object" || first === null) {
-    return undefined;
+  const legacyFunctionCall = record.function_call;
+  if (
+    typeof legacyFunctionCall === "object" &&
+    legacyFunctionCall !== null &&
+    "arguments" in legacyFunctionCall
+  ) {
+    return (legacyFunctionCall as Record<string, unknown>).arguments;
   }
-  const firstRecord = first as Record<string, unknown>;
-  const fn = firstRecord.function;
-  if (typeof fn === "object" && fn !== null && "arguments" in fn) {
-    return (fn as Record<string, unknown>).arguments;
-  }
-  return firstRecord.arguments;
+
+  return undefined;
 }
 
-function extractCloudflarePayload(response: unknown): unknown {
+function findChatCompletionPayload(
+  value: Record<string, unknown>,
+  allowMessageContent: boolean,
+): unknown | undefined {
+  const choices = Array.isArray(value.choices) ? value.choices : null;
+  if (!choices) {
+    return undefined;
+  }
+
+  const messages = choices.flatMap((choice) => {
+    if (typeof choice !== "object" || choice === null) return [];
+    const message = (choice as Record<string, unknown>).message;
+    return typeof message === "object" && message !== null ? [message] : [];
+  });
+
+  for (const message of messages) {
+    const toolArguments = findToolArguments(message);
+    if (toolArguments !== undefined) {
+      return toolArguments;
+    }
+  }
+  if (allowMessageContent) {
+    for (const message of messages) {
+      const content = (message as Record<string, unknown>).content;
+      if (typeof content === "string" && content.trim().length > 0) {
+        return content;
+      }
+    }
+  }
+
+  return undefined;
+}
+
+function extractCloudflarePayload(
+  response: unknown,
+  allowMessageContent: boolean,
+): unknown {
   const directToolArguments = findToolArguments(response);
   if (directToolArguments !== undefined) {
     return directToolArguments;
@@ -155,10 +203,24 @@ function extractCloudflarePayload(response: unknown): unknown {
 
   const record = response as Record<string, unknown>;
   if ("result" in record) {
-    const nested = extractCloudflarePayload(record.result);
+    const nested = extractCloudflarePayload(
+      record.result,
+      allowMessageContent,
+    );
     if (nested !== undefined) {
       return nested;
     }
+  }
+  // Workers AI text-generation models can return the OpenAI-compatible chat
+  // completion envelope instead of exposing tool_calls at the response root.
+  // Keep this traversal narrow so arbitrary nested model text is never treated
+  // as authoritative structured output.
+  const chatCompletionPayload = findChatCompletionPayload(
+    record,
+    allowMessageContent,
+  );
+  if (chatCompletionPayload !== undefined) {
+    return chatCompletionPayload;
   }
   if ("response" in record) {
     return record.response;
@@ -305,7 +367,10 @@ export class CloudflareAiProvider extends BaseStructuredAiProvider {
       }
     }
 
-    const payload = extractCloudflarePayload(response);
+    const payload = extractCloudflarePayload(
+      response,
+      this.structuredMode !== "function_calling",
+    );
     let serialized: string;
     try {
       serialized =
@@ -327,4 +392,3 @@ export class CloudflareAiProvider extends BaseStructuredAiProvider {
     return payload;
   }
 }
-
