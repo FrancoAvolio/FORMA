@@ -31,7 +31,7 @@ export const completeRoutineRequest: RoutineRequest = {
 
 export const completeParseInput: ParseRoutineTurnInput = {
   message:
-    "Soy intermedio, quiero hipertrofia cuatro días, 45 minutos, en el gimnasio con mancuernas y máquinas, prioridad en espalda y sin peso muerto. No tengo dolor ni restricciones.",
+    "Soy intermedio, quiero hipertrofia cuatro días, 45 minutos, en el gimnasio con mancuernas y máquinas, prioridad en espalda y sin peso muerto. No tengo dolor al moverme, lesiones recientes, operaciones recientes, restricciones médicas, síntomas durante el ejercicio ni indicaciones profesionales.",
   locale: "es-AR",
 };
 

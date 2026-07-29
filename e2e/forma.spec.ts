@@ -7,7 +7,7 @@ const CHAT_TURNS = {
   availability:
     "Soy intermedio, entreno cuatro días y tengo gimnasio completo",
   completion:
-    "Una hora por sesión y no tengo ninguna lesión ni restricción",
+    "Una hora por sesión y no tengo dolor al moverme, lesiones recientes, operaciones recientes, restricciones medicas, sintomas durante el ejercicio ni indicaciones profesionales",
 } as const;
 
 test.beforeEach(async ({ page }) => {
@@ -311,6 +311,50 @@ test("a safety-only follow-up preserves the exact requested profile and builds t
       { exact: true },
     ),
   ).toHaveCount(0);
+});
+
+test("collects conversational safety fields incrementally without repeating answered categories", async ({
+  page,
+}) => {
+  test.slow();
+  await page.goto("/crear/chat");
+  await expect(chatComposer(page)).toBeVisible({ timeout: 30_000 });
+
+  await sendChatMessage(
+    page,
+    "Quiero una rutina de hipertrofia. Soy intermedio, quiero entrenar cuatro dias por semana, una hora por sesion, en un gimnasio completo. Quiero priorizar espalda y biceps.",
+  );
+
+  const broadReply = await sendChatMessage(
+    page,
+    "No tengo ninguna restriccion para entrenar.",
+  );
+  await expect(broadReply).toContainText(/restricciones medicas|restricciones médicas/i);
+  await expect(broadReply).toContainText(/dolor al moverte/i);
+  await expect(broadReply).not.toContainText(/¿Tenés dolor, una lesión/i);
+  await expect(page.getByTestId("chat-profile-progress")).toHaveText("83%");
+  const profile = page.locator("details").filter({
+    has: page.getByText("Tu punto de partida", { exact: true }),
+  });
+  await profile.locator("summary").click();
+  await expect(page.getByText(/1 de 6 respuestas confirmadas/i)).toBeVisible();
+
+  await sendChatMessage(page, "No tengo dolor ni sintomas cuando entreno.");
+  await expect(page.getByText(/3 de 6 respuestas confirmadas/i)).toBeVisible();
+
+  await sendChatMessage(page, "No tuve lesiones ni operaciones recientes.");
+  await expect(page.getByText(/5 de 6 respuestas confirmadas/i)).toBeVisible();
+
+  const completionReply = await sendChatMessage(
+    page,
+    "No recibi indicaciones profesionales.",
+    60_000,
+  );
+  await expect(completionReply).toContainText(/validado|validada|Armé/i);
+  await expect(page.getByTestId("chat-profile-progress")).toHaveText("100%");
+  await expect(page.getByTestId("inline-routine")).toBeVisible({
+    timeout: 30_000,
+  });
 });
 
 test("provider failure preserves the request and offers the guided fallback", async ({

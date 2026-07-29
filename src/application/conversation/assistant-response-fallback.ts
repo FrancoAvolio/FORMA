@@ -3,6 +3,9 @@ import {
   type ValidatedAssistantResponseContext,
 } from "../../ai/schemas/assistant-response";
 import type { RequiredRoutineField } from "../../domain/profile/routine-draft";
+import {
+  CONVERSATIONAL_SAFETY_FIELD_LABELS,
+} from "../../domain/safety/conversational-screening";
 import { selectFocusedQuestionFields } from "./routine-turn-state";
 
 const QUESTION_COPY: Record<RequiredRoutineField, string> = {
@@ -61,7 +64,23 @@ const EQUIPMENT_COPY: Readonly<Record<string, string>> = {
 
 function joinedList(values: readonly string[]): string {
   if (values.length <= 1) return values[0] ?? "";
-  return `${values.slice(0, -1).join(", ")} y ${values.at(-1)}`;
+  const last = values.at(-1) ?? "";
+  const conjunction = /^[ií]/u.test(last) ? "e" : "y";
+  return `${values.slice(0, -1).join(", ")} ${conjunction} ${last}`;
+}
+
+function safetyFollowUp(context: ValidatedAssistantResponseContext): string {
+  const missing = context.safetyMissingFields.map(
+    (field) => CONVERSATIONAL_SAFETY_FIELD_LABELS[field],
+  );
+  if (missing.length === 0) return QUESTION_COPY.limitationsConfirmation;
+
+  const answered = context.safetyAnsweredFields.map(
+    (field) => CONVERSATIONAL_SAFETY_FIELD_LABELS[field],
+  );
+  const question = `Para completar la revisión, confirmame también si tenés ${joinedList(missing)}.`;
+  if (answered.length === 0) return question;
+  return `Entendido: registré que no declaraste ${joinedList(answered)}. ${question}`;
 }
 
 function profileAcknowledgement(
@@ -180,7 +199,10 @@ export function composeAssistantFallback(
     context.focusedQuestionFields.length > 0
       ? context.focusedQuestionFields
       : selectFocusedQuestionFields(context.missingFields);
-  const questions = focused.map((field) => QUESTION_COPY[field]).join(" ");
+  const questions =
+    context.safetyAnsweredCount > 0 || context.safetyMissingFields.length > 0
+      ? safetyFollowUp(context)
+      : focused.map((field) => QUESTION_COPY[field]).join(" ");
 
   if (context.latestIntent === "greeting") {
     return questions.length > 0

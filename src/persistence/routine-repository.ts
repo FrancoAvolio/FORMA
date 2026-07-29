@@ -15,6 +15,10 @@ import {
   SafetyScreeningSchema,
   type SafetyScreening,
 } from "@/domain/safety/schemas";
+import {
+  createClearConversationalSafetyScreeningDraft,
+  safetyScreeningToConversationalDraft,
+} from "@/domain/safety/conversational-screening";
 
 import {
   ConversationMessageSchema,
@@ -218,6 +222,9 @@ function migrateV1(
   const currentSafety = value.currentRoutine
     ? {
         signals: [],
+        screeningDraft: safetyScreeningToConversationalDraft(
+          value.currentRoutine.safetyScreening,
+        ),
         screening: value.currentRoutine.safetyScreening,
         result: evaluateRoutineSafety(
           value.currentRoutine.request,
@@ -467,6 +474,9 @@ export class LocalRoutineRepository implements RoutineRepository {
           : "not_confirmed",
         safety: {
           signals: [],
+          screeningDraft: safetyScreeningToConversationalDraft(
+            validatedSafety,
+          ),
           screening: validatedSafety,
           result: evaluateRoutineSafety(validatedRequest, validatedSafety),
         },
@@ -492,6 +502,18 @@ export class LocalRoutineRepository implements RoutineRepository {
 
   async saveConversation(state: ConversationState): Promise<void> {
     const validated = ConversationStateSchema.parse(state);
+    const clearScreening =
+      validated.limitationsConfirmation === "confirmed_none"
+        ? SafetyScreeningSchema.parse({
+            confirmedCurrentStatus: true,
+            painDuringMovement: false,
+            recentInjury: false,
+            recentOperation: false,
+            medicalRestriction: false,
+            symptomsDuringExercise: false,
+            professionalInstructionsAffectTraining: false,
+          })
+        : null;
     await this.updateConversationState((current) => ({
       messages: validated.messages,
       requestDraft: mergeLegacyProfile(
@@ -499,6 +521,16 @@ export class LocalRoutineRepository implements RoutineRepository {
         validated.structuredProfile,
       ),
       limitationsConfirmation: validated.limitationsConfirmation,
+      ...(validated.limitationsConfirmation === "confirmed_none"
+        ? {
+            safety: {
+              ...current.safety,
+              screeningDraft: createClearConversationalSafetyScreeningDraft(),
+              screening: clearScreening,
+              result: null,
+            },
+          }
+        : {}),
     }));
   }
 

@@ -21,6 +21,15 @@ import {
   SafetySignalsListSchema,
   type SafetySignalSchema,
 } from "../../ai/schemas/safety";
+import {
+  createEmptyConversationalSafetyScreeningDraft,
+  deriveConversationalSafetyStatus,
+  deriveMissingSafetyFields,
+  extractConversationalSafetyPatch,
+  mergeConversationalSafetyPatch,
+  type ConversationalSafetyScreeningDraft,
+  type ConversationalSafetyStatus,
+} from "../../domain/safety/conversational-screening";
 import type { z } from "zod";
 
 export const ROUTINE_PARSE_STATUS_VALUES = [
@@ -43,6 +52,9 @@ export type DerivedRoutineTurnResult = {
   status: RoutineParseStatus;
   safetySignals: SafetySignal[];
   assumptions: string[];
+  screeningDraft: ConversationalSafetyScreeningDraft;
+  safetyMissingFields: ReturnType<typeof deriveMissingSafetyFields>;
+  safetyStatus: ConversationalSafetyStatus;
 };
 
 /**
@@ -180,9 +192,14 @@ export function deriveParseStatus(
   requestDraft: RoutineRequestDraft,
   limitationsConfirmation: LimitationsConfirmation,
   safetySignals: readonly SafetySignal[],
+  screeningDraft?: ConversationalSafetyScreeningDraft,
 ): RoutineParseStatus {
   const signals = SafetySignalsListSchema.parse(safetySignals);
-  if (signals.length > 0) {
+  if (
+    signals.length > 0 ||
+    (screeningDraft &&
+      deriveConversationalSafetyStatus(screeningDraft, signals) === "blocked")
+  ) {
     return "unsupported";
   }
   return deriveMissingFields(requestDraft, limitationsConfirmation).length === 0
@@ -198,20 +215,40 @@ export function applyParsedRoutineTurn(
   currentDraft: RoutineRequestDraft,
   currentLimitationsConfirmation: LimitationsConfirmation,
   parsedTurn: ParsedRoutineTurn,
+  options: {
+    rawMessage?: string;
+    screeningDraft?: ConversationalSafetyScreeningDraft;
+  } = {},
 ): DerivedRoutineTurnResult {
+  // Retained in the function signature for callers migrating from the legacy
+  // coarse field; the field-level draft is now authoritative.
+  void currentLimitationsConfirmation;
   const turn = ParsedRoutineTurnSchema.parse(parsedTurn);
   let requestDraft = mergeRoutineRequestPatch(
     currentDraft,
     turn.requestPatch,
   );
-  const limitationsConfirmation = mergeLimitationsConfirmation(
-    currentLimitationsConfirmation,
-    turn.limitationsConfirmation,
+  const currentSafetyDraft =
+    options.screeningDraft ?? createEmptyConversationalSafetyScreeningDraft();
+  const latestSafetyPatch = options.rawMessage
+    ? extractConversationalSafetyPatch(options.rawMessage)
+    : {};
+  const screeningDraft = mergeConversationalSafetyPatch(
+    currentSafetyDraft,
+    latestSafetyPatch,
   );
+  const safetyStatus = deriveConversationalSafetyStatus(
+    screeningDraft,
+    turn.safetySignals,
+  );
+  const limitationsConfirmation: LimitationsConfirmation =
+    safetyStatus === "eligible"
+      ? "confirmed_none"
+      : safetyStatus === "blocked"
+        ? "confirmed_with_limitations"
+        : "not_confirmed";
 
-  if (
-    turn.limitationsConfirmation === "no_limitations"
-  ) {
+  if (safetyStatus === "eligible" && Object.keys(latestSafetyPatch).length > 0) {
     requestDraft = mergeRoutineRequestPatch(requestDraft, { limitations: [] });
   }
 
@@ -228,13 +265,12 @@ export function applyParsedRoutineTurn(
       requestDraft,
       limitationsConfirmation,
     ),
-    status: deriveParseStatus(
-      requestDraft,
-      limitationsConfirmation,
-      turn.safetySignals,
-    ),
+    status: deriveParseStatus(requestDraft, limitationsConfirmation, turn.safetySignals, screeningDraft),
     safetySignals: [...turn.safetySignals],
     assumptions: [...turn.assumptions],
+    screeningDraft,
+    safetyMissingFields: deriveMissingSafetyFields(screeningDraft),
+    safetyStatus,
   };
 }
 

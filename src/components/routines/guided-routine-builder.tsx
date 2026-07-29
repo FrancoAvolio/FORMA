@@ -41,6 +41,12 @@ import {
   SafetyScreeningSchema,
   type SafetyScreening,
 } from "@/domain/safety/schemas";
+import {
+  ConversationalSafetyScreeningDraftSchema,
+  deriveConversationalSafetyStatus,
+  deriveMissingSafetyFields,
+  type ConversationalSafetyScreeningDraft,
+} from "@/domain/safety/conversational-screening";
 import { evaluateRoutineSafety } from "@/domain/safety/evaluate-safety";
 import {
   createBrowserRoutineRepository,
@@ -306,6 +312,15 @@ function screeningToState(screening: SafetyScreening): NullableSafety {
   return { ...screening };
 }
 
+function screeningDraftToState(
+  draft: ConversationalSafetyScreeningDraft,
+): NullableSafety {
+  return {
+    confirmedCurrentStatus: false,
+    ...draft,
+  };
+}
+
 function limitationsConfirmationFor(
   request: RoutineRequest,
   screening: SafetyScreening,
@@ -328,10 +343,40 @@ function canonicalFormPatch(
   safetyCorrectionConfirmed: boolean,
 ) {
   const requestResult = RoutineRequestSchema.safeParse(requestDraft);
-  const screeningResult = SafetyScreeningSchema.safeParse(safety);
+  const screeningDraft = ConversationalSafetyScreeningDraftSchema.parse({
+    painDuringMovement: safety.painDuringMovement,
+    recentInjury: safety.recentInjury,
+    recentOperation: safety.recentOperation,
+    medicalRestriction: safety.medicalRestriction,
+    symptomsDuringExercise: safety.symptomsDuringExercise,
+    professionalInstructionsAffectTraining:
+      safety.professionalInstructionsAffectTraining,
+  });
+  const screeningStatus = deriveConversationalSafetyStatus(
+    screeningDraft,
+    [],
+  );
+  const screeningResult =
+    deriveMissingSafetyFields(screeningDraft).length === 0 &&
+    safety.confirmedCurrentStatus
+      ? SafetyScreeningSchema.safeParse(safety)
+      : { success: false as const };
 
   if (!requestResult.success || !screeningResult.success) {
-    return { requestDraft };
+    const limitationsConfirmation: LimitationsConfirmation =
+      screeningStatus === "blocked"
+        ? "confirmed_with_limitations"
+        : "not_confirmed";
+    return {
+      requestDraft,
+      limitationsConfirmation,
+      safety: {
+        signals: safetySignals,
+        screeningDraft,
+        screening: null,
+        result: null,
+      },
+    };
   }
 
   const request = requestResult.data;
@@ -341,6 +386,7 @@ function canonicalFormPatch(
     requestDraft,
     limitationsConfirmation: limitationsConfirmationFor(request, screening),
     safety: {
+      screeningDraft,
       signals: resolveSafetySignalsAfterManualReview(
         safetySignals,
         assessment,
@@ -394,6 +440,8 @@ export function GuidedRoutineBuilder({
         }
         if (conversationState.safety.screening) {
           setSafety(screeningToState(conversationState.safety.screening));
+        } else {
+          setSafety(screeningDraftToState(conversationState.safety.screeningDraft));
         }
         setSafetySignals(conversationState.safety.signals);
         setSafetyCorrectionConfirmed(false);
@@ -516,6 +564,17 @@ export function GuidedRoutineBuilder({
   const safetyComplete =
     safety.confirmedCurrentStatus &&
     RISK_QUESTIONS.every(([key]) => safety[key] !== null);
+  const safetyAnswered =
+    6 -
+    deriveMissingSafetyFields({
+      painDuringMovement: safety.painDuringMovement,
+      recentInjury: safety.recentInjury,
+      recentOperation: safety.recentOperation,
+      medicalRestriction: safety.medicalRestriction,
+      symptomsDuringExercise: safety.symptomsDuringExercise,
+      professionalInstructionsAffectTraining:
+        safety.professionalInstructionsAffectTraining,
+    }).length;
 
   const generate = async () => {
     setError(null);
@@ -896,6 +955,7 @@ export function GuidedRoutineBuilder({
                 <ShieldCheck aria-hidden="true" />
                 <div>
                   <h3>Chequeo previo obligatorio</h3>
+                  <p>Seguridad: {safetyAnswered} de 6 respuestas confirmadas.</p>
                   <p>Respondé según tu situación actual. No hacemos inferencias médicas.</p>
                 </div>
               </div>

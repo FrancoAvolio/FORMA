@@ -18,6 +18,10 @@ import type {
   SafetyReasonCode,
 } from "../../domain/safety/schemas";
 import { normalizeEquipment } from "../../domain/exercises/normalization";
+import {
+  deriveConversationalSafetyStatus,
+  type ConversationalSafetyScreeningDraft,
+} from "../../domain/safety/conversational-screening";
 import type { z } from "zod";
 
 type SafetySignal = z.output<typeof SafetySignalSchema>;
@@ -336,10 +340,23 @@ export function deriveAssistantSafetyResult(
   confirmation: LimitationsConfirmation,
   safetySignals: readonly SafetySignal[],
   assessment: SafetyAssessment | null = null,
+  screeningDraft: ConversationalSafetyScreeningDraft | null = null,
 ): AssistantSafetyResult {
   const signals = SafetySignalsListSchema.parse(safetySignals);
   if (signals.length > 0) {
     return { status: "unsupported", signals, generationAllowed: false };
+  }
+  if (
+    screeningDraft &&
+    deriveConversationalSafetyStatus(screeningDraft, signals) === "eligible"
+  ) {
+    return { status: "clear", signals: [], generationAllowed: true };
+  }
+  if (
+    screeningDraft &&
+    deriveConversationalSafetyStatus(screeningDraft, signals) === "blocked"
+  ) {
+    return { status: "needs_review", signals: [], generationAllowed: false };
   }
   if (confirmation === "confirmed_none") {
     return { status: "clear", signals: [], generationAllowed: true };

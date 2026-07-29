@@ -7,6 +7,7 @@ import type { RoutineRequest } from "@/domain/profile/routine-request";
 import { createEmptyRoutineRequestDraft } from "@/domain/profile/routine-draft";
 import type { RoutinePlan } from "@/domain/routine/schemas";
 import { evaluateRoutineSafety } from "@/domain/safety/evaluate-safety";
+import { safetyScreeningToConversationalDraft } from "@/domain/safety/conversational-screening";
 import type { SafetyScreening } from "@/domain/safety/schemas";
 import {
   createBrowserRoutineRepository,
@@ -125,6 +126,7 @@ async function seedCanonicalState({
     limitationsConfirmation: "confirmed_none",
     safety: {
       signals: safetySignals,
+      screeningDraft: safetyScreeningToConversationalDraft(clearSafety),
       screening: clearSafety,
       result: evaluateRoutineSafety(canonicalRequest, clearSafety),
     },

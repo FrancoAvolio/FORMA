@@ -1,6 +1,10 @@
 import { describe, expect, it } from "vitest";
 
 import { createEmptyRoutineRequestDraft } from "@/domain/profile/routine-draft";
+import {
+  createEmptyConversationalSafetyScreeningDraft,
+  safetyScreeningToConversationalDraft,
+} from "@/domain/safety/conversational-screening";
 import type { RoutineRequest } from "@/domain/profile/routine-request";
 import type { RoutinePlan } from "@/domain/routine/schemas";
 import type { SafetyScreening } from "@/domain/safety/schemas";
@@ -243,6 +247,7 @@ describe("LocalRoutineRepository", () => {
     const state = await repository.updateRoutineConversationState({
       safety: {
         signals: ["recent_injury"],
+        screeningDraft: createEmptyConversationalSafetyScreeningDraft(),
         screening: safetyScreening,
         result: {
           allowed: true,
@@ -255,6 +260,7 @@ describe("LocalRoutineRepository", () => {
 
     expect(state.safety).toEqual({
       signals: ["recent_injury"],
+      screeningDraft: safetyScreeningToConversationalDraft(safetyScreening),
       screening: null,
       result: null,
     });

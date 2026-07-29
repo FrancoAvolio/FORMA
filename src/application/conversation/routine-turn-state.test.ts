@@ -1,6 +1,10 @@
 import { describe, expect, it } from "vitest";
 
-import { createEmptyRoutineRequestDraft } from "../../domain/profile/routine-draft";
+import {
+  createEmptyRoutineRequestDraft,
+  type LimitationsConfirmation,
+} from "../../domain/profile/routine-draft";
+import type { ConversationalSafetyScreeningDraft } from "../../domain/safety/conversational-screening";
 import { ParsedRoutineTurnSchema } from "../../ai/schemas/routine-request";
 import {
   applyParsedRoutineTurn,
@@ -80,13 +84,21 @@ describe("routine conversation turn state", () => {
       availableEquipment: ["dumbbell", "machine"],
       focusMuscles: ["biceps"],
     });
-    const completed = applyParsedRoutineTurn(draft, "not_confirmed", {
-      intent: "provide_information",
-      requestPatch: {},
-      limitationsConfirmation: "no_limitations",
-      safetySignals: [],
-      assumptions: [],
-    });
+    const completed = applyParsedRoutineTurn(
+      draft,
+      "not_confirmed",
+      {
+        intent: "provide_information",
+        requestPatch: {},
+        limitationsConfirmation: "no_limitations",
+        safetySignals: [],
+        assumptions: [],
+      },
+      {
+        rawMessage:
+          "No tengo dolor, lesiones, operaciones, restricciones médicas, síntomas ni indicaciones profesionales.",
+      },
+    );
 
     expect(completed.status).toBe("complete");
     expect(completed.completionPercentage).toBe(100);
@@ -107,10 +119,71 @@ describe("routine conversation turn state", () => {
         safetySignals: [],
         assumptions: [],
       },
+      { screeningDraft: completed.screeningDraft },
     );
     expect(corrected.requestDraft.daysPerWeek).toBe(3);
     expect(corrected.requestDraft.goal).toBe("hypertrophy");
     expect(corrected.status).toBe("complete");
+  });
+
+  it("accepts only the deterministic field when the model claims a broad all-clear", () => {
+    const result = applyParsedRoutineTurn(
+      createEmptyRoutineRequestDraft(),
+      "not_confirmed",
+      {
+        intent: "provide_information",
+        requestPatch: {},
+        limitationsConfirmation: "no_limitations",
+        safetySignals: [],
+        assumptions: [],
+      },
+      {
+        rawMessage: "No tengo dolor.",
+      },
+    );
+
+    expect(result.screeningDraft).toMatchObject({
+      painDuringMovement: false,
+      recentInjury: null,
+      recentOperation: null,
+      medicalRestriction: null,
+    });
+    expect(result.safetyMissingFields).toHaveLength(5);
+    expect(result.limitationsConfirmation).toBe("not_confirmed");
+  });
+
+  it("merges a conversational safety sequence without repeating answered fields", () => {
+    const messages = [
+      "No tengo ninguna restricción para entrenar.",
+      "No tengo dolor ni síntomas cuando entreno.",
+      "No tuve lesiones ni operaciones recientes.",
+      "No recibí indicaciones profesionales.",
+    ];
+    let draft = createEmptyRoutineRequestDraft();
+    let screeningDraft: ConversationalSafetyScreeningDraft | undefined;
+    let confirmation: LimitationsConfirmation = "not_confirmed";
+    let latest;
+    for (const message of messages) {
+      latest = applyParsedRoutineTurn(
+        draft,
+        confirmation,
+        {
+          intent: "provide_information",
+          requestPatch: {},
+          limitationsConfirmation: "unknown",
+          safetySignals: [],
+          assumptions: [],
+        },
+        { rawMessage: message, screeningDraft },
+      );
+      draft = latest.requestDraft;
+      screeningDraft = latest.screeningDraft;
+      confirmation = latest.limitationsConfirmation;
+    }
+
+    expect(latest?.safetyMissingFields).toEqual([]);
+    expect(latest?.safetyStatus).toBe("eligible");
+    expect(latest?.limitationsConfirmation).toBe("confirmed_none");
   });
 
   it("uses null as an explicit clear operation", () => {

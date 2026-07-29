@@ -5,6 +5,7 @@ import {
   applyParsedRoutineTurn,
   toCompleteRoutineRequest,
 } from "../../application/conversation/routine-turn-state";
+import { reconcileParsedTurnSafety } from "../../application/conversation/deterministic-safety";
 import {
   completeParseInput,
   assistantResponseInput,
@@ -20,11 +21,17 @@ export function describeAiProviderContract(
 ): void {
   describe(`${name} AiProvider contract`, () => {
     it("returns a schema-valid request that converts to the domain contract", async () => {
-      const turn = await createProvider().parseRoutineTurn(completeParseInput);
+      const rawTurn = await createProvider().parseRoutineTurn(completeParseInput);
+      const turn = reconcileParsedTurnSafety(
+        rawTurn,
+        completeParseInput.message,
+        { hasCurrentRoutine: false },
+      );
       const result = applyParsedRoutineTurn(
         createEmptyRoutineRequestDraft(),
         "not_confirmed",
         turn,
+        { rawMessage: completeParseInput.message },
       );
       expect(result.status).toBe("complete");
       expect(

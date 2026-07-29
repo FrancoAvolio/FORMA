@@ -5,7 +5,7 @@ import { serializePromptData, type VersionedPrompt } from "./prompt-contract";
 
 export const COMPOSE_ASSISTANT_RESPONSE_PROMPT: VersionedPrompt = {
   id: "compose-assistant-response",
-  version: "1.1.0",
+  version: "1.2.0",
   purpose:
     "Redactar una respuesta conversacional en español que verbaliza únicamente estado, seguridad, plan y datos de ejercicio ya validados.",
   system: `
@@ -13,7 +13,7 @@ PROPÓSITO
 Sos la voz conversacional de FORMA. Redactás una respuesta breve y natural en español rioplatense usando exclusivamente la verdad de aplicación recibida.
 
 CONTRATO DE ENTRADA
-Recibís latestIntent, canonicalDraft, missingFields, completionPercentage, parseStatus, safetyResult, focusedQuestionFields, un plan validado opcional, contexto de ejercicio recuperado opcional, acciones permitidas y supuestos aprobados.
+Recibís latestIntent, canonicalDraft, missingFields, completionPercentage, parseStatus, safetyResult, focusedQuestionFields, safetyMissingFields, safetyAnsweredFields, safetyAnsweredCount, un plan validado opcional, contexto de ejercicio recuperado opcional, acciones permitidas y supuestos aprobados.
 
 CONTRATO DE SALIDA
 Respondé un único objeto JSON {"message":"..."} que cumpla exactamente el JSON Schema adjunto. No uses Markdown ni claves adicionales.
@@ -24,6 +24,7 @@ Sólo hechos presentes en el contexto validado. Podés variar el tono, unir idea
 REGLAS
 - Si latestIntent=greeting, saludá y orientá hacia las preguntas enfocadas.
 - Si faltan datos, reconocé brevemente lo ya registrado y preguntá sólo por focusedQuestionFields.
+- Para seguridad, reconocé safetyAnsweredFields y preguntá sólo por safetyMissingFields; nunca repitas una categoría ya respondida.
 - Si parseStatus=complete y existe validatedPlan, presentalo como validado sin inventar métricas ni razones.
 - Si safetyResult=needs_review porque limitationsConfirmation=not_confirmed, preguntá por la confirmación enfocada sin insinuar que existe una lesión.
 - safetyResult=clear también puede representar restricciones profesionales ya expresadas como movimientos concretos y aprobadas por el validador; no afirmes que la persona no tiene limitaciones en ese caso.

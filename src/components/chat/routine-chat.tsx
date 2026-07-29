@@ -64,7 +64,12 @@ import type { CatalogExercise } from "@/domain/exercises/catalog-exercise";
 import type { RoutineRequest } from "@/domain/profile/routine-request";
 import { createRoutineSeed } from "@/domain/routine/engine/seed";
 import { evaluateRoutineSafety } from "@/domain/safety/evaluate-safety";
-import type { SafetyScreening } from "@/domain/safety/schemas";
+import {
+  CONVERSATIONAL_SAFETY_FIELD_VALUES,
+  deriveMissingSafetyFields,
+  toCompleteSafetyScreening,
+  type ConversationalSafetyScreeningDraft,
+} from "@/domain/safety/conversational-screening";
 import type { ExerciseMedia } from "@/media";
 import {
   createBrowserRoutineRepository,
@@ -223,16 +228,10 @@ function createMessage(
   };
 }
 
-function clearSafetyScreening(): SafetyScreening {
-  return {
-    confirmedCurrentStatus: true,
-    painDuringMovement: false,
-    recentInjury: false,
-    recentOperation: false,
-    medicalRestriction: false,
-    symptomsDuringExercise: false,
-    professionalInstructionsAffectTraining: false,
-  };
+function safetyAnsweredCount(
+  draft: ConversationalSafetyScreeningDraft,
+): number {
+  return 6 - deriveMissingSafetyFields(draft).length;
 }
 
 function isAiErrorCode(value: unknown): value is AiErrorCode {
@@ -386,6 +385,15 @@ function composeContext(options: {
     focusedQuestionFields: selectFocusedQuestionFields(
       options.state.missingFields,
     ),
+    safetyMissingFields: deriveMissingSafetyFields(
+      options.state.safety.screeningDraft,
+    ),
+    safetyAnsweredFields: CONVERSATIONAL_SAFETY_FIELD_VALUES.filter(
+      (field) => options.state.safety.screeningDraft[field] !== null,
+    ),
+    safetyAnsweredCount: safetyAnsweredCount(
+      options.state.safety.screeningDraft,
+    ),
     validatedPlan: options.plan,
     exerciseContext:
       options.exerciseContext === undefined
@@ -438,7 +446,10 @@ function profileRows(state: RoutineConversationState) {
       key: "limitationsConfirmation",
       label: REQUIRED_LABELS.limitationsConfirmation,
       value:
-        state.limitationsConfirmation === "confirmed_none"
+        safetyAnsweredCount(state.safety.screeningDraft) > 0 &&
+        state.limitationsConfirmation === "not_confirmed"
+          ? `${safetyAnsweredCount(state.safety.screeningDraft)} de 6 respuestas confirmadas`
+          : state.limitationsConfirmation === "confirmed_none"
           ? "Sin dolor ni restricciones declaradas"
           : state.limitationsConfirmation === "confirmed_with_limitations"
             ? "Requiere revisión"
@@ -661,6 +672,10 @@ export function RoutineChat({
         baseState.requestDraft,
         baseState.limitationsConfirmation,
         parsedTurn,
+        {
+          rawMessage: text,
+          screeningDraft: baseState.safety.screeningDraft,
+        },
       );
       const safetySignals = [
         ...new Set([...baseState.safety.signals, ...result.safetySignals]),
@@ -676,15 +691,15 @@ export function RoutineChat({
         result.limitationsConfirmation,
         safetySignals,
         retainedSafetyAssessment,
+        result.screeningDraft,
       );
       const completeRequest = toCompleteRoutineRequest(
         result.requestDraft,
         result.limitationsConfirmation,
       );
       const screening = assistantSafety.generationAllowed
-        ? result.limitationsConfirmation === "confirmed_none"
-          ? clearSafetyScreening()
-          : baseState.safety.screening
+        ? toCompleteSafetyScreening(result.screeningDraft, safetySignals) ??
+          baseState.safety.screening
         : null;
       const safetyAssessment =
         completeRequest && screening
@@ -700,6 +715,7 @@ export function RoutineChat({
         limitationsConfirmation: result.limitationsConfirmation,
         safety: {
           signals: safetySignals,
+          screeningDraft: result.screeningDraft,
           screening,
           result: safetyAssessment,
         },
@@ -751,6 +767,7 @@ export function RoutineChat({
           working = await commit({
             safety: {
               signals: blockedSignals,
+              screeningDraft: working.safety.screeningDraft,
               screening: null,
               result: null,
             },
@@ -930,6 +947,7 @@ export function RoutineChat({
         latestState.limitationsConfirmation,
         latestState.safety.signals,
         latestState.safety.result,
+        latestState.safety.screeningDraft,
       );
       const context = composeContext({
         result,

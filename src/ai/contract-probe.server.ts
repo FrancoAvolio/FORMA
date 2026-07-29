@@ -74,7 +74,7 @@ export async function runAiProviderContractProbe(
       name: "complete_request",
       run: async () => {
         const message =
-          "Soy intermedio. Quiero hipertrofia cuatro días, 45 minutos por sesión, en gimnasio con mancuernas y máquinas. Evito peso muerto. Confirmo que no tengo dolor, lesiones, síntomas ni restricciones.";
+          "Soy intermedio. Quiero hipertrofia cuatro días, 45 minutos por sesión, en gimnasio con mancuernas y máquinas. Evito peso muerto. Confirmo que no tengo dolor al moverme, lesiones recientes, operaciones recientes, restricciones médicas, síntomas durante el ejercicio ni indicaciones profesionales.";
         const turn = await provider.parseRoutineTurn({
           message,
           locale: "es-AR",
@@ -87,6 +87,7 @@ export async function runAiProviderContractProbe(
           createEmptyRoutineRequestDraft(),
           "not_confirmed",
           reconciledTurn,
+          { rawMessage: message },
         );
         return (
           result.status === "complete" &&
@@ -129,6 +130,7 @@ export async function runAiProviderContractProbe(
           createEmptyRoutineRequestDraft(),
           "not_confirmed",
           profileTurn,
+          { rawMessage: profileMessage },
         );
         const safetyMessage =
           "No tengo dolor al moverme, lesiones recientes, operaciones recientes, restricciones médicas, síntomas durante el ejercicio ni indicaciones profesionales que afecten mi entrenamiento.";
@@ -147,6 +149,10 @@ export async function runAiProviderContractProbe(
           profileResult.requestDraft,
           profileResult.limitationsConfirmation,
           safetyTurn,
+          {
+            rawMessage: safetyMessage,
+            screeningDraft: profileResult.screeningDraft,
+          },
         );
 
         return (

@@ -137,6 +137,7 @@ describe("deterministic conversational safety", () => {
       profile,
       "not_confirmed",
       reconciled,
+      { rawMessage: message },
     );
 
     expect(reconciled).toMatchObject({

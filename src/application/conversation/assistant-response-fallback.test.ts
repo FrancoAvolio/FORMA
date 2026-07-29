@@ -24,6 +24,9 @@ const baseContext: ValidatedAssistantResponseContext = {
     generationAllowed: false,
   },
   focusedQuestionFields: ["limitationsConfirmation", "goal"],
+  safetyMissingFields: [],
+  safetyAnsweredFields: [],
+  safetyAnsweredCount: 0,
   validatedPlan: null,
   exerciseContext: null,
   allowedNextActions: [
@@ -107,5 +110,28 @@ describe("deterministic assistant fallback", () => {
     expect(message).toContain("no voy a generar una rutina");
     expect(message).toContain("catálogo");
     expect(message).not.toMatch(/diagnóstico|rehabilitación/i);
+  });
+
+  it("acknowledges a partial safety answer and asks only unresolved categories", () => {
+    const message = composeAssistantFallback({
+      ...baseContext,
+      latestIntent: "provide_information",
+      missingFields: ["limitationsConfirmation"],
+      completionPercentage: 83,
+      focusedQuestionFields: ["limitationsConfirmation"],
+      safetyMissingFields: [
+        "painDuringMovement",
+        "recentInjury",
+        "recentOperation",
+        "symptomsDuringExercise",
+        "professionalInstructionsAffectTraining",
+      ],
+      safetyAnsweredFields: ["medicalRestriction"],
+      safetyAnsweredCount: 1,
+    });
+
+    expect(message).toContain("restricciones médicas");
+    expect(message).toContain("dolor al moverte");
+    expect(message).not.toContain("restricción para entrenar");
   });
 });

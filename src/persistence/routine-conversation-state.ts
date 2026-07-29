@@ -30,6 +30,13 @@ import {
   type SafetyAssessment,
   type SafetyScreening,
 } from "@/domain/safety/schemas";
+import {
+  ConversationalSafetyScreeningDraftSchema,
+  createEmptyConversationalSafetyScreeningDraft,
+  deriveConversationalSafetyStatus,
+  safetyScreeningToConversationalDraft,
+  type ConversationalSafetyScreeningDraft,
+} from "@/domain/safety/conversational-screening";
 
 export const CONVERSATION_MESSAGE_ROLES = ["user", "assistant"] as const;
 
@@ -82,6 +89,9 @@ export const SafetyAssessmentSnapshotSchema = z
 export const ConversationSafetyStateSchema = z
   .object({
     signals: SafetySignalsListSchema,
+    screeningDraft: ConversationalSafetyScreeningDraftSchema
+      .optional()
+      .default(createEmptyConversationalSafetyScreeningDraft()),
     screening: SafetyScreeningSchema.nullable(),
     result: SafetyAssessmentSnapshotSchema.nullable(),
   })
@@ -89,12 +99,18 @@ export const ConversationSafetyStateSchema = z
 
 export type ConversationSafetyState = {
   signals: z.output<typeof SafetySignalsListSchema>;
+  screeningDraft: ConversationalSafetyScreeningDraft;
   screening: SafetyScreening | null;
   result: SafetyAssessment | null;
 };
 
 export function createEmptyConversationSafetyState(): ConversationSafetyState {
-  return { signals: [], screening: null, result: null };
+  return {
+    signals: [],
+    screeningDraft: createEmptyConversationalSafetyScreeningDraft(),
+    screening: null,
+    result: null,
+  };
 }
 
 const AiProviderErrorSnapshotSchema = z
@@ -209,12 +225,20 @@ function normalizeSafetyState(
   state: z.output<typeof ConversationSafetyStateSchema>,
 ): ConversationSafetyState {
   const parsed = ConversationSafetyStateSchema.parse(state);
-  if (parsed.signals.length === 0) return parsed;
+  const screeningDraft = parsed.screening
+    ? safetyScreeningToConversationalDraft(parsed.screening)
+    : parsed.screeningDraft;
+  if (parsed.signals.length === 0) return { ...parsed, screeningDraft };
 
   // A screening/result can become stale after a later conversational safety
   // signal. Persist the plan snapshot, but never persist an eligible current
   // safety result beside blocking evidence.
-  return { signals: parsed.signals, screening: null, result: null };
+  return {
+    signals: parsed.signals,
+    screeningDraft,
+    screening: null,
+    result: null,
+  };
 }
 
 /**
@@ -226,9 +250,23 @@ export const RoutineConversationStateSchema =
   RoutineConversationStateInputSchema.transform(
     (value): RoutineConversationState => {
       const requestDraft = RoutineRequestDraftSchema.parse(value.requestDraft);
-      const limitationsConfirmation = LimitationsConfirmationSchema.parse(
-        value.limitationsConfirmation,
+      const safetyDraft = value.safety.screening
+        ? safetyScreeningToConversationalDraft(value.safety.screening)
+        : value.safety.screeningDraft;
+      const safetyStatus = deriveConversationalSafetyStatus(
+        safetyDraft,
+        value.safety.signals,
       );
+      const effectiveSafetyStatus =
+        value.safety.screening === null && safetyStatus === "eligible"
+          ? "pending"
+          : safetyStatus;
+      const limitationsConfirmation: LimitationsConfirmation =
+        effectiveSafetyStatus === "eligible"
+          ? "confirmed_none"
+          : effectiveSafetyStatus === "blocked"
+            ? "confirmed_with_limitations"
+            : "not_confirmed";
       const messages = value.messages.map((message) => ({ ...message }));
       const providerState = normalizeProviderState(value.providerState);
       const retryMetadata =

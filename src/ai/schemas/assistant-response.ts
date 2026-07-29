@@ -11,6 +11,7 @@ import type { AiRequestControls } from "./common";
 import { ValidatedPlanSummarySchema } from "./explanation";
 import { RoutineTurnIntentSchema } from "./routine-request";
 import { SafetySignalsListSchema } from "./safety";
+import { ConversationalSafetyFieldSchema } from "../../domain/safety/conversational-screening";
 
 export const ASSISTANT_NEXT_ACTION_VALUES = [
   "ask_missing_information",
@@ -83,6 +84,15 @@ export const ComposeAssistantResponseInputDataSchema = z
     parseStatus: z.enum(["complete", "needs_input", "unsupported"]),
     safetyResult: AssistantSafetyResultSchema,
     focusedQuestionFields: z.array(RequiredRoutineFieldSchema).max(2),
+    safetyMissingFields: z
+      .array(ConversationalSafetyFieldSchema)
+      .max(6)
+      .default([]),
+    safetyAnsweredFields: z
+      .array(ConversationalSafetyFieldSchema)
+      .max(6)
+      .default([]),
+    safetyAnsweredCount: z.number().int().min(0).max(6).default(0),
     validatedPlan: ValidatedPlanSummarySchema.nullable().default(null),
     exerciseContext: GroundedExerciseResponseContextSchema.nullable().default(
       null,
