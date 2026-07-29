@@ -1107,7 +1107,7 @@ export function RoutineChat({
       window.setTimeout(() => composerRef.current?.focus(), 0);
     } catch {
       setGenerationError(
-        "No pudimos iniciar una conversaciÃ³n nueva. Conservamos el estado actual.",
+        "No pudimos iniciar una conversación nueva. Conservamos el estado actual.",
       );
     }
   }, [loading]);

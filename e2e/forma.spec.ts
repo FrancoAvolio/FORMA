@@ -272,7 +272,7 @@ test("the Mock conversation builds, modifies, explains, saves, and restores a ro
   expect(await inlineExerciseNames(restoredRoutine)).toEqual(modifiedExercises);
 
   page.once("dialog", (dialog) => void dialog.accept());
-  await page.getByRole("button", { name: "Nueva conversaciÃ³n" }).click();
+  await page.getByRole("button", { name: /Nueva convers/i }).click();
   await expect(page.getByText(/Hola, soy FORMA/).first()).toBeVisible();
   await expect(page.getByTestId("inline-routine")).not.toBeVisible();
   await expect(page.getByTestId("chat-profile-progress")).toHaveText("0%");
