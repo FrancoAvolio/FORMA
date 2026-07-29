@@ -19,11 +19,16 @@ Required attribution:
 
 > © Gym visual — https://gymvisual.com/
 
-FORMA preserves the attribution on every imported media-manifest entry. Any exercise detail that displays this media must show that attribution, and the global attribution screen must repeat it.
+FORMA preserves the attribution on every imported media-manifest entry. Any exercise detail or
+personal routine PDF that displays this media must show that attribution, and the global
+attribution screen must repeat it.
 
-The current binaries are enabled only for local development and private evaluation. They are excluded from public production packages while the licensing review is pending. Cloning the source repository is not treated as a downstream media license.
+The current binaries are enabled in local/private development and in the repository owner's
+explicitly authorized limited personal deployment. That owner decision also allows a static JPG
+thumbnail to be included as contextual material in a personal routine PDF, with watermark and
+attribution intact. It is not permission from Gym Visual and does not resolve public/commercial
+licensing. Cloning the source repository is not treated as a downstream media license.
 
 ## FORMA enrichment
 
 Spanish display names, search aliases, normalization values, programming classifications and substitution groups are FORMA-specific enrichment stored separately under `src/data/curated/`. They do not modify the immutable source records and should not be represented as upstream-verified facts.
-

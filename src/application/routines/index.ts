@@ -1,5 +1,6 @@
 export * from "./edit-routine";
 export * from "./export-routine";
+export * from "./routine-pdf-export";
 export * from "./apply-conversation-modification";
 export * from "./generate-routine";
 export * from "./regenerate-day";

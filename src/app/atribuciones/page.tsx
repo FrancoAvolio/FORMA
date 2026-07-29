@@ -98,6 +98,10 @@ export default function AttributionsPage() {
           <p>
             Cuando la media está habilitada, cada ejercicio conserva la indicación{" "}
             <strong>© Gym visual</strong> junto a la media y respeta la resolución de 180 × 180.
+            Los PDF personales pueden incluir el JPG estático dentro de la explicación del
+            ejercicio, con la misma marca y atribución y con el estado de licencia pendiente
+            visible en la página final; no incluyen los GIF ni ofrecen archivos visuales por
+            separado.
           </p>
           <a
             className={styles.external}

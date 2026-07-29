@@ -25,14 +25,20 @@ intended use.
 - Stage exactly one copy under `/exercises/source-media/{images,videos}/` and keep the source
   repository, `.git` data and duplicate files out of the artifact.
 - Display `© Gym visual — https://gymvisual.com/` whenever a protected asset is shown.
+- Permit a resolved 180×180 JPG to appear inside a user-generated personal routine PDF only when
+  the `owner_authorized_source` deployment mode is active. Keep the original bytes/watermark,
+  show attribution beside the image and repeat the pending-license notice in the PDF.
 - Keep the neutral SVG fallback for disabled, missing or unrecognized media.
 
 ## Current prohibited project behavior
 
-- Copy protected binaries anywhere except the exact owner-authorized OpenNext static namespace.
+- Copy protected binaries anywhere except the exact owner-authorized OpenNext static namespace
+  or the explicitly authorized in-browser personal PDF representation described above.
 - Treat the upstream MIT license as a media license.
 - Remove watermarks or attribution.
-- Alter, upscale, regenerate, or offer the media as standalone downloads.
+- Alter, upscale, regenerate, or offer the media as standalone downloads. A routine PDF may
+  contain the original thumbnail as contextual exercise material; it must not expose a separate
+  media-download action.
 - Ship the remote sample images referenced by the Stitch HTML exports.
 
 ## Launch gate

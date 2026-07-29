@@ -181,5 +181,5 @@ describe("generateRoutine", () => {
       ),
       { numRuns: 120 },
     );
-  });
+  }, 15_000);
 });

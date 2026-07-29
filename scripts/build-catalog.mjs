@@ -164,6 +164,13 @@ const routineCatalog = normalizedRecords
     };
   });
 
+const routineExportDetails = normalizedRecords
+  .filter((record) => metadataById.has(record.id))
+  .map((record) => ({
+    id: record.id,
+    instructionStepsEs: record.instructionStepsEs,
+  }));
+
 const searchOptions = {
   fields: [
     "displayName",
@@ -265,6 +272,12 @@ await atomicJson(`${GENERATED_DIRECTORY}/routine-catalog.json`, {
   schemaVersion: 1,
   datasetCommit: DATASET_SOURCE.commit,
   exercises: routineCatalog,
+});
+await atomicJson(`${GENERATED_DIRECTORY}/routine-export-details.json`, {
+  schemaVersion: 1,
+  datasetCommit: DATASET_SOURCE.commit,
+  sourceAttribution: SOURCE_ATTRIBUTION,
+  exercises: routineExportDetails,
 });
 await atomicJson(`${GENERATED_DIRECTORY}/exercise-index.json`, {
   schemaVersion: 1,

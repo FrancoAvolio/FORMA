@@ -315,3 +315,31 @@ Validation evidence prepared for release:
   accessibility, reduced motion, local protected media and the isolated disabled-media build.
 - Manual screenshots at 1,440 px and 390 px widths confirmed the growing composer, visible count,
   responsive routine actions and explicit session blocks without changing Stitch references.
+
+## 2026-07-29 — Visual PDF routine export
+
+Objective: replace the text-only primary export with a useful, phone-friendly document that
+preserves the validated routine structure, technique instructions and visible media attribution.
+
+- Added a browser-only `@react-pdf/renderer` flow loaded dynamically after `Exportar PDF`; PDF
+  rendering and image work do not run in the Cloudflare Worker or delay the initial routine UI.
+- Extended the deterministic catalog build with `routine-export-details.json`, a 101-KB artifact
+  containing Spanish instruction steps for the 156 generation-approved exercises. The exporter
+  selects only IDs present in the plan and never loads/parses the 3.2-MB detail catalog.
+- Added a pure PDF DTO that combines the validated plan, curated catalog, resolved media and
+  instruction subset without introducing AI or vendor dependencies into domain logic.
+- Added an A4 document with a FORMA cover, weekly index, bookmarks, one section per day, visible
+  preparation/closure blocks and exercise cards containing JPG, prescription, RIR/RPE, reasons,
+  notes, complete Spanish steps and a clickable detail/demonstration link.
+- Added a final warnings, assumptions, sources, attribution and pending-license section. Static
+  thumbnails keep their original bytes and watermark; GIFs are not embedded and source media is
+  not exposed as a standalone download.
+- Kept TXT as a deliberately secondary lightweight option. PDF preparation and native sharing
+  are separate actions so the eventual `Compartir PDF` click retains a fresh mobile user gesture;
+  `Guardar PDF` remains the universal fallback.
+- Extended the repository owner's limited personal-use media authorization specifically to
+  contextual JPG thumbnails in personal routine PDFs. This is still not represented as Gym
+  Visual permission or public/commercial license clearance.
+- Added pure-model, generated-detail, image-fetch/fallback, PDF binary, native share/download and
+  browser E2E assertions. Disabled media still produces a valid PDF with designed placeholders.
+- `docs/design-reference/**`, source records and imported JPG/GIF binaries remain unchanged.

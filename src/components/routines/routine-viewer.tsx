@@ -248,6 +248,7 @@ export function RoutineViewer({
           <ExportRoutineButton
             plan={current.plan}
             catalog={catalog}
+            media={media}
             disabled={safetyBlocked}
           />
           <button className="button button-primary" type="button" onClick={() => void save()} disabled={safetyBlocked}>

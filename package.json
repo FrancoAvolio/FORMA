@@ -46,6 +46,7 @@
     "validate": "npm run validate:references && npm run validate:utf8 && npm run validate:dataset && npm run validate:curated && npm run validate:media && npm run validate:generated && npm run typecheck && npm run lint && npm run test && npm run build && npm run validate:media"
   },
   "dependencies": {
+    "@react-pdf/renderer": "^4.5.1",
     "ajv": "^8.20.0",
     "ajv-formats": "^3.0.1",
     "geist": "^1.7.2",

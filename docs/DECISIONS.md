@@ -230,13 +230,27 @@ it does not weaken generation validation. A changed session duration forces a co
 deterministic rebuild. Earlier persisted plans remain readable through missing optional blocks and
 their stored engine version.
 
-## ADR-028 — Portable routine export is text-first; demonstrations stay user-controlled
+## ADR-028 — Portable routine export is PDF-first; demonstrations stay user-controlled
 
-“Exportar al teléfono” builds a UTF-8 text representation locally, including prescriptions,
-visible session blocks, detail-page links and the attribution-page link. On supported phones it
-uses the native Web Share sheet with a `.txt` file, falls back to sharing text, and finally to a
-normal browser download. It never embeds or packages protected image/GIF binaries.
+“Exportar PDF” builds a real paginated PDF in the browser, with a cover, weekly summary, one
+bookmarked section per day, visible session blocks, prescriptions, deterministic selection
+reasons, complete Spanish instruction steps, static JPG thumbnails, exercise links, warnings,
+assumptions and a final attribution/licensing section. The PDF renderer and its 156-record,
+101-KB instruction artifact load only after the export action; the initial routine UI does not
+ship the 3.2-MB detail catalog and Cloudflare does not render the document.
 
-Routine cards retain a separate `Ver ficha` link and add an explicit inline JPG/GIF toggle. At
-most one animation is active per routine surface; no list animation autoplays or restores itself
-after navigation. The resolved dimensions, watermark and visible attribution remain unchanged.
+Only resolved same-origin JPG/PNG thumbnails are fetched, with at most four concurrent requests.
+A missing or disabled image becomes a designed placeholder and does not invalidate the PDF. GIF
+animations are never embedded: every card links back to the exercise page for the user-controlled
+demonstration. Because mobile native sharing requires a fresh user action, generation and
+sharing are separate steps: after preparation, the person explicitly chooses `Guardar PDF` or
+`Compartir PDF`. UTF-8 TXT remains a secondary lightweight alternative.
+
+The repository owner's limited personal-use authorization is extended specifically to JPGs
+rendered inside personal routine PDFs. Original pixels/watermarks and per-image attribution stay
+intact; the final page states that public/commercial licensing remains pending and the export
+does not offer source media as standalone downloads.
+
+Routine cards retain a separate `Ver ficha` link and an explicit inline JPG/GIF toggle. At most
+one animation is active per routine surface; no list animation autoplays or restores itself after
+navigation. The resolved dimensions, watermark and visible attribution remain unchanged.

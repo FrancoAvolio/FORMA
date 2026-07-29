@@ -36,10 +36,11 @@ export default function PrivacyPage() {
             los datos del sitio desde el navegador produce el mismo resultado.
           </p>
           <p>
-            Al exportar una rutina, FORMA genera un archivo de texto dentro de este
-            navegador. En un teléfono se abre el menú nativo para que elijas el destino; si
-            no está disponible, el archivo se descarga localmente. FORMA no sube esa copia a
-            un servidor propio.
+            Al exportar una rutina, FORMA genera el PDF completo dentro de este navegador y
+            descarga las imágenes estáticas necesarias desde el mismo sitio. Después elegís
+            si querés guardarlo o compartirlo con el menú nativo del teléfono; la versión TXT
+            sigue disponible como alternativa liviana. FORMA no sube esa copia a un servidor
+            propio.
           </p>
         </section>
 

@@ -322,6 +322,7 @@ export function ConversationRoutinePreview({
           <ExportRoutineButton
             plan={plan}
             catalog={catalog}
+            media={media}
             disabled={!actions}
           />
         </div>

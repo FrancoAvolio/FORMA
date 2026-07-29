@@ -377,8 +377,9 @@ test("the Mock conversation builds, modifies, explains, saves, and restores a ro
   await expect(page.getByRole("button", { name: /Abrir rutina/ })).toBeVisible();
 });
 
-test("routine export downloads a portable text file when native sharing is unavailable", async ({
+test("routine export creates a rich PDF and keeps TXT as a lightweight alternative", async ({
   page,
+  isMobile,
 }) => {
   test.slow();
   await page.addInitScript(() => {
@@ -395,14 +396,47 @@ test("routine export downloads a portable text file when native sharing is unava
 
   const routineTitle = await page.getByRole("heading", { level: 1 }).textContent();
   expect(routineTitle).toBeTruthy();
-  const downloadPromise = page.waitForEvent("download");
-  await page.getByRole("button", { name: "Exportar al teléfono" }).click();
-  const download = await downloadPromise;
+  await page.getByRole("button", { name: "Exportar PDF" }).click();
+  await expect(
+    page.getByRole("status").filter({
+      hasText: "PDF listo. Ahora podés guardarlo o compartirlo.",
+    }),
+  ).toBeVisible({ timeout: 60_000 });
+  if (isMobile) {
+    await expect(page.getByRole("button", { name: "Guardar PDF" })).toBeVisible();
+    const horizontalOverflow = await page.evaluate(
+      () => document.documentElement.scrollWidth - window.innerWidth,
+    );
+    expect(horizontalOverflow).toBeLessThanOrEqual(1);
+  }
 
-  expect(download.suggestedFilename()).toMatch(/^forma-[a-z0-9-]+\.txt$/);
-  const downloadedPath = await download.path();
-  expect(downloadedPath).not.toBeNull();
-  const exportedText = await readFile(downloadedPath!, "utf8");
+  const pdfDownloadPromise = page.waitForEvent("download");
+  await page.getByRole("button", { name: "Guardar PDF" }).click();
+  const pdfDownload = await pdfDownloadPromise;
+  expect(pdfDownload.suggestedFilename()).toMatch(/^forma-[a-z0-9-]+\.pdf$/);
+  const pdfPath = await pdfDownload.path();
+  expect(pdfPath).not.toBeNull();
+  const exportedPdf = await readFile(pdfPath!);
+  const pdfSource = exportedPdf.toString("latin1");
+  expect(exportedPdf.subarray(0, 5).toString("latin1")).toBe("%PDF-");
+  expect(exportedPdf.byteLength).toBeGreaterThan(50_000);
+  expect(pdfSource).toContain("/Subtype /Image");
+  expect(pdfSource).toContain("/Subtype /Link");
+  expect(pdfSource.match(/\/Type \/Page\b/g)?.length ?? 0).toBeGreaterThanOrEqual(6);
+  expect(pdfSource).not.toContain(".gif");
+  await expect(
+    page.getByRole("status").filter({
+      hasText: "Descargamos tu rutina en PDF.",
+    }),
+  ).toBeVisible();
+
+  const textDownloadPromise = page.waitForEvent("download");
+  await page.getByRole("button", { name: "Descargar versión TXT" }).click();
+  const textDownload = await textDownloadPromise;
+  expect(textDownload.suggestedFilename()).toMatch(/^forma-[a-z0-9-]+\.txt$/);
+  const textPath = await textDownload.path();
+  expect(textPath).not.toBeNull();
+  const exportedText = await readFile(textPath!, "utf8");
   expect(exportedText).toContain("FORMA · RUTINA VALIDADA");
   expect(exportedText).toContain(routineTitle!);
   expect(exportedText).toContain("DÍA 1");
@@ -412,7 +446,7 @@ test("routine export downloads a portable text file when native sharing is unava
   );
   await expect(
     page.getByRole("status").filter({
-      hasText: "Descargamos la rutina en formato de texto.",
+      hasText: "Descargamos la versión liviana en TXT.",
     }),
   ).toBeVisible();
 });
@@ -713,6 +747,34 @@ test("disabled-media fixture keeps the placeholder layout usable", async ({ page
   ).toBeVisible();
   await expect(page.getByRole("button", { name: /Ver demostraci/ })).toHaveCount(0);
   await expect(page.getByLabel(/Atribuci/)).toContainText("licencia separada");
+});
+
+test("disabled-media fixture exports a valid PDF with designed placeholders", async ({
+  page,
+}) => {
+  test.skip(
+    process.env.PLAYWRIGHT_EXPECT_DISABLED_MEDIA !== "true",
+    "Point PLAYWRIGHT_BASE_URL at a server with EXERCISE_MEDIA_MODE=disabled and set PLAYWRIGHT_EXPECT_DISABLED_MEDIA=true.",
+  );
+  test.slow();
+
+  await generateWithGuidedForm(page);
+  await page.getByRole("button", { name: "Exportar PDF" }).click();
+  await expect(
+    page.getByRole("status").filter({ hasText: "PDF listo" }),
+  ).toBeVisible({ timeout: 60_000 });
+
+  const downloadPromise = page.waitForEvent("download");
+  await page.getByRole("button", { name: "Guardar PDF" }).click();
+  const download = await downloadPromise;
+  const downloadedPath = await download.path();
+  expect(downloadedPath).not.toBeNull();
+  const exportedPdf = await readFile(downloadedPath!);
+  const source = exportedPdf.toString("latin1");
+  expect(exportedPdf.subarray(0, 5).toString("latin1")).toBe("%PDF-");
+  expect(exportedPdf.byteLength).toBeGreaterThan(20_000);
+  expect(source).not.toContain("/Subtype /Image");
+  expect(source).not.toContain(".gif");
 });
 
 test("mobile project exposes the persistent core navigation", async ({ page, isMobile }) => {
