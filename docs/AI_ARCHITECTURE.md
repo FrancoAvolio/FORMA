@@ -203,7 +203,7 @@ AI_PROVIDER=ollama
 AI_TIMEOUT_MS=60000
 AI_DEBUG_LOGS=false
 OLLAMA_BASE_URL=http://127.0.0.1:11434
-OLLAMA_MODEL=qwen3:1.7b
+OLLAMA_MODEL=qwen3:4b
 ```
 
 ```env
@@ -228,9 +228,10 @@ require no local model, Cloudflare account, credentials, or paid inference.
 
 Recorded on 2026-07-28:
 
-- Real Ollama `qwen3:1.7b`: 7/7 semantic contract checks passed in one repetition, including
+- Real Ollama `qwen3:4b`: 7/7 semantic contract checks passed in three repetitions, including
   preservation of an explicit profile across a separate safety-confirmation turn.
-- Ollama `qwen3:4b`: not installed and not downloaded automatically; no result is claimed.
+- Ollama `qwen3:1.7b`: previously passed the same 7/7 check matrix and remains a smaller
+  fallback when installed.
 - Simulated Cloudflare binding: 11/11 tests passed without inference usage.
 - OpenNext build and Wrangler deployment dry-run passed, and the packaged artifact scan found zero
   protected Gym Visual binaries.

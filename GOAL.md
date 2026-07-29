@@ -228,7 +228,7 @@ Use Ollama as the default AI provider during local development.
 Default model:
 
 ```text
-qwen3:1.7b
+qwen3:4b
 ```
 
 Default API URL:
@@ -242,7 +242,7 @@ Development environment:
 ```env
 AI_PROVIDER=ollama
 OLLAMA_BASE_URL=http://127.0.0.1:11434
-OLLAMA_MODEL=qwen3:1.7b
+OLLAMA_MODEL=qwen3:4b
 ```
 
 The application must connect to Ollama only through server-side code.
@@ -270,8 +270,8 @@ docs/LOCAL_AI_SETUP.md
 The document must include:
 
 ```bash
-ollama pull qwen3:1.7b
-ollama run qwen3:1.7b
+ollama pull qwen3:4b
+ollama run qwen3:4b
 ```
 
 The application must show an understandable state when Ollama is not installed or not running:
@@ -456,7 +456,7 @@ Example:
 ```env
 AI_PROVIDER=ollama
 OLLAMA_BASE_URL=http://127.0.0.1:11434
-OLLAMA_MODEL=qwen3:1.7b
+OLLAMA_MODEL=qwen3:4b
 ```
 
 ### Cloudflare deployment
@@ -1788,7 +1788,7 @@ The product must already be useful without AI at the end of this phase.
 ### Phase 6 — Ollama
 
 * Implement Ollama provider.
-* Use `qwen3:1.7b`.
+* Use `qwen3:4b`.
 * Add structured output.
 * Add local setup documentation.
 * Add missing-Ollama UI state.

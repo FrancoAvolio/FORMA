@@ -25,6 +25,17 @@ export type AssistantSafetyResult = z.output<typeof AssistantSafetyResultSchema>
 
 type PatchField = keyof RoutineRequestPatch;
 
+const SPANISH_NUMBERS: Readonly<Record<string, number>> = {
+  un: 1,
+  uno: 1,
+  una: 1,
+  dos: 2,
+  tres: 3,
+  cuatro: 4,
+  cinco: 5,
+  seis: 6,
+};
+
 const CANONICAL_EQUIPMENT = new Set([
   "body_weight",
   "dumbbell",
@@ -69,6 +80,95 @@ const PROFILE_FIELD_EVIDENCE: Readonly<Record<PatchField, RegExp>> = {
     /\b(?:dolor|lesion|operacion|cirugia|restriccion|limitacion|sintoma|indicacion profesional|rehabilit)\b/u,
   notes: /\b(?:nota|aclaracion|tene en cuenta|ten en cuenta|anota|recorda)\b/u,
 };
+
+function extractDeterministicRequestPatch(
+  normalized: string,
+): RoutineRequestPatch {
+  const patch: Record<string, unknown> = {};
+  if (/\b(?:hipertrofi\w*|ganar (?:masa|musculo)|crecer)\b/u.test(normalized)) {
+    patch.goal = "hypertrophy";
+  } else if (/\bfuerza\b/u.test(normalized)) {
+    patch.goal = "strength";
+  } else if (/\bresistencia muscular\b/u.test(normalized)) {
+    patch.goal = "muscular_endurance";
+  } else if (/\b(?:estado fisico|fitness general)\b/u.test(normalized)) {
+    patch.goal = "general_fitness";
+  }
+
+  const experience = normalized.match(
+    /\b(principiante|intermedio|avanzado)\b/u,
+  )?.[1];
+  if (experience) {
+    patch.experience =
+      experience === "principiante"
+        ? "beginner"
+        : experience === "intermedio"
+          ? "intermediate"
+          : "advanced";
+  }
+
+  const days = normalized.match(
+    /\b(\d|un|uno|una|dos|tres|cuatro|cinco|seis)\s+(?:dias?|veces)\b/u,
+  );
+  if (days?.[1]) {
+    const value = Number(days[1]) || SPANISH_NUMBERS[days[1]];
+    if (value >= 1 && value <= 6) patch.daysPerWeek = value;
+  }
+
+  const minutes = normalized.match(/\b(\d{1,3})\s*minutos?\b/u);
+  const hours = normalized.match(
+    /\b(\d|un|uno|una|dos)\s*horas?\b/u,
+  );
+  if (minutes?.[1]) {
+    patch.sessionMinutes = Number(minutes[1]);
+  } else if (hours?.[1]) {
+    const value = Number(hours[1]) || SPANISH_NUMBERS[hours[1]];
+    if (value >= 1 && value <= 2) patch.sessionMinutes = value * 60;
+  }
+
+  if (/\b(?:gimnasio|gym)\b/u.test(normalized)) {
+    patch.trainingLocation = "commercial_gym";
+  } else if (/\b(?:casa|hogar|domicilio)\b/u.test(normalized)) {
+    patch.trainingLocation = "home";
+  }
+
+  const equipmentMentions: ReadonlyArray<readonly [RegExp, string]> = [
+    [/\bmancuernas?\b/u, "dumbbell"],
+    [/\bbarra de dominadas\b/u, "pull_up_bar"],
+    [/\bbarra\b/u, "barbell"],
+    [/\b(?:poleas?|cables?)\b/u, "cable"],
+    [/\bmaquinas?\b/u, "machine"],
+    [/\bsmith\b/u, "smith_machine"],
+    [/\b(?:kettlebells?|pesas? rusas?)\b/u, "kettlebell"],
+    [/\bbandas?\b/u, "resistance_band"],
+    [/\bbanco\b/u, "bench"],
+    [/\bpeso corporal\b/u, "body_weight"],
+  ];
+  const equipment = equipmentMentions
+    .filter(([pattern]) => pattern.test(normalized))
+    .map(([, value]) => value);
+  if (equipment.length > 0) {
+    patch.availableEquipment = [...new Set(equipment)];
+  }
+
+  if (/\b(?:prioriz|enfoc|crecer|ganar)\w*\b/u.test(normalized)) {
+    const muscles: ReadonlyArray<readonly [RegExp, string]> = [
+      [/\bbiceps?\b/u, "biceps"],
+      [/\b(?:espalda|dorsales?)\b/u, "back"],
+      [/\bpecho\b/u, "chest"],
+      [/\bhombros?\b/u, "shoulders"],
+      [/\btriceps?\b/u, "triceps"],
+      [/\b(?:piernas?|cuadriceps)\b/u, "legs"],
+      [/\bgluteos?\b/u, "glutes"],
+    ];
+    const focus = muscles
+      .filter(([pattern]) => pattern.test(normalized))
+      .map(([, value]) => value);
+    if (focus.length > 0) patch.focusMuscles = [...new Set(focus)];
+  }
+
+  return patch as RoutineRequestPatch;
+}
 
 function reconcileRequestPatch(
   requestPatch: RoutineRequestPatch,
@@ -123,6 +223,9 @@ function reconcileRequestPatch(
       if (
         /\b(?:gimnasio|gym)\b.*\b(?:completo|commercial|comercial)\b/u.test(
           normalized,
+        ) ||
+        /\b(?:equipo|equipamiento)\b\s+(?:completo|disponible|total)\b/u.test(
+          normalized,
         )
       ) {
         continue;
@@ -136,7 +239,14 @@ function reconcileRequestPatch(
 
     reconciled[field] = rawValue;
   }
-  return reconciled as RoutineRequestPatch;
+  const deterministicPatch = extractDeterministicRequestPatch(normalized);
+  return {
+    ...reconciled,
+    ...deterministicPatch,
+    ...(reconciled.focusMuscles
+      ? { focusMuscles: reconciled.focusMuscles }
+      : {}),
+  } as RoutineRequestPatch;
 }
 
 const REASON_TO_SIGNAL: Partial<Record<SafetyReasonCode, SafetySignal>> = {

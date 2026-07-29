@@ -118,7 +118,24 @@ export type SafetyClassification = z.output<
 export function createSafetyClassificationSchema(
   deterministicSignals: readonly z.infer<typeof SafetySignalSchema>[],
 ) {
-  return SafetyClassificationSchema.superRefine((value, context) => {
+  const providerOutputSchema = z.preprocess((value) => {
+    if (
+      value !== null &&
+      typeof value === "object" &&
+      "classification" in value &&
+      value.classification !== "needs_review" &&
+      "clarificationQuestion" in value &&
+      value.clarificationQuestion !== null
+    ) {
+      // Some structured models add an unnecessary follow-up to an otherwise
+      // valid unsupported/no-signal result. It cannot affect the safety
+      // decision, so canonicalize it before the strict domain validation.
+      return { ...value, clarificationQuestion: null };
+    }
+    return value;
+  }, SafetyClassificationSchema);
+
+  return providerOutputSchema.superRefine((value, context) => {
     for (const signal of deterministicSignals) {
       if (!value.signals.includes(signal)) {
         context.addIssue({

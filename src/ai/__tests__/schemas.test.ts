@@ -124,4 +124,16 @@ describe("AI structured schemas", () => {
       }).success,
     ).toBe(false);
   });
+
+  it("canonicalizes an unnecessary question on an unsupported safety result", () => {
+    const schema = createSafetyClassificationSchema(["recent_injury"]);
+    const result = schema.parse({
+      classification: "unsupported_signal",
+      signals: ["recent_injury"],
+      reason: "No puedo generar una rutina para una lesión reciente.",
+      clarificationQuestion: "¿Te evaluó un profesional?",
+    });
+
+    expect(result.clarificationQuestion).toBeNull();
+  });
 });

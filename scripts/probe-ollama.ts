@@ -6,7 +6,7 @@ async function main(): Promise<void> {
     process.env.OLLAMA_MODELS?.split(",") ??
     (process.env.OLLAMA_MODEL
       ? [process.env.OLLAMA_MODEL]
-      : ["qwen3:1.7b", "qwen3:4b"]);
+      : ["qwen3:4b", "qwen3:1.7b"]);
   const models = [...new Set(configuredModels.map((model) => model.trim()))].filter(
     Boolean,
   );

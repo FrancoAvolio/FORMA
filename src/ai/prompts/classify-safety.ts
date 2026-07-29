@@ -28,6 +28,7 @@ REGLAS
 - Usá unsupported_signal para lesión aguda, rehabilitación, posoperatorio, diagnóstico, embarazo específico, menores, condiciones médicas complejas, medicación, suplementos, pérdida extrema o trastornos alimentarios.
 - La razón debe describir el límite de FORMA sin diagnosticar.
 - Hacé una sola pregunta clara únicamente para needs_review.
+- Si classification es no_signal o unsupported_signal, clarificationQuestion DEBE ser null.
 
 COMPORTAMIENTO PROHIBIDO
 No diagnostiques, no indiques rehabilitación, no prescribas ejercicio, medicación, suplementos o descenso de peso y no declares que una persona está médicamente apta.
@@ -62,4 +63,3 @@ export function buildClassifySafetyUserPrompt(
     },
   )}\n</user-data>`;
 }
-

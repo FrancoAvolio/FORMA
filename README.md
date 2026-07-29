@@ -94,7 +94,7 @@ and draft and links to this same guided path.
 ```env
 AI_PROVIDER=ollama
 OLLAMA_BASE_URL=http://127.0.0.1:11434
-OLLAMA_MODEL=qwen3:1.7b
+OLLAMA_MODEL=qwen3:4b
 AI_TIMEOUT_MS=60000
 ```
 
@@ -154,9 +154,9 @@ npm run test:ollama
 npm run test:cloudflare
 ```
 
-On 2026-07-28, the real installed `qwen3:1.7b` Ollama model passed all 6 contract checks in one
-recorded repetition. `qwen3:4b` was not installed and was deliberately not downloaded, so no 4b
-pass is claimed. The simulated Cloudflare suite passed 11/11 tests without spending inference;
+The local default is now `qwen3:4b`, which passed the recorded 7/7 real contract checks. The smaller
+`qwen3:1.7b` model previously passed the same contract checks. The simulated Cloudflare suite
+passed 11/11 tests without spending inference;
 the live account-backed Granite check remains manual. Details and exact commands are in the local
 and Cloudflare setup documents.
 

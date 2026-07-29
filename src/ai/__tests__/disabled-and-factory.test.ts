@@ -21,7 +21,7 @@ describe("disabled provider and server-side provider factory", () => {
       environment: { NODE_ENV: "development" },
       fetchImplementation: vi.fn() as unknown as typeof fetch,
     });
-    expect(provider).toMatchObject({ id: "ollama", model: "qwen3:1.7b" });
+    expect(provider).toMatchObject({ id: "ollama", model: "qwen3:4b" });
   });
 
   it("uses Cloudflare by default in production without reading client variables", () => {

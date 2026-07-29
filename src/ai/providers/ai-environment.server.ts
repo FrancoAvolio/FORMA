@@ -49,7 +49,7 @@ export const AiEnvironmentSchema = z
       debugLogs: environment.AI_DEBUG_LOGS === "true",
       ollamaBaseUrl:
         environment.OLLAMA_BASE_URL ?? "http://127.0.0.1:11434",
-      ollamaModel: environment.OLLAMA_MODEL ?? "qwen3:1.7b",
+      ollamaModel: environment.OLLAMA_MODEL ?? "qwen3:4b",
       cloudflareModel:
         environment.CLOUDFLARE_AI_MODEL ??
         "@cf/ibm-granite/granite-4.0-h-micro",

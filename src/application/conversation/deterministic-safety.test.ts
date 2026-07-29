@@ -217,6 +217,43 @@ describe("deterministic conversational safety", () => {
     expect(result.requestPatch).not.toHaveProperty("availableEquipment");
   });
 
+  it("extracts a location when the model returns a greeting with an empty patch", () => {
+    const result = reconcileParsedTurnSafety(
+      {
+        intent: "greeting",
+        requestPatch: {},
+        limitationsConfirmation: "unknown",
+        safetySignals: [],
+        assumptions: [],
+      },
+      "Voy a entrenar en un gimnasio publico",
+      { hasCurrentRoutine: false },
+    );
+
+    expect(result.intent).toBe("provide_information");
+    expect(result.requestPatch).toEqual({
+      trainingLocation: "commercial_gym",
+    });
+  });
+
+  it("does not turn generic full-equipment wording into a guessed equipment list", () => {
+    const result = reconcileParsedTurnSafety(
+      {
+        intent: "modify_profile",
+        requestPatch: {
+          availableEquipment: ["barbell", "dumbbell"],
+        },
+        limitationsConfirmation: "unknown",
+        safetySignals: [],
+        assumptions: [],
+      },
+      "Cuento con equipamiento completo",
+      { hasCurrentRoutine: false },
+    );
+
+    expect(result.requestPatch).toEqual({});
+  });
+
   it("does not rewrite routine-modification intent when routine state is unknown", () => {
     const result = reconcileParsedTurnSafety(
       {

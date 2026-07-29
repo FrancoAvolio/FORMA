@@ -25,7 +25,7 @@ function responseForSystemPrompt(system: string): unknown {
 function ollamaResponse(content: unknown, status = 200): Response {
   return new Response(
     JSON.stringify({
-      model: "qwen3:1.7b",
+      model: "qwen3:4b",
       message: {
         role: "assistant",
         content: typeof content === "string" ? content : JSON.stringify(content),
@@ -68,7 +68,7 @@ describe("OllamaAiProvider transport", () => {
     const [, init] = vi.mocked(fetchImplementation).mock.calls[0]!;
     const body = JSON.parse(String(init?.body)) as Record<string, unknown>;
     expect(body).toMatchObject({
-      model: "qwen3:1.7b",
+      model: "qwen3:4b",
       stream: false,
       think: false,
     });

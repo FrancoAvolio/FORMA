@@ -21,9 +21,8 @@ automated accessibility checks, repository metadata, or a successful package bui
   quota, and exercise the configured production model in the target account before launch. A
   local `npm run test:cloudflare` result does not satisfy this live gate.
 - **Ollama model matrix:** the guided form and deterministic generator work without Ollama.
-  `qwen3:1.7b` is the configured local default, but each release must record its real external
-  contract result separately from standard validation. `qwen3:4b` is not installed on the current
-  developer machine and was intentionally not downloaded automatically. The operator must run
+  `qwen3:4b` is the configured local default, but each release must record its real external
+  contract result separately from standard validation. If it is not installed, the operator must run
   `ollama pull qwen3:4b`, then in PowerShell run
   `$env:OLLAMA_MODEL='qwen3:4b'; npm run test:ollama` before a 4b result can be claimed.
 - **Cloudflare rate-limit scope:** the in-application limiter is per worker isolate and intended

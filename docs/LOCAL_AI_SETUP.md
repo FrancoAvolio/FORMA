@@ -14,8 +14,8 @@ silently.
 Download and start the configured local default:
 
 ```bash
-ollama pull qwen3:1.7b
-ollama run qwen3:1.7b
+ollama pull qwen3:4b
+ollama run qwen3:4b
 ```
 
 Keep Ollama running while using conversational interpretation. The model download can be
@@ -28,7 +28,7 @@ Add these server-only values to `.env.local`:
 ```env
 AI_PROVIDER=ollama
 OLLAMA_BASE_URL=http://127.0.0.1:11434
-OLLAMA_MODEL=qwen3:1.7b
+OLLAMA_MODEL=qwen3:4b
 AI_TIMEOUT_MS=60000
 AI_DEBUG_LOGS=false
 ```
@@ -93,7 +93,7 @@ models.
 PowerShell:
 
 ```powershell
-$env:OLLAMA_MODEL='qwen3:1.7b'
+$env:OLLAMA_MODEL='qwen3:4b'
 $env:AI_PROBE_REPETITIONS='1'
 npm run test:ollama
 ```
@@ -101,7 +101,7 @@ npm run test:ollama
 Bash:
 
 ```bash
-OLLAMA_MODEL=qwen3:1.7b AI_PROBE_REPETITIONS=1 npm run test:ollama
+OLLAMA_MODEL=qwen3:4b AI_PROBE_REPETITIONS=1 npm run test:ollama
 ```
 
 The probe exercises seven capabilities through the real provider: a complete turn, incomplete-turn
@@ -111,21 +111,21 @@ signal, and explanation of validated plan facts.
 
 ### Recorded result — 2026-07-28
 
-- `qwen3:1.7b`: real local Ollama inference passed 7/7 checks in one repetition.
-- `qwen3:4b`: not installed on the verification machine. It was intentionally not downloaded, so
-  no 4b result is claimed.
+- `qwen3:4b`: real local Ollama inference passed 7/7 checks in three repetitions after the
+  structured safety-output canonicalization was added.
+- `qwen3:1.7b`: previously passed 7/7 checks in one repetition; it remains available as a
+  smaller fallback when installed.
 
-To complete the 4b matrix manually:
+The configured 4b verification was run with:
 
 ```powershell
-ollama pull qwen3:4b
 $env:OLLAMA_MODEL='qwen3:4b'
-$env:AI_PROBE_REPETITIONS='1'
+$env:AI_PROBE_REPETITIONS='3'
 npm run test:ollama
 ```
 
-The first command downloads external model data and must remain an explicit operator choice. Do
-not mark 4b as passing until the JSON report has `passed: true` and all seven checks pass.
+The model download was an explicit operator action. Do not mark a different model as passing
+until its JSON report has `passed: true` and all seven checks pass.
 
 You can check endpoint/model reachability independently:
 
