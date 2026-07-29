@@ -33,7 +33,7 @@ import {
 } from "@/application/routines";
 import { deriveAssistantSafetyResult } from "@/application/conversation";
 import { ExerciseThumbnail } from "@/components/exercises/exercise-thumbnail";
-import { ExportRoutineButton } from "@/components/routines/export-routine-button";
+import { LazyExportRoutineButton } from "@/components/routines/lazy-export-routine-button";
 import { SessionBlocks } from "@/components/routines/session-blocks";
 import type { CatalogExercise } from "@/domain/exercises/catalog-exercise";
 import { rirToRpe } from "@/domain/routine/engine/assign-prescription";
@@ -245,7 +245,7 @@ export function RoutineViewer({
           <Link className="button button-quiet" href="/crear">
             <Pencil aria-hidden="true" size={17} /> Editar perfil
           </Link>
-          <ExportRoutineButton
+          <LazyExportRoutineButton
             plan={current.plan}
             catalog={catalog}
             media={media}

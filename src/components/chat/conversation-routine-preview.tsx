@@ -15,7 +15,7 @@ import Link from "next/link";
 import { useId, useMemo, useState } from "react";
 
 import { ExerciseThumbnail } from "@/components/exercises/exercise-thumbnail";
-import { ExportRoutineButton } from "@/components/routines/export-routine-button";
+import { LazyExportRoutineButton } from "@/components/routines/lazy-export-routine-button";
 import { SessionBlocks } from "@/components/routines/session-blocks";
 import type { CatalogExercise } from "@/domain/exercises/catalog-exercise";
 import type { RoutinePlan } from "@/domain/routine/schemas";
@@ -319,7 +319,7 @@ export function ConversationRoutinePreview({
               <Save aria-hidden="true" /> {saved ? "Guardada" : "Guardar"}
             </button>
           ) : null}
-          <ExportRoutineButton
+          <LazyExportRoutineButton
             plan={plan}
             catalog={catalog}
             media={media}

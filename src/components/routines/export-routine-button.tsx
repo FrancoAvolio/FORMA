@@ -22,19 +22,21 @@ import type { ExerciseMedia } from "@/media";
 
 import styles from "./export-routine-button.module.css";
 
-export function ExportRoutineButton({
-  plan,
-  catalog,
-  media,
-  disabled = false,
-}: {
+export type ExportRoutineButtonProps = {
   plan: RoutinePlan;
   catalog: RoutineExportCatalog;
   media:
     | Readonly<Record<string, ExerciseMedia>>
     | ReadonlyMap<string, ExerciseMedia>;
   disabled?: boolean;
-}) {
+};
+
+export function ExportRoutineButton({
+  plan,
+  catalog,
+  media,
+  disabled = false,
+}: ExportRoutineButtonProps) {
   const [statusState, setStatusState] = useState<{
     plan: RoutinePlan;
     text: string;
