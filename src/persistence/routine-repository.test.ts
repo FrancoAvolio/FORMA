@@ -441,4 +441,21 @@ describe("LocalRoutineRepository", () => {
     expect(await repository.loadCurrentRoutine()).toBeNull();
     expect(await repository.loadMediaPlaybackPreference()).toBe("system");
   });
+
+  it("clears the active conversation without deleting saved routines", async () => {
+    const storage = new MemoryStorage();
+    const repository = new LocalRoutineRepository(storage);
+    await repository.save(request, plan, safetyScreening);
+    await repository.saveCurrentRoutine(request, plan, safetyScreening);
+    await repository.updateRoutineConversationState({ messages: [userMessage] });
+
+    await repository.clearRoutineConversationState();
+
+    const conversation = await repository.loadRoutineConversationState();
+    expect(conversation.messages).toEqual([]);
+    expect(conversation.currentRoutine).toBeNull();
+    expect(conversation.completionPercentage).toBe(0);
+    expect(await repository.list()).toHaveLength(1);
+    expect(await repository.get(plan.id)).not.toBeNull();
+  });
 });

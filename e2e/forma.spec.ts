@@ -270,6 +270,15 @@ test("the Mock conversation builds, modifies, explains, saves, and restores a ro
     restoredRoutine.getByRole("button", { name: "Guardada", exact: true }),
   ).toBeVisible();
   expect(await inlineExerciseNames(restoredRoutine)).toEqual(modifiedExercises);
+
+  page.once("dialog", (dialog) => void dialog.accept());
+  await page.getByRole("button", { name: "Nueva conversaciÃ³n" }).click();
+  await expect(page.getByText(/Hola, soy FORMA/).first()).toBeVisible();
+  await expect(page.getByTestId("inline-routine")).not.toBeVisible();
+  await expect(page.getByTestId("chat-profile-progress")).toHaveText("0%");
+
+  await page.goto("/guardadas");
+  await expect(page.getByRole("button", { name: /Abrir rutina/ })).toBeVisible();
 });
 
 test("a safety-only follow-up preserves the exact requested profile and builds the routine", async ({

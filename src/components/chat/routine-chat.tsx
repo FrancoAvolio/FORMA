@@ -80,7 +80,10 @@ import {
   type RoutineConversationStateUpdate,
   type RoutineRepository,
 } from "@/persistence";
-import { exerciseLabel, exerciseListLabel } from "@/presentation/exercise-labels";
+import {
+  exerciseLabel,
+  exerciseListLabel,
+} from "@/presentation/exercise-labels";
 
 import { ConversationRoutinePreview } from "./conversation-routine-preview";
 import styles from "./routine-chat.module.css";
@@ -119,7 +122,8 @@ function matchesSavedSnapshot(
   return (
     JSON.stringify(current.request) === JSON.stringify(saved.request) &&
     JSON.stringify(current.plan) === JSON.stringify(saved.plan) &&
-    JSON.stringify(current.safetyScreening) === JSON.stringify(saved.safetyScreening)
+    JSON.stringify(current.safetyScreening) ===
+      JSON.stringify(saved.safetyScreening)
   );
 }
 
@@ -241,10 +245,7 @@ function isAiErrorCode(value: unknown): value is AiErrorCode {
   );
 }
 
-function fallbackFromPayload(
-  payload: unknown,
-  status = 503,
-): AiFallbackState {
+function fallbackFromPayload(payload: unknown, status = 503): AiFallbackState {
   const envelope =
     payload && typeof payload === "object"
       ? (payload as Record<string, unknown>)
@@ -275,9 +276,13 @@ function fallbackFromPayload(
     canRetry:
       typeof error?.canRetry === "boolean"
         ? error.canRetry
-        : ["unavailable", "timeout", "invalid_output", "rate_limited", "provider_error"].includes(
-            code,
-          ),
+        : [
+            "unavailable",
+            "timeout",
+            "invalid_output",
+            "rate_limited",
+            "provider_error",
+          ].includes(code),
     ...(typeof error?.retryAfterSeconds === "number"
       ? { retryAfterSeconds: error.retryAfterSeconds }
       : {}),
@@ -346,10 +351,8 @@ function composeContext(options: {
   exerciseContext?: unknown;
   assumptions?: readonly string[];
 }): ValidatedAssistantResponseContext {
-  const allowedNextActions: ValidatedAssistantResponseContext["allowedNextActions"] = [
-    "open_guided_form",
-    "browse_exercises",
-  ];
+  const allowedNextActions: ValidatedAssistantResponseContext["allowedNextActions"] =
+    ["open_guided_form", "browse_exercises"];
   if (options.state.missingFields.length > 0) {
     allowedNextActions.unshift("ask_missing_information");
   }
@@ -450,10 +453,10 @@ function profileRows(state: RoutineConversationState) {
         state.limitationsConfirmation === "not_confirmed"
           ? `${safetyAnsweredCount(state.safety.screeningDraft)} de 6 respuestas confirmadas`
           : state.limitationsConfirmation === "confirmed_none"
-          ? "Sin dolor ni restricciones declaradas"
-          : state.limitationsConfirmation === "confirmed_with_limitations"
-            ? "Requiere revisión"
-            : null,
+            ? "Sin dolor ni restricciones declaradas"
+            : state.limitationsConfirmation === "confirmed_with_limitations"
+              ? "Requiere revisión"
+              : null,
     },
   ] as const;
 }
@@ -480,12 +483,15 @@ export function RoutineChat({
   const [activity, setActivity] = useState("Entendiendo tu mensaje…");
   const [fallback, setFallback] = useState<AiFallbackState | null>(null);
   const [generationError, setGenerationError] = useState<string | null>(null);
-  const [diagnostics, setDiagnostics] = useState<ProviderDiagnostics | null>(null);
+  const [diagnostics, setDiagnostics] = useState<ProviderDiagnostics | null>(
+    null,
+  );
   const [activeDayId, setActiveDayId] = useState<string | null>(null);
   const [activeExercise, setActiveExercise] =
     useState<ConversationExerciseTarget | null>(null);
-  const [exerciseCard, setExerciseCard] =
-    useState<GroundedExerciseCard | null>(null);
+  const [exerciseCard, setExerciseCard] = useState<GroundedExerciseCard | null>(
+    null,
+  );
   const [saved, setSaved] = useState(false);
   const desktopProfile = useSyncExternalStore(
     subscribeDesktopProfile,
@@ -494,19 +500,16 @@ export function RoutineChat({
   );
   const [mobileProfileOpen, setMobileProfileOpen] = useState(false);
 
-  const commit = useCallback(
-    async (update: RoutineConversationStateUpdate) => {
-      const repository = repositoryRef.current;
-      if (!repository) {
-        throw new Error("El almacenamiento local todavía no está listo.");
-      }
-      const next = await repository.updateRoutineConversationState(update);
-      conversationRef.current = next;
-      setConversation(next);
-      return next;
-    },
-    [],
-  );
+  const commit = useCallback(async (update: RoutineConversationStateUpdate) => {
+    const repository = repositoryRef.current;
+    if (!repository) {
+      throw new Error("El almacenamiento local todavía no está listo.");
+    }
+    const next = await repository.updateRoutineConversationState(update);
+    conversationRef.current = next;
+    setConversation(next);
+    return next;
+  }, []);
 
   useEffect(() => {
     let mounted = true;
@@ -541,13 +544,15 @@ export function RoutineChat({
       setConversation(state);
       setActiveDayId(state.currentRoutine?.plan.days[0]?.id ?? null);
       const savedRoutine = state.currentRoutine
-        ? routines.find((routine) => routine.id === state.currentRoutine?.plan.id)
+        ? routines.find(
+            (routine) => routine.id === state.currentRoutine?.plan.id,
+          )
         : null;
       setSaved(
         Boolean(
           state.currentRoutine &&
-            savedRoutine &&
-            matchesSavedSnapshot(state.currentRoutine, savedRoutine),
+          savedRoutine &&
+          matchesSavedSnapshot(state.currentRoutine, savedRoutine),
         ),
       );
       if (state.providerState.status === "error") {
@@ -651,14 +656,16 @@ export function RoutineChat({
     ) => {
       setActivity("Entendiendo tu mensaje…");
       const interpreted = await postApi<
-        SuccessfulEnvelope & { turn: unknown; diagnostics?: ProviderDiagnostics }
+        SuccessfulEnvelope & {
+          turn: unknown;
+          diagnostics?: ProviderDiagnostics;
+        }
       >(
         "/api/ai/interpret",
         {
           message: text,
           currentDraft: baseState.requestDraft,
-          currentLimitationsConfirmation:
-            baseState.limitationsConfirmation,
+          currentLimitationsConfirmation: baseState.limitationsConfirmation,
           locale: "es-AR",
         },
         signal,
@@ -698,8 +705,8 @@ export function RoutineChat({
         result.limitationsConfirmation,
       );
       const screening = assistantSafety.generationAllowed
-        ? toCompleteSafetyScreening(result.screeningDraft, safetySignals) ??
-          baseState.safety.screening
+        ? (toCompleteSafetyScreening(result.screeningDraft, safetySignals) ??
+          baseState.safety.screening)
         : null;
       const safetyAssessment =
         completeRequest && screening
@@ -719,10 +726,7 @@ export function RoutineChat({
           screening,
           result: safetyAssessment,
         },
-        providerState: readyProviderState(
-          baseState,
-          interpreted.diagnostics,
-        ),
+        providerState: readyProviderState(baseState, interpreted.diagnostics),
         retryMetadata: null,
       });
       let currentRoutine = working.currentRoutine;
@@ -933,10 +937,9 @@ export function RoutineChat({
             },
             signal,
           );
-          exerciseResponseContext =
-            GroundedExerciseResponseContextSchema.parse(
-              exercisePayload.responseContext,
-            );
+          exerciseResponseContext = GroundedExerciseResponseContextSchema.parse(
+            exercisePayload.responseContext,
+          );
           setExerciseCard(exercisePayload.context as GroundedExerciseCard);
         }
       }
@@ -1076,6 +1079,39 @@ export function RoutineChat({
     setSaved(true);
   }, []);
 
+  const startNewConversation = useCallback(async () => {
+    if (loading || !repositoryRef.current) return;
+
+    const confirmed = window.confirm(
+      "Se va a borrar la conversaciónn y la rutina activa. Las rutinas guardadas no se borrarán. Querés continuar?",
+    );
+    if (!confirmed) return;
+
+    requestAbortRef.current?.abort();
+    setInput("");
+    setFallback(null);
+    setGenerationError(null);
+    setDiagnostics(null);
+    setExerciseCard(null);
+    setActiveExercise(null);
+    setActiveDayId(null);
+    setSaved(false);
+
+    try {
+      await repositoryRef.current.clearRoutineConversationState();
+      const next = await repositoryRef.current.updateRoutineConversationState({
+        messages: [createMessage("assistant", INITIAL_MESSAGE)],
+      });
+      conversationRef.current = next;
+      setConversation(next);
+      window.setTimeout(() => composerRef.current?.focus(), 0);
+    } catch {
+      setGenerationError(
+        "No pudimos iniciar una conversaciÃ³n nueva. Conservamos el estado actual.",
+      );
+    }
+  }, [loading]);
+
   const explainExercise = useCallback(
     (target: ConversationExerciseTarget) => {
       const exercise = catalog.find(
@@ -1110,11 +1146,11 @@ export function RoutineChat({
   );
   const currentRoutine = conversation?.currentRoutine ?? null;
   const assistantSafety = conversation
-      ? deriveAssistantSafetyResult(
-          conversation.limitationsConfirmation,
-          conversation.safety.signals,
-          conversation.safety.result,
-        )
+    ? deriveAssistantSafetyResult(
+        conversation.limitationsConfirmation,
+        conversation.safety.signals,
+        conversation.safety.result,
+      )
     : null;
   const showSuggestions =
     Boolean(conversation) &&
@@ -1159,7 +1195,17 @@ export function RoutineChat({
               </span>
               <strong>FORMA mantiene el contexto validado</strong>
             </div>
-            <span className={styles.statusDot} aria-hidden="true" />
+            <div className={styles.chatTopActions}>
+              <button
+                type="button"
+                className={styles.newConversation}
+                onClick={() => void startNewConversation()}
+                disabled={loading}
+              >
+                <RotateCcw aria-hidden="true" /> Nueva conversación
+              </button>
+              <span className={styles.statusDot} aria-hidden="true" />
+            </div>
           </div>
 
           <div
@@ -1255,7 +1301,8 @@ export function RoutineChat({
                       {exerciseCard.alternatives.map((alternative) => (
                         <li key={alternative.id}>
                           <Link href={`/ejercicios/${alternative.id}`}>
-                            {alternative.displayNameEs ?? alternative.displayName}
+                            {alternative.displayNameEs ??
+                              alternative.displayName}
                           </Link>
                         </li>
                       ))}
@@ -1264,7 +1311,9 @@ export function RoutineChat({
                 ) : null}
                 <small>
                   Fuente: catálogo local · commit{" "}
-                  <code>{exerciseCard.grounding.datasetCommit.slice(0, 12)}</code>
+                  <code>
+                    {exerciseCard.grounding.datasetCommit.slice(0, 12)}
+                  </code>
                 </small>
               </div>
             </article>
@@ -1279,12 +1328,11 @@ export function RoutineChat({
                 <div>
                   {fallback.canRetry && conversation.retryMetadata ? (
                     <button type="button" onClick={retry}>
-                      <RotateCcw aria-hidden="true" /> Reintentar el último turno
+                      <RotateCcw aria-hidden="true" /> Reintentar el último
+                      turno
                     </button>
                   ) : null}
-                  <Link href="/crear/manual">
-                    Continuar con el formulario
-                  </Link>
+                  <Link href="/crear/manual">Continuar con el formulario</Link>
                 </div>
               </div>
             </div>
@@ -1297,7 +1345,10 @@ export function RoutineChat({
           ) : null}
 
           {showSuggestions ? (
-            <div className={styles.suggestions} aria-label="Ideas para responder">
+            <div
+              className={styles.suggestions}
+              aria-label="Ideas para responder"
+            >
               {SUGGESTIONS.map((suggestion) => (
                 <button
                   type="button"
@@ -1521,9 +1572,10 @@ export function RoutineChat({
       <footer className={styles.trustNote}>
         <ShieldCheck aria-hidden="true" />
         <p>
-          La IA interpreta y redacta; nunca elige ejercicios ni aprueba seguridad.
-          El catálogo local, las reglas y el validador siguen siendo la fuente de
-          verdad. <Link href="/ejercicios">Explorar ejercicios</Link>
+          La IA interpreta y redacta; nunca elige ejercicios ni aprueba
+          seguridad. El catálogo local, las reglas y el validador siguen siendo
+          la fuente de verdad.{" "}
+          <Link href="/ejercicios">Explorar ejercicios</Link>
           <ExternalLink aria-hidden="true" />
         </p>
       </footer>
