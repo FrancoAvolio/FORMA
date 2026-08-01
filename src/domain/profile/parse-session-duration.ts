@@ -1,7 +1,9 @@
 import { normalizeDomainText } from "../exercises/normalization";
 
-const MINIMUM_SESSION_MINUTES = 20;
-const MAXIMUM_SESSION_MINUTES = 120;
+export const SESSION_DURATION_LIMITS = {
+  minimum: 20,
+  maximum: 120,
+} as const;
 
 const NUMBER_WORDS: Readonly<Record<string, number>> = {
   media: 30,
@@ -17,8 +19,8 @@ const NUMBER_WORDS: Readonly<Record<string, number>> = {
 
 function withinSupportedRange(minutes: number): number | null {
   return Number.isInteger(minutes) &&
-    minutes >= MINIMUM_SESSION_MINUTES &&
-    minutes <= MAXIMUM_SESSION_MINUTES
+    minutes >= SESSION_DURATION_LIMITS.minimum &&
+    minutes <= SESSION_DURATION_LIMITS.maximum
     ? minutes
     : null;
 }
@@ -29,8 +31,8 @@ function hoursValue(value: string): number | null {
   return null;
 }
 
-/** Parses explicit Spanish session-duration phrases without consulting an AI provider. */
-export function parseSessionDuration(value: string): number | null {
+/** Parses explicit Spanish session-duration phrases without applying the domain range. */
+function parseRequestedSessionDuration(value: string): number | null {
   const decimalSource = value
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/gu, "")
@@ -38,14 +40,12 @@ export function parseSessionDuration(value: string): number | null {
     .replace(",", ".");
   const compactHours = decimalSource.match(/\b(\d)\s*h\s*(\d{1,2})\b/u);
   if (compactHours?.[1] && compactHours[2]) {
-    return withinSupportedRange(
-      Number(compactHours[1]) * 60 + Number(compactHours[2]),
-    );
+    return Number(compactHours[1]) * 60 + Number(compactHours[2]);
   }
 
   const decimalHours = decimalSource.match(/\b(0\.5|1\.5|2\.0)\s*horas?\b/u);
   if (decimalHours?.[1]) {
-    return withinSupportedRange(Number(decimalHours[1]) * 60);
+    return Number(decimalHours[1]) * 60;
   }
 
   const normalized = normalizeDomainText(value);
@@ -67,20 +67,34 @@ export function parseSessionDuration(value: string): number | null {
           : extraMinutes
             ? Number(extraMinutes)
             : 0;
-      return withinSupportedRange(hourCount * 60 + additional);
+      return hourCount * 60 + additional;
     }
   }
 
   const numericMinutes = normalized.match(/\b(\d{1,3})\s*(?:minutos?|min)\b/u);
   if (numericMinutes?.[1]) {
-    return withinSupportedRange(Number(numericMinutes[1]));
+      return Number(numericMinutes[1]);
   }
 
   for (const [words, minutes] of Object.entries(NUMBER_WORDS)) {
     if (normalized.includes(`${words} minutos`) || normalized.includes(`${words} min`)) {
-      return withinSupportedRange(minutes);
+      return minutes;
     }
   }
 
   return null;
+}
+
+/** Parses a duration only when it fits the deterministic routine-engine range. */
+export function parseSessionDuration(value: string): number | null {
+  const requested = parseRequestedSessionDuration(value);
+  return requested === null ? null : withinSupportedRange(requested);
+}
+
+/** Returns an explicit duration that the engine understood but cannot support. */
+export function parseOutOfRangeSessionDuration(value: string): number | null {
+  const requested = parseRequestedSessionDuration(value);
+  return requested !== null && withinSupportedRange(requested) === null
+    ? requested
+    : null;
 }

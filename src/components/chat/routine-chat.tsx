@@ -46,6 +46,7 @@ import {
   buildRoutinePlanContext,
   buildValidatedPlanSummary,
   composeAssistantFallback,
+  composeUnsupportedSessionDurationReply,
   deriveAssistantSafetyResult,
   OFF_TOPIC_REPLY,
   reconcileParsedTurnSafety,
@@ -70,6 +71,7 @@ import {
   USER_MESSAGE_LIMITS,
 } from "@/domain/conversation/user-message";
 import type { RoutineRequest } from "@/domain/profile/routine-request";
+import { parseOutOfRangeSessionDuration } from "@/domain/profile/parse-session-duration";
 import { createRoutineSeed } from "@/domain/routine/engine/seed";
 import { evaluateRoutineSafety } from "@/domain/safety/evaluate-safety";
 import {
@@ -691,6 +693,7 @@ export function RoutineChat({
         text,
         baseState.pendingQuestion,
       );
+      const outOfRangeSessionMinutes = parseOutOfRangeSessionDuration(text);
       if (pendingAnswer.kind === "affirmative") {
         return appendAssistant(
           baseState,
@@ -708,7 +711,10 @@ export function RoutineChat({
         turn: unknown;
         diagnostics?: ProviderDiagnostics;
       };
-      if (pendingAnswer.kind === "negative") {
+      if (
+        pendingAnswer.kind === "negative" ||
+        outOfRangeSessionMinutes !== null
+      ) {
         interpreted = {
           turn: ParsedRoutineTurnSchema.parse({
             intent: "provide_information",
@@ -742,6 +748,9 @@ export function RoutineChat({
         text,
         { hasCurrentRoutine: Boolean(baseState.currentRoutine) },
       );
+      if (outOfRangeSessionMinutes !== null) {
+        delete parsedTurn.requestPatch.sessionMinutes;
+      }
       const result = applyParsedRoutineTurn(
         baseState.requestDraft,
         baseState.limitationsConfirmation,
@@ -802,7 +811,15 @@ export function RoutineChat({
         pendingQuestion: null,
       });
       let currentRoutine = working.currentRoutine;
+      let routineGeneratedThisTurn = false;
       let deterministicReply: string | null = null;
+
+      if (outOfRangeSessionMinutes !== null) {
+        return appendAssistant(
+          working,
+          composeUnsupportedSessionDurationReply(outOfRangeSessionMinutes),
+        );
+      }
 
       if (result.intent === "off_topic") {
         return appendAssistant(working, OFF_TOPIC_REPLY);
@@ -940,6 +957,7 @@ export function RoutineChat({
           updatedAt: now(),
         };
         working = await commit({ currentRoutine });
+        routineGeneratedThisTurn = true;
         setActiveDayId(generated.plan.days[0]?.id ?? null);
         setSaved(false);
       }
@@ -1035,6 +1053,9 @@ export function RoutineChat({
         plan: currentRoutine ? validatedPlan : null,
         exerciseContext: exerciseResponseContext,
       });
+      if (routineGeneratedThisTurn) {
+        return appendAssistant(latestState, composeAssistantFallback(context));
+      }
       const response = await requestAssistantResponse(context, signal);
       return appendAssistant(
         latestState,

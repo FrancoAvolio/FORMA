@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
 
-import { parseSessionDuration } from "./parse-session-duration";
+import {
+  parseOutOfRangeSessionDuration,
+  parseSessionDuration,
+} from "./parse-session-duration";
 
 describe("parseSessionDuration", () => {
   it.each([
@@ -25,4 +28,15 @@ describe("parseSessionDuration", () => {
       expect(parseSessionDuration(message)).toBeNull();
     },
   );
+
+  it.each([
+    ["150 minutos", 150],
+    ["180 minutos", 180],
+  ])("identifies an explicit unsupported duration in %s", (message, expected) => {
+    expect(parseOutOfRangeSessionDuration(message)).toBe(expected);
+  });
+
+  it("does not classify a supported duration as out of range", () => {
+    expect(parseOutOfRangeSessionDuration("120 minutos")).toBeNull();
+  });
 });

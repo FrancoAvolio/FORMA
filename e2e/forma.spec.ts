@@ -451,6 +451,11 @@ test("a safety-only follow-up preserves the exact requested profile and builds t
   page,
 }) => {
   test.slow();
+  let respondCalls = 0;
+  await page.route("**/api/ai/respond", async (route) => {
+    respondCalls += 1;
+    await route.continue();
+  });
   await page.goto("/crear/chat");
   await expect(chatComposer(page)).toBeVisible({ timeout: 30_000 });
 
@@ -488,6 +493,10 @@ test("a safety-only follow-up preserves the exact requested profile and builds t
   await expect(page.getByTestId("inline-routine")).toBeVisible({
     timeout: 30_000,
   });
+  expect(respondCalls).toBe(0);
+  await expect(
+    page.getByRole("region", { name: /Conversación/i }).getByRole("alert"),
+  ).toHaveCount(0);
   if ((page.viewportSize()?.width ?? 0) >= 900) {
     const routineBox = await page.getByTestId("inline-routine").boundingBox();
     const profileBox = await page.locator("aside").first().boundingBox();
@@ -503,6 +512,33 @@ test("a safety-only follow-up preserves the exact requested profile and builds t
       { exact: true },
     ),
   ).toHaveCount(0);
+});
+
+test("explains when a requested session exceeds the supported duration range", async ({
+  page,
+}) => {
+  test.slow();
+  let interpretCalls = 0;
+  await page.route("**/api/ai/interpret", async (route) => {
+    interpretCalls += 1;
+    await route.continue();
+  });
+  await page.goto("/crear/chat");
+  await expect(chatComposer(page)).toBeVisible({ timeout: 30_000 });
+
+  await sendChatMessage(
+    page,
+    "Quiero una rutina de hipertrofia, soy avanzado y entreno cuatro días por semana en un gimnasio completo.",
+  );
+
+  const durationReply = await sendChatMessage(
+    page,
+    "150 minutos, gimnasio público",
+  );
+  await expect(durationReply).toContainText("20 a 120 minutos");
+  await expect(durationReply).toContainText("Pediste 150 minutos");
+  await expect(durationReply).not.toContainText("¿Cuánto tiempo tenés");
+  expect(interpretCalls).toBe(1);
 });
 
 test("accepts a contextual No for the pending safety question without calling the interpreter again", async ({

@@ -2,7 +2,10 @@ import { describe, expect, it } from "vitest";
 
 import { createEmptyRoutineRequestDraft } from "../../domain/profile/routine-draft";
 import type { ValidatedAssistantResponseContext } from "../../ai/schemas/assistant-response";
-import { composeAssistantFallback } from "./assistant-response-fallback";
+import {
+  composeAssistantFallback,
+  composeUnsupportedSessionDurationReply,
+} from "./assistant-response-fallback";
 
 const baseContext: ValidatedAssistantResponseContext = {
   latestIntent: "greeting",
@@ -38,6 +41,14 @@ const baseContext: ValidatedAssistantResponseContext = {
 };
 
 describe("deterministic assistant fallback", () => {
+  it("explains the supported duration range instead of repeating the question", () => {
+    const message = composeUnsupportedSessionDurationReply(150);
+
+    expect(message).toContain("20 a 120 minutos");
+    expect(message).toContain("Pediste 150 minutos");
+    expect(message).toContain("Elegí un valor dentro del rango");
+  });
+
   it("greets naturally and asks only the focused questions", () => {
     const message = composeAssistantFallback(baseContext);
     expect(message).toContain("Hola");

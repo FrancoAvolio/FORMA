@@ -3,6 +3,7 @@ import {
   type ValidatedAssistantResponseContext,
 } from "../../ai/schemas/assistant-response";
 import type { RequiredRoutineField } from "../../domain/profile/routine-draft";
+import { SESSION_DURATION_LIMITS } from "../../domain/profile/parse-session-duration";
 import {
   CONVERSATIONAL_SAFETY_FIELD_LABELS,
 } from "../../domain/safety/conversational-screening";
@@ -62,6 +63,12 @@ const EQUIPMENT_COPY: Readonly<Record<string, string>> = {
   bench: "banco",
   pull_up_bar: "barra de dominadas",
 };
+
+export function composeUnsupportedSessionDurationReply(
+  requestedMinutes: number,
+): string {
+  return `Por ahora puedo armar sesiones de ${SESSION_DURATION_LIMITS.minimum} a ${SESSION_DURATION_LIMITS.maximum} minutos. Pediste ${requestedMinutes} minutos, que queda fuera de ese rango. Elegí un valor dentro del rango para continuar.`;
+}
 
 function joinedList(values: readonly string[]): string {
   if (values.length <= 1) return values[0] ?? "";

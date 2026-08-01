@@ -282,3 +282,16 @@ ambiguous, and equipment phrases such as `bandas de resistencia` do not become a
 The off-topic gate still takes precedence when the message explicitly requests a non-training
 task. Providers can extract prose, but they cannot override the deterministic goal supported by
 the current raw message.
+
+## ADR-031 — Unsupported session durations receive a deterministic boundary response
+
+The routine engine supports session targets from 20 through 120 minutes. An explicit duration
+outside that range is detected before provider interpretation, removed from any untrusted model
+patch, and answered with the supported range. Other deterministic facts in the same message can
+still be retained, but the invalid duration never silently becomes another value and never
+repeats the generic time question.
+
+Once a routine has been generated and validated, its completion acknowledgement is provider-free.
+The application composes the validated summary locally; AI remains available for grounded
+questions and requested routine changes. A timeout in optional prose generation therefore cannot
+surface as an error after a valid routine is already visible.

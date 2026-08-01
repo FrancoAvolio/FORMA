@@ -386,3 +386,22 @@ Validation evidence:
   run. The new browser coverage proves that a typed contextual `No` survives reload, reaches 100%
   without another `/api/ai/interpret` request, and that `Resistencia` generates a validated plan
   with the `Resistencia muscular` profile value.
+
+## 2026-08-01 — Duration boundary and post-generation timeout hardening
+
+Objective: explain unsupported session durations without silently dropping them, and prevent an
+optional assistant wording timeout from appearing after a deterministic routine has already been
+generated successfully.
+
+- Added a raw duration parser result for explicit values outside the 20–120-minute engine range.
+  These turns bypass AI interpretation, preserve other deterministic profile facts and return a
+  Spanish range message that names the rejected value.
+- Removed the post-generation `/api/ai/respond` dependency for the routine acknowledgement. The
+  validated plan is now confirmed locally; provider calls remain available for routine questions,
+  exercise explanations and requested changes.
+- Added unit and desktop/mobile E2E coverage for `150 minutos`, the no-provider path and the absence
+  of a false timeout alert after generation.
+
+Validation evidence: `npm run validate` passed 344 tests, zero-warning lint, dataset/media/reference
+checks and the production build. `npm run test:e2e:all` passed 33 desktop/mobile tests plus 2
+disabled-media tests.
