@@ -17,6 +17,46 @@ const neutralTurn = {
 };
 
 describe("deterministic conversational safety", () => {
+  it.each(["Resistencia", "Recistencia", "Resistensia", "Recistensia"])(
+    "extracts muscular endurance deterministically from %s",
+    (message) => {
+      const result = reconcileParsedTurnSafety(neutralTurn, message, {
+        hasCurrentRoutine: false,
+      });
+
+      expect(result).toMatchObject({
+        intent: "provide_information",
+        requestPatch: { goal: "muscular_endurance" },
+      });
+    },
+  );
+
+  it("corrects an unsupported model goal using the explicit resistance wording", () => {
+    const result = reconcileParsedTurnSafety(
+      {
+        ...neutralTurn,
+        requestPatch: { goal: "strength" },
+      },
+      "Recistensia",
+      { hasCurrentRoutine: false },
+    );
+
+    expect(result.requestPatch).toEqual({ goal: "muscular_endurance" });
+  });
+
+  it("does not turn resistance-band equipment into a routine goal", () => {
+    const result = reconcileParsedTurnSafety(
+      {
+        ...neutralTurn,
+        requestPatch: { goal: "muscular_endurance" },
+      },
+      "Tengo bandas de resistencia en casa",
+      { hasCurrentRoutine: false },
+    );
+
+    expect(result.requestPatch.goal).toBeUndefined();
+  });
+
   it("cannot lose a recent injury omitted by model output", () => {
     const result = reconcileParsedTurnSafety(
       neutralTurn,

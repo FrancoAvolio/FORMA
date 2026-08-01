@@ -255,3 +255,30 @@ does not offer source media as standalone downloads.
 Routine cards retain a separate `Ver ficha` link and an explicit inline JPG/GIF toggle. At most
 one animation is active per routine surface; no list animation autoplays or restores itself after
 navigation. The resolved dimensions, watermark and visible attribution remain unchanged.
+
+## ADR-029 — Short safety replies are scoped to a persisted pending question
+
+The application records a typed pending safety question beside the assistant message that asked
+it. A short negative such as `No`, `No, ninguna` or `No tengo nada de eso` may clear only the
+specific unanswered fields in that question. The resolver runs locally before provider
+interpretation, persists across reloads and discards stale context when a newer assistant message,
+a completed screening or blocking evidence supersedes it. A bare `No` without valid pending
+context never grants clearance.
+
+Explicit raw-text evidence retains higher precedence than the contextual answer, so wording such
+as `No, pero me duele` remains blocking. A generic affirmative answer records no invented injury
+or restriction; it asks the person to describe the situation or continue in the guided form.
+Application-authored quick replies expose both paths without making safety eligibility dependent
+on Ollama, Workers AI or the user copying a long sentence.
+
+## ADR-030 — Routine-goal aliases use one deterministic parser
+
+Goal extraction in the provider mock, raw-message reconciliation and domain relevance shares one
+pure parser. Bare `Resistencia`, `resistencia muscular` and the curated misspellings
+`recistencia`, `resistensia` and `recistensia` map to `muscular_endurance`; unambiguous existing
+strength, hypertrophy and general-fitness wording keeps its prior mapping. Multiple goals remain
+ambiguous, and equipment phrases such as `bandas de resistencia` do not become an objective.
+
+The off-topic gate still takes precedence when the message explicitly requests a non-training
+task. Providers can extract prose, but they cannot override the deterministic goal supported by
+the current raw message.

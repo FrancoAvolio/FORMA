@@ -56,6 +56,20 @@ describe("MockAiProvider scenarios", () => {
       },
     },
     {
+      message: "Resistencia",
+      expected: {
+        intent: "provide_information",
+        requestPatch: { goal: "muscular_endurance" },
+      },
+    },
+    {
+      message: "Recistensia",
+      expected: {
+        intent: "provide_information",
+        requestPatch: { goal: "muscular_endurance" },
+      },
+    },
+    {
       message: "Cambiame el press por una máquina",
       expected: { intent: "modify_routine", requestPatch: {} },
     },

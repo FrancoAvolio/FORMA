@@ -401,6 +401,7 @@ export class LocalRoutineRepository implements RoutineRepository {
       currentRoutine: parsed.currentRoutine,
       providerState: parsed.providerState,
       retryMetadata: parsed.retryMetadata,
+      pendingQuestion: parsed.pendingQuestion,
     });
   }
 
@@ -437,6 +438,7 @@ export class LocalRoutineRepository implements RoutineRepository {
       safety: createEmptyConversationSafetyState(),
       providerState: createIdleAiProviderState(),
       retryMetadata: null,
+      pendingQuestion: null,
     });
   }
 
@@ -481,6 +483,7 @@ export class LocalRoutineRepository implements RoutineRepository {
           result: evaluateRoutineSafety(validatedRequest, validatedSafety),
         },
         currentRoutine,
+        pendingQuestion: null,
       },
       timestamp,
     );
@@ -529,6 +532,7 @@ export class LocalRoutineRepository implements RoutineRepository {
               screening: clearScreening,
               result: null,
             },
+            pendingQuestion: null,
           }
         : {}),
     }));

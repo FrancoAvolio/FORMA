@@ -3,6 +3,7 @@ import "server-only";
 import { z } from "zod";
 
 import { composeAssistantFallback } from "../../application/conversation/assistant-response-fallback";
+import { parseExplicitRoutineGoal } from "../../domain/profile/parse-routine-goal";
 import { parseSessionDuration } from "../../domain/profile/parse-session-duration";
 import { detectLimitationsDeclaration } from "../../domain/safety/detect-safety-text";
 import type { AiProvider } from "../ai-provider";
@@ -190,15 +191,8 @@ function parseMockTurn(input: ParsedTurnInput): ParsedRoutineTurn {
   const text = normalized(input.message);
   const requestPatch: RoutineRequestPatch = {};
 
-  if (includesAny(text, ["hipertrof", "ganar musculo", "masa muscular"])) {
-    requestPatch.goal = "hypertrophy";
-  } else if (includesAny(text, ["fuerza", "mas fuerte"])) {
-    requestPatch.goal = "strength";
-  } else if (includesAny(text, ["resistencia muscular"])) {
-    requestPatch.goal = "muscular_endurance";
-  } else if (includesAny(text, ["estado fisico", "fitness general", "salud general"])) {
-    requestPatch.goal = "general_fitness";
-  }
+  const explicitGoal = parseExplicitRoutineGoal(input.message);
+  if (explicitGoal) requestPatch.goal = explicitGoal;
 
   if (text.includes("principiante")) requestPatch.experience = "beginner";
   if (text.includes("intermedio")) requestPatch.experience = "intermediate";

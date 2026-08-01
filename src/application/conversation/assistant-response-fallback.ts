@@ -11,7 +11,7 @@ import { OFF_TOPIC_REPLY } from "./domain-relevance";
 
 const QUESTION_COPY: Record<RequiredRoutineField, string> = {
   limitationsConfirmation:
-    "¿Tenés dolor, una lesión reciente, síntomas o alguna restricción profesional para entrenar?",
+    "Antes de crearla, ¿tenés actualmente dolor al moverte, una lesión u operación reciente, síntomas al entrenar o alguna restricción o indicación profesional?",
   goal: "¿Cuál es tu objetivo principal: ganar músculo, fuerza, resistencia o estado físico general?",
   daysPerWeek: "¿Cuántos días por semana querés entrenar?",
   experience: "¿Cuál es tu nivel actual: principiante, intermedio o avanzado?",
@@ -63,9 +63,6 @@ const EQUIPMENT_COPY: Readonly<Record<string, string>> = {
   pull_up_bar: "barra de dominadas",
 };
 
-const COMPLETE_SAFETY_EXAMPLE =
-  "No tengo dolor al moverme, lesiones recientes, operaciones recientes, restricciones médicas, síntomas durante el ejercicio ni indicaciones profesionales que afecten mi entrenamiento.";
-
 function joinedList(values: readonly string[]): string {
   if (values.length <= 1) return values[0] ?? "";
   const last = values.at(-1) ?? "";
@@ -82,11 +79,11 @@ function safetyFollowUp(context: ValidatedAssistantResponseContext): string {
   const answered = context.safetyAnsweredFields.map(
     (field) => CONVERSATIONAL_SAFETY_FIELD_LABELS[field],
   );
-  const question = `Para completar la revisión, confirmame también si tenés ${joinedList(missing)}.`;
+  const question = `Para completar la revisión, ¿tenés actualmente ${joinedList(missing)}?`;
   if (answered.length === 0) {
-    return `${question} Si todo es negativo, podés responder: “${COMPLETE_SAFETY_EXAMPLE}”`;
+    return `${question} Si ninguna aplica, alcanza con responder “No”.`;
   }
-  return `Entendido: registré que no declaraste ${joinedList(answered)}. ${question}`;
+  return `Entendido: registré que no declaraste ${joinedList(answered)}. ${question} Si ninguna de estas otras situaciones aplica, respondé “No”.`;
 }
 
 function profileAcknowledgement(

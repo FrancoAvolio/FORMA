@@ -505,48 +505,81 @@ test("a safety-only follow-up preserves the exact requested profile and builds t
   ).toHaveCount(0);
 });
 
-test("collects conversational safety fields incrementally without repeating answered categories", async ({
+test("accepts a contextual No for the pending safety question without calling the interpreter again", async ({
+  page,
+}) => {
+  test.slow();
+  let interpretCalls = 0;
+  await page.route("**/api/ai/interpret", async (route) => {
+    interpretCalls += 1;
+    await route.continue();
+  });
+  await page.goto("/crear/chat");
+  await expect(chatComposer(page)).toBeVisible({ timeout: 30_000 });
+
+  const profileReply = await sendChatMessage(
+    page,
+    "Quiero una rutina de hipertrofia. Soy intermedio, quiero entrenar cuatro dias por semana, una hora por sesion, en un gimnasio completo. Quiero priorizar espalda y biceps.",
+  );
+  await expect(profileReply).toContainText(/dolor al moverte/i);
+  await expect(
+    page.getByRole("button", { name: "No, ninguna", exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: "Sí, quiero aclarar", exact: true }),
+  ).toBeVisible();
+  await expect(page.getByTestId("chat-profile-progress")).toHaveText("83%");
+  expect(interpretCalls).toBe(1);
+
+  await page.reload();
+  await expect(chatComposer(page)).toBeVisible({ timeout: 30_000 });
+  await expect(
+    page.getByRole("button", { name: "No, ninguna", exact: true }),
+  ).toBeVisible();
+  await expect(page.getByTestId("chat-profile-progress")).toHaveText("83%");
+
+  const completionReply = await sendChatMessage(page, "No", 60_000);
+  await expect(completionReply).toContainText(/validado|validada|Arme|Armé/i);
+  await expect(page.getByTestId("chat-profile-progress")).toHaveText("100%");
+  await expect(page.getByTestId("inline-routine")).toBeVisible({
+    timeout: 30_000,
+  });
+  await expect(
+    page.getByRole("button", { name: "No, ninguna", exact: true }),
+  ).toHaveCount(0);
+  expect(interpretCalls).toBe(1);
+});
+
+test("recognizes Resistencia as the routine goal and generates the plan", async ({
   page,
 }) => {
   test.slow();
   await page.goto("/crear/chat");
   await expect(chatComposer(page)).toBeVisible({ timeout: 30_000 });
 
-  await sendChatMessage(
+  const profileReply = await sendChatMessage(
     page,
-    "Quiero una rutina de hipertrofia. Soy intermedio, quiero entrenar cuatro dias por semana, una hora por sesion, en un gimnasio completo. Quiero priorizar espalda y biceps.",
+    "Soy intermedio, entreno cuatro dias por semana, 60 minutos por sesion y en un gimnasio completo. No tengo dolor al moverme, lesiones recientes, operaciones recientes, restricciones medicas, sintomas durante el ejercicio ni indicaciones profesionales que afecten mi entrenamiento.",
   );
-
-  const broadReply = await sendChatMessage(
-    page,
-    "No tengo ninguna restriccion para entrenar.",
+  await expect(profileReply).toContainText(
+    /objetivo principal|ganar musculo|fuerza|resistencia/i,
   );
-  await expect(broadReply).toContainText(/restricciones medicas|restricciones médicas/i);
-  await expect(broadReply).toContainText(/dolor al moverte/i);
-  await expect(broadReply).not.toContainText(/¿Tenés dolor, una lesión/i);
   await expect(page.getByTestId("chat-profile-progress")).toHaveText("83%");
-  const profile = page.locator("details").filter({
-    has: page.getByText("Tu punto de partida", { exact: true }),
-  });
-  await profile.locator("summary").click();
-  await expect(page.getByText(/1 de 6 respuestas confirmadas/i)).toBeVisible();
 
-  await sendChatMessage(page, "No tengo dolor ni sintomas cuando entreno.");
-  await expect(page.getByText(/3 de 6 respuestas confirmadas/i)).toBeVisible();
-
-  await sendChatMessage(page, "No tuve lesiones ni operaciones recientes.");
-  await expect(page.getByText(/5 de 6 respuestas confirmadas/i)).toBeVisible();
-
-  const completionReply = await sendChatMessage(
-    page,
-    "No recibi indicaciones profesionales.",
-    60_000,
-  );
-  await expect(completionReply).toContainText(/validado|validada|Armé/i);
+  const completionReply = await sendChatMessage(page, "Resistencia", 60_000);
+  await expect(completionReply).toContainText(/resistencia|validado|validada|Arme|Armé/i);
   await expect(page.getByTestId("chat-profile-progress")).toHaveText("100%");
   await expect(page.getByTestId("inline-routine")).toBeVisible({
     timeout: 30_000,
   });
+
+  const profile = page.locator("details").filter({
+    has: page.getByText("Tu punto de partida", { exact: true }),
+  });
+  await profile.locator("summary").click();
+  await expect(
+    profile.getByText("Resistencia muscular", { exact: true }),
+  ).toBeVisible();
 });
 
 test("asks for missing profile data after explicit safety confirmation", async ({

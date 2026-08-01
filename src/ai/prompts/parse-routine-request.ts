@@ -5,7 +5,7 @@ import { serializePromptData, type VersionedPrompt } from "./prompt-contract";
 
 export const PARSE_ROUTINE_TURN_PROMPT: VersionedPrompt = {
   id: "parse-routine-turn",
-  version: "2.3.0",
+  version: "2.4.0",
   purpose:
     "Extract only explicit facts from the latest user turn as a small patch.",
   system: `
@@ -19,7 +19,7 @@ EXTRACTION RULES
 - Include a requestPatch key only when the latest message explicitly supplies or corrects it.
 - Never guess a muscle, goal, number, location, equipment item, limitation, or exercise.
 - Spanish number words uno, dos, tres, cuatro, cinco, seis map to 1..6. Normalize equivalent duration expressions: "una hora"=60, "una hora y media"=90, "1 h 30"=90 and "noventa minutos"=90.
-- goal: hypertrophy for explicit hipertrofia, ganar musculo/masa, or growing a named muscle; strength for fuerza; muscular_endurance for resistencia muscular; general_fitness for estado fisico general.
+- goal: hypertrophy for explicit hipertrofia, ganar musculo/masa, or growing a named muscle; strength for fuerza; muscular_endurance for resistencia or resistencia muscular (including the common recistencia/recistensia misspellings when clearly used as the goal); general_fitness for estado fisico general. Never treat bandas de resistencia as a goal.
 - experience: beginner/principiante, intermediate/intermedio, advanced/avanzado.
 - trainingLocation: commercial_gym for gimnasio/gym completo; home for casa; custom only for an explicitly custom setup.
 - availableEquipment uses canonical English tokens only for equipment explicitly named. A complete commercial gym location does not require listing every item.
@@ -52,6 +52,10 @@ Do not return completion, missing fields, safety eligibility, accumulated profil
     {
       input: "Una hora y media por sesión.",
       output: "provide_information with requestPatch.sessionMinutes=90.",
+    },
+    {
+      input: "Recistensia.",
+      output: "provide_information with requestPatch.goal=muscular_endurance.",
     },
   ],
 };

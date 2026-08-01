@@ -28,9 +28,18 @@ describe("conversation domain relevance", () => {
     expect(isClearlyOffTopicMessage("No")).toBe(false);
     expect(isClearlyOffTopicMessage("Una hora y media")).toBe(false);
     expect(isClearlyOffTopicMessage("90 min")).toBe(false);
+    expect(isClearlyOffTopicMessage("Quiero mejorar mi recistensia")).toBe(
+      false,
+    );
   });
 
   it("provides a stable redirect message", () => {
     expect(OFF_TOPIC_REPLY).toMatch(/rutinas|ejercicios|equipamiento/i);
+  });
+
+  it("does not let resistance wording override an explicit off-topic task", () => {
+    expect(
+      isClearlyOffTopicMessage("Quiero cocinar una pizza con resistencia"),
+    ).toBe(true);
   });
 });

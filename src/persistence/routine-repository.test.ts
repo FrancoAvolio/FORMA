@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { createEmptyRoutineRequestDraft } from "@/domain/profile/routine-draft";
+import { createPendingSafetyQuestion } from "@/domain/conversation/pending-question";
 import {
   createEmptyConversationalSafetyScreeningDraft,
   safetyScreeningToConversationalDraft,
@@ -100,6 +101,13 @@ const userMessage: ConversationMessage = {
   role: "user",
   content: "Quiero priorizar bíceps.",
   createdAt: "2026-07-28T12:00:00.000Z",
+};
+
+const safetyQuestionMessage: ConversationMessage = {
+  id: "message-assistant-safety",
+  role: "assistant",
+  content: "¿Tenés alguna situación de seguridad que afecte tu entrenamiento?",
+  createdAt: "2026-07-28T11:59:00.000Z",
 };
 
 function savedRoutineFixture() {
@@ -242,6 +250,104 @@ describe("LocalRoutineRepository", () => {
     expect((await repository.loadCurrentRoutine())?.plan).toEqual(plan);
   });
 
+  it("persists a pending safety question across reload and the user reply", async () => {
+    const storage = new MemoryStorage();
+    const repository = new LocalRoutineRepository(storage);
+    const pendingQuestion = createPendingSafetyQuestion(
+      safetyQuestionMessage.id,
+      ["painDuringMovement", "recentInjury"],
+    );
+
+    await repository.updateRoutineConversationState({
+      messages: [safetyQuestionMessage],
+      pendingQuestion,
+    });
+    expect(
+      (await new LocalRoutineRepository(storage).loadRoutineConversationState())
+        .pendingQuestion,
+    ).toEqual(pendingQuestion);
+
+    const afterUserReply = await repository.updateRoutineConversationState(
+      (current) => ({
+        messages: [...current.messages, userMessage],
+      }),
+    );
+    expect(afterUserReply.pendingQuestion).toEqual(pendingQuestion);
+  });
+
+  it("drops pending context when a newer assistant message supersedes it", async () => {
+    const repository = new LocalRoutineRepository(new MemoryStorage());
+    const pendingQuestion = createPendingSafetyQuestion(
+      safetyQuestionMessage.id,
+      ["painDuringMovement"],
+    );
+    await repository.updateRoutineConversationState({
+      messages: [safetyQuestionMessage],
+      pendingQuestion,
+    });
+
+    const superseded = await repository.updateRoutineConversationState(
+      (current) => ({
+        messages: [
+          ...current.messages,
+          {
+            id: "message-assistant-newer",
+            role: "assistant" as const,
+            content: "¿Cuál es tu nivel de experiencia?",
+            createdAt: "2026-07-28T12:01:00.000Z",
+          },
+        ],
+      }),
+    );
+
+    expect(superseded.pendingQuestion).toBeNull();
+  });
+
+  it("drops pending context once safety is complete", async () => {
+    const repository = new LocalRoutineRepository(new MemoryStorage());
+    const completed = await repository.updateRoutineConversationState({
+      messages: [safetyQuestionMessage],
+      pendingQuestion: createPendingSafetyQuestion(safetyQuestionMessage.id, [
+        "painDuringMovement",
+      ]),
+      safety: {
+        signals: [],
+        screeningDraft:
+          safetyScreeningToConversationalDraft(safetyScreening),
+        screening: safetyScreening,
+        result: {
+          allowed: true,
+          classification: "eligible",
+          reasonCodes: [],
+          message: "Apto para generar.",
+        },
+      },
+    });
+
+    expect(completed.pendingQuestion).toBeNull();
+  });
+
+  it("drops pending context when explicit safety evidence blocks generation", async () => {
+    const repository = new LocalRoutineRepository(new MemoryStorage());
+    const blocked = await repository.updateRoutineConversationState({
+      messages: [safetyQuestionMessage],
+      pendingQuestion: createPendingSafetyQuestion(safetyQuestionMessage.id, [
+        "painDuringMovement",
+      ]),
+      safety: {
+        signals: ["pain_during_movement"],
+        screeningDraft: {
+          ...createEmptyConversationalSafetyScreeningDraft(),
+          painDuringMovement: true,
+        },
+        screening: null,
+        result: null,
+      },
+    });
+
+    expect(blocked.pendingQuestion).toBeNull();
+  });
+
   it("fails closed when a new safety signal makes an older eligible result stale", async () => {
     const repository = new LocalRoutineRepository(new MemoryStorage());
     const state = await repository.updateRoutineConversationState({
@@ -363,6 +469,7 @@ describe("LocalRoutineRepository", () => {
       model: "qwen3:1.7b",
       error: null,
     };
+    delete envelope.conversationState["pendingQuestion"];
     storage.setItem(ROUTINE_STORAGE_KEY, JSON.stringify(envelope));
 
     const reloaded = await new LocalRoutineRepository(
@@ -380,6 +487,7 @@ describe("LocalRoutineRepository", () => {
       status: "idle",
       providerId: "ollama",
     });
+    expect(reloaded.pendingQuestion).toBeNull();
 
     const normalized = JSON.parse(storage.getItem(ROUTINE_STORAGE_KEY)!) as {
       conversationState: { providerState: { status: string } };

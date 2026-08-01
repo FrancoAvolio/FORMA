@@ -26,6 +26,8 @@ describe("versioned prompt contracts", () => {
     expect(prompt.system).toContain("OUTPUT");
     expect(prompt.system).toContain("FORBIDDEN");
     expect(prompt.system).toContain("Never guess");
+    expect(prompt.system).toContain("recistencia/recistensia");
+    expect(prompt.system).toContain("Never treat bandas de resistencia as a goal");
   });
 
   it.each(spanishContractPrompts)("$id includes required prompt metadata", (prompt) => {

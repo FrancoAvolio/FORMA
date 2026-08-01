@@ -50,6 +50,7 @@ import {
   OFF_TOPIC_REPLY,
   reconcileParsedTurnSafety,
   resolveConversationQuestion,
+  resolvePendingConversationAnswer,
   selectFocusedQuestionFields,
   toCompleteRoutineRequest,
   type AssistantSafetyResult,
@@ -63,6 +64,7 @@ import {
 } from "@/application/routines";
 import { ExerciseThumbnail } from "@/components/exercises/exercise-thumbnail";
 import type { CatalogExercise } from "@/domain/exercises/catalog-exercise";
+import { createPendingSafetyQuestion } from "@/domain/conversation/pending-question";
 import {
   getUserMessageMetrics,
   USER_MESSAGE_LIMITS,
@@ -74,6 +76,7 @@ import {
   CONVERSATIONAL_SAFETY_FIELD_VALUES,
   deriveMissingSafetyFields,
   toCompleteSafetyScreening,
+  type ConversationalSafetyField,
   type ConversationalSafetyScreeningDraft,
 } from "@/domain/safety/conversational-screening";
 import type { ExerciseMedia } from "@/media";
@@ -600,9 +603,16 @@ export function RoutineChat({
     async (
       state: RoutineConversationState,
       content: string,
-      providerFallback?: AiFallbackState | null,
+      options: {
+        providerFallback?: AiFallbackState | null;
+        pendingSafety?: {
+          fields: readonly ConversationalSafetyField[];
+          mode?: "confirm" | "describe";
+        };
+      } = {},
     ) => {
       const message = createMessage("assistant", content);
+      const providerFallback = options.providerFallback;
       const next = await commit({
         messages: [...state.messages, message],
         retryMetadata: null,
@@ -616,6 +626,13 @@ export function RoutineChat({
           : state.providerState.status === "error"
             ? createIdleAiProviderState()
             : state.providerState,
+        pendingQuestion: options.pendingSafety
+          ? createPendingSafetyQuestion(
+              message.id,
+              [...options.pendingSafety.fields],
+              options.pendingSafety.mode,
+            )
+          : null,
       });
       if (providerFallback) setFallback(providerFallback);
       return next;
@@ -670,22 +687,56 @@ export function RoutineChat({
       signal: AbortSignal,
       explicitExerciseTarget: ConversationExerciseTarget | null,
     ) => {
-      setActivity("Entendiendo tu mensaje…");
-      const interpreted = await postApi<
-        SuccessfulEnvelope & {
-          turn: unknown;
-          diagnostics?: ProviderDiagnostics;
-        }
-      >(
-        "/api/ai/interpret",
-        {
-          message: text,
-          currentDraft: baseState.requestDraft,
-          currentLimitationsConfirmation: baseState.limitationsConfirmation,
-          locale: "es-AR",
-        },
-        signal,
+      const pendingAnswer = resolvePendingConversationAnswer(
+        text,
+        baseState.pendingQuestion,
       );
+      if (pendingAnswer.kind === "affirmative") {
+        return appendAssistant(
+          baseState,
+          "Gracias por avisar. Contame cuál de esas situaciones aplica y cómo afecta tu entrenamiento, o revisala en el formulario guiado. No voy a generar la rutina hasta que quede aclarado.",
+          {
+            pendingSafety: {
+              fields: pendingAnswer.fields,
+              mode: "describe",
+            },
+          },
+        );
+      }
+
+      let interpreted: {
+        turn: unknown;
+        diagnostics?: ProviderDiagnostics;
+      };
+      if (pendingAnswer.kind === "negative") {
+        interpreted = {
+          turn: ParsedRoutineTurnSchema.parse({
+            intent: "provide_information",
+            requestPatch: {},
+            limitationsConfirmation: "unknown",
+            safetySignals: [],
+            assumptions: [],
+          }),
+        };
+      } else {
+        setActivity("Entendiendo tu mensaje…");
+        interpreted = await postApi<
+          SuccessfulEnvelope & {
+            turn: unknown;
+            diagnostics?: ProviderDiagnostics;
+          }
+        >(
+          "/api/ai/interpret",
+          {
+            message: text,
+            currentDraft: baseState.requestDraft,
+            currentLimitationsConfirmation:
+              baseState.limitationsConfirmation,
+            locale: "es-AR",
+          },
+          signal,
+        );
+      }
       const parsedTurn = reconcileParsedTurnSafety(
         ParsedRoutineTurnSchema.parse(interpreted.turn),
         text,
@@ -698,6 +749,10 @@ export function RoutineChat({
         {
           rawMessage: text,
           screeningDraft: baseState.safety.screeningDraft,
+          contextualSafetyPatch:
+            pendingAnswer.kind === "negative"
+              ? pendingAnswer.patch
+              : undefined,
         },
       );
       const safetySignals = [
@@ -744,6 +799,7 @@ export function RoutineChat({
         },
         providerState: readyProviderState(baseState, interpreted.diagnostics),
         retryMetadata: null,
+        pendingQuestion: null,
       });
       let currentRoutine = working.currentRoutine;
       let deterministicReply: string | null = null;
@@ -938,7 +994,7 @@ export function RoutineChat({
           const providerError = explanationPayload.providerError
             ? fallbackFromPayload({ error: explanationPayload.providerError })
             : null;
-          return appendAssistant(working, explanation, providerError);
+          return appendAssistant(working, explanation, { providerFallback: providerError });
         }
         if (resolution.kind === "exercise") {
           setActiveExercise(resolution.target);
@@ -983,7 +1039,17 @@ export function RoutineChat({
       return appendAssistant(
         latestState,
         response.message,
-        response.providerError,
+        {
+          providerFallback: response.providerError,
+          ...(context.safetyMissingFields.length > 0
+            ? {
+                pendingSafety: {
+                  fields: context.safetyMissingFields,
+                  mode: "confirm" as const,
+                },
+              }
+            : {}),
+        },
       );
     },
     [
@@ -1166,6 +1232,10 @@ export function RoutineChat({
     [conversation],
   );
   const currentRoutine = conversation?.currentRoutine ?? null;
+  const pendingSafetyQuestion =
+    conversation?.pendingQuestion?.kind === "safety_confirmation"
+      ? conversation.pendingQuestion
+      : null;
   const assistantSafety = conversation
     ? deriveAssistantSafetyResult(
         conversation.limitationsConfirmation,
@@ -1176,6 +1246,7 @@ export function RoutineChat({
   const showSuggestions =
     Boolean(conversation) &&
     !currentRoutine &&
+    !pendingSafetyQuestion &&
     (conversation?.messages.length ?? 0) <= 3;
 
   if (!conversation) {
@@ -1270,6 +1341,35 @@ export function RoutineChat({
               </div>
             ) : null}
           </div>
+
+          {pendingSafetyQuestion?.mode === "confirm" && !loading ? (
+            <div
+              className={styles.safetyReplies}
+              aria-label="Respuestas rápidas de seguridad"
+            >
+              <button
+                type="button"
+                className={styles.safetyClearReply}
+                onClick={() => void submitText("No, ninguna")}
+              >
+                <ShieldCheck aria-hidden="true" /> No, ninguna
+              </button>
+              <button
+                type="button"
+                onClick={() => void submitText("Sí, quiero aclarar")}
+              >
+                <ShieldAlert aria-hidden="true" /> Sí, quiero aclarar
+              </button>
+            </div>
+          ) : null}
+
+          {pendingSafetyQuestion?.mode === "describe" && !loading ? (
+            <div className={styles.safetyDescribeAction}>
+              <Link href="/crear/manual">
+                Revisar estas situaciones en el formulario
+              </Link>
+            </div>
+          ) : null}
 
           {exerciseCard ? (
             <article

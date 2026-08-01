@@ -38,6 +38,10 @@ import {
   type ConversationalSafetyScreeningDraft,
 } from "@/domain/safety/conversational-screening";
 import { USER_MESSAGE_LIMITS } from "@/domain/conversation/user-message";
+import {
+  PendingConversationQuestionSchema,
+  type PendingConversationQuestion,
+} from "@/domain/conversation/pending-question";
 
 export const CONVERSATION_MESSAGE_ROLES = ["user", "assistant"] as const;
 
@@ -193,6 +197,9 @@ const RoutineConversationStateInputSchema = z
     currentRoutine: CurrentRoutineSchema.nullable(),
     providerState: StoredAiProviderStateSchema,
     retryMetadata: ConversationRetryMetadataSchema.nullable(),
+    pendingQuestion: PendingConversationQuestionSchema.nullable()
+      .optional()
+      .default(null),
     lastUpdatedAt: z.string().datetime({ offset: true }),
   })
   .strict();
@@ -207,6 +214,7 @@ export type RoutineConversationState = {
   currentRoutine: CurrentRoutine | null;
   providerState: AiProviderState;
   retryMetadata: ConversationRetryMetadata | null;
+  pendingQuestion: PendingConversationQuestion | null;
   lastUpdatedAt: string;
 };
 
@@ -280,6 +288,23 @@ export const RoutineConversationStateSchema =
         )
           ? value.retryMetadata
           : null;
+      const pendingFields = value.pendingQuestion?.fields.filter(
+        (field) => safetyDraft[field] === null,
+      );
+      const lastAssistantMessage = messages.findLast(
+        (message) => message.role === "assistant",
+      );
+      const pendingQuestion =
+        effectiveSafetyStatus === "pending" &&
+        value.pendingQuestion &&
+        pendingFields &&
+        pendingFields.length > 0 &&
+        lastAssistantMessage?.id === value.pendingQuestion.assistantMessageId
+          ? PendingConversationQuestionSchema.parse({
+              ...value.pendingQuestion,
+              fields: pendingFields,
+            })
+          : null;
 
       return {
         messages,
@@ -297,6 +322,7 @@ export const RoutineConversationStateSchema =
         currentRoutine: value.currentRoutine,
         providerState,
         retryMetadata,
+        pendingQuestion,
         lastUpdatedAt: value.lastUpdatedAt,
       };
     },
@@ -317,6 +343,7 @@ export function createEmptyRoutineConversationState(
     currentRoutine: null,
     providerState: createIdleAiProviderState(),
     retryMetadata: null,
+    pendingQuestion: null,
     lastUpdatedAt,
   });
 }
@@ -331,6 +358,7 @@ export type RoutineConversationStatePatch = Partial<
     | "currentRoutine"
     | "providerState"
     | "retryMetadata"
+    | "pendingQuestion"
   >
 >;
 

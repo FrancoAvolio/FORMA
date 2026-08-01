@@ -9,6 +9,7 @@ import {
   type SafetySignalSchema,
 } from "../../ai/schemas/safety";
 import type { LimitationsConfirmation } from "../../domain/profile/routine-draft";
+import { parseExplicitRoutineGoal } from "../../domain/profile/parse-routine-goal";
 import { parseSessionDuration } from "../../domain/profile/parse-session-duration";
 import {
   detectLimitationsDeclaration,
@@ -80,7 +81,7 @@ const CANONICAL_EQUIPMENT = new Set([
 
 const PROFILE_FIELD_EVIDENCE: Readonly<Record<PatchField, RegExp>> = {
   goal:
-    /\b(?:objetivo|hipertrofi\w*|ganar (?:masa|musculo)|crecer|fuerza|resistencia muscular|estado fisico|acondicionamiento|fitness general)\b/u,
+    /\b(?:objetivo|hipertrofi\w*|ganar (?:masa|musculo)|crecer|fuerza|re[sc]isten[cs]ia|estado fisico|acondicionamiento|fitness general)\b/u,
   experience: /\b(?:experiencia|nivel|principiante|intermedio|avanzado)\b/u,
   daysPerWeek:
     /\b(?:(?:un|uno|dos|tres|cuatro|cinco|seis|[1-6])\s+(?:dias?|veces)|(?:dias?|veces)\s+(?:por|a la)\s+semana|semanal)\b/u,
@@ -110,7 +111,7 @@ const PROFILE_FIELD_EVIDENCE: Readonly<Record<PatchField, RegExp>> = {
  */
 const EXPLICIT_PROFILE_CHANGE_EVIDENCE: Readonly<Record<PatchField, RegExp>> = {
   goal:
-    /\b(?:objetivo|hipertrofi\w*|ganar (?:masa|musculo)|crecer|fuerza|resistencia muscular|estado fisico|acondicionamiento|fitness general)\b/u,
+    /\b(?:objetivo|hipertrofi\w*|ganar (?:masa|musculo)|crecer|fuerza|re[sc]isten[cs]ia|estado fisico|acondicionamiento|fitness general)\b/u,
   experience: /\b(?:experiencia|nivel|principiante|intermedio|avanzado)\b/u,
   daysPerWeek:
     /\b(?:(?:un|uno|dos|tres|cuatro|cinco|seis|[1-6])\s+(?:dias?|veces)|(?:dias?|veces)\s+(?:por|a la)\s+semana|semanal)\b/u,
@@ -136,15 +137,8 @@ function extractDeterministicRequestPatch(
   normalized: string,
 ): RoutineRequestPatch {
   const patch: Record<string, unknown> = {};
-  if (/\b(?:hipertrofi\w*|ganar (?:masa|musculo)|crecer)\b/u.test(normalized)) {
-    patch.goal = "hypertrophy";
-  } else if (/\bfuerza\b/u.test(normalized)) {
-    patch.goal = "strength";
-  } else if (/\bresistencia muscular\b/u.test(normalized)) {
-    patch.goal = "muscular_endurance";
-  } else if (/\b(?:estado fisico|fitness general)\b/u.test(normalized)) {
-    patch.goal = "general_fitness";
-  }
+  const explicitGoal = parseExplicitRoutineGoal(normalized);
+  if (explicitGoal) patch.goal = explicitGoal;
 
   const experienceMatches = normalized.match(
     /\b(?:principiante|intermedio|avanzado)\b/gu,
@@ -248,17 +242,7 @@ function reconcileRequestPatch(
     }
 
     if (field === "goal") {
-      const explicitGoal = normalized.match(
-        /\b(?:hipertrofi\w*|ganar (?:masa|musculo)|crecer(?: musculo)?)\b/u,
-      )
-        ? "hypertrophy"
-        : normalized.match(/\bfuerza\b/u)
-          ? "strength"
-          : normalized.match(/\bresistencia muscular\b/u)
-            ? "muscular_endurance"
-            : normalized.match(/\b(?:estado fisico|fitness general)\b/u)
-              ? "general_fitness"
-              : null;
+      const explicitGoal = parseExplicitRoutineGoal(normalized);
       if (explicitGoal) reconciled[field] = explicitGoal;
       continue;
     }

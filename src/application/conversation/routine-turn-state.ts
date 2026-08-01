@@ -27,6 +27,7 @@ import {
   deriveMissingSafetyFields,
   extractConversationalSafetyPatch,
   mergeConversationalSafetyPatch,
+  type ConversationalSafetyPatch,
   type ConversationalSafetyScreeningDraft,
   type ConversationalSafetyStatus,
 } from "../../domain/safety/conversational-screening";
@@ -218,6 +219,7 @@ export function applyParsedRoutineTurn(
   options: {
     rawMessage?: string;
     screeningDraft?: ConversationalSafetyScreeningDraft;
+    contextualSafetyPatch?: ConversationalSafetyPatch;
   } = {},
 ): DerivedRoutineTurnResult {
   // Retained in the function signature for callers migrating from the legacy
@@ -230,9 +232,13 @@ export function applyParsedRoutineTurn(
   );
   const currentSafetyDraft =
     options.screeningDraft ?? createEmptyConversationalSafetyScreeningDraft();
-  const latestSafetyPatch = options.rawMessage
+  const explicitSafetyPatch = options.rawMessage
     ? extractConversationalSafetyPatch(options.rawMessage)
     : {};
+  const latestSafetyPatch = {
+    ...(options.contextualSafetyPatch ?? {}),
+    ...explicitSafetyPatch,
+  };
   const screeningDraft = mergeConversationalSafetyPatch(
     currentSafetyDraft,
     latestSafetyPatch,

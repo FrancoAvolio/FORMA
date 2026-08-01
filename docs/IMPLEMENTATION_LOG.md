@@ -344,3 +344,45 @@ preserves the validated routine structure, technique instructions and visible me
 - Added pure-model, generated-detail, image-fetch/fallback, PDF binary, native share/download and
   browser E2E assertions. Disabled media still produces a valid PDF with designed placeholders.
 - `docs/design-reference/**`, source records and imported JPG/GIF binaries remain unchanged.
+
+## 2026-08-01 — Contextual safety replies and resilient goal parsing
+
+Objective: remove repeated conversational safety questions without weakening the deterministic
+screening boundary, and recognize the resistance goal consistently even with the common
+`recistencia`/`recistensia` misspellings.
+
+Invariants for this phase:
+
+- A language model still cannot grant safety eligibility. A short negative answer is accepted
+  only against a typed, persisted safety question created by the application.
+- Contextual negatives clear exactly the safety fields that were asked. A bare `No` outside that
+  context changes nothing, while explicit positive or contradictory safety evidence always wins.
+- Goal extraction remains deterministic and schema-validated. The provider may suggest a value,
+  but raw-message reconciliation is authoritative and uses one shared goal parser.
+- The guided form, deterministic routine engine, imported dataset/media and immutable Stitch
+  reference remain unchanged.
+
+Implemented boundaries:
+
+- Added a typed `PendingConversationQuestion` tied to the latest assistant message. The repository
+  persists it across reload and a following user message, removes answered fields and clears stale,
+  completed or blocked questions at the schema boundary.
+- Added a provider-independent resolver for contextual `No`/`Nada` variants. It runs before
+  `/api/ai/interpret`, clears only the pending fields and lets explicit contradictory evidence win.
+  A generic affirmative answer asks for details without inventing a limitation category.
+- Added visible `No, ninguna` and `Sí, quiero aclarar` actions while a safety confirmation is
+  pending. The fallback now says that a simple `No` is sufficient instead of requiring a long
+  sentence.
+- Centralized explicit routine-goal parsing for reconciliation, Mock and relevance checks.
+  `Resistencia` and curated `c`/`s` spelling variants map to muscular endurance, while resistance
+  bands, multiple goals and explicit off-topic tasks remain non-goal or off-topic inputs.
+
+Validation evidence:
+
+- `npm run validate` passed the immutable Stitch check, UTF-8 validation, all 1,324 dataset/media
+  relationships, the 156-record generation catalog, zero-warning lint, 340 Vitest assertions and
+  the production Next.js build.
+- `npm run test:e2e:all` passed the complete desktop/mobile suite plus the isolated disabled-media
+  run. The new browser coverage proves that a typed contextual `No` survives reload, reaches 100%
+  without another `/api/ai/interpret` request, and that `Resistencia` generates a validated plan
+  with the `Resistencia muscular` profile value.

@@ -182,7 +182,7 @@ describe("deterministic assistant fallback", () => {
     expect(message).not.toContain("dolor al moverte");
   });
 
-  it("explains the explicit all-clear wording when no safety field is answered", () => {
+  it("explains that a short contextual No is enough when no safety field is answered", () => {
     const message = composeAssistantFallback({
       ...baseContext,
       latestIntent: "provide_information",
@@ -208,6 +208,9 @@ describe("deterministic assistant fallback", () => {
       safetyAnsweredCount: 0,
     });
 
-    expect(message).toContain("No tengo dolor al moverme, lesiones recientes");
+    expect(message).toContain("alcanza con responder “No”");
+    expect(message).not.toContain(
+      "No tengo dolor al moverme, lesiones recientes",
+    );
   });
 });

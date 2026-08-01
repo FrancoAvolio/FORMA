@@ -4,7 +4,9 @@ import {
   createEmptyRoutineRequestDraft,
   type LimitationsConfirmation,
 } from "../../domain/profile/routine-draft";
-import type { ConversationalSafetyScreeningDraft } from "../../domain/safety/conversational-screening";
+import {
+  type ConversationalSafetyScreeningDraft,
+} from "../../domain/safety/conversational-screening";
 import { ParsedRoutineTurnSchema } from "../../ai/schemas/routine-request";
 import {
   applyParsedRoutineTurn,
@@ -184,6 +186,64 @@ describe("routine conversation turn state", () => {
     expect(latest?.safetyMissingFields).toEqual([]);
     expect(latest?.safetyStatus).toBe("eligible");
     expect(latest?.limitationsConfirmation).toBe("confirmed_none");
+  });
+
+  it("accepts a scoped contextual No without depending on model clearance", () => {
+    const result = applyParsedRoutineTurn(
+      createEmptyRoutineRequestDraft(),
+      "not_confirmed",
+      {
+        intent: "provide_information",
+        requestPatch: {},
+        limitationsConfirmation: "unknown",
+        safetySignals: [],
+        assumptions: [],
+      },
+      {
+        rawMessage: "No",
+        contextualSafetyPatch: {
+          painDuringMovement: false,
+          recentInjury: false,
+          recentOperation: false,
+          medicalRestriction: false,
+          symptomsDuringExercise: false,
+          professionalInstructionsAffectTraining: false,
+        },
+      },
+    );
+
+    expect(result.safetyMissingFields).toEqual([]);
+    expect(result.safetyStatus).toBe("eligible");
+    expect(result.limitationsConfirmation).toBe("confirmed_none");
+  });
+
+  it("keeps explicit positive evidence authoritative over contextual negatives", () => {
+    const result = applyParsedRoutineTurn(
+      createEmptyRoutineRequestDraft(),
+      "not_confirmed",
+      {
+        intent: "unsupported",
+        requestPatch: {},
+        limitationsConfirmation: "has_limitations",
+        safetySignals: ["pain_during_movement"],
+        assumptions: [],
+      },
+      {
+        rawMessage: "No, pero tengo dolor al moverme.",
+        contextualSafetyPatch: {
+          painDuringMovement: false,
+          recentInjury: false,
+          recentOperation: false,
+          medicalRestriction: false,
+          symptomsDuringExercise: false,
+          professionalInstructionsAffectTraining: false,
+        },
+      },
+    );
+
+    expect(result.screeningDraft.painDuringMovement).toBe(true);
+    expect(result.safetyStatus).toBe("blocked");
+    expect(result.status).toBe("unsupported");
   });
 
   it("uses null as an explicit clear operation", () => {
